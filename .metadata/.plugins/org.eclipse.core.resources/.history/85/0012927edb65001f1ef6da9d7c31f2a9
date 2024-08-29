@@ -1,0 +1,53 @@
+spring.application.name=erp
+
+#Server
+server.port=8082
+spring.devtools.restart.enabled=true
+server.servlet.encoding.force-response=true
+server.servlet.encoding.charset=utf-8
+server.servlet.encoding.enabled=true
+server.servlet.encoding.force=true
+
+#file I/O
+spring.servlet.multipart.enabled=true
+spring.servlet.multipart.max-file-size=4MB
+#여러개의 파일 업로드 시 파일 전체 크기
+spring.servlet.multipart.max-request-size=10MB
+
+#view
+spring.mvc.view.prefix=/WEB-INF/views/
+spring.mvc.view.suffix=.jsp
+
+#로컬 jdbc
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+spring.datasource.url=jdbc:mysql://localhost:3306/cms
+spring.datasource.username=hana
+spring.datasource.password=hana1234
+
+#thymeleaf
+#템플릿 캐쉬를 비활성 : 소스를 수정시 새로고침이 이루어짐
+spring.thymeleaf.cache=false
+#템블릿 뷰를 이용하여 resources에 디렉토리를 활성화 하여 사용함
+spring.thymeleaf.check-template-location=true
+spring.thymeleaf.enabled=true
+#view 경로
+spring.thymeleaf.prefix=classpath:/templates/
+#view 파일 속성명
+spring.thymeleaf.suffix=.html
+#view에서 사용되는 연동 파일랜더링 코드
+spring.thymeleaf.mode=html
+
+#JPA (자바의 종속성을 유지시키는 표준 인터페이스 모음) Hibernate, OpenJPA
+#콘솔에 sql 문법출력
+spring.jpa.show-sql=true
+#자동으로 dto에서 설정된 값으로 신규 생성 및 자동 sql ddl 적용 (create:테이블 생성, update:테이블 초기화)
+#validate : 테이블을 생성하지는 않음 단, 정상적으로 컬럼에 대한 매핑을 체크하게 됩니다.
+spring.jpa.hibernate.ddl-auto=none
+#jpa에서 사용할 db명
+spring.jpa.database=mysql
+#db에 대한 버전을 설정하는 속성
+spring.jpa.database-platform=org.hibernate.dialect.MySQLDialect
+#dto에 @Entity 를 사용할 수 있도록 하는 속성 (spring-boot 2.x 이상에서는 사용하지 않음)
+#spring.jpa.generate-ddl=true
+#콘솔 화면에 sql ddl를 이쁘게 보여주기 위함
+spring.jpa.properties.hibernate.format_sql = true
