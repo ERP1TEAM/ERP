@@ -1,93 +1,30 @@
 <!DOCTYPE html>
-<html xmlns:th="http://thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-<link rel="stylesheet" th:href="@{/css/test.css}">
+    <meta charset="UTF-8">
+    <title>Thymeleaf Sidebar and Scrollable List</title>
+    <link rel="stylesheet" th:href="@{/css/test.css}">
 </head>
 <body>
-<div class="div">
-  <div class="line-2"></div>
-  <div class="div2">고객관리</div>
-  <div class="div3">주문관리</div>
-  <div class="div4">재고관리</div>
-  <div class="div5">입고관리</div>
-  <div class="div6">출고관리</div>
-  <div class="div7">창고관리</div>
-  <div class="frame-5">
-    <div class="div8">입고요청</div>
-    <div class="div9">요청내역</div>
-    <div class="div10">입고현황</div>
-    <div class="div11">입고내역</div>
-    <div class="div12">미입고현황</div>
-  </div>
-  <div class="div13">입고요청</div>
-  <div class="line-5"></div>
-  <div class="frame-9">
-    <div class="quick-koala">Quick Koala</div>
-    <img
-      class="free-icon-koala-424783-2-1"
-      th:src="@{/img/koala.png}"
-    />
-    <div class="rectangle-7"></div>
-    <div class="div14">로그아웃</div>
-    <div class="div15">안녕하세요 홍길동님!</div>
-    <img class="line-6" src="line-60.svg" />
-    <div class="_2024-08-30-16-26-33">2024 08 30 (금) 16 : 26 : 33</div>
-  </div>
-  <div class="div16">품목코드</div>
-  <div class="div17">제조사</div>
-  <div class="div18">품목명</div>
-  <div class="div19">수량</div>
-  <div class="div20">단가</div>
-  <div class="div21">총 금액</div>
-  <div class="div22">+</div>
-  <div class="_1234572">1234572</div>
-  <div class="div23">키트의 신</div>
-  <div class="_5">김치찌개 키트 (5인분)</div>
-  <div class="_35">35</div>
-  <div class="_11-900">11,900</div>
-  <div class="_416-500">416,500</div>
-  <div class="div24">+</div>
-  <div class="_1234571">1234571</div>
-  <div class="div25">키트의 신</div>
-  <div class="_3">차돌된장찌개 키트 (3인분)</div>
-  <div class="_25">25</div>
-  <div class="_9-900">9,900</div>
-  <div class="_247-500">247,500</div>
-  <div class="div26">+</div>
-  <div class="_1234568">1234568</div>
-  <div class="div27">고기조아</div>
-  <div class="_250-g">냉동삼겹살(250g)</div>
-  <div class="_40">40</div>
-  <div class="_13-000">13,000</div>
-  <div class="_520-000">520,000</div>
-  <div class="div28">+</div>
-  <div class="_1234567">1234567</div>
-  <div class="div29">고기조아</div>
-  <div class="_200-g">생삼겹살(200g)</div>
-  <div class="_30">30</div>
-  <div class="_15-000">15,000</div>
-  <div class="_450-000">450,000</div>
-  <div class="div30">+</div>
-  <div class="_1234570">1234570</div>
-  <div class="div31">키트의 신</div>
-  <div class="_32">부대찌개 키트 (3인분)</div>
-  <div class="_15">15</div>
-  <div class="_9-9002">9,900</div>
-  <div class="_148-500">148,500</div>
-  <div class="div32">+</div>
-  <div class="_1234569">1234569</div>
-  <div class="div33">전문컴</div>
-  <div class="_322">32인치 모니터</div>
-  <div class="_52">5</div>
-  <div class="_250-000">250,000</div>
-  <div class="_1-250-000">1,250,000</div>
-  <div class="div34">+</div>
-  <div class="rectangle-18"></div>
-  <div class="div35">입고요청</div>
-  <div class="rectangle-182"></div>
-  <div class="div36">엑셀 불러오기</div>
-</div>
+    <div class="container">
+        <aside class="sidebar">
+            <h2>Menu</h2>
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="#">Services</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+        </aside>
+        <main class="main-content">
+            <h1>List of Items</h1>
+            <ul>
+                <li th:each="item : ${items}" th:text="${item}"></li>
+            </ul>
+            <ul>
+                <li th:each="user : ${member}" th:text="${user}"></li>
+            </ul>
+        </main>
+    </div>
 </body>
 </html>
