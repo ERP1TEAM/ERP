@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>로그인 페이지</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+        }
+        .login-container {
+        	width: 500px;
+        	height: 380px;
+            text-align: center;
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .login-container input {
+            width: 81%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .login-container button {
+            width: 85%;
+            padding: 10px;
+            margin: 10px;
+            background-color: #252627;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .login-container button:hover {
+            background-color: #474B54;
+        }
+        .admin-register {
+            margin-top: 10px;
+            font-size: 12px;
+        }
+        .admin-register a {
+            color: #000000;
+            text-decoration: none;
+        }
+        .admin-register a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h2><img src="/img/logo.png" style="width: 140px; height:95px;"></h2>
+        <form>
+            <input type="text" placeholder="아이디" required><br>
+            <input type="password" placeholder="패스워드" required><br>
+            <button type="submit">로그인</button>
+        </form>
+        <div class="admin-register">
+            <a href="#">관리자 등록</a>
+        </div>
+    </div>
+</body>
+</html>
