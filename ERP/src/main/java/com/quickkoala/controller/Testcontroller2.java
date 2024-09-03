@@ -11,4 +11,10 @@ public class Testcontroller2 {
 		System.out.println("테스트");
 		return "test2";
 	}
+	
+	@GetMapping("main")
+	public String mains() {
+		System.out.println("테스트");
+		return "main";
+	}
 }
