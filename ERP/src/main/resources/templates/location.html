@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quick Koala Dashboard</title>
+<link rel="stylesheet" href="./css/location.css">
+<link rel="stylesheet" href="./css/table-page.css">
+</head>
+<body>
+
+    <!-- 상단 헤더 -->
+    <header class="head">
+        <div class="com">
+        	<span class="com-logo" >
+        		<img src="./logo/logo.png" alt="코알라 로고">
+        	</span>
+	        <span class="com-name">Quick Koala</span>
+        </div>
+		<div class="date">2024 08 30 (금)  16 : 26 : 33</div>
+		<div class="login">
+			<div class="login-welcome">안녕하세요 홍길동님</div>
+        <button class="login-btn" type="button" >로그아웃</button>
+		</div>
+    </header>
+     <!-- 왼쪽 메뉴 -->
+     <nav class="left-bar">
+        <ul class="left-menu">
+            <li class="left-menu-click"><a href="#">메뉴 1</a></li>
+            <li class="left-menu-click"><a href="#">메뉴 2</a></li>
+            <li class="left-menu-click"><a href="#">메뉴 3</a></li>
+            <li class="left-menu-click"><a href="#">메뉴 4</a></li>
+            <li class="left-menu-click"><a href="#">메뉴 5</a></li>
+        </ul>
+    </nav>
+<div class=location_frame1>
+  <div class=location_large_controller>
+   <button class="rackbutton r1_button" onclick="rbutton(this)">R1</button>
+   <button class="rackbutton r2_button" onclick="rbutton(this)">R2</button>
+   <button class="rackbutton r3_button" onclick="rbutton(this)">R3</button>
+   <button class="rackbutton r4_button" onclick="rbutton(this)">R4</button>
+   <button class="rackbutton r5_button" onclick="rbutton(this)">R5</button>
+   <button class="rackbutton r6_button" onclick="rbutton(this)">R6</button>
+  </div><span class="location_title">로케이션 현황</span>
+  <div class=location_stocklist_box_frame>
+  <select id="warehouse_select" onchange="change_warehouse()">
+  <option value="W1">경기도 남양주 창고</option>
+  <option value="W2">인천 검단 창고</option>
+  </select>
+    <div class=location_frame2>
+    </div>
+  </div>
+  <div class=location_stocklist_frame1>
+    <div class="location_stocklist_box"></div>
+    <div class=location_stocklist_frame2>
+      <div class=location_stocklist_frame3>
+        <div class=location_stocklist_frame4>
+        </div>
+        <div class=location_company1><span>제조사</span></div>
+        <div class=location_product1><span>상품명</span></div>
+        <div class=location_qty1><span>개수</span></div>
+      </div>
+    </div>
+    <div class=e172_5801>
+      <div class=e172_5802>
+        <div class=e172_5803>
+          <div class="e172_5804"></div>
+        </div>
+        <div class=e172_5805><span  class="ei172_5805_0_12">Company</span></div>
+        <div class=e172_5806><span  class="ei172_5806_0_12">product name</span></div>
+        <div class=e172_5807><span  class="ei172_5807_0_12">qty</span></div>
+      </div>
+    </div><span  class="location_stocklist_font">재고 리스트</span>
+  </div>
+  <div class=e172_5809>
+    <div class="e172_5810"></div>
+    <div class=location_frame3 id="showbutton">
+    <div class=location_1a>
+      <div class="e172_5836"></div><span  class="e172_5837">1A</span>
+    </div>
+    <div class=location_2a>
+      <div class="e172_5815"></div><span  class="e172_5816">2A</span>
+    </div>
+    <div class=location_2b>
+      <div class="e172_5827"></div><span  class="e172_5828">2B</span>
+    </div>
+    <div class=location_3a>
+      <div class="e172_5812"></div><span  class="e172_5813">3A</span>
+    </div>
+    <div class=location_3b>
+      <div class="e172_5821"></div><span  class="e172_5822">3B</span>
+    </div>
+    <div class=location_3c>
+      <div class="e172_5818"></div><span  class="e172_5819">3C</span>
+    </div>
+    <div class=location_4a>
+      <div class="e172_5824"></div><span  class="e172_5825">4A</span>
+    </div>
+    <div class=location_4b>
+      <div class="e172_5830"></div><span  class="e172_5831">4B</span>
+    </div>
+    <div class=location_4c>
+      <div class="e172_5839"></div><span  class="e172_5840">4C</span>
+    </div>
+    <div class=location_4d>
+      <div class="e172_5833"></div><span  class="e172_5834">4D</span>
+    </div>
+   </div>
+  </div>
+</div>
+</body>
+<script src="./js/location.js"></script>
+</html>
