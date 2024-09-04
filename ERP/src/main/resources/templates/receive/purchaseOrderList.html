@@ -10,6 +10,7 @@
     <link href="../assets/css/font-awesome.css" rel="stylesheet" />
     <link href="../assets/js/morris/morris-0.4.3.min.css" rel="stylesheet" />
     <link href="../assets/css/custom-styles.css" rel="stylesheet" />
+    <link href="../css/purchaseOrderList.css" rel="stylesheet" />
     <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
     <link rel="stylesheet" href="../assets/js/Lightweight-Chart/cssCharts.css"> 
 </head>
@@ -90,7 +91,7 @@
 					<li>
                         <a href="#" class="waves-effect waves-dark" style="color:white;"><img src="/img/icon/order_icon.png"> 입고관리<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
-                            <li >
+                            <li>
                                 <a href="./purchaseOrder3"  style="color: #E2E2E2;">발주요청</a>
                             </li>
                             <li>
@@ -164,6 +165,7 @@
                     <div class="card-action">
                          발주내역 <span style="float: right;">+ MORE</span>
                     </div>
+                    <div class="small-tap" id="all">전체</div><div class="small-tap" id="wait">입고대기</div><div class="small-tap" id="finish">입고완료</div><div class="small-tap" id="return">입고반품</div><br><br>
                     <div class="card-content">
                         <div class="table-responsive">
                         	<form id="order_frm">
@@ -219,6 +221,7 @@
 	<script src="../assets/js/easypiechart-data.js"></script>
 	<script src="../assets/js/Lightweight-Chart/jquery.chart.js"></script>
     <script src="../assets/js/custom-scripts.js"></script>
+    <script src="../js/purchaseOrderList.js"></script>
 </body>
 
 </html>

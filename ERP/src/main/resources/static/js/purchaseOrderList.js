@@ -1,7 +1,11 @@
 document.addEventListener("DOMContentLoaded", function() {
     const params = new URLSearchParams(window.location.search);
     const status = params.get("status");
-    if (status === null || status === "입고대기") {
+    if(status === null || status === "전체") {
+        let all = document.getElementById("all");
+        all.style.backgroundColor = "#007BFF";
+        all.style.color = "white";	
+	}else if (status === "입고대기") {
         let wait = document.getElementById("wait");
         wait.style.backgroundColor = "#007BFF";
         wait.style.color = "white";
@@ -15,13 +19,16 @@ document.addEventListener("DOMContentLoaded", function() {
         returns.style.color = "white";
 	}
 	
+	document.querySelector("#all").addEventListener("click",function(){
+		location.href="./purchaseOrderList";
+	})
 	document.querySelector("#wait").addEventListener("click",function(){
-		location.href="./temporaryReceive?status=입고대기";
+		location.href="./purchaseOrderList?status=입고대기";
 	})
 	document.querySelector("#finish").addEventListener("click",function(){
-		location.href="./temporaryReceive?status=입고완료";
+		location.href="./purchaseOrderList?status=입고완료";
 	})
 	document.querySelector("#return").addEventListener("click",function(){
-		location.href="./temporaryReceive?status=입고반품";
+		location.href="./purchaseOrderList?status=입고반품";
 	})
 });

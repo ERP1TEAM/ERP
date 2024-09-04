@@ -49,7 +49,7 @@ public class PurchaseServiceImpl implements PurchaseService{
 		
 	    for (int f=0; f<orders.getProduct_code().size(); f++) {
 	        PurchaseEntity order = new PurchaseEntity();
-	        String formattedNumber = String.format("%02d", number);
+	        String formattedNumber = String.format("%03d", number);
 	        order.setOrderNumber("20240903-" + formattedNumber);
 	        order.setSupplierCode(orders.getSupplier().get(f));
 	        order.setProductCode(orders.getProduct_code().get(f));

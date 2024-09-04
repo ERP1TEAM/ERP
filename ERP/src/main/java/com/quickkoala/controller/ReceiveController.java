@@ -24,6 +24,7 @@ import com.quickkoala.dto.PurchaseDto;
 import com.quickkoala.dto.PurchaseListDto;
 import com.quickkoala.entity.PurchaseEntity;
 import com.quickkoala.service.PurchaseService;
+import com.quickkoala.utils.ExcelUpload;
 
 @Controller
 @RequestMapping("receive")
@@ -33,9 +34,9 @@ public class ReceiveController {
 	private PurchaseService purchaseService;
 	
 	//발주요청 페이지
-	@GetMapping("purchaseOrder")
+	@GetMapping("purchaseOrder2")
 	public String tablePage() {
-		return "receive/purchaseOrder";
+		return "receive/purchaseOrder2";
 	}
 	
 	//발주요청 페이지
@@ -46,8 +47,8 @@ public class ReceiveController {
 	
 	//발주내역 페이지
 	@GetMapping("purchaseOrderList")
-	public String listPage(Model model) {
-		List<PurchaseEntity> item = purchaseService.getAllOrders();
+	public String listPage(Model model, String status) {
+		List<PurchaseEntity> item = purchaseService.getAllOrdersByStatus(status);
 		model.addAttribute("items",item);
 		return "receive/purchaseOrderList";
 	}
@@ -72,29 +73,21 @@ public class ReceiveController {
 	@PostMapping("upload-excel")
 	public ResponseEntity<List<PurchaseDto>> uploadExcel(@RequestParam("excel") MultipartFile file) {
 		List<PurchaseDto> data = new ArrayList<>();
-		 
-		try (InputStream inputStream = file.getInputStream()) {
-		    Workbook workbook = WorkbookFactory.create(inputStream);
-		    Sheet sheet = workbook.getSheetAt(0);
-		    for (Row row : sheet) {
-		    	
-		        if (row.getRowNum() == 0) {
-		            continue;
-		        }
-		        PurchaseDto dto = new PurchaseDto();
-		        dto.setProduct_code(String.valueOf((int)row.getCell(0).getNumericCellValue()));
-		        dto.setSupplier(row.getCell(1).getStringCellValue());
-		        dto.setProduct(row.getCell(2).getStringCellValue());
-		        dto.setQuantity((int)row.getCell(3).getNumericCellValue());
-		        dto.setPrice((int)row.getCell(4).getNumericCellValue());
-		        dto.setTotal_price((int)row.getCell(5).getNumericCellValue());
-		        data.add(dto);
-		    }
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		ExcelUpload eu = new ExcelUpload(); 
 		
+		for (Row row : eu.uploadExcel(file)) {
+	        if (row.getRowNum() == 0) {
+	            continue;
+	        }
+	        PurchaseDto dto = new PurchaseDto();
+	        dto.setProduct_code(String.valueOf((int)row.getCell(0).getNumericCellValue()));
+	        dto.setSupplier(row.getCell(1).getStringCellValue());
+	        dto.setProduct(row.getCell(2).getStringCellValue());
+	        dto.setQuantity((int)row.getCell(3).getNumericCellValue());
+	        dto.setPrice((int)row.getCell(4).getNumericCellValue());
+	        dto.setTotal_price((int)row.getCell(5).getNumericCellValue());
+	        data.add(dto);
+	    }
 		return ResponseEntity.ok(data);
 	 }
-	
 }
