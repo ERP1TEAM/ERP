@@ -16,4 +16,5 @@ public interface PurchaseRepository extends JpaRepository<PurchaseEntity, String
     long countByOrderDate(@Param("today") LocalDate today);
 	
 	List<PurchaseEntity> findAllByOrderByOrderNumberDesc();
+	List<PurchaseEntity> findAllByStatusOrderByOrderNumberDesc(String status);
 }

@@ -47,11 +47,17 @@ public class ReceiveController {
 	//발주내역 페이지
 	@GetMapping("purchaseOrderList")
 	public String listPage(Model model) {
-		List<List<PurchaseEntity>> items = new ArrayList<List<PurchaseEntity>>();
 		List<PurchaseEntity> item = purchaseService.getAllOrders();
-		System.out.println(item);
 		model.addAttribute("items",item);
 		return "receive/purchaseOrderList";
+	}
+	
+	//입고현황 페이지
+	@GetMapping("temporaryReceive")
+	public String tempPage(Model model, String status) {
+		List<PurchaseEntity> item = purchaseService.getAllOrdersByStatus(status);
+		model.addAttribute("items",item);
+		return "receive/temporaryReceive";
 	}
 	
 	//발주요청

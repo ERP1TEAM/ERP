@@ -80,4 +80,13 @@ public class PurchaseServiceImpl implements PurchaseService{
 	public List<PurchaseEntity> getAllOrders() {
 		return purchaseRepository.findAllByOrderByOrderNumberDesc();
 	}
+	
+	@Override
+	public List<PurchaseEntity> getAllOrdersByStatus(String status) {
+		if(status == null) {
+			return purchaseRepository.findAllByOrderByOrderNumberDesc();
+		}else {
+			return purchaseRepository.findAllByStatusOrderByOrderNumberDesc(status);			
+		}
+	}
 }
