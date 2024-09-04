@@ -1,0 +1,28 @@
+.small-tap {
+    float: left;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-right: 2px;
+    padding: 8px 15px;
+    background-color: #f7f7f7;
+    color: #333;
+    font-family: 'Arial', sans-serif;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.small-tap:hover {
+    background-color: #007BFF;
+    color: white;
+    border-color: #007BFF;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transform: translateY(-2px);
+}
+
+.small-tap.active {
+    background-color: #0056b3;
+    color: white;
+    border-color: #0056b3;
+}

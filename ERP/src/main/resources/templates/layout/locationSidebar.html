@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<section class="sidebar" th:fragment="sidebar">
+        <div class="sidebar-a">
+            <span class="sa-logo">
+                <img th:src="@{/img/logo.png}" alt="코알라 로고" width="50px" height="50px">
+            </span>
+            <span class="sa-name">Quick Koala</span>
+        </div>
+        <ul class="sidebar-b">
+            <li><a href="#">공지사항</a></li>
+            <li><a href="#">사이트설정</a></li>
+        </ul>
+        <nav class="sidebar-c">
+            <ul class="sc-menu">
+                <li><a href="#">고객관리</a></li>
+                <li><a href="#">주문관리</a></li>
+                <li><a href="#">재고관리</a></li>
+                <li>
+                    <a class="toggle-link">입고관리</a>
+                    <ul class="cb-sheet">
+                        <li><a style="color:red;">입고요청</a></li>
+                        <li><a>입고대기</a></li>
+                        <li><a>입고승인</a></li>
+                        <li><a>입고취소</a></li>
+                    </ul>
+                </li>
+                <li><a href="#">출고관리</a></li>
+                <li><a href="#">창고관리</a></li>
+            </ul>
+        </nav>
+    </section>
+</body>
+</html>

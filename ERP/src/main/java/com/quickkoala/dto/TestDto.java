@@ -1,5 +1,11 @@
 package com.quickkoala.dto;
 
-public class TestDto {
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
+public class TestDto {
+	private int idx;
+	private String uid;
 }

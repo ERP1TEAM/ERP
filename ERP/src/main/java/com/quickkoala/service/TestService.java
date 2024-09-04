@@ -1,5 +1,10 @@
 package com.quickkoala.service;
 
-public class TestService {
+import java.util.List;
 
+import com.quickkoala.entity.TestEntity;
+
+public interface TestService {
+	
+	List<TestEntity> getAllMember();
 }

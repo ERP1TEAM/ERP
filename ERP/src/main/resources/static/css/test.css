@@ -1,1 +1,39 @@
-@charset "UTF-8";
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    display: flex;
+    height: 100vh; /* 전체 화면 높이 */
+}
+
+.container {
+    display: flex;
+    width: 100%;
+}
+
+.sidebar {
+    width: 200px;
+    height: 100vh; /* 전체 화면 높이 */
+    background-color: #f4f4f4;
+    padding: 20px;
+    box-sizing: border-box;
+    position: fixed; /* 사이드바를 고정 위치에 설정 */
+    top: 0;
+    left: 0;
+}
+
+.main-content {
+    margin-left: 220px; /* 사이드바 너비만큼 여백 */
+    padding: 20px;
+    height: 100vh;
+    overflow-y: auto; /* 스크롤이 가능하도록 설정 */
+    flex-grow: 1; /* 가능한 모든 공간을 차지하도록 설정 */
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    margin-bottom: 10px;
+}
