@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class Testcontroller2 {
-	zz
 	@GetMapping("test2")
 	public String test() {
 		System.out.println("테스트");
