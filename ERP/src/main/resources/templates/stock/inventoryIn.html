@@ -17,15 +17,18 @@
         <li>
             <select class="product_input1">
                 <option value="W1">경기도 남양주 창고</option>
-            </select>
+            </select><input type="button" value="+" title="+" class="product_btn2" onclick="showwarehouse()">
         </li>
     </ul>
+    
+    <div th:insert="~{modal/stockModal :: warehouselist}"></div>
+    
     <ul>
         <li>로케이션 코드</li>
         <li>
             <select class="product_input1">
                 <option value=""></option>
-            </select>
+            </select><input type="button" value="+" title="+" class="product_btn2">
         </li>
     </ul>
     <ul>
@@ -33,7 +36,7 @@
         <li>
             <select class="product_input1">
                 <option value=""></option>
-            </select>
+            </select><input type="button" value="+" title="+" class="product_btn2">
         </li>
     </ul>
     <ul>
@@ -83,7 +86,7 @@
     <ul>
         <li>가용재고</li>
         <li>
-            <input type="text" class="product_input3">EA <span class="help_text">※ 숫자만 입력하세요.</span>
+            <input type="text" class="product_input3"> <span class="help_text">※ 숫자만 입력하세요.</span>
         </li>
     </ul>
     <ul>
