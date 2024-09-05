@@ -11,13 +11,13 @@ public class LoginController {
 	public String test() {
 		return "/member/login";
 	}
-	@GetMapping("sidebar")
-	public String sidevar() {
-		return "sidebar";
-	}
 	@GetMapping("main.do")
 	public String getMethodName() {
 		return "main";
+	}
+	@GetMapping("register.do")
+	public String register() {
+		return "/member/register";
 	}
 	
 }
