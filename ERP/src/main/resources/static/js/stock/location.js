@@ -24,4 +24,5 @@ function l_button(button){
     });
 	
 	button.classList.toggle('l_active');
+	
 }

@@ -8,9 +8,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("stock")
 public class StockController {
 
-	@GetMapping("/location")
-	public String location() {
+	@GetMapping("/inventoryIn")
+	public String inventoryIn() {
 		
-		return "stock/location.html";
+		return "stock/inventoryIn.html";
+	}
+	
+	@GetMapping("/inventoryList")
+	public String inventoryList() {
+		
+		return "stock/inventoryList.html";
 	}
 }
