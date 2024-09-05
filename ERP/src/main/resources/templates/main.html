@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"> 
+<html xmlns:th="http://www.thymeleaf.org"> 
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -47,32 +47,7 @@
 <li><a href="#"><i class="fa fa-sign-out fa-fw"></i>로그아웃</a>
 </li>
 </ul>
-	   <!--/. NAV TOP  -->
-        <nav class="navbar-default navbar-side" role="navigation">
-            <div class="sidebar-collapse">
-                <ul class="nav" id="main-menu">
-					<li>
-                        <a href="#" class="waves-effect waves-dark" style="color:white;"><img src="/img/icon/order_icon.png"> 주문등록<span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level">
-                            <li >
-                                <a href="#"  style="color: #E2E2E2;">주문등록</a>
-                            </li>
-                            <li>
-                                <a href="#"  style="color: #E2E2E2;">주문완료</a>
-                            </li>
-                            <!--  샘플메뉴
-                            <li>
-                                <a class="active-menu waves-effect waves-dark" href="index.html"><i class="fa fa-dashboard"></i> 메뉴1</a>
-                            </li>
-                            -->
-                        </ul>
-                    </li>
-                </ul>
-
-            </div>
-
-        </nav>
-        <!-- nav  -->
+	   <div th:insert="~{sidebar :: sidebar}"></div>
       <div id="page-wrapper">
 	  <div class="header"> 
             <h1 class="page-header">
