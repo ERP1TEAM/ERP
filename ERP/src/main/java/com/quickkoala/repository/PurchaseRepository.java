@@ -17,4 +17,6 @@ public interface PurchaseRepository extends JpaRepository<PurchaseEntity, String
 	
 	List<PurchaseEntity> findAllByOrderByOrderNumberDesc();
 	List<PurchaseEntity> findAllByStatusOrderByOrderNumberDesc(String status);
+	
+	PurchaseEntity findByOrderNumber(String number);
 }

@@ -12,6 +12,7 @@ import com.quickkoala.dto.PurchaseDto;
 import com.quickkoala.dto.PurchaseListDto;
 import com.quickkoala.entity.PurchaseEntity;
 import com.quickkoala.repository.PurchaseRepository;
+import com.quickkoala.utils.TodayUtils;
 
 @Service
 public class PurchaseServiceImpl implements PurchaseService{
@@ -50,7 +51,7 @@ public class PurchaseServiceImpl implements PurchaseService{
 	    for (int f=0; f<orders.getProduct_code().size(); f++) {
 	        PurchaseEntity order = new PurchaseEntity();
 	        String formattedNumber = String.format("%03d", number);
-	        order.setOrderNumber("20240903-" + formattedNumber);
+	        order.setOrderNumber(TodayUtils.getToday()+"-" + formattedNumber);
 	        order.setSupplierCode(orders.getSupplier().get(f));
 	        order.setProductCode(orders.getProduct_code().get(f));
 	        order.setManager("홍길동");
@@ -88,5 +89,10 @@ public class PurchaseServiceImpl implements PurchaseService{
 		}else {
 			return purchaseRepository.findAllByStatusOrderByOrderNumberDesc(status);			
 		}
+	}
+	
+	@Override
+	public PurchaseEntity getOrderByNumber(String number) {
+		return purchaseRepository.findByOrderNumber(number);
 	}
 }

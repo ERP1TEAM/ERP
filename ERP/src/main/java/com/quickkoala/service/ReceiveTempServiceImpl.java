@@ -15,12 +15,20 @@ import com.quickkoala.entity.PurchaseEntity;
 import com.quickkoala.entity.ReceiveTempEntity;
 import com.quickkoala.repository.PurchaseRepository;
 import com.quickkoala.repository.ReceiveTempRepository;
+import com.quickkoala.repository.ReceiveTempViewRepository;
+import com.quickkoala.utils.TodayUtils;
 
 @Service
 public class ReceiveTempServiceImpl implements ReceiveTempService{
 
 	@Autowired
+	private PurchaseRepository purchaseRepository;
+	
+	@Autowired
 	private ReceiveTempRepository receiveTempRepository;
+	
+	@Autowired
+	private ReceiveTempViewRepository receiveTempViewRepository;
 	
 	@Override
 	public List<ReceiveTempEntity> addAllReceive(SupplierDeliveryListDto orders) {
@@ -50,4 +58,40 @@ public class ReceiveTempServiceImpl implements ReceiveTempService{
 	    return receiveTempRepository.saveAll(orderEntities);
 	}
 	
+	@Override
+	public ReceiveTempEntity addDelivery(String data, Integer ea) {
+		int number = (int)this.getCountOfOrdersToday()+1;
+		
+		PurchaseEntity purchaseEntity = purchaseRepository.findByOrderNumber(data);
+		ReceiveTempEntity receiveTempEntity = new ReceiveTempEntity();
+		String formattedNumber = String.format("%03d", number);
+		receiveTempEntity.setCode("RT"+TodayUtils.getToday()+"-"+formattedNumber);
+		receiveTempEntity.setOrderNumber(purchaseEntity.getOrderNumber());
+		receiveTempEntity.setQuantity(purchaseEntity.getQuantity());
+		receiveTempEntity.setWtQuantity(ea);
+		receiveTempEntity.setDate(LocalDateTime.now());
+		receiveTempEntity.setMemo("-");
+		return receiveTempRepository.save(receiveTempEntity);
+	}
+	
+	@Override
+	public long getCountOfOrdersToday() {
+		LocalDate today = LocalDate.now();
+        return receiveTempRepository.countByOrderDate(today);
+	}
+	
+	@Override
+	public List<ReceiveTempEntity> getAllTemp() {
+		return receiveTempRepository.findAllByOrderByCodeDesc();
+	}
+	
+	@Override
+	public ReceiveTempEntity getOne(String data) {
+		return receiveTempRepository.findByCode(data);
+	}
+	
+	@Override
+	public ReceiveTempEntity modifyStatus(String data, Integer ea) {
+		return null;
+	}
 }

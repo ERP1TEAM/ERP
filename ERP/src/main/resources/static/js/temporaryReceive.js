@@ -24,4 +24,30 @@ document.addEventListener("DOMContentLoaded", function() {
 	document.querySelector("#return").addEventListener("click",function(){
 		location.href="./temporaryReceive?status=입고반품";
 	})
+	
+	document.querySelectorAll(".receiving").forEach(function(btn){
+		btn.addEventListener("click",function(){
+			let idx = btn.getAttribute("data");
+			let ea = document.getElementById(idx).value;
+			if(!ea){
+				alert("입고수량을 입력하셔야 합니다.");
+				return;
+			}
+			fetch("./receiving?data="+idx+"&ea="+ea,{
+				method:"GET"
+			})
+			.then(response => response.text())
+			.then(data => {
+				if(data === "ok"){
+					alert('입고가 완료되었습니다.');
+					window.location.reload();
+				}else if(data === "over"){
+					alert("대기수량을 확인해주세요.");
+				}
+			})
+			.catch(error => {
+				conosole.log(error);
+			})
+		})
+	})
 });

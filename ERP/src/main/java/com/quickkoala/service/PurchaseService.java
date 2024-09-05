@@ -12,4 +12,5 @@ public interface PurchaseService {
 	long getCountOfOrdersToday();
 	List<PurchaseEntity> getAllOrders();
 	List<PurchaseEntity> getAllOrdersByStatus(String status);
+	PurchaseEntity getOrderByNumber(String number);
 }

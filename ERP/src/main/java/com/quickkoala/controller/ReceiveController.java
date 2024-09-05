@@ -23,7 +23,11 @@ import org.springframework.web.multipart.MultipartFile;
 import com.quickkoala.dto.PurchaseDto;
 import com.quickkoala.dto.PurchaseListDto;
 import com.quickkoala.entity.PurchaseEntity;
+import com.quickkoala.entity.ReceiveTempEntity;
+import com.quickkoala.entity.TemporaryReceiveViewEntity;
 import com.quickkoala.service.PurchaseService;
+import com.quickkoala.service.ReceiveTempService;
+import com.quickkoala.service.TemporaryReceiveViewService;
 import com.quickkoala.utils.ExcelUpload;
 
 @Controller
@@ -33,16 +37,16 @@ public class ReceiveController {
 	@Autowired
 	private PurchaseService purchaseService;
 	
-	//발주요청 페이지
-	@GetMapping("purchaseOrder2")
-	public String tablePage() {
-		return "receive/purchaseOrder2";
-	}
+	@Autowired
+	private ReceiveTempService receiveTempService;
+	
+	@Autowired
+	private TemporaryReceiveViewService temporaryReceiveViewService;
 	
 	//발주요청 페이지
-	@GetMapping("purchaseOrder3")
+	@GetMapping("purchaseOrder")
 	public String orderPage() {
-		return "receive/purchaseOrder3";
+		return "receive/purchaseOrder";
 	}
 	
 	//발주내역 페이지
@@ -56,7 +60,8 @@ public class ReceiveController {
 	//입고현황 페이지
 	@GetMapping("temporaryReceive")
 	public String tempPage(Model model, String status) {
-		List<PurchaseEntity> item = purchaseService.getAllOrdersByStatus(status);
+		//List<PurchaseEntity> item = purchaseService.getAllOrdersByStatus(status);
+		List<TemporaryReceiveViewEntity> item = temporaryReceiveViewService.getAllOrders();
 		model.addAttribute("items",item);
 		return "receive/temporaryReceive";
 	}
@@ -90,4 +95,17 @@ public class ReceiveController {
 	    }
 		return ResponseEntity.ok(data);
 	 }
+	
+	//입고
+	@GetMapping("receiving")
+	public ResponseEntity<String> receiving(@RequestParam("data") String data, @RequestParam("ea") Integer ea){
+		ReceiveTempEntity receiveTempEntity = receiveTempService.getOne(data);
+		System.out.println(ea);
+		if(receiveTempEntity.getWtQuantity() < ea) {
+			return ResponseEntity.ok("over");			
+		}else {
+			
+			return ResponseEntity.ok("ok");
+		}
+	}
 }

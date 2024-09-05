@@ -16,7 +16,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.quickkoala.dto.SupplierDeliveryDto;
 import com.quickkoala.entity.PurchaseEntity;
+import com.quickkoala.entity.PurchaseProductViewEntity;
+import com.quickkoala.service.PurchaseProductViewService;
 import com.quickkoala.service.PurchaseService;
+import com.quickkoala.service.ReceiveTempService;
 import com.quickkoala.utils.ExcelUpload;
 
 @Controller
@@ -26,10 +29,16 @@ public class SupplierController {
 	@Autowired
 	private PurchaseService purchaseService;
 	
+	@Autowired
+	private ReceiveTempService receiveTempService;
+	
+	@Autowired
+	private PurchaseProductViewService purchaseProductViewService;
+	
+	//납품등록 페이지
 	@GetMapping("supplierOrderList")
 	public String supplierOrderList(Model model) {
-		List<PurchaseEntity> item = purchaseService.getAllOrders();
-		model.addAttribute("items",item);
+		model.addAttribute("items",purchaseProductViewService.getAllOrders());
 		return "supplier/supplierOrderList";
 	}
 	
@@ -52,5 +61,18 @@ public class SupplierController {
 	        data.add(dto);
 	    }
 		return ResponseEntity.ok(data);
+	}
+	
+	//납품등록
+	@GetMapping("delivery_regi")
+	public ResponseEntity<String> deliveryRegi(@RequestParam("data") String data, @RequestParam("ea") Integer ea){
+		PurchaseEntity purchaseEntity = purchaseService.getOrderByNumber(data);
+		System.out.println(purchaseEntity.getQuantity());
+		if(purchaseEntity.getQuantity() < ea) {
+			return ResponseEntity.ok("over");			
+		}else {
+			receiveTempService.addDelivery(data, ea);
+			return ResponseEntity.ok("ok");
+		}
 	}
 }
