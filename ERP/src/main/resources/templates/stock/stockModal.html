@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+
+<div th:fragment="warehouselist">
+<div id="overlay" class="modal-overlay"></div>
+<div id="warehouselistmodal" class="modal">
+    <div>
+        <span class="close" onclick="closemodal()">&times;</span>
+    </div>
+    <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-action">
+			          <h2>창고 리스트</h2>
+                    </div>
+                    
+                    <div class="card-content">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+                                <thead>
+                                    <tr>
+                                     	<th class="center" style="width: 2%;"><input type="checkbox" class="checkbox"></th>
+		                                <th class="center" style="width: 12%;">창고코드</th>
+		                                <th class="center" style="width: 20%;">창고이름</th>
+		                                <th class="center" style="width: 5%;">메모</th>
+		                                <th class="center" style="width: 5%;">관리</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody">
+                                	<tr class="odd gradeX">
+		                                <th class="center"><input type="checkbox" class="checkbox"></th>
+		                                <td></td>
+		                                <td></td>
+		                                <td class="center"><input type="button" value="메모"></td>
+		                                <td class="center"><input type="button" value="수정"></td>
+		                            </tr>
+                                </tbody>
+                            </table>
+					        </div>
+                            <input class="cd-paging-right-btn" type="button" value="창고등록">
+                            <input class="cd-paging-right-btn" type="button" value="창고삭제">
+					        </div>
+					        </div>
+					        </div>
+					        </div>
+</div>
+</div>
+</html>
