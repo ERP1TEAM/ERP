@@ -23,21 +23,33 @@
             position: relative;
             margin: 0 auto;
             margin-top: 50px;
-            opacity: 1;
-            transition: opacity 0.5s ease-in-out;
+            opacity: 0; /* 초기에는 투명하게 설정 */
+            transform: scale(0.95); /* 약간 작게 보이도록 설정 */
+            transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
         }
-        .bd-placeholder-img {
-            font-size: 1.125rem;
-            text-anchor: middle;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
+        .div-container.fade-in {
+            opacity: 1; /* 완전히 불투명하게 설정 */
+            transform: scale(1); /* 원래 크기로 복원 */
         }
-        @media (min-width: 768px) {
-            .bd-placeholder-img-lg {
-                font-size: 3.5rem;
-            }
+        .btn-back {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background-color: #474B54;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        .btn-back:hover {
+            background-color: #1F2837;
         }
         .form-control {
             margin-bottom: 15px;
@@ -53,7 +65,8 @@
     <link href="assets/css/form-validation.css" rel="stylesheet">
 </head>
 <body>
-    <div class="div-container">
+    <div class="div-container" id="div-container">
+        <button class="btn-back" onclick="goBack()">←</button>
         <div class="text-center">
             <img class="d-block mx-auto mb-4" src="img/logo.png" alt="" width="280px;" height="200px;">
             <h2>Register</h2>
@@ -108,18 +121,15 @@
                     <label for="mpass2">Check Password</label>
                     <input type="password" class="form-control" id="mpass2" placeholder="동일한 패스워드를 입력하세요" value="" required>
                 </div>
-	            <div class="col-md-6 mb-3">
-	                <label for="mtel">TEL</label>
-	                <input type="text" class="form-control" id="mtel" placeholder="연락처를 입력하세요" name="utel" required>
-	            </div>
-	
-	            <div class="col-md-6 mb-3">
-	                <label for="email">Email</label>
-	                <input type="email" class="form-control" id="email" placeholder="이메일을 입력하세요" name="uemail" required>
-	            </div>
+                <div class="col-md-6 mb-3">
+                    <label for="mtel">TEL</label>
+                    <input type="text" class="form-control" id="mtel" placeholder="연락처를 입력하세요" name="utel" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="email">Email</label>
+                    <input type="email" class="form-control" id="email" placeholder="이메일을 입력하세요" name="uemail" required>
+                </div>
             </div>
-
-
 
             <hr class="mb-4">
             <input type="button" class="btn btn-primary btn-lg btn-block" value="관리자 등록" onclick="register()">
@@ -147,6 +157,17 @@
                 levelSelect.value = '';
             }
         });
+
+        // 페이지가 로드될 때 fade-in 효과 적용
+        window.onload = () => {
+            const divContainer = document.getElementById('div-container');
+            divContainer.classList.add('fade-in');
+        };
+
+        // 뒤로가기 버튼 클릭 시 로그인 페이지로 이동
+        function goBack() {
+            window.location.href = '/login.do';
+        }
     </script>
 </body>
 </html>

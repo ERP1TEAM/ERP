@@ -23,8 +23,13 @@
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             position: relative;
-            opacity: 1;
-            transition: opacity 0.5s ease-in-out;
+            opacity: 0; /* 초기에는 투명하게 설정 */
+            transform: scale(0.95); /* 약간 작게 보이도록 설정 */
+            transition: opacity 0.5s ease-in-out, transform 0.3s ease-in-out;
+        }
+        .login-container.fade-in {
+            opacity: 1; /* 완전히 불투명하게 설정 */
+            transform: scale(1); /* 원래 크기로 복원 */
         }
         .login-container.fade-out {
             opacity: 0;
@@ -84,6 +89,12 @@
     </div>
 
     <script>
+        // 페이지가 로드될 때 fade-in 효과 적용
+        window.onload = () => {
+            const loginContainer = document.getElementById('login-container');
+            loginContainer.classList.add('fade-in');
+        };
+
         function redirectToRegister() {
             const loginContainer = document.getElementById('login-container');
             loginContainer.classList.add('fade-out');
