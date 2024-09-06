@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.catalina.connector.Response;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -24,9 +25,12 @@ import com.quickkoala.dto.PurchaseDto;
 import com.quickkoala.dto.PurchaseListDto;
 import com.quickkoala.entity.PurchaseEntity;
 import com.quickkoala.entity.ReceiveTempEntity;
+import com.quickkoala.entity.SupplierEntity;
 import com.quickkoala.entity.TemporaryReceiveViewEntity;
+import com.quickkoala.service.ProductSupplierViewService;
 import com.quickkoala.service.PurchaseService;
 import com.quickkoala.service.ReceiveTempService;
+import com.quickkoala.service.SupplierService;
 import com.quickkoala.service.TemporaryReceiveViewService;
 import com.quickkoala.utils.ExcelUpload;
 
@@ -43,9 +47,16 @@ public class ReceiveController {
 	@Autowired
 	private TemporaryReceiveViewService temporaryReceiveViewService;
 	
+	@Autowired
+	private SupplierService supplierService;
+	
+	@Autowired
+	private ProductSupplierViewService productSupplierViewService;
+	
 	//발주요청 페이지
 	@GetMapping("purchaseOrder")
-	public String orderPage() {
+	public String orderPage(Model model) {
+		model.addAttribute("items",productSupplierViewService.getAllData());
 		return "receive/purchaseOrder";
 	}
 	
@@ -73,6 +84,12 @@ public class ReceiveController {
 		purchaseService.addOrder(orders);
 		return ResponseEntity.ok("success");
 	}
+	
+	//제조사 자동완성
+	@GetMapping("autocomplete")
+	public ResponseEntity<List<SupplierEntity>> autocomplete(@RequestParam String term) {
+        return ResponseEntity.ok(supplierService.searchByName(term));
+    }
 	
 	//엑셀 불러오기
 	@PostMapping("upload-excel")

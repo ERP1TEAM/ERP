@@ -12,16 +12,27 @@
     <link href="../assets/css/custom-styles.css" rel="stylesheet" />
     <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
     <link rel="stylesheet" href="../assets/js/Lightweight-Chart/cssCharts.css"> 
+    <link rel="stylesheet" href="../css/purchaseOrder.css"> 
 </head>
 
 <body>
+	<div id="overlay" class="overlay"></div>
     <div id="wrapper">
         <nav class="navbar navbar-default top-navbar" role="navigation" th:replace="~{header.html :: header}"></nav>
 		<!-- Dropdown Structure -->
 	<ul id="dropdown1" class="dropdown-content" th:replace="~{dropdown1.html :: dropdown1}"></ul>
 	   <!--/. NAV TOP  -->
        <nav class="navbar-default navbar-side" role="navigation" th:replace="~{sidebar.html :: sidebar}"></nav>
-        <!-- nav  -->
+        <!-- modal -->
+        <div id="myModal" class="modal">
+		  <div class="modal-content">
+		    <span id="close-modal-btn" style="float: right; cursor: pointer;">&times;</span>
+		    <h2>상품목록</h2>
+		    <div id="modal-items" th:each="item : ${items}">
+		      <div class="modal-item" th:data-value="${item.productName}" th:text="${item.productName}"></div>
+		    </div>
+		  </div>
+		</div>
       <div id="page-wrapper">
 	  <div class="header"> 
             <h1 class="page-header">
@@ -47,6 +58,7 @@
                     </div>
                     <div class="card-content">
                         <div class="table-responsive">
+                            <button id="open-modal-btn">상품목록</button>
                         	<form id="order_frm">
                             <table class="table table-striped table-bordered table-hover" id="dataTables-example">
                                 <thead>
@@ -61,12 +73,17 @@
                                 </thead>
                                 <tbody id="tbody">
                                 	<tr class="odd gradeX">
-		                                <td><input type="text" name="product_code"></td>
-		                                <td><input type="text" name="supplier"></td>
-		                                <td><input type="text" name="product"></td>
-		                                <td><input type="text" name="quantity"></td>
-		                                <td><input type="text" name="price"></td>
-		                                <td><input type="text" name="total_price"></td>
+		                                <td><input type="text" id="selected-data" name="product_code" readonly></td>
+		                                <td>
+		                                <div style="position: relative;">
+		                                <input id="autocomplete-input" type="text" name="supplier" readonly>
+		                                <div id="autocomplete-results" class="autocomplete-items"></div>
+		                                </div>
+		                                </td>
+		                                <td><input type="text" name="product" readonly></td>
+		                                <td><input type="text" name="quantity" id="quantity"></td>
+		                                <td><input type="text" name="price" id="price" readonly></td>
+		                                <td><input type="text" name="total_price" id="total_price" readonly></td>
 		                            </tr>
                                 </tbody>
                             </table>
@@ -81,7 +98,6 @@
                 </div>
             </div>
     </div>
-		
    <footer><p>Copyright 2024 ⓒ quickkoala.com by <i class="fa fa-love"></i><a href="http://quickkoala.com">Quick Koala All right reserved.</a></p></footer>
             </div>
         </div>

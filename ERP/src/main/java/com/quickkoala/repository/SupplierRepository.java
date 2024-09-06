@@ -10,4 +10,5 @@ import com.quickkoala.entity.SupplierEntity;
 @Repository
 public interface SupplierRepository extends JpaRepository<SupplierEntity, String>{
 	List<SupplierEntity> findAllByOrderByCreatedDateDesc();
+	List<SupplierEntity> findByNameContainingIgnoreCase(String term);
 }

@@ -18,4 +18,9 @@ public class SupplierServiceImpl implements SupplierService{
 	public List<SupplierEntity> getAllData() {
 		return supplierRepository.findAllByOrderByCreatedDateDesc();
 	}
+	
+	@Override
+	public List<SupplierEntity> searchByName(String term) {
+		return supplierRepository.findByNameContainingIgnoreCase(term);
+	}
 }

@@ -1,4 +1,40 @@
 document.addEventListener("DOMContentLoaded",function(){
+	const input = document.getElementById('autocomplete-input');
+      const resultsContainer = document.getElementById('autocomplete-results');
+
+      input.addEventListener('input', function() {
+        const query = this.value;
+
+        if (query.length > 0) {
+          fetch(`./autocomplete?term=${encodeURIComponent(query)}`)
+            .then(response => response.json())
+            .then(data => {
+              resultsContainer.innerHTML = '';
+
+              data.forEach(item => {
+                const div = document.createElement('div');
+                div.classList.add('autocomplete-item');
+                div.textContent = item.name;
+                div.addEventListener('click', function() {
+                  input.value = item.name;
+                  resultsContainer.innerHTML = '';
+                });
+                resultsContainer.appendChild(div);
+              });
+            })
+            .catch(error => console.error('Error:', error));
+        } else {
+          resultsContainer.innerHTML = '';
+        }
+      });
+	
+	const input_qty = document.getElementById("quantity");
+	const price = document.getElementById("price");
+	const tt_price = document.getElementById("total_price");
+	input_qty.addEventListener("input",function(){
+		tt_price.value = this.value * price.value;
+	})
+	
 	document.querySelector("#purchase_request").addEventListener("click",function(){
 		formData = new FormData(order_frm);
 		
@@ -75,4 +111,48 @@ document.addEventListener("DOMContentLoaded",function(){
 			console.log(error);
 		})
 	})
+	
+	// 모달 관련 요소
+  const modal = document.getElementById('myModal');
+  const openModalBtn = document.getElementById('open-modal-btn');
+  const closeModalBtn = document.getElementById('close-modal-btn');
+  const modalItems = document.querySelectorAll('.modal-item');
+  const selectedData = document.getElementById('selected-data');
+  const body = document.body;
+
+  // 모달 열기
+  openModalBtn.addEventListener('click', () => {
+    modal.style.display = 'block';
+    overlay.style.display = 'block';
+    body.classList.add('no-scroll');
+  });
+
+  // 모달 닫기
+  closeModalBtn.addEventListener('click', () => {
+    modal.style.display = 'none';
+    overlay.style.display = 'none';
+    body.classList.remove('no-scroll');
+  });
+
+  // 모달 외부 클릭 시 닫기
+  window.addEventListener('click', (event) => {
+    if (event.target === modal) {
+      modal.style.display = 'none';
+      overlay.style.display = 'none';
+      body.classList.remove('no-scroll');
+    }
+  });
+
+  // 모달 아이템 클릭 시 데이터 반영
+  modalItems.forEach(item => {
+    item.addEventListener('click', (event) => {
+      const value = event.target.getAttribute('data-value');
+      selectedData.value = value;
+      console.log(selectedData.value);
+      body.classList.remove('no-scroll');
+      overlay.style.display = 'none';
+      modal.style.display = 'none';
+    });
+  });
 })
+
