@@ -19,5 +19,17 @@ public class LoginController {
 	public String register() {
 		return "/member/register";
 	}
+	@GetMapping("/distribution/distribution.do")
+	public String test1() {
+		return "test1";
+	}
+	@GetMapping("/supplying/supplying.do")
+	public String test2() {
+		return "test2";
+	}
+	@GetMapping("/sales/sales.do")
+	public String test3() {
+		return "test3";
+	}
 	
 }

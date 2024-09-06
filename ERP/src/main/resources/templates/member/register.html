@@ -1,99 +1,152 @@
 <!doctype html>
-<html lang="en">
-  <head>
+<html lang="ko">
+<head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Hugo 0.101.0">
-    <title>Checkout example · Bootstrap v4.6</title>
-    <link rel="canonical" href="https://getbootstrap.com/docs/4.6/examples/checkout/">
-	<link href="assets/css/bootstrap.min.css" rel="stylesheet">
+    <title>Register Admin</title>
+    <link href="assets/css/bootstrap.min.css" rel="stylesheet">
     <style>
-      .bd-placeholder-img {
-        font-size: 1.125rem;
-        text-anchor: middle;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
-      }
-
-      @media (min-width: 768px) {
-        .bd-placeholder-img-lg {
-          font-size: 3.5rem;
+        body {
+            background-color: #e0e8f5 !important;
         }
-      }
+        .div-container {
+            width: 800px;
+            height: auto;
+            max-width: 100%;
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+            margin: 0 auto;
+            margin-top: 50px;
+            opacity: 1;
+            transition: opacity 0.5s ease-in-out;
+        }
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+        .form-control {
+            margin-bottom: 15px;
+        }
+        .btn-primary {
+            background-color: #1F2837;
+            border: none;
+        }
+        .btn-primary:hover {
+            background-color: #474B54;
+        }
     </style> 
     <link href="assets/css/form-validation.css" rel="stylesheet">
-  </head>
-  
-  
-  
-  
-<body class="bg-light">
-	<div class="container">
-	  <div class="py-5 text-center">
-	    <img class="d-block mx-auto mb-4" src="img/logo.png" alt="" width="280px;" height="200px;">
-	  <h2>Register</h2>
-	  </div>
-	   <div class="row justify-content-center">
-	    <div class="col-md-8 order-md-1">
-	      <h4 class="mb-3">관리자 등록</h4>
-	      <form id="form" class="needs-validation" novalidate>
-	      <input type="hidden" id="niceck" value="">
-	      
-	        <div class="row">
-	          <div class="col-md-6 mb-3">
-	            <a>고객명</a>
-	            <input type="text" class="form-control" id="mname" placeholder="고객명을 입력하세요" name="uname" value="" required>
-	          </div>
-	          <div class="col-md-6 mb-3">
-	            <a>아이디</a>
-	            <input type="text" class="form-control" style="width:70%" id="mid" placeholder="아이디를 입력하세요" name="uid" required>
-	            <input type="hidden" id="checkList" value="ok">
-	          </div>
-	        </div>
-	        <div class="row">
-	          <div class="col-md-6 mb-3">
-	            <label>패스워드</label>
-	            <input type="password" class="form-control" id="mpass" placeholder="패스워드를 입력하세요" name="upass" value="" required>
-	          </div>
-	          <div class="col-md-6 mb-3">
-	            <label>패스워드 확인</label>
-	            <input type="password" class="form-control" id="mpass2" placeholder="동일한 패스워드를 입력하세요" value="" required>
-	          </div>
-	        </div>
-	        
-	        <div class="mb-3">
-	          <a>연락처</a>
-	          <div class="input-group">
-	            <input type="text" class="form-control" id="mtel" placeholder="연락처를 입력하세요" name="utel" required>
-	          </div>
-	        </div>
-	
-	        <div class="mb-3">
-	          <label for="email">이메일</label>
-	          <input type="email" class="form-control" id="email" placeholder="이메일을 입력하세요" name="uemail" required="required">
-	        </div>
+</head>
+<body>
+    <div class="div-container">
+        <div class="text-center">
+            <img class="d-block mx-auto mb-4" src="img/logo.png" alt="" width="280px;" height="200px;">
+            <h2>Register</h2>
+        </div>
+        <h4 class="mb-3">Register Admin</h4>
+        <form id="form" class="needs-validation" novalidate>
+            <input type="hidden" id="niceck" value="">
 
-	        <hr class="mb-4">
-	        <input type="button" class="btn btn-primary btn-lg btn-block" style="background-color: #1F2837; border: none;" value="관리자 등록" onclick="register()">
-	      </form>
-	    </div>
-	  </div>
-	</div>
-<br><br><br><br><br><br><br>
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-<script>window.jQuery || document.write('<script src="assets/js/vendor/jquery.slim.min.js"><\/script>')</script>
-<script src="assets/js/bootstrap.bundle.min.js"></script>
-<script src="assets/js/form-validation.js"></script>
-	<form name="form_chk" method="post">
-		<input type="hidden" name="m" value="checkplusSerivce">					
-		<input type="hidden" name="EncodeData" value="AgAFRzk5MTZ5bGwjPvVVgtPgjjtX60MpxLCLNasf+OES5QU4oR2M6TDy6dxQgVnXcRehs54OqG7Ks3/alMFewELcvKADU9zW/4Po5W9HNsgaJWdjMRkMcgAPjkKCsOteYxYy4P85W6gx67fhMc5MEw4Ub3XAw32pTnjnZkho1/34K0cnooSsrSD0GIuuuC68mC/fVrm7nhNJ0xmvkEtW1K9MJWpppYzVEsiwltK1kVgOuo5bhZ3z2TUbgv8yFrInvCFboa9+6mx1ejBsOGheYo+Uqxqv7lhD4y9Yd7Y5FtlIZQDKk7rE+LVojHsdK7eHFf66e7BQDGiODH0WMJGMc4MJaqpFjoWJW8woB3adYSyxeUFGXJhJbDOqOSgF6UDLdfEmpFBzRXeA7KR45dy3cm6OKdBGE0OeuXG+KueH9ntMcSZfScGvlcEFWHPmhRR0Z8voozXD0tmAEOQsUH4cTgyf/DbQjZIEop8EWE9ddQZ9x0qTy3oj3lOtbC5PuIRrZEL1QxD0oZM=">	
-		<input type="hidden" name="param_r1" value="">
-		<input type="hidden" name="param_r2" value="">
-		<input type="hidden" name="param_r3" value="">
-	</form>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="authority">Authority</label>
+                    <select id="authority" class="form-control" required>
+                        <option value="">가입 권한 선택</option>
+                        <option value="distribution">Distribution Partner</option>
+                        <option value="sales">Sales Partner</option>
+                        <option value="supplying">Supplying Partner</option>
+                    </select>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label id="level" style="display: none;">Level</label>
+                    <select id="position" class="form-control" style="display: none;" required>
+                        <option value="">직급 선택</option>
+                        <option value="사원">사원</option>
+                        <option value="주임">주임</option>
+                        <option value="대리">대리</option>
+                        <option value="과장">과장</option>
+                        <option value="차장">차장</option>
+                        <option value="부장">부장</option>
+                    </select>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="company">Company</label>
+                    <input type="text" class="form-control" id="company" placeholder="소속사를 입력하세요" name="uname" value="" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="department">Department</label>
+                    <input type="text" class="form-control" id="department" placeholder="부서명을 입력하세요" name="uname" value="" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="name">Name</label>
+                    <input type="text" class="form-control" id="name" placeholder="이름을 입력하세요" name="uname" value="" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="mid">ID</label>
+                    <input type="text" class="form-control" id="mid" placeholder="아이디를 입력하세요" name="uid" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="mpass">Password</label> 
+                    <input type="password" class="form-control" id="mpass" placeholder="패스워드를 입력하세요" name="upass" value="" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="mpass2">Check Password</label>
+                    <input type="password" class="form-control" id="mpass2" placeholder="동일한 패스워드를 입력하세요" value="" required>
+                </div>
+	            <div class="col-md-6 mb-3">
+	                <label for="mtel">TEL</label>
+	                <input type="text" class="form-control" id="mtel" placeholder="연락처를 입력하세요" name="utel" required>
+	            </div>
+	
+	            <div class="col-md-6 mb-3">
+	                <label for="email">Email</label>
+	                <input type="email" class="form-control" id="email" placeholder="이메일을 입력하세요" name="uemail" required>
+	            </div>
+            </div>
+
+
+
+            <hr class="mb-4">
+            <input type="button" class="btn btn-primary btn-lg btn-block" value="관리자 등록" onclick="register()">
+        </form>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script>window.jQuery || document.write('<script src="assets/js/vendor/jquery.slim.min.js"><\/script>')</script>
+    <script src="assets/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/form-validation.js"></script>
+    <script>
+        // 권한 선택에 따른 직급 선택 활성화
+        const authoritySelect = document.getElementById('authority');
+        const positionSelect = document.getElementById('position');
+        const levelSelect = document.getElementById('level');
+
+        authoritySelect.addEventListener('change', function() {
+            if (this.value === 'distribution') {
+                positionSelect.style.display = 'block';  // Distribution Partner 선택 시 직급 보이기
+                levelSelect.style.display = 'block';
+            } else {
+                positionSelect.style.display = 'none';   // 다른 권한 선택 시 직급 숨기기
+                positionSelect.value = '';  // 직급 선택 초기화
+                levelSelect.style.display = 'none';
+                levelSelect.value = '';
+            }
+        });
+    </script>
 </body>
 </html>
