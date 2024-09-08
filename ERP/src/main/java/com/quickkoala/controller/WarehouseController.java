@@ -37,7 +37,6 @@ public class WarehouseController {
         
     	List<WarehouseEntity> warehouselist=warehouseservice.getAllOrdersByCode();
     	
-    	System.out.println(warehouselist.size());
     	return ResponseEntity.ok(warehouselist);
     }
 }

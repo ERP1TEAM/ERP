@@ -1,14 +1,14 @@
-function showwarehouse() {
-	 // Ajax 요청 보내기
+document.getElementById('warehousebtn').addEventListener('click',function(){
 	 fetch('/warehouse/warehouse-info', {
-	 method: 'GET'
+	 method: 'GET',
+	 cache : "no-cache",
 	 })
-     .then(response => response.json())
-     .then(data => {
+     .then(response=>response.json())
+     .then(data=>{
 		let warehousetbody=document.querySelector('#tbody');
     	warehousetbody.innerHTML='';
     	
-    	data.forEach(warehouse =>{
+    	data.forEach(function(warehouse){
 			
     	let th = `<tr class="odd gradeX">
                     <th><input type="checkbox" class="checkbox"></th>
@@ -23,9 +23,10 @@ function showwarehouse() {
     document.getElementById('overlay').style.display = 'block';   // 오버레이 숨기기
     document.body.style.overflow = 'hidden';  // 배경 스크롤 다시 활성화
 		})
-		.catch(error=>console.error('error'));
-		}
-
+		.catch(function(error){
+			alert("error");
+		});
+});
 function closemodal() {
     document.getElementById('warehouselistmodal').style.display = 'none';
     document.getElementById('overlay').style.display = 'none';   // 오버레이 숨기기
