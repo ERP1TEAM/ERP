@@ -39,4 +39,11 @@ public class WarehouseController {
     	
     	return ResponseEntity.ok(warehouselist);
     }
+ 
+    @CrossOrigin(origins="*",allowedHeaders = "*")
+    @GetMapping("/warehouse-in")
+    public String warehousein() {
+    	
+    	return "warehouse/warehouseModal";
+    }
 }
