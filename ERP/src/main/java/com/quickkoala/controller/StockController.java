@@ -16,7 +16,7 @@ public class StockController {
 	
 	@GetMapping("/inventoryIn")
 	public String inventoryIn() {
-		
+		z
 		return "stock/inventoryIn.html";
 	}
 	
