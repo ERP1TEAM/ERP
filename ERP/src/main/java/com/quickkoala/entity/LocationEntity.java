@@ -24,18 +24,18 @@ public class LocationEntity {
 	private String code;
 	
 	@Column(name="warehouse_code", length=3, nullable=false)
-	private String warehousecode;
+	private String warehouseCode;
 	
 	@Column(name="rack_code", length=2, nullable=false)
-	private String rackcode;
+	private String rackCode;
 	
 	@Column(name="row_code", length=2, nullable=false)
-	private String rowcode;
+	private String rowCode;
 	
 	@Column(name="level_code", length=1, nullable=false)
-	private String levelcode;
+	private String levelCode;
 	
 	@Column(name = "use_flag", nullable = false)
     @Enumerated(EnumType.STRING)
-    private UseFlag useflag;
+    private UseFlag useFlag;
 }

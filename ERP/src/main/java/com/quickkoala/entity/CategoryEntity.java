@@ -24,18 +24,18 @@ public class CategoryEntity {
 	private String code;
 	
 	@Column(name="main_code", length=3, nullable=false)
-	private String maincode;
+	private String mainCode;
 	
 	@Column(name="main_name", length=50, nullable=false)
-	private String mainname;
+	private String mainName;
 	
 	@Column(name="sub_code", length=2, nullable=false)
-	private String subcode;
+	private String subCode;
 	
 	@Column(name="sub_name", length=50, nullable=false)
-	private String subname;
+	private String subName;
 	
 	@Column(name = "use_flag", nullable = false)
     @Enumerated(EnumType.STRING)
-    private UseFlag useflag;
+    private UseFlag useFlag;
 }

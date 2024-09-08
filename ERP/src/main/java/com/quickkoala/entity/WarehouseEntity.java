@@ -19,6 +19,6 @@ public class WarehouseEntity {
 	@Column(name="code", length=3, nullable=false)
 	private String code;
 	
-	@Column(name="name", length=5, nullable=false)
+	@Column(name="name", length=200, nullable=false)
 	private String name;
 }
