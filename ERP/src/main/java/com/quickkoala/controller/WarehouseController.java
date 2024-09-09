@@ -40,7 +40,7 @@ public class WarehouseController {
     @CrossOrigin(origins="*", allowedHeaders = "*")
     @GetMapping("/warehouse-in")
     public String warehousein() {
-    	return "warehouse/warehouseModal :: warehouseInModal";  // Thymeleaf 템플릿을 반환
+    	return "warehouse/warehouseModal :: warehouseInModalContent";  // Thymeleaf 템플릿을 반환
     }
 
 }

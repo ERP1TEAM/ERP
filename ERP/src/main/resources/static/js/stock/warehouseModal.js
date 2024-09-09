@@ -36,19 +36,9 @@ document.getElementById('warehousebtn').addEventListener('click',function(){
         })
         .then(response => response.text())  // 서버에서 HTML 텍스트를 받아옴
         .then(data => {
+           	console.log(data);
             // warehouseinmodal 요소 찾기
             let warehouseinmodal = document.querySelector('#warehouseinmodal');
-
-            // 만약 warehouseinmodal이 없다면 동적으로 생성
-            if (!warehouseinmodal) {
-                warehouseinmodal = document.createElement('div');
-                warehouseinmodal.id = 'warehouseinmodal';
-                warehouseinmodal.className = 'modal';
-                document.body.appendChild(warehouseinmodal);
-            }
-
-            // 서버에서 받은 HTML 데이터를 삽입
-            warehouseinmodal.innerHTML = data;
 
             // 모달을 보여줌
             warehouseinmodal.style.display = 'block';
@@ -56,18 +46,7 @@ document.getElementById('warehousebtn').addEventListener('click',function(){
             // 창고 리스트 모달 숨기기
             document.getElementById('warehouselistmodal').style.display = 'none';
 
-            // 취소 버튼에 이벤트 리스너 추가
-           const cancelButton = document.getElementById('warehouseincancle');
-            if (cancelButton) {
-                cancelButton.addEventListener('click', function() {
-                    warehouseinmodal.style.display = 'none';
-                    document.getElementById('warehouselistmodal').style.display = 'block';
-                    document.getElementById('overlay').style.display = 'block';
-                    document.body.style.overflow = 'hidden';
-                }); 
-                } else {
-                console.error('Cancel button not found.');
-            }
+            
         })
         .catch(error => {
             console.error('Error:', error);
