@@ -193,7 +193,7 @@
 
 .product_input1 {
     display:block;
-    width: 150px;
+    width: 150px !important;
     height: 30px;
     border: 1px solid rgb(81, 61, 61);
     text-indent: 1px;

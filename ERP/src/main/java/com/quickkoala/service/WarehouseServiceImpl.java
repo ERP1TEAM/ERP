@@ -12,13 +12,17 @@ import com.quickkoala.repository.WarehouseRepository;
 public class WarehouseServiceImpl implements WarehouseService {
 
 	@Autowired
-	private WarehouseRepository warehouserepository;
+	private WarehouseRepository warehouseRepository;
 	
 	@Override
 	public List<WarehouseEntity> getAllOrdersByCode() {
 
-		return warehouserepository.findAllByOrderByCodeDesc();
+		return warehouseRepository.findAllByOrderByCodeDesc();
 	}
 
+	@Override
+	public void saveWarehouse(WarehouseEntity warehouseEntity) {
+		warehouseRepository.save(warehouseEntity);
+	}
 	
 }

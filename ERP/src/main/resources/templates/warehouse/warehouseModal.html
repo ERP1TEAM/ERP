@@ -49,22 +49,27 @@
 </div>
 <div id="warehouseinmodal" class="modal"  th:fragment="warehouseInModalContent">
 <div class="product_insert">
+<div class="card">
+                    <div class="card-action">
+			          <h2>창고 등록</h2>
+                    </div>
     <ul>
         <li>창고 코드</li>
         <li>
-        <input type="text" class="product_input1">
+        <input type="text" class="product_input1" id="warehouseCode">
         </li>
     </ul>
         <ul>
         <li>창고 이름</li>
         <li>
-        <input type="text" class="product_input1">
+        <input type="text" class="product_input1" id="warehouseName">
         </li>
     </ul>
 </div>
 <div class="subpage_view4" style="text-align:center; margin-bottom: 100px;">
-    <input type="button" value="등록"  class="p_button p_button_color2" style="margin-right: 5px;">
-    <input type="button" value="취소"  class="p_button p_button_color1" id="warehouseincancle">
+    <input type="button" value="등록"  class="p_button p_button_color2" style="margin-right: 5px;" id="warehouseregister">
+    <input type="button" value="취소"  class="p_button p_button_color1" id="warehouseinback">
+</div>
 </div>
 </div>
 </div>
