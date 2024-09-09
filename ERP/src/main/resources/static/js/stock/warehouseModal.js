@@ -1,3 +1,4 @@
+document.addEventListener('DOMContentLoaded', function() {
 document.getElementById('warehousebtn').addEventListener('click',function(){
 	 fetch('/warehouse/warehouse-info', {
 	 method: 'GET',
@@ -28,39 +29,55 @@ document.getElementById('warehousebtn').addEventListener('click',function(){
 		});
 });
 
-document.getElementById('warehousein').addEventListener('click', function() {
-    // 창고 등록 폼을 비동기적으로 가져옴
-    fetch('/warehouse/warehouse-in', {
-        method: 'GET',
-        cache: 'no-cache'
-    })
-    .then(response => response.text())  // HTML 텍스트로 응답을 받음
-    .then(data => {
-        // 창고 등록 폼을 모달에 삽입
-        let warehouseinmodal = document.getElementById('warehouseinmodal');
-        warehouseinmodal.innerHTML = data;
-        warehouseinmodal.style.display = 'block';  // 모달 표시
+    document.getElementById('warehousein').addEventListener('click', function() {
+        fetch('/warehouse/warehouse-in', {
+            method: 'GET',
+            cache: 'no-cache'
+        })
+        .then(response => response.text())  // 서버에서 HTML 텍스트를 받아옴
+        .then(data => {
+            // warehouseinmodal 요소 찾기
+            let warehouseinmodal = document.querySelector('#warehouseinmodal');
 
-        // 창고 리스트 모달 숨기기
-        document.getElementById('warehouselistmodal').style.display = 'none';
-    })
-	.catch(function(error){
-			alert("error");
-		});
-});
+            // 만약 warehouseinmodal이 없다면 동적으로 생성
+            if (!warehouseinmodal) {
+                warehouseinmodal = document.createElement('div');
+                warehouseinmodal.id = 'warehouseinmodal';
+                warehouseinmodal.className = 'modal';
+                document.body.appendChild(warehouseinmodal);
+            }
 
-//in 취소
-document.getElementById('warehouseincancle').addEventListener('click', function() {
-   
-    document.getElementById('warehouseinmodal').style.display = 'none';
-    document.getElementById('warehouselistmodal').style.display = 'block';
-    document.getElementById('overlay').style.display = 'block';
-    document.body.style.overflow = 'hidden';
-});
+            // 서버에서 받은 HTML 데이터를 삽입
+            warehouseinmodal.innerHTML = data;
+
+            // 모달을 보여줌
+            warehouseinmodal.style.display = 'block';
+            
+            // 창고 리스트 모달 숨기기
+            document.getElementById('warehouselistmodal').style.display = 'none';
+
+            // 취소 버튼에 이벤트 리스너 추가
+           const cancelButton = document.getElementById('warehouseincancle');
+            if (cancelButton) {
+                cancelButton.addEventListener('click', function() {
+                    warehouseinmodal.style.display = 'none';
+                    document.getElementById('warehouselistmodal').style.display = 'block';
+                    document.getElementById('overlay').style.display = 'block';
+                    document.body.style.overflow = 'hidden';
+                }); 
+                } else {
+                console.error('Cancel button not found.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    });
 
 //창고 모달 닫기
 document.getElementById('closemodal').addEventListener('click',function(){
     document.getElementById('warehouselistmodal').style.display = 'none';
     document.getElementById('overlay').style.display = 'none';   // 오버레이 숨기기
     document.body.style.overflow = 'auto';  // 배경 스크롤 다시 활성화
+});
 });
