@@ -95,6 +95,13 @@
             loginContainer.classList.add('fade-in');
         };
 
+        // 브라우저의 캐싱된 페이지에서 뒤로가기 했을 때 새로고침
+        window.onpageshow = function(event) {
+            if (event.persisted) {
+                window.location.reload();
+            }
+        };
+        
         function redirectToRegister() {
             const loginContainer = document.getElementById('login-container');
             loginContainer.classList.add('fade-out');
