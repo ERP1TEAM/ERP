@@ -6,5 +6,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class PurchaseProductViewDto {
-	private String orderNumber, productCode, name, quantity, price, totalPrice, orderDate;
+	private String orderNumber, productCode, name, quantity, price, totalPrice, orderDate, wtQuantity;
+	
 }

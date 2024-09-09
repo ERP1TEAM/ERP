@@ -94,4 +94,9 @@ public class ReceiveTempServiceImpl implements ReceiveTempService{
 	public ReceiveTempEntity modifyStatus(String data, Integer ea) {
 		return null;
 	}
+	
+	@Override
+	public Integer getWtQuantity(String order) {
+		return receiveTempRepository.findWtQuantityByOrderNumber(order);
+	}
 }

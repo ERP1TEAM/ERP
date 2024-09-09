@@ -18,4 +18,7 @@ public interface ReceiveTempRepository extends JpaRepository<ReceiveTempEntity, 
 	List<ReceiveTempEntity> findAllByOrderByCodeDesc();
 	ReceiveTempEntity findByCode(String data);
 	
+	@Query("SELECT r.wtQuantity FROM ReceiveTempEntity r WHERE r.orderNumber = :orderNumber")
+    Integer findWtQuantityByOrderNumber(@Param("orderNumber") String orderNumber);
+	
 }

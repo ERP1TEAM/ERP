@@ -16,6 +16,9 @@ public class PurchaseProductViewServiceImpl implements PurchaseProductViewServic
 	@Autowired
 	private PurchaseProductViewRepository purchaseProductViewRepository;
 	
+	@Autowired
+	private ReceiveTempService receiveTempService;
+	
 	@Override
 	public List<PurchaseProductViewDto> getAllOrders() {
 		List<PurchaseProductViewEntity> result = purchaseProductViewRepository.findAllByOrderByOrderNumberDesc();
@@ -29,6 +32,8 @@ public class PurchaseProductViewServiceImpl implements PurchaseProductViewServic
 			dto.setPrice(String.format("%,d", ppve.getPrice()));
 			dto.setTotalPrice(String.format("%,d", ppve.getTotalPrice()));
 			dto.setOrderDate(String.valueOf(ppve.getOrderDate()).replace("T", " "));
+			Integer wtQuantity = receiveTempService.getWtQuantity(ppve.getOrderNumber());
+			dto.setWtQuantity(wtQuantity == null ? "0" : String.valueOf(ppve.getQuantity() - wtQuantity));
 			data.add(dto);
 		}
 		return data;

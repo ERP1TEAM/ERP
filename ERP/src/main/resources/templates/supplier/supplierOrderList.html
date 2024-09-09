@@ -17,84 +17,22 @@
 
 <body>
     <div id="wrapper">
-        <nav class="navbar navbar-default top-navbar" role="navigation">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle waves-effect waves-dark" data-toggle="collapse" data-target=".sidebar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand waves-effect waves-dark" style="background-color: #F5F5F5" href="index.html"><img src="../img/only_logo.png" style="width: 45px; height:30px; display: ruby; margin-right: 18px; margin-left: 8px;"><strong style="color: black;">Quick Koala</strong></a>
-				
-		<div id="sideNav" href=""><i class="material-icons dp48" style="color: #1A4870">toc</i></div>
-            </div>
-
-            <ul class="nav navbar-top-links navbar-right"> 
-				<!--
-				<li><a class="dropdown-button waves-effect waves-dark" href="#!" data-activates="dropdown4"><i class="fa fa-envelope fa-fw"></i> <i class="material-icons right">arrow_drop_down</i></a></li>				
-				<li><a class="dropdown-button waves-effect waves-dark" href="#!" data-activates="dropdown3"><i class="fa fa-tasks fa-fw"></i> <i class="material-icons right">arrow_drop_down</i></a></li>
-				<li><a class="dropdown-button waves-effect waves-dark" href="#!" data-activates="dropdown2"><i class="fa fa-bell fa-fw"></i> <i class="material-icons right">arrow_drop_down</i></a></li>
-				-->
-				<li><a class="dropdown-button waves-effect waves-dark" href="#!" data-activates="dropdown1"><i class="fa fa-user fa-fw"></i> <b>홍길동 관리자</b> <i class="material-icons right">arrow_drop_down</i></a></li>
-            </ul>
-        </nav>
-		<!-- Dropdown Structure -->
-<ul id="dropdown1" class="dropdown-content">
-<li><a href="#"><i class="fa fa-user fa-fw"></i>내정보 확인</a>
-</li>
-<li><a href="#"><i class="fa fa-gear fa-fw"></i>페이지 셋팅</a>
-</li> 
-<li><a href="#"><i class="fa fa-sign-out fa-fw"></i>로그아웃</a>
-</li>
-</ul>
+        <nav class="navbar navbar-default top-navbar" role="navigation" th:replace="~{supplier/header-s.html :: header}"></nav>
+		<ul id="dropdown1" class="dropdown-content" th:replace="~{supplier/dropdown1-s.html :: dropdown1}"></ul>
 	   <!--/. NAV TOP  -->
-        <nav class="navbar-default navbar-side" role="navigation">
-            <div class="sidebar-collapse">
-                <ul class="nav" id="main-menu">
-                    <li>
-                        <a href="#" class="waves-effect waves-dark" style="color:white;"><img src="/img/icon/order_icon.png"> 납품등록<span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level">
-                            <li >
-                                <a href="#"  style="color: #E2E2E2;">등록</a>
-                            </li>
-                        </ul>
-                    </li>
-                	<li>
-                        <a href="#" class="waves-effect waves-dark" style="color:white;"><img src="/img/icon/order_icon.png"> 납품내역<span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level">
-                            <li >
-                                <a href="#"  style="color: #E2E2E2;">내역</a>
-                            </li>
-                    	</ul>
-                    </li>
-					<li>
-                        <a href="#" class="waves-effect waves-dark" style="color:white;"><img src="/img/icon/order_icon.png"> 반품내역<span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level">
-                            <li>
-                                <a href="./purchaseOrder3"  style="color: #E2E2E2;">내역</a>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-
-            </div>
-
-        </nav>
+        <nav class="navbar-default navbar-side" role="navigation" th:replace="~{supplier/sidebar-s.html :: sidebar}"></nav>
         <!-- nav  -->
       <div id="page-wrapper"  style="background-color:#F7FFF0;">
 	  <div class="header"> 
             <h1 class="page-header">
-               납품관리
+               납품등록
                     </h1>
 						<ol class="breadcrumb">
 					  <li><a href="#" style="color: #1A4870;">Home</a></li>
 					  
 					  <li><a href="#">페이지 tap1</a></li>
 					  <li class="active">페이지 tap2</li>
-					  
 					</ol> 
-									
 		</div>
     <!-- main views-->
      <div id="page-inner">
@@ -133,7 +71,7 @@
 		                                <td th:text="${item.price}"></td>
 		                                <td th:text="${item.totalPrice}"></td>
 		                                <td th:text="${item.orderDate}"></td>
-		                                <td th:text="${item.quantity}"></td>
+		                                <td th:text="${item.wtQuantity}"></td>
 		                                <td><input type="text" th:id="${item.orderNumber}"></td>
 		                                <td><input class="cd-paging-right-btn purchase_request" type="button" value="납품등록" th:data="${item.orderNumber}"></td>
 		                            </tr>
