@@ -26,8 +26,14 @@ public class WarehouseServiceImpl implements WarehouseService {
 	}
 
 	@Override
-	public void saveWarehouse(WarehouseEntity warehouseEntity) {
+	public boolean saveWarehouse(WarehouseEntity warehouseEntity) {
+
+		if(warehouseRepository.existsByCode(warehouseEntity.getCode())) {
+			return false;
+		}
+		
 		warehouseRepository.save(warehouseEntity);
+		return true;
 	}
 	
 	@Override
@@ -50,4 +56,5 @@ public class WarehouseServiceImpl implements WarehouseService {
 		
 		return response;
 	}
+	
 }

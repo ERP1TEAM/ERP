@@ -12,5 +12,7 @@ public interface WarehouseRepository extends JpaRepository<WarehouseEntity, Stri
 
 	List<WarehouseEntity> findAllByOrderByCodeDesc();
 	
+	boolean existsByCode(String code);
+	
 	void deleteByCode(String code);
 }

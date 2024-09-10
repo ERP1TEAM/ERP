@@ -10,7 +10,7 @@ public interface WarehouseService {
 	
 	List<WarehouseEntity> getAllOrdersByCode();
 	
-	void saveWarehouse(WarehouseEntity warehouseEntity);
+	boolean saveWarehouse(WarehouseEntity warehouseEntity);
 	
 	Map<String, Object> deleteWarehouse(List<String> warehouseCode);
 }

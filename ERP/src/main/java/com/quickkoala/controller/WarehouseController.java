@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -46,8 +47,11 @@ public class WarehouseController {
 
     @PostMapping("/warehouse-register")
     public ResponseEntity<String> registerWarehouse(@RequestBody WarehouseEntity warehouseEntity) {
-    	warehouseService.saveWarehouse(warehouseEntity);
-        return ResponseEntity.ok("창고가 등록되었습니다.");
+    	boolean insave = warehouseService.saveWarehouse(warehouseEntity);
+        if(!insave) {
+    	return ResponseEntity.status(HttpStatus.CONFLICT).body("이미 존재하는 창고 코드 입니다.");
+        }
+    	return ResponseEntity.ok("창고가 등록되었습니다.");
     }
     
     @PostMapping("/warehouse-delete")

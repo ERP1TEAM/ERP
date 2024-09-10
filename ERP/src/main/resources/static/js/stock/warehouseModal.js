@@ -14,6 +14,9 @@ warehousemainmodal();
             let warehouseinmodal = document.querySelector('#warehouseinmodal');
             warehouseinmodal.style.display = 'block';
             document.getElementById('warehouselistmodal').style.display = 'none';
+            
+            document.getElementById('warehouseCode').value = '';
+       		document.getElementById('warehouseName').value = '';
         })
         .catch(error => {
             alert("error");
@@ -46,17 +49,19 @@ document.getElementById('warehouseregister').addEventListener('click', function(
         .then(response => {
             if (response.ok) {
                 return response.text();
-            }else{
+            }else if(response.status == 409){
+				return response.text();
+				}else{
 				alert('창고 등록에 실패했습니다.');
 			}
         })
         .then(data => {
-           
             alert(data);
-            
+            if(data=='창고가 등록되었습니다.'){
               document.getElementById('warehouseinmodal').style.display = 'none';
               document.getElementById('warehouselistmodal').style.display = 'block';
               warehousemainmodal();
+              }
         })
         .catch(error => {
             alert('오류가 발생했습니다.');
@@ -128,7 +133,7 @@ function warehousemainmodal(){
 	})
 	.then(response=>response.json())
     .then(data=>{
-		let warehousetbody=document.querySelector('#tbody');
+		let warehousetbody=document.querySelector('#warehousetbody');
     	warehousetbody.innerHTML='';
     	
     	data.forEach(function(warehouse){
