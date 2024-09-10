@@ -17,6 +17,7 @@ warehousemainmodal();
             
             document.getElementById('warehouseCode').value = '';
        		document.getElementById('warehouseName').value = '';
+       		document.getElementById('warehouseMemo').value = '';
         })
         .catch(error => {
             alert("error");
@@ -28,6 +29,7 @@ document.getElementById('warehouseregister').addEventListener('click', function(
         
         const warehouseCode = document.getElementById('warehouseCode').value.trim();
         const warehouseName = document.getElementById('warehouseName').value.trim();
+        const warehouseMemo = document.getElementById('warehouseMemo').value.trim();
         
         if (!warehouseCode || !warehouseName) {
         alert('창고 코드와 이름을 모두 입력해주세요.');
@@ -36,7 +38,8 @@ document.getElementById('warehouseregister').addEventListener('click', function(
         
         const warehouseData = {
             code: warehouseCode,
-            name: warehouseName
+            name: warehouseName,
+            memo: warehouseMemo
         };
         
         fetch('/warehouse/warehouse-register', {
@@ -109,7 +112,36 @@ document.getElementById('warehousedelete').addEventListener('click',function(){
         alert('오류가 발생했습니다.');
     });
 }); 
-  
+
+document.querySelector('#warehousetbody').addEventListener('click', function(event) {
+    if (event.target && event.target.classList.contains('warehousemodifybtn')) {
+
+        const warehouseCode = event.target.getAttribute('data-warehousecode');
+        
+        fetch(`/warehouse/get-info?code=${warehouseCode}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            // 모달의 입력 필드에 창고 정보를 채워줌
+            document.getElementById('warehouseCode').value = data.code;
+            document.getElementById('warehouseName').value = data.name;
+            document.getElementById('warehouseMemo').value = data.memo;
+            
+            // 수정 모달 열기
+            document.getElementById('editWarehouseModal').style.display = 'block';
+        })
+        .catch(error => {
+            alert('창고 정보를 가져오는 중 오류가 발생했습니다.');
+        });
+    }
+});
+
+
+
 //모달닫기
 document.getElementById('closemodal').addEventListener('click',function(){
     document.getElementById('warehouselistmodal').style.display = 'none';
@@ -143,7 +175,7 @@ function warehousemainmodal(){
                     <td>${warehouse.code}</td>
                     <td>${warehouse.name}</td>
                     <td><input type="button" value="메모"></td>
-                    <td><input type="button" value="수정"></td>
+                    <td><input type="button" value="수정" class="warehousemodifybtn" data-warehousecode="${warehouse.code}"></td>
                  </tr>`;
 			warehousetbody.innerHTML +=th;
 		});
