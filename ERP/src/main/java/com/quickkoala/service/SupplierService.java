@@ -7,4 +7,5 @@ import com.quickkoala.entity.SupplierEntity;
 public interface SupplierService {
 	List<SupplierEntity> getAllData();
 	List<SupplierEntity> searchByName(String term);
+	SupplierEntity getCode(String name);
 }

@@ -11,9 +11,9 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "product_supplier_view")
+@Table(name = "view_purchase")
 @Data
-public class ProductSupplierViewEntity {
+public class PurchaseViewEntity {
 
 	 @Id
     @Column(name = "product_code")  // 상품 코드

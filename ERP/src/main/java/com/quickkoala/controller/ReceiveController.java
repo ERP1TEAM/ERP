@@ -1,14 +1,9 @@
 package com.quickkoala.controller;
 
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.catalina.connector.Response;
 import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -16,19 +11,21 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.quickkoala.dto.PurchaseDto;
 import com.quickkoala.dto.PurchaseListDto;
+import com.quickkoala.dto.ReceiveModalDto;
 import com.quickkoala.entity.PurchaseEntity;
+import com.quickkoala.entity.ReceiveDetailEntity;
 import com.quickkoala.entity.ReceiveTempEntity;
 import com.quickkoala.entity.SupplierEntity;
 import com.quickkoala.entity.TemporaryReceiveViewEntity;
-import com.quickkoala.service.ProductSupplierViewService;
+import com.quickkoala.service.PurchaseViewService;
 import com.quickkoala.service.PurchaseService;
+import com.quickkoala.service.ReceiveDetailService;
 import com.quickkoala.service.ReceiveTempService;
 import com.quickkoala.service.SupplierService;
 import com.quickkoala.service.TemporaryReceiveViewService;
@@ -51,12 +48,15 @@ public class ReceiveController {
 	private SupplierService supplierService;
 	
 	@Autowired
-	private ProductSupplierViewService productSupplierViewService;
+	private PurchaseViewService purchaseViewService;
+	
+	@Autowired
+	private ReceiveDetailService receiveDetailService;
 	
 	//발주요청 페이지
 	@GetMapping("purchaseOrder")
 	public String orderPage(Model model) {
-		model.addAttribute("items",productSupplierViewService.getAllData());
+		model.addAttribute("items",purchaseViewService.getAllData());
 		return "receive/purchaseOrder";
 	}
 	
@@ -77,11 +77,17 @@ public class ReceiveController {
 		return "receive/temporaryReceive";
 	}
 	
+	//입고내역 페이지
+	@GetMapping("receiveDetail")
+	public String receiveDetail(Model model) {
+		model.addAttribute("items","");
+		return "receiveDetail";
+	}
+	
 	//발주요청
 	@PostMapping("purchaseAdd")
 	public ResponseEntity<String> purchaseAdd(@ModelAttribute PurchaseListDto orders){
-		System.out.println(orders.getProduct_code());
-		purchaseService.addOrder(orders);
+		purchaseService.addOrders(orders);
 		return ResponseEntity.ok("success");
 	}
 	
@@ -117,12 +123,27 @@ public class ReceiveController {
 	@GetMapping("receiving")
 	public ResponseEntity<String> receiving(@RequestParam("data") String data, @RequestParam("ea") Integer ea){
 		ReceiveTempEntity receiveTempEntity = receiveTempService.getOne(data);
-		System.out.println(ea);
 		if(receiveTempEntity.getWtQuantity() < ea) {
 			return ResponseEntity.ok("over");			
 		}else {
-			
-			return ResponseEntity.ok("ok");
+			ReceiveDetailEntity result = receiveDetailService.addData(data,ea);
+			if(result == null) {
+				return ResponseEntity.ok("no");
+			}else {
+				
+				return ResponseEntity.ok("ok");
+			}
 		}
+	}
+	
+	//입고확정 모달
+	@GetMapping("receivingModal")
+	public ResponseEntity<ReceiveModalDto> receivingModal(@RequestParam("name") String name, 
+			@RequestParam("qty") Integer qty, @RequestParam("wqty") Integer wqty){
+		ReceiveModalDto dto = new ReceiveModalDto();
+		dto.setName(name);
+		dto.setQty(qty);
+		dto.setWqty(wqty);
+		return ResponseEntity.ok(dto);
 	}
 }

@@ -42,7 +42,7 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-action">
-                         발주내역 <span style="float: right;">+ MORE</span>
+                         발주내역 & 납품등록 <span style="float: right;">+ MORE</span>
                     </div>
                     <div class="card-content">
                         <div class="table-responsive">
@@ -73,7 +73,7 @@
 		                                <td th:text="${item.orderDate}"></td>
 		                                <td th:text="${item.wtQuantity}"></td>
 		                                <td><input type="text" th:id="${item.orderNumber}"></td>
-		                                <td><input class="cd-paging-right-btn purchase_request" type="button" value="납품등록" th:data="${item.orderNumber}"></td>
+		                                <td><input class="cd-paging-right-btn purchase_request" type="button" value="납품등록" th:data-idx="${item.orderNumber}" th:data-wt="${item.wtQuantity}"></td>
 		                            </tr>
                                 </tbody>
                             </table>

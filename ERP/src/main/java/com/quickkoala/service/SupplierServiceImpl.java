@@ -23,4 +23,10 @@ public class SupplierServiceImpl implements SupplierService{
 	public List<SupplierEntity> searchByName(String term) {
 		return supplierRepository.findByNameContainingIgnoreCase(term);
 	}
+	
+	@Override
+	public SupplierEntity getCode(String name) {
+		System.out.println(name);
+		return supplierRepository.findByName(name);
+	}
 }

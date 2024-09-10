@@ -7,8 +7,7 @@ import com.quickkoala.dto.PurchaseListDto;
 import com.quickkoala.entity.PurchaseEntity;
 
 public interface PurchaseService {
-	PurchaseEntity addAllOrder(PurchaseDto orders);
-	List<PurchaseEntity> addOrder(PurchaseListDto orders);
+	List<PurchaseEntity> addOrders(PurchaseListDto orders);
 	long getCountOfOrdersToday();
 	List<PurchaseEntity> getAllOrders();
 	List<PurchaseEntity> getAllOrdersByStatus(String status);

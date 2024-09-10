@@ -33,7 +33,7 @@ public class PurchaseProductViewServiceImpl implements PurchaseProductViewServic
 			dto.setTotalPrice(String.format("%,d", ppve.getTotalPrice()));
 			dto.setOrderDate(String.valueOf(ppve.getOrderDate()).replace("T", " "));
 			Integer wtQuantity = receiveTempService.getWtQuantity(ppve.getOrderNumber());
-			dto.setWtQuantity(wtQuantity == null ? "0" : String.valueOf(ppve.getQuantity() - wtQuantity));
+			dto.setWtQuantity(wtQuantity == null ? String.valueOf(ppve.getQuantity()) : String.valueOf(ppve.getQuantity() - wtQuantity));
 			data.add(dto);
 		}
 		return data;

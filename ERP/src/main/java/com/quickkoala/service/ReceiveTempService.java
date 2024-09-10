@@ -1,5 +1,6 @@
 package com.quickkoala.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import com.quickkoala.dto.PurchaseDto;
@@ -17,4 +18,5 @@ public interface ReceiveTempService {
 	ReceiveTempEntity getOne(String data);
 	ReceiveTempEntity modifyStatus(String data, Integer ea);
 	Integer getWtQuantity(String order);
+	String getOrderNumber(String data);
 }

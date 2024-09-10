@@ -11,7 +11,9 @@ import org.springframework.stereotype.Service;
 import com.quickkoala.dto.PurchaseDto;
 import com.quickkoala.dto.PurchaseListDto;
 import com.quickkoala.entity.PurchaseEntity;
+import com.quickkoala.entity.SupplierEntity;
 import com.quickkoala.repository.PurchaseRepository;
+import com.quickkoala.repository.SupplierRepository;
 import com.quickkoala.utils.TodayUtils;
 
 @Service
@@ -20,39 +22,19 @@ public class PurchaseServiceImpl implements PurchaseService{
 	@Autowired
 	private PurchaseRepository purchaseRepository;
 	
-	@Override
-	public PurchaseEntity addAllOrder(PurchaseDto orders) {
-		PurchaseEntity order = new PurchaseEntity();
-		//order.setOrderNumber("20240903-"+this.getCountOfOrdersToday()+1);
-		order.setOrderNumber("20240903-10");
-		order.setSupplierCode(orders.getSupplier());
-		order.setProductCode(orders.getProduct_code());
-		order.setManager("홍길동");
-		order.setQuantity(orders.getQuantity());
-		order.setPrice(orders.getPrice());
-		order.setTotalPrice(orders.getQuantity()*orders.getPrice());
-		if (order.getOrderDate() == null) {
-            order.setOrderDate(LocalDateTime.now());
-        }
-		order.setExpectedDate("2024-09-10");
-		order.setStatus("입고대기");
-//		return purchaseRepository.saveAll(order);
-		return purchaseRepository.save(order);
-	}
+	@Autowired
+	private SupplierService supplierService;
 	
 	@Override
-	public List<PurchaseEntity> addOrder(PurchaseListDto orders) {
-		System.out.println("1번까진됨");
+	public List<PurchaseEntity> addOrders(PurchaseListDto orders) {
 		List<PurchaseEntity> orderEntities = new ArrayList<>();
 		int number = (int)this.getCountOfOrdersToday()+1;
-		
-		System.out.println("2번까진됨");
 		
 	    for (int f=0; f<orders.getProduct_code().size(); f++) {
 	        PurchaseEntity order = new PurchaseEntity();
 	        String formattedNumber = String.format("%03d", number);
 	        order.setOrderNumber(TodayUtils.getToday()+"-" + formattedNumber);
-	        order.setSupplierCode(orders.getSupplier().get(f));
+	        order.setSupplierCode(supplierService.getCode(orders.getSupplier().get(f)).getCode());
 	        order.setProductCode(orders.getProduct_code().get(f));
 	        order.setManager("홍길동");
 	        order.setQuantity(orders.getQuantity().get(f));
@@ -67,7 +49,6 @@ public class PurchaseServiceImpl implements PurchaseService{
 	        number += 1;
 	    }
 
-	    System.out.println("3번까진됨");
 	    // 여러 엔티티를 저장하므로 saveAll 사용
 	    return purchaseRepository.saveAll(orderEntities);
 	}

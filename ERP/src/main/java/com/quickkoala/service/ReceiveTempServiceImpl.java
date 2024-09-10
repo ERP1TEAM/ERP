@@ -30,6 +30,9 @@ public class ReceiveTempServiceImpl implements ReceiveTempService{
 	@Autowired
 	private ReceiveTempViewRepository receiveTempViewRepository;
 	
+	@Autowired
+	private DeliveryDetailService deliveryDetailService;
+	
 	@Override
 	public List<ReceiveTempEntity> addAllReceive(SupplierDeliveryListDto orders) {
 		List<ReceiveTempEntity> orderEntities = new ArrayList<>();
@@ -71,6 +74,7 @@ public class ReceiveTempServiceImpl implements ReceiveTempService{
 		receiveTempEntity.setWtQuantity(ea);
 		receiveTempEntity.setDate(LocalDateTime.now());
 		receiveTempEntity.setMemo("-");
+		
 		return receiveTempRepository.save(receiveTempEntity);
 	}
 	
@@ -97,6 +101,11 @@ public class ReceiveTempServiceImpl implements ReceiveTempService{
 	
 	@Override
 	public Integer getWtQuantity(String order) {
-		return receiveTempRepository.findWtQuantityByOrderNumber(order);
+		return receiveTempRepository.findTotalWtQuantityByOrderNumber(order);
+	}
+	
+	@Override
+	public String getOrderNumber(String data) {
+		return receiveTempRepository.findOrderNumberByCode(data);
 	}
 }

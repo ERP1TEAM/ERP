@@ -17,6 +17,8 @@ import org.springframework.web.multipart.MultipartFile;
 import com.quickkoala.dto.SupplierDeliveryDto;
 import com.quickkoala.entity.PurchaseEntity;
 import com.quickkoala.entity.PurchaseProductViewEntity;
+import com.quickkoala.service.DeliveryDetailService;
+import com.quickkoala.service.DeliveryDetailViewService;
 import com.quickkoala.service.PurchaseProductViewService;
 import com.quickkoala.service.PurchaseService;
 import com.quickkoala.service.ReceiveTempService;
@@ -35,11 +37,24 @@ public class SupplierController {
 	@Autowired
 	private PurchaseProductViewService purchaseProductViewService;
 	
+	@Autowired
+	private DeliveryDetailService deliveryDetailService;
+	
+	@Autowired
+	private DeliveryDetailViewService deliveryDetailViewService;
+	
 	//납품등록 페이지
 	@GetMapping("supplierOrderList")
 	public String supplierOrderList(Model model) {
 		model.addAttribute("items",purchaseProductViewService.getAllOrders());
 		return "supplier/supplierOrderList";
+	}
+	
+	//납품내역 페이지
+	@GetMapping("supplierDeliveryList")
+	public String supplierDeliveryList(Model model) {
+		model.addAttribute("items",deliveryDetailViewService.getAllData());
+		return "supplier/supplierDeliveryList";
 	}
 	
 	//엑셀 불러오기
@@ -67,11 +82,11 @@ public class SupplierController {
 	@GetMapping("delivery_regi")
 	public ResponseEntity<String> deliveryRegi(@RequestParam("data") String data, @RequestParam("ea") Integer ea){
 		PurchaseEntity purchaseEntity = purchaseService.getOrderByNumber(data);
-		System.out.println(purchaseEntity.getQuantity());
 		if(purchaseEntity.getQuantity() < ea) {
 			return ResponseEntity.ok("over");			
 		}else {
 			receiveTempService.addDelivery(data, ea);
+			deliveryDetailService.addDelivery(data, ea);
 			return ResponseEntity.ok("ok");
 		}
 	}

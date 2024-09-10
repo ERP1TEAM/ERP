@@ -32,7 +32,12 @@ document.addEventListener("DOMContentLoaded", function() {
 		})
 			.then(response => response.text())
 			.then(data => {
-				alert(data);
+				if(data === "success"){
+					alert("발주등록 되었습니다.");
+					location.reload();					
+				}else{
+					alert("오류로 인하여 발주등록에 실패하였습니다.");
+				}
 			})
 			.catch(error => {
 				console.log(error);
