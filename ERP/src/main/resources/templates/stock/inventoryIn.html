@@ -3,8 +3,8 @@
 <head th:insert="~{layout/stockHeader :: topheader}"></head>
 <body class="bg-light">
     <div id="wrapper">
-	<div th:insert="~{layout/stockHeader::top}"></div>
-	<div th:insert="~{layout/stockHeader::sidemenu}"></div>
+	<div th:insert="~{/layout/stockHeader::top}"></div>
+	<div th:insert="~{/sidebar::sidebar}"></div>
         <!-- nav  -->
       <div id="page-wrapper"  style="background-color:#F7FFF0;">
 	  <div th:insert="~{layout/stockHeader :: header}"></div>
@@ -37,7 +37,7 @@
         <li>
             <select class="product_input1">
                 <option value=""></option>
-            </select><input type="button" value="+" title="+" class="product_btn2">
+            </select>
         </li>
     </ul>
     <ul>
@@ -70,24 +70,6 @@
         <li>
             <label><input type="radio" name="a" class="rdo" checked> 사용</label>
             <label><input type="radio" name="a" class="rdo"> 미사용</label>
-        </li>
-    </ul>
-        <ul>
-        <li>총 재고량</li>
-        <li>
-            <input type="text" class="product_input3"> <span class="help_text">※ 숫자만 입력하세요</span>
-        </li>
-    </ul>
-    <ul>
-        <li>예약된 재고</li>
-        <li>
-            <input type="text" class="product_input3">
-        </li>
-    </ul>
-    <ul>
-        <li>가용재고</li>
-        <li>
-            <input type="text" class="product_input3"> <span class="help_text">※ 숫자만 입력하세요.</span>
         </li>
     </ul>
     <ul>

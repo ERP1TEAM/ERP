@@ -11,4 +11,6 @@ import com.quickkoala.entity.WarehouseEntity;
 public interface WarehouseRepository extends JpaRepository<WarehouseEntity, String>{
 
 	List<WarehouseEntity> findAllByOrderByCodeDesc();
+	
+	void deleteByCode(String code);
 }

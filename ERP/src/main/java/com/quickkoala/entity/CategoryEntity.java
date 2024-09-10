@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
 public class CategoryEntity {
 	
 	@Id
-	@Column(name="code", length=5, nullable=false)
+	@Column(name="code", length=6, nullable=false)
 	private String code;
 	
 	@Column(name="main_code", length=3, nullable=false)
@@ -29,7 +29,7 @@ public class CategoryEntity {
 	@Column(name="main_name", length=50, nullable=false)
 	private String mainName;
 	
-	@Column(name="sub_code", length=2, nullable=false)
+	@Column(name="sub_code", length=3, nullable=false)
 	private String subCode;
 	
 	@Column(name="sub_name", length=50, nullable=false)
@@ -38,4 +38,7 @@ public class CategoryEntity {
 	@Column(name = "use_flag", nullable = false)
     @Enumerated(EnumType.STRING)
     private UseFlag useFlag;
+	
+	@Column(name="memo", nullable=true, columnDefinition = "text")
+	private String memo;
 }

@@ -11,13 +11,13 @@ public class StockController {
 	@GetMapping("/inventoryIn")
 	public String inventoryIn() {
 		
-		return "stock/inventoryIn.html";
+		return "stock/inventoryIn";
 	}
 	
 	@GetMapping("/inventoryList")
 	public String inventoryList() {
 		
-		return "stock/inventoryList.html";
+		return "stock/inventoryList";
 	}
 	
 }

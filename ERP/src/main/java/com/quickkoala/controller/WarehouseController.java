@@ -1,6 +1,7 @@
 package com.quickkoala.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,7 @@ import com.quickkoala.service.WarehouseService;
 
 @Controller
 @RequestMapping("warehouse")
+@CrossOrigin(origins="*", allowedHeaders = "*")
 public class WarehouseController {
 
 	@Autowired
@@ -28,8 +30,6 @@ public class WarehouseController {
 		return "warehouse/locationStatus";
 	}
 	
-	 // 창고 정보를 비동기적으로 가져오는 메소드
-    @CrossOrigin(origins="*",allowedHeaders = "*")
 	@GetMapping("/warehouse-info")
     @ResponseBody
     public ResponseEntity<List<WarehouseEntity>> warehouseList() {
@@ -39,15 +39,23 @@ public class WarehouseController {
     	return ResponseEntity.ok(warehouseList);
     }
  
-    @CrossOrigin(origins="*", allowedHeaders = "*")
     @GetMapping("/warehousein-modal")
     public String warehousein() {
-    	return "warehouse/warehouseModal :: warehouseInModalContent";  // Thymeleaf 템플릿을 반환
+    	return "warehouse/warehouseModal :: warehouseInModalContent";
     }
 
     @PostMapping("/warehouse-register")
     public ResponseEntity<String> registerWarehouse(@RequestBody WarehouseEntity warehouseEntity) {
-        warehouseService.saveWarehouse(warehouseEntity);
-        return ResponseEntity.ok("창고가 성공적으로 등록되었습니다.");
+    	warehouseService.saveWarehouse(warehouseEntity);
+        return ResponseEntity.ok("창고가 등록되었습니다.");
+    }
+    
+    @PostMapping("/warehouse-delete")
+    public ResponseEntity<Map<String, Object>> deleteWarehouses(@RequestBody Map<String, List<String>> request) {
+        List<String> warehouseCode = request.get("warehouseCode");
+        Map<String, Object> response =  warehouseService.deleteWarehouse(warehouseCode);
+       
+        return ResponseEntity.ok().body(response);
+
     }
 }

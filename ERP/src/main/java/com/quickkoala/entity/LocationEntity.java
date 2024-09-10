@@ -38,4 +38,7 @@ public class LocationEntity {
 	@Column(name = "use_flag", nullable = false)
     @Enumerated(EnumType.STRING)
     private UseFlag useFlag;
+	
+	@Column(name="memo", nullable=true, columnDefinition = "text")
+	private String memo;
 }
