@@ -47,6 +47,7 @@
 					        </div>
 					        </div>
 </div>
+
 <div id="warehouseinmodal" class="modal"  th:fragment="warehouseInModalContent">
 <div class="product_insert">
 <div class="card">
@@ -56,7 +57,7 @@
     <ul>
         <li>창고 코드</li>
         <li>
-        <input type="text" class="product_input1" id="warehouseCode">
+        <input type="text" class="product_input1" id="warehouseCode"> *한번 등록할 시 절대 수정할 수 없습니다.
         </li>
     </ul>
         <ul>
@@ -74,9 +75,42 @@
 </div>
 <div class="subpage_view4" style="text-align:center; margin-bottom: 100px;">
     <input type="button" value="등록"  class="p_button p_button_color2" style="margin-right: 5px;" id="warehouseregister">
-    <input type="button" value="취소"  class="p_button p_button_color1" id="warehouseinback">
+    <input type="button" value="취소"  class="p_button p_button_color1" id="warehouseinback" >
 </div>
 </div>
 </div>
+
+<div id="warehousemodifymodal" class="modal" >
+<div class="product_insert">
+<div class="card">
+                    <div class="card-action">
+			          <h2>창고 수정</h2>
+                    </div>
+    <ul>
+        <li>창고 코드</li>
+        <li>
+        <input type="text" class="product_input1" id="warehouseMcode" readonly="readonly">
+        </li>
+    </ul>
+        <ul>
+        <li>창고 이름</li>
+        <li>
+        <input type="text" class="product_input1" id="warehouseMname">
+        </li>
+    </ul>
+    <ul>
+        <li>메모</li>
+        <li>
+        <input type="text" class="product_input1" id="warehouseMmemo">
+        </li>
+    </ul>
+</div>
+<div class="subpage_view4" style="text-align:center; margin-bottom: 100px;">
+    <input type="button" value="수정"  class="p_button p_button_color2" style="margin-right: 5px;" id="warehouseModifybtn">
+    <input type="button" value="취소"  class="p_button p_button_color1"  id="warehousemodifyback">
+</div>
+</div>
+</div>
+
 </div>
 </html>

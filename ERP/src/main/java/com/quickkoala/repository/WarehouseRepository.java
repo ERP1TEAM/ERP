@@ -14,5 +14,5 @@ public interface WarehouseRepository extends JpaRepository<WarehouseEntity, Stri
 	
 	boolean existsByCode(String code);
 	
-	void deleteByCode(String code);
+	WarehouseEntity findByCode(String code);
 }

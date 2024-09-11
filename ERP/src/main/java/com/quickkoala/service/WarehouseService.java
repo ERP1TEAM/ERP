@@ -12,5 +12,8 @@ public interface WarehouseService {
 	
 	boolean saveWarehouse(WarehouseEntity warehouseEntity);
 	
-	Map<String, Object> deleteWarehouse(List<String> warehouseCode);
+	Map<String, Object> deleteWarehouse(List<String> warehouseCodes);
+	
+	WarehouseEntity getWarehouseByCode(String warehouseCode);
+	boolean updateWarehouse(String warehouseCode, WarehouseEntity warehouseEntity);
 }

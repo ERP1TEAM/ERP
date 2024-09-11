@@ -38,23 +38,41 @@ public class WarehouseServiceImpl implements WarehouseService {
 	
 	@Override
 	@Transactional
-	public Map<String, Object> deleteWarehouse(List<String> warehouseCode) {
-		Map<String, Object> response = new HashMap<>();
-		List<String> faildel = new ArrayList<>();
-        List<String> successdel = new ArrayList<>();
+	public Map<String, Object> deleteWarehouse(List<String> warehouseCodes) {
+		Map<String, Object> warehousedelresult = new HashMap<>();
 		
-		for(String code: warehouseCode) {
+		for(String code: warehouseCodes) {
 			try {
-			warehouseRepository.deleteByCode(code);
-			successdel.add(code);
+			if(warehouseRepository.existsById(code)) {
+			warehouseRepository.deleteById(code);
+			warehousedelresult.put(code, "삭제되었습니다");
+			}else {
+			warehousedelresult.put(code, "삭제에 실패했습니다.");
+			}
         }catch(Exception e) {
-        	faildel.add(code);
+        	warehousedelresult.put(code,"Error");
         }
 		}
-		response.put("ok", successdel); 
-		response.put("no", faildel); 
 		
-		return response;
+		return warehousedelresult;
+	}
+	@Override
+	public WarehouseEntity getWarehouseByCode(String warehouseCode) {
+		return warehouseRepository.findByCode(warehouseCode);
 	}
 	
+	@Override
+	public boolean updateWarehouse(String warehouseCode, WarehouseEntity warehouseEntity) {
+
+		WarehouseEntity warehouseupresult= warehouseRepository.findById(warehouseCode).orElse(null);
+		
+		if(warehouseupresult != null) {
+			warehouseupresult.setName(warehouseEntity.getName());
+			warehouseupresult.setMemo(warehouseEntity.getMemo());
+		    warehouseRepository.save(warehouseupresult);
+			return true;
+		}
+		
+		return false;
+	}
 }
