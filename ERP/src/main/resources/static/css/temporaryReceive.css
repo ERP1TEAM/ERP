@@ -26,3 +26,8 @@
     color: white;
     border-color: #0056b3;
 }
+
+input.no-style {
+	border: none; 
+	color: inherit;
+}

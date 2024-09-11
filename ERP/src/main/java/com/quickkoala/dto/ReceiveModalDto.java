@@ -6,6 +6,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ReceiveModalDto {
-	private String name;
+	private String ornum, code, name;
 	private Integer qty, wqty;
 }

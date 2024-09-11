@@ -1,7 +1,5 @@
 package com.quickkoala.entity;
 
-import java.time.LocalDateTime;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -12,19 +10,18 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "view_receive_purchase_product")
-@Data
-public class TemporaryReceiveViewEntity {
+@Table(name = "view_purchase_summary")
+@Data  // Lombok 어노테이션으로 getter, setter, toString, equals, hashCode 메서드 자동 생성
+public class PurchaseSummaryViewEntity {
 
 	@Id
-    private String code; // Primary key for the view
-
     private String orderNumber;
-    private String supplierName; // Updated to reflect supplier name correctly
+
     private String productCode;
     private String productName;
     private int quantity;
-    private int wtQuantity;
-    private LocalDateTime date;
-    private String manager;
+    private int price;
+    private int totalPrice;
+    private java.util.Date date;
+    private int totalWtQuantity;
 }

@@ -9,5 +9,5 @@ import com.quickkoala.entity.DeliveryDetailViewEntity;
 
 @Repository
 public interface DeliveryDetailViewRepository extends JpaRepository<DeliveryDetailViewEntity, String>{
-	List<DeliveryDetailViewEntity> findAllByOrderByDeliveryCode();
+	List<DeliveryDetailViewEntity> findAllByOrderByDeliveryCodeDesc();
 }

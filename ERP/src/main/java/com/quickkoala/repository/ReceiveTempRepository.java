@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -23,5 +24,9 @@ public interface ReceiveTempRepository extends JpaRepository<ReceiveTempEntity, 
 	
 	@Query("SELECT r.orderNumber FROM ReceiveTempEntity r WHERE r.code = :code")
 	String findOrderNumberByCode(@Param("code") String code);
+	
+	@Modifying
+	@Query("UPDATE ReceiveTempEntity rt SET rt.wtQuantity = :quantity WHERE rt.code = :code")
+	void updateWtQuantityByCode(@Param("code") String code, @Param("quantity") Integer quantity);
 	
 }

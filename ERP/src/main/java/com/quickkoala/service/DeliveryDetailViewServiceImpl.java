@@ -16,6 +16,6 @@ public class DeliveryDetailViewServiceImpl implements DeliveryDetailViewService{
 	
 	@Override
 	public List<DeliveryDetailViewEntity> getAllData() {
-		return deliveryDetailViewRepository.findAllByOrderByDeliveryCode();
+		return deliveryDetailViewRepository.findAllByOrderByDeliveryCodeDesc();
 	}
 }

@@ -13,8 +13,8 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "view_receive_temp")
 @Data
-@Table(name = "receive_with_temp")
 public class ReceiveTempViewEntity {
 
 	@Id
@@ -24,21 +24,24 @@ public class ReceiveTempViewEntity {
     @Column(name = "order_number")
     private String orderNumber;
 
-    @Column(name = "manager")
-    private String manager;
+    @Column(name = "supplier_name")
+    private String supplierName;
+
+    @Column(name = "product_code")
+    private String productCode;
+
+    @Column(name = "product_name")
+    private String productName;
 
     @Column(name = "quantity")
-    private int quantity;
-
-    @Column(name = "date")
-    private LocalDateTime date;
-
-    @Column(name = "expiration_date")
-    private String expirationDate;
-
-    @Column(name = "memo")
-    private String memo;
+    private Integer quantity;
 
     @Column(name = "wt_quantity")
     private Integer wtQuantity;
+
+    @Column(name = "date")
+    private java.util.Date date;
+
+    @Column(name = "manager")
+    private String manager;
 }

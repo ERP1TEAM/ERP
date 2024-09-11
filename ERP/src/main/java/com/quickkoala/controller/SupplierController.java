@@ -16,10 +16,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.quickkoala.dto.SupplierDeliveryDto;
 import com.quickkoala.entity.PurchaseEntity;
-import com.quickkoala.entity.PurchaseProductViewEntity;
+import com.quickkoala.entity.PurchaseSummaryViewEntity;
 import com.quickkoala.service.DeliveryDetailService;
 import com.quickkoala.service.DeliveryDetailViewService;
-import com.quickkoala.service.PurchaseProductViewService;
+import com.quickkoala.service.PurchaseSummaryViewService;
 import com.quickkoala.service.PurchaseService;
 import com.quickkoala.service.ReceiveTempService;
 import com.quickkoala.utils.ExcelUpload;
@@ -35,7 +35,7 @@ public class SupplierController {
 	private ReceiveTempService receiveTempService;
 	
 	@Autowired
-	private PurchaseProductViewService purchaseProductViewService;
+	private PurchaseSummaryViewService purchaseSummaryViewService;
 	
 	@Autowired
 	private DeliveryDetailService deliveryDetailService;
@@ -46,7 +46,7 @@ public class SupplierController {
 	//납품등록 페이지
 	@GetMapping("supplierOrderList")
 	public String supplierOrderList(Model model) {
-		model.addAttribute("items",purchaseProductViewService.getAllOrders());
+		model.addAttribute("items",purchaseSummaryViewService.getAllOrders());
 		return "supplier/supplierOrderList";
 	}
 	

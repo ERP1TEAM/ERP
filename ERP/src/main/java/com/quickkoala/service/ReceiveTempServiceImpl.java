@@ -8,15 +8,14 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.quickkoala.dto.PurchaseDto;
-import com.quickkoala.dto.PurchaseListDto;
 import com.quickkoala.dto.SupplierDeliveryListDto;
 import com.quickkoala.entity.PurchaseEntity;
 import com.quickkoala.entity.ReceiveTempEntity;
 import com.quickkoala.repository.PurchaseRepository;
 import com.quickkoala.repository.ReceiveTempRepository;
-import com.quickkoala.repository.ReceiveTempViewRepository;
 import com.quickkoala.utils.TodayUtils;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class ReceiveTempServiceImpl implements ReceiveTempService{
@@ -26,9 +25,6 @@ public class ReceiveTempServiceImpl implements ReceiveTempService{
 	
 	@Autowired
 	private ReceiveTempRepository receiveTempRepository;
-	
-	@Autowired
-	private ReceiveTempViewRepository receiveTempViewRepository;
 	
 	@Autowired
 	private DeliveryDetailService deliveryDetailService;
@@ -107,5 +103,11 @@ public class ReceiveTempServiceImpl implements ReceiveTempService{
 	@Override
 	public String getOrderNumber(String data) {
 		return receiveTempRepository.findOrderNumberByCode(data);
+	}
+	
+	@Transactional
+	@Override
+	public void modifyWtquantity(String code, Integer quantity) {
+		receiveTempRepository.updateWtQuantityByCode(code, quantity);
 	}
 }

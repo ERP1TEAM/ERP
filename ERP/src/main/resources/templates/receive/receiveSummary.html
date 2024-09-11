@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Quick Koala :: 가입고</title>
+<title>Quick Koala :: 입고현황</title>
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
 	rel="stylesheet">
 <link rel="stylesheet"
@@ -54,13 +54,8 @@
 					<div class="col-md-12">
 						<div class="card">
 							<div class="card-action">
-								가입고 <span style="float: right;">+ MORE</span>
+								입고현황 <span style="float: right;">+ MORE</span>
 							</div>
-							<div class="small-tap" id="all">전체</div>
-							<div class="small-tap" id="wait">처리대기</div>
-							<div class="small-tap" id="finish">처리완료</div>
-							<br>
-							<br>
 							<div class="card-content">
 								<div class="table-responsive">
 									<form id="order_frm">
@@ -68,35 +63,22 @@
 											id="dataTables-example">
 											<thead>
 												<tr>
-													<th class="center" style="width: 8%;">가입고코드</th>
-													<th class="center" style="width: 7%;">주문번호</th>
-													<th class="center" style="width: 7%;">제조사</th>
-													<th class="center" style="width: 8%;">품목코드</th>
-													<th class="center" style="width: 28%;">품목명</th>
-													<th class="center" style="width: 7%;">발주수량</th>
-													<th class="center" style="width: 7%;">대기수량</th>
-													<th class="center" style="width: 10%;">가입고일시</th>
-													<th class="center" style="width: 5%;">담당자</th>
-													<th class="center" style="width: 5%;">입고</th>
+													<th class="center" style="width: 13%;">주문번호</th>
+													<th class="center" style="width: 50%;">발주품목</th>
+													<th class="center" style="width: 8%;">발주수량</th>
+													<th class="center" style="width: 8%;">입고대기</th>
+													<th class="center" style="width: 8%;">입고완료</th>
+													<th class="center" style="width: 8%;">입고반품</th>
 												</tr>
 											</thead>
 											<tbody id="tbody">
 												<tr class="odd gradeX" th:each="item : ${items}">
-													<td th:text="${item.code}"></td>
 													<td th:text="${item.orderNumber}"></td>
-													<td th:text="${item.supplierName}"></td>
-													<td th:text="${item.productCode}"></td>
 													<td th:text="${item.productName}"></td>
-													<td th:text="${item.quantity}"></td>
-													<td th:text="${item.wtQuantity}"></td>
-													<td th:text="${#strings.replace(item.date,'T',' ')}"></td>
-													<td th:text="${item.manager}"></td>
-													<td><button type="button" class="small-tap receiving"
-															th:data-on="${item.orderNumber}"
-															th:data-code="${item.code}" 
-															th:data-name="${item.productName}"
-															th:data-qty="${item.quantity}"
-															th:data-wqty="${item.wtQuantity}">입고</button></td>
+													<td th:text="${item.purchaseQuantity}"></td>
+													<td th:text="${item.totalWtQuantity}"></td>
+													<td th:text="${item.totalReceiveQuantity}"></td>
+													<td th:text="${item.totalReturnQuantity}"></td>
 												</tr>
 											</tbody>
 										</table>
@@ -127,7 +109,6 @@
 	<script src="../assets/js/easypiechart-data.js"></script>
 	<script src="../assets/js/Lightweight-Chart/jquery.chart.js"></script>
 	<script src="../assets/js/custom-scripts.js"></script>
-	<script src="../js/receive/temporaryReceive.js"></script>
 </body>
 
 </html>

@@ -1,14 +1,9 @@
 package com.quickkoala.service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
-import com.quickkoala.dto.PurchaseDto;
-import com.quickkoala.dto.PurchaseListDto;
 import com.quickkoala.dto.SupplierDeliveryListDto;
-import com.quickkoala.entity.PurchaseEntity;
 import com.quickkoala.entity.ReceiveTempEntity;
-import com.quickkoala.entity.ReceiveTempViewEntity;
 
 public interface ReceiveTempService {
 	List<ReceiveTempEntity> addAllReceive(SupplierDeliveryListDto orders);
@@ -19,4 +14,5 @@ public interface ReceiveTempService {
 	ReceiveTempEntity modifyStatus(String data, Integer ea);
 	Integer getWtQuantity(String order);
 	String getOrderNumber(String data);
+	void modifyWtquantity(String code, Integer quantity);
 }
