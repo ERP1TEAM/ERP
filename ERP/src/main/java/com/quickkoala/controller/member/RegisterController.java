@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api")
-public class MemberController {
+public class RegisterController {
 
     @Autowired
     private MemberService memberService;

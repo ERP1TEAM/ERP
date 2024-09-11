@@ -107,7 +107,7 @@
             <br>
         </div>
         <h4 class="mb-3">Admin Information</h4>
-        <form id="form" class="needs-validation" novalidate>
+        <form id="form">
 
             <div class="row">
                 <div class="col-md-6 mb-3">
@@ -154,7 +154,7 @@
 				</div>
                 <div class="col-md-6 mb-3">
                     <label for="mtel">TEL</label>
-                    <input type="text" class="form-control" id="mtel" name="mtel" placeholder="연락처를 입력하세요 ('-' 없이)" maxlength="11" required>
+                    <input type="text" class="form-control" id="mtel" name="mtel" placeholder="연락처를 입력하세요 (숫자만)" maxlength="11" required>
                 </div>
                 <div class="col-md-6 mb-3">
                     <label for="email">Email</label>
@@ -166,12 +166,7 @@
             <input type="button" class="btn btn-primary btn-lg btn-block" value="관리자 등록" onclick="register()">
         </form>
     </div>
-<!-- 
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-    <script>window.jQuery || document.write('<script src="assets/js/vendor/jquery.slim.min.js"><\/script>')</script>
-    <script src="assets/js/bootstrap.bundle.min.js"></script>
-    <script src="assets/js/form-validation.js"></script>
--->
+
     <script>
         // 페이지가 로드될 때 fade-in 효과 적용
         window.onload = () => {
@@ -185,43 +180,50 @@
         }
 
         // 권한 코드 입력 시 상태 확인
-        document.getElementById('code').addEventListener('input', function() {
-            const codeInput = this.value;
-            const companyInfo = document.getElementById('company-info');
-            const errorMessage = document.getElementById('error-message');
-            const company = document.getElementById('company');
-            if (codeInput.startsWith('SP')) {
-                companyInfo.style.display = 'block';
-                errorMessage.style.display = 'none';
+		document.getElementById('code').addEventListener('input', function() {
+		    const codeInput = this.value;
+		    const companyInfo = document.getElementById('company-info');
+		    const errorMessage = document.getElementById('error-message');
+		    const company = document.getElementById('company');
+		
+		    if (codeInput === 'QKOALA') {
+		        companyInfo.innerHTML = 'Distributor: 퀵코알라';
+		        company.value = '퀵코알라';
+		        errorMessage.style.display = 'none';
+		        companyInfo.style.display = 'block';
+		    } else if (codeInput.startsWith('SP')) {
+		        companyInfo.style.display = 'block';
+		        errorMessage.style.display = 'none';
+		
+		        // 서버에 요청하여 소속사 확인
+		        fetch(`/api/checkCompany?code=${codeInput}`)
+		            .then(response => response.json())
+		            .then(data => {
+		                if (data.success) {
+		                    companyInfo.innerHTML = `Supplier: <span style="color: blue;">${data.name}</span>`;
+		                    company.value = `${data.name}`;
+		                } else {
+		                    companyInfo.innerHTML = 'Supplier: <span style="color: red;">[소속사 미확인]</span>';
+		                    company.value = '';
+		                }
+		            })
+		            .catch(error => {
+		                console.error('Error:', error);
+		                companyInfo.innerHTML = 'Supplier: <span style="color: red;">[소속사 미확인]</span>';
+		            });
+		    } else if (codeInput === '') {
+		        companyInfo.style.display = 'none';
+		        errorMessage.style.display = 'block';
+		        errorMessage.innerHTML = '권한 코드를 입력하세요.';
+		        company.value = '';
+		    } else {
+		        companyInfo.style.display = 'none';
+		        errorMessage.style.display = 'block';
+		        errorMessage.innerHTML = '소속 코드를 확인할 수 없습니다.';
+		        company.value = '';
+		    }
+		});
 
-                // 서버에 요청하여 소속사 확인
-                fetch(`/api/checkCompany?code=${codeInput}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            companyInfo.innerHTML = `Supplier: <span style="color: blue;">${data.name}</span>`;
-                            company.value = `${data.name}`;
-                        } else {
-                            companyInfo.innerHTML = 'Supplier: <span style="color: red;">[소속사 미확인]</span>';
-                            company.value = '';
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        companyInfo.innerHTML = 'Supplier: <span style="color: red;">[소속사 미확인]</span>';
-                    });
-            } else if (codeInput === '') {
-                companyInfo.style.display = 'none';
-                errorMessage.style.display = 'block';
-                errorMessage.innerHTML = '권한 코드를 입력하세요.';
-                company.value = '';
-            } else {
-                companyInfo.style.display = 'none';
-                errorMessage.style.display = 'block';
-                errorMessage.innerHTML = '소속 코드를 확인할 수 없습니다.';
-                company.value = '';
-            }
-        });
 
         // 아이디 중복 확인
 		document.getElementById('userId').addEventListener('input', function() {
@@ -250,11 +252,16 @@
 		    }
 		});
 
-
+		// 회원가입 처리
         function register() {
             const form = document.getElementById('form');
             const formData = new FormData(form);
-            // FormData를 JSON으로 변환
+
+            // 유효성 검사
+            if (!validateForm()) {
+                return; // 유효성 검사가 실패하면 종료
+            }
+
             const memberData = {
                 code: formData.get('code'),
                 role: document.getElementById('company-info').textContent.split(':')[0].trim(),
@@ -262,7 +269,7 @@
                 department: formData.get('department'),
                 name: formData.get('name'),
                 userId: formData.get('userId'),
-                password: formData.get('password'),
+                password: formData.get('mpass'),
                 tel: formData.get('mtel'),
                 email: formData.get('email')
             };
@@ -277,14 +284,75 @@
             .then(response => response.text())
             .then(data => {
                 alert(data);
-                location.href=""
+                location.href = ""; // 성공 후 리다이렉트
             })
             .catch(error => {
                 console.error('Error:', error);
             });
         }
+
+        // 폼 유효성 검사
+        function validateForm() {
+            const code = document.getElementById('code').value;
+            const company = document.getElementById('company').value;
+            const department = document.getElementById('department').value;
+            const name = document.getElementById('name').value;
+            const userId = document.getElementById('userId').value;
+            const password = document.getElementById('mpass').value;
+            const passwordConfirm = document.getElementById('mpass2').value;
+            const tel = document.getElementById('mtel').value;
+            const telPattern = /^\d+$/;
+            const email = document.getElementById('email').value;
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            
+            let valid = true;
+
+            if (company === '') {
+                alert('올바른 권한코드를 입력해 주세요');
+                document.getElementById('code').focus();
+                valid = false;
+            } else if (department === '') {
+                alert('부서명을 입력해 주세요.');
+                document.getElementById('department').focus();
+                valid = false;
+            } else if (name === '') {
+                alert('이름을 입력해 주세요.');
+                document.getElementById('name').focus();
+                valid = false;
+            } else if (userId === '') {
+                alert('아이디를 입력해 주세요.');
+                document.getElementById('userId').focus();
+                valid = false;
+            } else if (password.length < 8) {
+                alert('패스워드는 8자 이상이어야 합니다.');
+                document.getElementById('mpass').focus();
+                valid = false;
+            } else if (password !== passwordConfirm) {
+                alert('패스워드가 일치하지 않습니다.');
+                document.getElementById('mpass2').focus();
+                valid = false;
+            } else if (tel === '') {
+                alert('연락처를 입력해 주세요.');
+                document.getElementById('mtel').focus();
+                valid = false;
+            } else if (!telPattern.test(tel)) {
+                alert('연락처는 숫자만 포함해야 합니다.');
+                document.getElementById('mtel').focus();
+                valid = false;
+            } else if (email === '') {
+                alert('이메일을 입력해 주세요.');
+                document.getElementById('email').focus();
+                valid = false;
+            } else if (!emailPattern.test(email)) {
+                alert('유효한 이메일 주소를 입력해 주세요.');
+                document.getElementById('email').focus();
+                valid = false;
+            }
+
+            return valid;
+        }
         
-        
+        //패스워드 일치 확인
         function checkPasswordMatch() {
             const passwordInput = document.getElementById('mpass').value;
             const passwordConfirmInput = document.getElementById('mpass2').value;
