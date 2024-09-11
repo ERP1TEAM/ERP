@@ -3,17 +3,18 @@ package com.quickkoala.service;
 import java.util.List;
 import java.util.Map;
 
+import com.quickkoala.dto.WarehouseDto;
 import com.quickkoala.entity.WarehouseEntity;
 
 public interface WarehouseService {
 	
 	
-	List<WarehouseEntity> getAllOrdersByCode();
+	List<WarehouseDto> getAllOrdersByCode();
 	
-	boolean saveWarehouse(WarehouseEntity warehouseEntity);
+	boolean saveWarehouse(WarehouseDto warehouseDto);
 	
 	Map<String, Object> deleteWarehouse(List<String> warehouseCodes);
 	
-	WarehouseEntity getWarehouseByCode(String warehouseCode);
-	boolean updateWarehouse(String warehouseCode, WarehouseEntity warehouseEntity);
+	WarehouseDto getWarehouseByCode(String warehouseCode);
+	boolean updateWarehouse(String warehouseCode, WarehouseDto warehouseDto);
 }

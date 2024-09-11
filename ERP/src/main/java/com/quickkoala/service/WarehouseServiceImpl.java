@@ -8,6 +8,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.quickkoala.dto.WarehouseDto;
 import com.quickkoala.entity.WarehouseEntity;
 import com.quickkoala.repository.WarehouseRepository;
 
@@ -20,19 +21,19 @@ public class WarehouseServiceImpl implements WarehouseService {
 	private WarehouseRepository warehouseRepository;
 	
 	@Override
-	public List<WarehouseEntity> getAllOrdersByCode() {
+	public List<WarehouseDto> getAllOrdersByCode() {
 
 		return warehouseRepository.findAllByOrderByCodeDesc();
 	}
 
 	@Override
-	public boolean saveWarehouse(WarehouseEntity warehouseEntity) {
+	public boolean saveWarehouse(WarehouseDto warehouseDto) {
 
 		if(warehouseRepository.existsByCode(warehouseEntity.getCode())) {
 			return false;
 		}
 		
-		warehouseRepository.save(warehouseEntity);
+		warehouseRepository.save(warehouseDto);
 		return true;
 	}
 	
@@ -57,18 +58,18 @@ public class WarehouseServiceImpl implements WarehouseService {
 		return warehousedelresult;
 	}
 	@Override
-	public WarehouseEntity getWarehouseByCode(String warehouseCode) {
+	public WarehouseDto getWarehouseByCode(String warehouseCode) {
 		return warehouseRepository.findByCode(warehouseCode);
 	}
 	
 	@Override
-	public boolean updateWarehouse(String warehouseCode, WarehouseEntity warehouseEntity) {
+	public boolean updateWarehouse(String warehouseCode, WarehouseDto warehouseDto) {
 
 		WarehouseEntity warehouseupresult= warehouseRepository.findById(warehouseCode).orElse(null);
 		
 		if(warehouseupresult != null) {
-			warehouseupresult.setName(warehouseEntity.getName());
-			warehouseupresult.setMemo(warehouseEntity.getMemo());
+			warehouseupresult.setName(warehouseDto.getName());
+			warehouseupresult.setMemo(warehouseDto.getMemo());
 		    warehouseRepository.save(warehouseupresult);
 			return true;
 		}
