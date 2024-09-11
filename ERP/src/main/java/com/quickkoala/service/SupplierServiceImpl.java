@@ -24,7 +24,7 @@ public class SupplierServiceImpl implements SupplierService{
 	public List<SupplierEntity> searchByName(String term) {
 		return supplierRepository.findByNameContainingIgnoreCase(term);
 	}
-	
+	//관리자 등록 - 코드로 관리자 소속사 확인
 	@Override
     public Optional<SupplierEntity> findByCode(String code) {
         return supplierRepository.findByCode(code);

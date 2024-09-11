@@ -12,5 +12,6 @@ import com.quickkoala.entity.SupplierEntity;
 public interface SupplierRepository extends JpaRepository<SupplierEntity, String>{
 	List<SupplierEntity> findAllByOrderByCreatedDateDesc();
 	List<SupplierEntity> findByNameContainingIgnoreCase(String term);
+	//관리자 등록 - 코드로 관리자 소속사 확인
 	Optional<SupplierEntity> findByCode(String code);
 }
