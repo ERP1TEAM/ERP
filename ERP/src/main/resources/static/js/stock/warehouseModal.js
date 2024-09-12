@@ -188,13 +188,6 @@ document.getElementById('warehouseModifybtn').addEventListener('click', function
         });
     });
 
-//모달닫기
-document.getElementById('closemodal').addEventListener('click',function(){
-    document.getElementById('warehouselistmodal').style.display = 'none';
-    document.getElementById('overlay').style.display = 'none';   // 오버레이 숨기기
-    document.body.style.overflow = 'auto';  // 배경 스크롤 다시 활성화
-});
-
 //창고등록취소
 document.getElementById('warehouseinback').addEventListener('click',function(){
     document.getElementById('warehouseinmodal').style.display = 'none';
@@ -239,4 +232,23 @@ function warehousemainmodal(){
 			alert("error");
 		});
         }
+});
+
+//모달닫기
+document.getElementById('closemodal').addEventListener('click',function(){
+    document.getElementById('warehouselistmodal').style.display = 'none';
+    document.getElementById('overlay').style.display = 'none';   // 오버레이 숨기기
+    document.body.style.overflow = 'auto';  // 배경 스크롤 다시 활성화
+});
+
+// 모달 외부를 클릭하면 모달 닫기
+window.addEventListener('click', function(event) {
+    const warehouselistmodal = document.getElementById('warehouselistmodal');
+    const overlay = document.getElementById('overlay');
+    
+    if (event.target == warehouselistmodal || event.target == overlay) {
+        warehouselistmodal.style.display = 'none';
+        overlay.style.display = 'none';
+        document.body.style.overflow = 'auto';
+    }
 });
