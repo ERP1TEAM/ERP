@@ -20,57 +20,89 @@ public class WarehouseServiceImpl implements WarehouseService {
 	@Autowired
 	private WarehouseRepository warehouseRepository;
 	
+	//Entity -> DTO 변환
+	private WarehouseDto convertToWarehouseDto(WarehouseEntity warehouseEntity) {
+		WarehouseDto maptoWarehouseDto = new WarehouseDto();
+		maptoWarehouseDto.setCode(warehouseEntity.getCode());
+		maptoWarehouseDto.setName(warehouseEntity.getName());
+		maptoWarehouseDto.setMemo(warehouseEntity.getMemo());
+		return maptoWarehouseDto;
+	}
+	
+	//DTO -> Entity 변환
+	private WarehouseEntity convertToWarehouseEntity(WarehouseDto warehouseDto) {
+		WarehouseEntity maptoWarehouseEntity = new WarehouseEntity();
+		maptoWarehouseEntity.setCode(warehouseDto.getCode());
+		maptoWarehouseEntity.setName(warehouseDto.getName());
+		maptoWarehouseEntity.setMemo(warehouseDto.getMemo());
+		return maptoWarehouseEntity;
+	}
+	
 	@Override
 	public List<WarehouseDto> getAllOrdersByCode() {
-
-		return warehouseRepository.findAllByOrderByCodeDesc();
+		List<WarehouseEntity> listWarehouseEntity = warehouseRepository.findAllByOrderByCodeDesc();
+		List<WarehouseDto> listWarehouseDto = new ArrayList<>();
+		
+		for (WarehouseEntity warehouseEntity : listWarehouseEntity) {
+			WarehouseDto warehouseDto = convertToWarehouseDto(warehouseEntity);
+			listWarehouseDto.add(warehouseDto);
+		}
+	return listWarehouseDto;
 	}
 
 	@Override
 	public boolean saveWarehouse(WarehouseDto warehouseDto) {
+		
+		WarehouseEntity warehouseEntity = convertToWarehouseEntity(warehouseDto);
 
 		if(warehouseRepository.existsByCode(warehouseEntity.getCode())) {
 			return false;
 		}
 		
-		warehouseRepository.save(warehouseDto);
+		warehouseRepository.save(warehouseEntity);
 		return true;
 	}
 	
 	@Override
 	@Transactional
 	public Map<String, Object> deleteWarehouse(List<String> warehouseCodes) {
-		Map<String, Object> warehousedelresult = new HashMap<>();
+		Map<String, Object> warehouseDelresult = new HashMap<>();
 		
 		for(String code: warehouseCodes) {
 			try {
 			if(warehouseRepository.existsById(code)) {
 			warehouseRepository.deleteById(code);
-			warehousedelresult.put(code, "삭제되었습니다");
+			warehouseDelresult.put(code, "삭제되었습니다");
 			}else {
-			warehousedelresult.put(code, "삭제에 실패했습니다.");
+			warehouseDelresult.put(code, "삭제에 실패했습니다.");
 			}
         }catch(Exception e) {
-        	warehousedelresult.put(code,"Error");
+        	warehouseDelresult.put(code,"Error");
         }
 		}
 		
-		return warehousedelresult;
+		return warehouseDelresult;
 	}
 	@Override
 	public WarehouseDto getWarehouseByCode(String warehouseCode) {
-		return warehouseRepository.findByCode(warehouseCode);
+		WarehouseEntity warehouseEntity = warehouseRepository.findByCode(warehouseCode);
+		if(warehouseEntity != null) {
+			return convertToWarehouseDto(warehouseEntity);
+		}
+		
+		
+		return null;
 	}
 	
 	@Override
 	public boolean updateWarehouse(String warehouseCode, WarehouseDto warehouseDto) {
 
-		WarehouseEntity warehouseupresult= warehouseRepository.findById(warehouseCode).orElse(null);
+		WarehouseEntity warehouseEntity= warehouseRepository.findById(warehouseCode).orElse(null);
 		
-		if(warehouseupresult != null) {
-			warehouseupresult.setName(warehouseDto.getName());
-			warehouseupresult.setMemo(warehouseDto.getMemo());
-		    warehouseRepository.save(warehouseupresult);
+		if(warehouseEntity != null) {
+			warehouseEntity.setName(warehouseDto.getName());
+			warehouseEntity.setMemo(warehouseDto.getMemo());
+		    warehouseRepository.save(warehouseEntity);
 			return true;
 		}
 		

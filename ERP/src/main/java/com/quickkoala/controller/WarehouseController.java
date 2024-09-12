@@ -9,20 +9,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.quickkoala.service.WarehouseService;
 
 @Controller
-@RequestMapping("warehouse")
+@RequestMapping("main")
 @CrossOrigin(origins="*", allowedHeaders = "*")
 public class WarehouseController {
 
 	@Autowired
 	private WarehouseService warehouseService;
 	
-	@GetMapping("/locationStatus")
+	@GetMapping("/warehouse/locationStatus")
 	public String locationStatus() {
 		
 		return "warehouse/locationStatus";
 	}
 	
-    @GetMapping("/warehousein-modal")
+    @GetMapping("/warehouse/warehousein-modal")
     public String warehousein() {
     	return "warehouse/warehouseModal :: warehouseInModalContent";
     }

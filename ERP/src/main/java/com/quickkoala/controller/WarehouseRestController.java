@@ -17,33 +17,34 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.quickkoala.dto.WarehouseDto;
 import com.quickkoala.entity.WarehouseEntity;
 import com.quickkoala.service.WarehouseService;
 
 @RestController
-@RequestMapping("warehouse")
+@RequestMapping("main")
 @CrossOrigin(origins="*", allowedHeaders = "*")
 public class WarehouseRestController {
 
 	@Autowired
 	private WarehouseService warehouseService;
 	
-	@GetMapping("/warehouses")
-    public ResponseEntity<List<WarehouseEntity>> warehouseList() {
-    	List<WarehouseEntity> warehouseList=warehouseService.getAllOrdersByCode();
+	@GetMapping("/warehouse/warehouses")
+    public ResponseEntity<List<WarehouseDto>> warehouseList() {
+    	List<WarehouseDto> warehouseList=warehouseService.getAllOrdersByCode();
     	return ResponseEntity.ok(warehouseList);
     }
 	
-    @PostMapping("/warehouses")
-    public ResponseEntity<String> registerWarehouse(@RequestBody WarehouseEntity warehouseEntity) {
-    	boolean insave = warehouseService.saveWarehouse(warehouseEntity);
+    @PostMapping("/warehouse/warehouses")
+    public ResponseEntity<String> registerWarehouse(@RequestBody WarehouseDto warehouseDto) {
+    	boolean insave = warehouseService.saveWarehouse(warehouseDto);
         if(!insave) {
     	return ResponseEntity.status(HttpStatus.CONFLICT).body("이미 존재하는 창고 코드 입니다.");
         }
     	return ResponseEntity.ok("창고가 등록되었습니다.");
     }
     
-    @DeleteMapping("/{warehouseCodes}")
+    @DeleteMapping("/warehouse/{warehouseCodes}")
     public ResponseEntity<Map<String, Object>> deleteWarehouses(@PathVariable String warehouseCodes) {
     	List<String> warehouseCodeList = Arrays.asList(warehouseCodes.split(","));
         Map<String, Object> warehouseresponse = warehouseService.deleteWarehouse(warehouseCodeList);
@@ -53,19 +54,19 @@ public class WarehouseRestController {
         return ResponseEntity.ok(warehouseresponse);
     }
 	
-	@GetMapping("/{warehouseCode}")
-	public ResponseEntity<WarehouseEntity> getWarehouse(@PathVariable String warehouseCode) {
-	     WarehouseEntity warehouse = warehouseService.getWarehouseByCode(warehouseCode);
-	     if (warehouse != null) {
-	    	 return ResponseEntity.ok(warehouse);
+	@GetMapping("/warehouse/{warehouseCode}")
+	public ResponseEntity<WarehouseDto> getWarehouse(@PathVariable String warehouseCode) {
+	     WarehouseDto warehouseDto = warehouseService.getWarehouseByCode(warehouseCode);
+	     if (warehouseDto != null) {
+	    	 return ResponseEntity.ok(warehouseDto);
 	     } else {
 	         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 	     }
 	}
 	
-	@PutMapping("/{warehouseCode}")
-	public ResponseEntity<String> updateWarehouse(@PathVariable String warehouseCode, @RequestBody WarehouseEntity updatedWarehouse){
-		boolean updateWarehouse = warehouseService.updateWarehouse(warehouseCode, updatedWarehouse);
+	@PutMapping("/warehouse/{warehouseCode}")
+	public ResponseEntity<String> updateWarehouse(@PathVariable String warehouseCode, @RequestBody WarehouseDto warehouseDto){
+		boolean updateWarehouse = warehouseService.updateWarehouse(warehouseCode, warehouseDto);
 		
 		if(updateWarehouse) {
 			return ResponseEntity.ok("창고가 수정되었습니다.");
