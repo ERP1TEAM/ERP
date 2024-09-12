@@ -1,4 +1,4 @@
-package com.quickkoala.dto;
+package com.quickkoala.dto.stock;
 
 import lombok.Getter;
 import lombok.Setter;

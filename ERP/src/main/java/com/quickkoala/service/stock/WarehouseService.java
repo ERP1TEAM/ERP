@@ -1,10 +1,10 @@
-package com.quickkoala.service;
+package com.quickkoala.service.stock;
 
 import java.util.List;
 import java.util.Map;
 
-import com.quickkoala.dto.WarehouseDto;
-import com.quickkoala.entity.WarehouseEntity;
+import com.quickkoala.dto.stock.WarehouseDto;
+import com.quickkoala.entity.stock.WarehouseEntity;
 
 public interface WarehouseService {
 	

@@ -1,6 +1,6 @@
-package com.quickkoala.entity;
+package com.quickkoala.entity.stock;
 
-import com.quickkoala.entity.ProductEntity.UseFlag;
+import com.quickkoala.entity.stock.ProductEntity.UseFlag;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

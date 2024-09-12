@@ -1,4 +1,4 @@
-package com.quickkoala.controller;
+package com.quickkoala.controller.stock;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.quickkoala.service.WarehouseService;
+import com.quickkoala.service.stock.WarehouseService;
 
 @Controller
 @RequestMapping("main")
@@ -16,15 +16,15 @@ public class WarehouseController {
 	@Autowired
 	private WarehouseService warehouseService;
 	
-	@GetMapping("/warehouse/locationStatus")
+	@GetMapping("/stock/locationStatus")
 	public String locationStatus() {
 		
-		return "warehouse/locationStatus";
+		return "stock/locationStatus";
 	}
 	
-    @GetMapping("/warehouse/warehousein-modal")
+    @GetMapping("/stock/warehousein-modal")
     public String warehousein() {
-    	return "warehouse/warehouseModal :: warehouseInModalContent";
+    	return "stock/warehouseModal :: warehouseInModalContent";
     }
 
 

@@ -4,7 +4,7 @@ warehousemainmodal();
 });
 
     document.getElementById('warehousein').addEventListener('click', function() {
-        fetch('/warehouse/warehousein-modal', {
+        fetch('/main/stock/warehousein-modal', {
             method: 'GET',
             cache: 'no-cache'
         })
@@ -42,7 +42,7 @@ document.getElementById('warehouseregister').addEventListener('click', function(
             memo: warehouseMemo
         };
         
-        fetch('/warehouse/warehouses', {
+        fetch('/main/stock/warehouses', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -92,7 +92,7 @@ document.getElementById('warehousedelete').addEventListener('click',function(){
     
     const warehouseCodePath=selectWarehouse.join(',');
     
-    fetch(`/warehouse/${warehouseCodePath}`, {
+    fetch(`/main/stock/${warehouseCodePath}`, {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',
@@ -118,7 +118,7 @@ document.getElementById('warehousedelete').addEventListener('click',function(){
 document.querySelector('#warehousetbody').addEventListener('click', function(event) {
 if (event.target && event.target.classList.contains('warehousemodifybtn')) {
     let warehouseCode = event.target.closest('tr').querySelector('.checkbox').value;
-    fetch(`/warehouse/${warehouseCode}`, {
+    fetch(`/main/stock/${warehouseCode}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
@@ -159,7 +159,7 @@ document.getElementById('warehouseModifybtn').addEventListener('click', function
         };
         console.log(warehouseName);
         
-        fetch(`/warehouse/${warehouseCode}`, {
+        fetch(`/main/stock/${warehouseCode}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -209,7 +209,7 @@ document.getElementById('warehousemodifyback').addEventListener('click',function
 
 //창고리스트 출력
 function warehousemainmodal(){
-	fetch('/warehouse/warehouses',{
+	fetch('/main/stock/warehouses',{
 		method:'GET',
 		headers:{
 			'Content-Type':'application/json',

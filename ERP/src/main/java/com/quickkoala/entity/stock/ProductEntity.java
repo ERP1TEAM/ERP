@@ -1,4 +1,4 @@
-package com.quickkoala.entity;
+package com.quickkoala.entity.stock;
 
 import java.time.LocalDateTime;
 

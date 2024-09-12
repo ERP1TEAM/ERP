@@ -1,4 +1,4 @@
-package com.quickkoala.controller;
+package com.quickkoala.controller.stock;
 
 import java.util.Arrays;
 import java.util.List;
@@ -17,9 +17,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.quickkoala.dto.WarehouseDto;
-import com.quickkoala.entity.WarehouseEntity;
-import com.quickkoala.service.WarehouseService;
+import com.quickkoala.dto.stock.WarehouseDto;
+import com.quickkoala.entity.stock.WarehouseEntity;
+import com.quickkoala.service.stock.WarehouseService;
 
 @RestController
 @RequestMapping("main")
@@ -29,13 +29,13 @@ public class WarehouseRestController {
 	@Autowired
 	private WarehouseService warehouseService;
 	
-	@GetMapping("/warehouse/warehouses")
+	@GetMapping("/stock/warehouses")
     public ResponseEntity<List<WarehouseDto>> warehouseList() {
     	List<WarehouseDto> warehouseList=warehouseService.getAllOrdersByCode();
     	return ResponseEntity.ok(warehouseList);
     }
 	
-    @PostMapping("/warehouse/warehouses")
+    @PostMapping("/stock/warehouses")
     public ResponseEntity<String> registerWarehouse(@RequestBody WarehouseDto warehouseDto) {
     	boolean insave = warehouseService.saveWarehouse(warehouseDto);
         if(!insave) {
@@ -44,7 +44,7 @@ public class WarehouseRestController {
     	return ResponseEntity.ok("창고가 등록되었습니다.");
     }
     
-    @DeleteMapping("/warehouse/{warehouseCodes}")
+    @DeleteMapping("/stock/{warehouseCodes}")
     public ResponseEntity<Map<String, Object>> deleteWarehouses(@PathVariable String warehouseCodes) {
     	List<String> warehouseCodeList = Arrays.asList(warehouseCodes.split(","));
         Map<String, Object> warehouseresponse = warehouseService.deleteWarehouse(warehouseCodeList);
@@ -54,7 +54,7 @@ public class WarehouseRestController {
         return ResponseEntity.ok(warehouseresponse);
     }
 	
-	@GetMapping("/warehouse/{warehouseCode}")
+	@GetMapping("/stock/{warehouseCode}")
 	public ResponseEntity<WarehouseDto> getWarehouse(@PathVariable String warehouseCode) {
 	     WarehouseDto warehouseDto = warehouseService.getWarehouseByCode(warehouseCode);
 	     if (warehouseDto != null) {
@@ -64,7 +64,7 @@ public class WarehouseRestController {
 	     }
 	}
 	
-	@PutMapping("/warehouse/{warehouseCode}")
+	@PutMapping("/stock/{warehouseCode}")
 	public ResponseEntity<String> updateWarehouse(@PathVariable String warehouseCode, @RequestBody WarehouseDto warehouseDto){
 		boolean updateWarehouse = warehouseService.updateWarehouse(warehouseCode, warehouseDto);
 		

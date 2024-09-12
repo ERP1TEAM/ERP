@@ -1,4 +1,4 @@
-package com.quickkoala.entity;
+package com.quickkoala.entity.stock;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
