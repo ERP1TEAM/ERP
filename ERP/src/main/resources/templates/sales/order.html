@@ -46,7 +46,7 @@
                             <div class="card-content">
                                 <div class="table-responsive">
                                     <!-- 주문등록(서식) 파일 다운로드 링크 추가 -->
-                                    <a href="/csv/주문등록(서식).csv" class="btn btn-primary" style="background-color: #126d1d; border: none;" download>주문등록 서식 다운로드 (.csv)</a>
+                                    <a href="/csv/주문등록(서식).xlsx" class="btn btn-primary" style="background-color: #126d1d; border: none;" download>주문등록 서식 다운로드 (.xlsx)</a>
                                     <br><br>
                                     
                                     <!-- 파일 업로드 UI -->
@@ -58,7 +58,7 @@
                                     <!-- 선택한 파일명 표시 -->
                                     <p id="fileName" style="color: #126d1d;"></p>
 
-                                    <button id="uploadButton" class="btn btn-primary" style="border: none; background-color:#474B54; " onclick="uploadFile()" disabled>파일 업로드</button>
+                                    <button id="uploadButton" class="btn btn-primary" style="border: none; background-color:#474B54; " onclick="uploadFile()" disabled>주문 등록</button>
                                     <p id="uploadStatus"></p>
                                 </div> 
                             </div>
@@ -128,7 +128,8 @@
                 })
                 .then(response => response.text())
                 .then(result => {
-                    document.getElementById('uploadStatus').innerText = '파일 업로드 성공!';
+                    document.getElementById('uploadStatus').innerText = '주문 완료';
+                    location.href="./orderlist";
                 })
                 .catch(error => {
                     document.getElementById('uploadStatus').innerText = '파일 업로드 실패';

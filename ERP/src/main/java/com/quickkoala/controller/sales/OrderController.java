@@ -8,17 +8,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/sales")
 public class OrderController {
 	
-	@GetMapping("/order.do")
+	@GetMapping("/order")
 	public String order() {
 		return "sales/order";
 	}
 	
-	@GetMapping("/main.do")
+	@GetMapping("/home")
 	public String main() {
 		return "sales/main";
 	}
 	
-	@GetMapping("/orderlist.do")
+	@GetMapping("/orderlist")
 	public String orderlist() {
 		return "sales/orderlist";
 	}

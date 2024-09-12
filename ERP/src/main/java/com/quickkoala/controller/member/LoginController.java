@@ -7,27 +7,23 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class LoginController {
 	
-	@GetMapping("login.do")
+	@GetMapping("login")
 	public String test() {
 		return "/member/login";
 	}
-	@GetMapping("main.do")
-	public String getMethodName() {
-		return "main";
-	}
-	@GetMapping("register.do")
+	@GetMapping("register")
 	public String register() {
 		return "/member/register";
 	}
-	@GetMapping("/distribution/distribution.do")
+	@GetMapping("/main/distribution")
 	public String test1() {
 		return "test1";
 	}
-	@GetMapping("/supplying/supplying.do")
+	@GetMapping("/supplying/supplying")
 	public String test2() {
 		return "test2";
 	}
-	@GetMapping("/sales/sales.do")
+	@GetMapping("/sales/sales")
 	public String test3() {
 		return "test3";
 	}
