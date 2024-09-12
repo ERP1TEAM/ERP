@@ -107,7 +107,8 @@ public class ReceiveTempServiceImpl implements ReceiveTempService{
 	
 	@Transactional
 	@Override
-	public void modifyWtquantity(String code, Integer quantity) {
-		receiveTempRepository.updateWtQuantityByCode(code, quantity);
+	public void removeData(String code) {
+		receiveTempRepository.deleteByCode(code);
+		
 	}
 }

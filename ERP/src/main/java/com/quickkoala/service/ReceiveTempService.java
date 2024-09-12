@@ -14,5 +14,5 @@ public interface ReceiveTempService {
 	ReceiveTempEntity modifyStatus(String data, Integer ea);
 	Integer getWtQuantity(String order);
 	String getOrderNumber(String data);
-	void modifyWtquantity(String code, Integer quantity);
+	void removeData(String code);
 }

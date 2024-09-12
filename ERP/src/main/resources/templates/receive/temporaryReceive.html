@@ -56,20 +56,15 @@
 							<div class="card-action">
 								가입고 <span style="float: right;">+ MORE</span>
 							</div>
-							<div class="small-tap" id="all">전체</div>
-							<div class="small-tap" id="wait">처리대기</div>
-							<div class="small-tap" id="finish">처리완료</div>
-							<br>
-							<br>
 							<div class="card-content">
 								<div class="table-responsive">
 									<form id="order_frm">
 										<table class="table table-striped table-bordered table-hover"
 											id="dataTables-example">
-											<thead>
+											<thead id="thead">
 												<tr>
 													<th class="center" style="width: 8%;">가입고코드</th>
-													<th class="center" style="width: 7%;">주문번호</th>
+													<th class="center" style="width: 7%;">발주번호</th>
 													<th class="center" style="width: 7%;">제조사</th>
 													<th class="center" style="width: 8%;">품목코드</th>
 													<th class="center" style="width: 28%;">품목명</th>
@@ -81,6 +76,9 @@
 												</tr>
 											</thead>
 											<tbody id="tbody">
+												<tr th:if="${#lists.isEmpty(items)}">
+													<td colspan="10" style="text-align: center;">등록된 가입고 내역이 없습니다.</td>
+												</tr>
 												<tr class="odd gradeX" th:each="item : ${items}">
 													<td th:text="${item.code}"></td>
 													<td th:text="${item.orderNumber}"></td>
@@ -93,7 +91,7 @@
 													<td th:text="${item.manager}"></td>
 													<td><button type="button" class="small-tap receiving"
 															th:data-on="${item.orderNumber}"
-															th:data-code="${item.code}" 
+															th:data-code="${item.code}"
 															th:data-name="${item.productName}"
 															th:data-qty="${item.quantity}"
 															th:data-wqty="${item.wtQuantity}">입고</button></td>
@@ -101,7 +99,7 @@
 											</tbody>
 										</table>
 									</form>
-										
+
 								</div>
 							</div>
 						</div>

@@ -11,4 +11,11 @@ public class TodayUtils {
 		return today;
 	}
 	
+	public static String getTodayS() {
+		Date date = new Date();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyMMdd");
+		String today = sdf.format(date);
+		return today;
+	}
+	
 }

@@ -78,3 +78,132 @@
 		}
 	  });
 	*/
+	
+	
+	//테이블 출력
+	const tableData = (sta) => {
+		fetch(`../main/receive/temporaryData/${sta}`, {
+			method: 'GET'
+		})
+			.then(response => response.json())
+			.then(data => {
+				let thead = document.querySelector("#thead");
+				thead.innerHTML = '';
+				let tbody = document.querySelector('#tbody');
+				tbody.innerHTML = '';
+				if (sta === "처리대기") {
+					let th = `<tr>
+										<th class="center" style="width: 8%;">가입고코드</th>
+													<th class="center" style="width: 7%;">주문번호</th>
+													<th class="center" style="width: 7%;">제조사</th>
+													<th class="center" style="width: 8%;">품목코드</th>
+													<th class="center" style="width: 28%;">품목명</th>
+													<th class="center" style="width: 7%;">발주수량</th>
+													<th class="center" style="width: 7%;">대기수량</th>
+													<th class="center" style="width: 10%;">가입고일시</th>
+													<th class="center" style="width: 5%;">담당자</th>
+													<th class="center" style="width: 5%;">입고</th>
+												</tr>`;
+					thead.innerHTML = th;
+					data.forEach(function(item) {
+						let th = `
+				    <tr class="odd gradeX">
+				        <td>${item.code}</td>
+				        <td>${item.orderNumber}</td>
+				        <td>${item.supplierName}</td>
+				        <td>${item.productCode}</td>
+				        <td>${item.productName}</td>
+				        <td>${item.quantity}</td>
+				        <td>${item.wtQuantity}</td>
+				        <td>${item.date}</td>
+				        <td>${item.manager}</td>
+				        <td><button type="button" class="small-tap receiving"
+														 	data-on="${item.orderNumber}"
+															data-code="${item.code}" 
+															data-name="${item.productName}"
+															data-qty="${item.quantity}"
+															data-wqty="${item.wtQuantity}">입고</button></td>
+				    </tr>`;
+						tbody.innerHTML += th;
+					})
+				}else {
+					let th = `<tr>
+								<th class="center" style="width: 8%;">가입고코드</th>
+								<th class="center" style="width: 7%;">주문번호</th>
+								<th class="center" style="width: 7%;">제조사</th>
+								<th class="center" style="width: 8%;">품목코드</th>
+								<th class="center" style="width: 28%;">품목명</th>
+								<th class="center" style="width: 7%;">발주수량</th>
+								<th class="center" style="width: 7%;">대기수량</th>
+								<th class="center" style="width: 10%;">가입고일시</th>
+								<th class="center" style="width: 5%;">담당자</th>
+								</tr>`;
+					thead.innerHTML = th;
+					data.forEach(function(item) {
+						let th = `
+				    <tr class="odd gradeX">
+				        <td>${item.code}</td>
+				        <td>${item.orderNumber}</td>
+				        <td>${item.supplierName}</td>
+				        <td>${item.productCode}</td>
+				        <td>${item.productName}</td>
+				        <td>${item.quantity}</td>
+				        <td>${item.wtQuantity}</td>
+				        <td>${item.date}</td>
+				        <td>${item.manager}</td>
+				    </tr>`;
+						tbody.innerHTML += th;
+					})
+				}
+
+
+
+			})
+			.catch(function(error) {
+				alert(error);
+			});
+	}
+
+	tableData(null);
+
+	// 스타일을 설정하는 함수
+	function setActiveStyle(activeElement) {
+		const elements = [document.getElementById("wait"), document.getElementById("finish"), document.getElementById("all")];
+
+		elements.forEach(element => {
+			if (element === activeElement) {
+				element.style.backgroundColor = "#007BFF";
+				element.style.color = "white";
+			} else {
+				element.style.backgroundColor = "#FFFFFF";
+				element.style.color = "black";
+			}
+		});
+	}
+	setActiveStyle(document.getElementById("all"));
+
+	// 데이터 로딩 함수
+	function loadData(status) {
+		tableData(status);
+	}
+
+	// 이벤트 리스너 설정
+	function setupEventListeners() {
+		document.getElementById("wait").addEventListener("click", function() {
+			setActiveStyle(this);
+			loadData("처리대기");
+		});
+
+		document.getElementById("finish").addEventListener("click", function() {
+			setActiveStyle(this);
+			loadData("처리완료");
+		});
+
+		document.getElementById("all").addEventListener("click", function() {
+			setActiveStyle(this);
+			loadData("null");
+		});
+	}
+
+	// 초기화
+	setupEventListeners();

@@ -1,70 +1,16 @@
 document.addEventListener("DOMContentLoaded", function() {
-	const params = new URLSearchParams(window.location.search);
-	const status = params.get("status");
-	if (status === null) {
-		let wait = document.getElementById("all");
-		wait.style.backgroundColor = "#007BFF";
-		wait.style.color = "white";
-	} else if (status === "처리대기") {
-		let finish = document.getElementById("wait");
-		finish.style.backgroundColor = "#007BFF";
-		finish.style.color = "white";
-	} else if (status === "처리완료") {
-		let returns = document.getElementById("finish");
-		returns.style.backgroundColor = "#007BFF";
-		returns.style.color = "white";
-	}
-
-	document.querySelector("#wait").addEventListener("click", function() {
-		location.href = "./temporaryReceive?status=처리대기";
-	})
-	document.querySelector("#finish").addEventListener("click", function() {
-		location.href = "./temporaryReceive?status=처리완료";
-	})
-	document.querySelector("#all").addEventListener("click", function() {
-		location.href = "./temporaryReceive";
-	})
-	/*
-	document.querySelectorAll(".receiving").forEach(function(btn) {
-		btn.addEventListener("click", function() {
-			let idx = btn.getAttribute("data-code");
-			let ea = document.getElementById(idx).value;
-			if (!ea) {
-				alert("입고수량을 입력하셔야 합니다.");
-				return;
-			}
-			fetch("./receiving?data=" + idx + "&ea=" + ea, {
-				method: "GET"
-			})
-				.then(response => response.text())
-				.then(data => {
-					if (data === "ok") {
-						alert('입고가 완료되었습니다.');
-						window.location.reload();
-					} else if (data === "over") {
-						alert("대기수량을 확인해주세요.");
-					} else if (data === "no") {
-						alert("입고등록에 실패하였습니다.");
-					}
-				})
-				.catch(error => {
-					conosole.log(error);
-				})
-		})
-	})
-	*/
-
 	//입고버튼 클릭
-	document.querySelectorAll(".receiving").forEach(function(btn) {
-		btn.addEventListener("click", function() {
+	document.querySelector('#tbody').addEventListener('click', function(event) {
+		if (event.target && event.target.classList.contains('receiving')) {
+			const btn = event.target;
 			const orNum = btn.getAttribute("data-on");
 			const code = btn.getAttribute("data-code");
 			const name = btn.getAttribute("data-name");
 			const qty = btn.getAttribute("data-qty");
 			const wqty = btn.getAttribute("data-wqty");
 			receivingModal(orNum, code, name, qty, wqty);
-		})
-	})
+		}
+	});
 
 	//모달닫기
 	document.getElementById('closemodal').addEventListener('click', function() {
@@ -116,32 +62,32 @@ document.addEventListener("DOMContentLoaded", function() {
 	}
 
 	document.querySelector('#tbody2').addEventListener('change', function(event) {
-	    if (event.target && event.target.matches('select.condition-select')) {
-	        if(event.target.value === "기타"){
+		if (event.target && event.target.matches('select.condition-select')) {
+			if (event.target.value === "기타") {
 				document.getElementById("memo").innerHTML = `<input type="text">`;
-			}else{
+			} else {
 				document.getElementById("memo").innerHTML = "";
 			}
-	    }
+		}
 	});
 	document.querySelector('#tbody2').addEventListener('focusout', function(event) {
-	    if (event.target && event.target.matches("#re-qty")) {
+		if (event.target && event.target.matches("#re-qty")) {
 			let wqty = parseInt(document.querySelector("#wqty").value);
 			let reQty = parseInt(event.target.value);
 			let caQty = parseInt(document.querySelector("#ca-qty").value);
-			if(reQty > wqty){
+			if (reQty > wqty) {
 				event.target.value = wqty;
 				document.querySelector("#ca-qty").value = 0;
-			}else{
-	       		caQty = wqty - reQty;		
-	       		if(isNaN(caQty)){
+			} else {
+				caQty = wqty - reQty;
+				if (isNaN(caQty)) {
 					caQty = 0;
 				}
-	       		document.querySelector("#ca-qty").value = caQty;
+				document.querySelector("#ca-qty").value = caQty;
 			}
-	    }
+		}
 	});
-	
+
 	//입고 및 반품확정 버튼 클릭
 	document.getElementById('final-btn').addEventListener('click', function() {
 		let orNum = document.getElementById("ornum").value;
@@ -151,30 +97,30 @@ document.addEventListener("DOMContentLoaded", function() {
 		let caQty = parseInt(document.getElementById("ca-qty").value);
 		let con = document.getElementById("condition").value;
 		let memo = document.getElementById("memo").value;
-		
+
 		if (!reQty && reQty !== 0) {
 			alert("입고수량을 입력하셔야 합니다.");
 			return;
-		}else if(!caQty && caQty !== 0){
+		} else if (!caQty && caQty !== 0) {
 			alert("반품수량을 입력하셔야 합니다.");
 			return;
-		}else if(wqty < reQty){
+		} else if (wqty < reQty) {
 			alert("대기수량을 확인해주세요");
 			return;
 		}
 
 		const formData = new FormData();
-		formData.append("orderNumber",orNum);
-		formData.append("code",code);
-		formData.append("wqty",wqty);
-		formData.append("reQty",reQty);
-		formData.append("caQty",caQty);
-		formData.append("con",con);
-		formData.append("memo",memo);
-		formData.append("manager","홍길동");
+		formData.append("orderNumber", orNum);
+		formData.append("code", code);
+		formData.append("wqty", wqty);
+		formData.append("reQty", reQty);
+		formData.append("caQty", caQty);
+		formData.append("con", con);
+		formData.append("memo", memo);
+		formData.append("manager", "홍길동");
 		console.log(formData.get("memo"));
-		
-		fetch("./receiving", {
+
+		fetch("../main/receive/receiving", {
 			method: "POST",
 			body: formData
 		})
@@ -192,12 +138,12 @@ document.addEventListener("DOMContentLoaded", function() {
 			.catch(error => {
 				conosole.log(error);
 			})
-			
+
 		document.getElementById('warehouselistmodal').style.display = 'none';
 		document.getElementById('overlay').style.display = 'none';
 		document.body.style.overflow = 'auto';
 	})
-	
+
 
 
 });

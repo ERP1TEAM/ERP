@@ -25,8 +25,13 @@ public interface ReceiveTempRepository extends JpaRepository<ReceiveTempEntity, 
 	@Query("SELECT r.orderNumber FROM ReceiveTempEntity r WHERE r.code = :code")
 	String findOrderNumberByCode(@Param("code") String code);
 	
+	/*
 	@Modifying
 	@Query("UPDATE ReceiveTempEntity rt SET rt.wtQuantity = :quantity WHERE rt.code = :code")
 	void updateWtQuantityByCode(@Param("code") String code, @Param("quantity") Integer quantity);
+	*/
 	
+	@Modifying
+	@Query("DELETE FROM ReceiveTempEntity rt WHERE rt.code = :code")
+	void deleteByCode(@Param("code") String code);
 }

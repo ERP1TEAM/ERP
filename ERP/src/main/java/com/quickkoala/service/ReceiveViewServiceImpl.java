@@ -16,6 +16,6 @@ public class ReceiveViewServiceImpl implements ReceiveViewService {
 	
 	@Override
 	public List<ReceiveViewEntity> getData() {
-		return receiveViewRepository.findAllByOrderByOrderNumberDesc();
+		return receiveViewRepository.findAllByOrderByReceiveCodeDesc();
 	}
 }

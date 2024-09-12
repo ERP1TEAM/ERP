@@ -10,5 +10,5 @@ import com.quickkoala.entity.ReceiveViewEntity;
 @Repository
 public interface ReceiveViewRepository extends JpaRepository<ReceiveViewEntity, String>{
 
-	List<ReceiveViewEntity> findAllByOrderByOrderNumberDesc();
+	List<ReceiveViewEntity> findAllByOrderByReceiveCodeDesc();
 }

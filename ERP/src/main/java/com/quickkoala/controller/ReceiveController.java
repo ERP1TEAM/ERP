@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -56,19 +57,19 @@ public class ReceiveController {
 
 	@Autowired
 	private ReceiveDetailService receiveDetailService;
-	
+
 	@Autowired
 	private ReceiveReturnService receiveReturnService;
-	
+
 	@Autowired
 	private ReceiveTempService receiveTempService;
-	
+
 	@Autowired
 	private ReceiveSummaryViewService receiveSummaryViewService;
-	
+
 	@Autowired
 	private ReceiveViewService receiveViewService;
-	
+
 	@Autowired
 	private PurchaseDetailViewService purchaseDetailViewService;
 
@@ -78,7 +79,7 @@ public class ReceiveController {
 		model.addAttribute("items", purchaseViewService.getAllData());
 		return "receive/purchaseOrder";
 	}
-	
+
 	// 발주내역 페이지
 	@GetMapping("purchaseOrderList")
 	public String listPage(Model model, String status) {
@@ -98,7 +99,7 @@ public class ReceiveController {
 	// 입고현황(진) 페이지
 	@GetMapping("receiveSummary")
 	public String receiveSummary(Model model) {
-		model.addAttribute("items",receiveSummaryViewService.getData());
+		model.addAttribute("items", receiveSummaryViewService.getData());
 		return "receive/receiveSummary";
 	}
 
@@ -144,25 +145,13 @@ public class ReceiveController {
 		return ResponseEntity.ok(data);
 	}
 
-	// 입고
-	@PostMapping("receiving")
-	public ResponseEntity<String> receiving(@ModelAttribute ReceivingDto dto) {
-		ReceiveDetailEntity result = receiveDetailService.addData(dto.getCode(), dto.getReQty());
-		ReceiveReturnEntity result2 = receiveReturnService.addData(dto);
-		if (result == null || result2 == null) {
-			return ResponseEntity.ok("no");
-		} else {
-			receiveTempService.modifyWtquantity(dto.getCode(), 0);
-			return ResponseEntity.ok("ok");
-		}
-	}
+	
 
 	// 입고확정 모달
 	@GetMapping("receivingModal")
-	public ResponseEntity<ReceiveModalDto> receivingModal(
-			@RequestParam("ornum") String ornum,
-			@RequestParam("code") String code,
-			@RequestParam("name") String name, @RequestParam("qty") Integer qty, @RequestParam("wqty") Integer wqty) {
+	public ResponseEntity<ReceiveModalDto> receivingModal(@RequestParam("ornum") String ornum,
+			@RequestParam("code") String code, @RequestParam("name") String name, @RequestParam("qty") Integer qty,
+			@RequestParam("wqty") Integer wqty) {
 		ReceiveModalDto dto = new ReceiveModalDto();
 		dto.setOrnum(ornum);
 		dto.setCode(code);
