@@ -3,9 +3,9 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Quick Koala</title> 
-	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-	<link rel="stylesheet" href="../assets/materialize/css/materialize.min.css" media="screen,projection" />
+    <title>주문등록</title> 
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/materialize/css/materialize.min.css" media="screen,projection" />
     <link href="../assets/css/bootstrap.css" rel="stylesheet" />
     <link href="../assets/css/font-awesome.css" rel="stylesheet" />
     <link href="../assets/js/morris/morris-0.4.3.min.css" rel="stylesheet" />
@@ -16,111 +16,138 @@
 
 <body>
     <div id="wrapper">
-		<nav th:insert="~{header :: header}"></nav>
-		<!-- 
-		<!-- Dropdown Structure 
-		<ul id="dropdown1" class="dropdown-content">
-		<li><a href="#"><i class="fa fa-user fa-fw"></i>내정보 확인</a>
-		</li>
-		<li><a href="#"><i class="fa fa-gear fa-fw"></i>페이지 셋팅</a>
-		</li> 
-		<li><a href="#"><i class="fa fa-sign-out fa-fw"></i>로그아웃</a>
-		</li>
-		</ul>
- 		-->
-
-
-
-	  <div th:insert="~{sidebar :: sidebar}"></div>
-	  
-	  
-	  
-	  
-      <div id="page-wrapper" style="background-color: #f2eeff">
-		  	<div class="header"> 
-	            <h1 class="page-header">주문 등록</h1>
-					<ol class="breadcrumb">
-						<li><a href="#" style="color: #1A4870;">Home</a></li>
-						  <!--
-						  <li><a href="#">페이지 tap1</a></li>
-						  <li class="active">페이지 tap2</li>
-						  -->
-					</ol> 			
-			</div>
-			
-    <!-- main views-->
-     <div id="page-inner">
-
-        <!--공지사항 출력 페이지 -->
-        <div class="row">
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="card-action">
-                         공지사항 (NOTICE) <span style="float: right;">+ MORE</span>
-                    </div>
-                    <div class="card-content">
-                        <div class="table-responsive">
-                            <table class="table table-striped table-bordered table-hover" id="dataTables-example">
-                                <thead>
-                                    <tr>
-                                        <th class="center" style="width: 5%;">주문번호</th>
-                                        <th class="center" style="width: 5%;">주문자명</th>
-                                        <th class="center" style="width: 20%;">배송지</th>
-                                        <th class="center" style="width: 5%;">상품수량</th>
-                                        <th class="center" style="width: 10%;">판매처</th>
-                                        <th class="center" style="width: 5%;">주문날짜</th>
-                                        <th class="center" style="width: 5%;">배송기한</th>
-                                        <th class="center" style="width: 5%;">배송유형</th>
-                                        <th class="center" style="width: 5%;">상세보기</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr class="odd gradeX">
-                                        <td class="center">000000001</td>
-                                        <td class="center">홍길동</td>
-                                        <td class="center">서울특별시 마포구 신촌로32 중앙정보처리학원 402호</td>
-                                        <td class="center">49</td>
-                                        <td class="center">[SL0008] 11번가</td>
-                                        <td class="center">2024-09-03</td>
-                                        <td class="center">2024-09-10</td>
-                                        <td class="center">Safe Koala</td>
-                                        <td class="center"><input type="button" value="상세" onclick="detailPopup()"></td>
-                                    </tr>
-                                    <tr class="even gradeX">
-                                        <td class="center">000000002</td>
-                                        <td class="center">이순신</td>
-                                        <td class="center">서울특별시 마포구 신촌로32 중앙정보처리학원 402호</td>
-                                        <td class="center">76</td>
-                                        <td class="center">[SL0010] 옥션</td>
-                                        <td class="center">2024-09-03</td>
-                                        <td class="center">2024-09-04</td>
-                                        <td class="center">Quick Koala</td>
-                                        <td class="center"><input type="button" value="상세" onclick="detailPopup()"></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div> 
-                    </div>
-
-                </div>
+        <nav th:insert="~{/sales/header :: header}"></nav>
+        
+        <!-- Dropdown Structure -->
+        <ul id="dropdown1" class="dropdown-content">
+        <li><a href="#"><i class="fa fa-user fa-fw"></i>내정보 확인</a></li>
+        <li><a href="#"><i class="fa fa-gear fa-fw"></i>페이지 셋팅</a></li> 
+        <li><a href="#"><i class="fa fa-sign-out fa-fw"></i>로그아웃</a></li>
+        </ul>
+        
+        <nav th:insert="~{/sales/sidebar :: sidebar}"></nav>
+        
+        <div id="page-wrapper" style="background-color: #dcebdb">
+            <div class="header"> 
+                <h1 class="page-header">주문 등록</h1>
+                <ol class="breadcrumb">
+                    <li><a href="#" style="color: #1A4870;">Home</a></li>
+                </ol>             
             </div>
-    </div>
-		
-   <footer><p>Copyright 2024 ⓒ quickkoala.com by <i class="fa fa-love"></i><a href="http://quickkoala.com">Quick Koala All right reserved.</a>
-</p></footer>
+            
+            <!-- main views-->
+            <div id="page-inner">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-action">
+                                 주문등록(ORDER)
+                            </div>
+                            <div class="card-content">
+                                <div class="table-responsive">
+                                    <!-- 주문등록(서식) 파일 다운로드 링크 추가 -->
+                                    <a href="/csv/주문등록(서식).csv" class="btn btn-primary" style="background-color: #126d1d; border: none;" download>주문등록 서식 다운로드 (.csv)</a>
+                                    <br><br>
+                                    
+                                    <!-- 파일 업로드 UI -->
+                                    <div class="file-upload-container" style="border: 2px dashed #cccccc; padding: 50px; text-align: center; cursor: pointer;">
+                                        <h5>등록할 주문의 csv 파일을 여기에 드래그하거나 클릭하여 업로드하세요</h5>
+                                        <input type="file" id="fileInput" style="display: none;" />
+                                    </div>
+                                    <br>
+                                    <!-- 선택한 파일명 표시 -->
+                                    <p id="fileName" style="color: #126d1d;"></p>
+
+                                    <button id="uploadButton" class="btn btn-primary" style="border: none; background-color:#474B54; " onclick="uploadFile()" disabled>파일 업로드</button>
+                                    <p id="uploadStatus"></p>
+                                </div> 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <footer>
+                    <p>Copyright 2024 ⓒ quickkoala.com by <i class="fa fa-love"></i><a href="http://quickkoala.com">Quick Koala All right reserved.</a></p>
+                </footer>
             </div>
         </div>
     </div>
+
+    <script>
+        const fileInput = document.getElementById('fileInput');
+        const fileUploadContainer = document.querySelector('.file-upload-container');
+        const fileNameDisplay = document.getElementById('fileName');
+        const uploadButton = document.getElementById('uploadButton');
+
+        // 파일을 드래그 앤 드롭 또는 클릭으로 선택
+        fileUploadContainer.addEventListener('click', function () {
+            fileInput.click();
+        });
+
+        fileUploadContainer.addEventListener('dragover', function (e) {
+            e.preventDefault();
+            fileUploadContainer.style.borderColor = '#0000ff';
+        });
+
+        fileUploadContainer.addEventListener('dragleave', function (e) {
+            e.preventDefault();
+            fileUploadContainer.style.borderColor = '#cccccc';
+        });
+
+        fileUploadContainer.addEventListener('drop', function (e) {
+            e.preventDefault();
+            fileInput.files = e.dataTransfer.files;
+            fileUploadContainer.style.borderColor = '#cccccc';
+            displaySelectedFile();
+        });
+
+        fileInput.addEventListener('change', displaySelectedFile);
+
+        // 파일명을 표시하고 업로드 버튼 활성화
+        function displaySelectedFile() {
+            const file = fileInput.files[0];
+            if (file) {
+                fileNameDisplay.textContent = `선택된 파일: ${file.name}`;
+                uploadButton.disabled = false;
+            } else {
+                fileNameDisplay.textContent = '';
+                uploadButton.disabled = true;
+            }
+        }
+
+        // 파일 업로드 함수
+        function uploadFile() {
+            const file = fileInput.files[0];
+            if (file) {
+                const formData = new FormData();
+                formData.append('file', file);
+
+                fetch('/uploadFile', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.text())
+                .then(result => {
+                    document.getElementById('uploadStatus').innerText = '파일 업로드 성공!';
+                })
+                .catch(error => {
+                    document.getElementById('uploadStatus').innerText = '파일 업로드 실패';
+                });
+            } else {
+                alert('업로드할 파일을 선택해주세요.');
+            }
+        }
+    </script>
+
     <script src="../assets/js/jquery-1.10.2.js"></script>
     <script src="../assets/js/bootstrap.min.js"></script>
-	<script src="../assets/materialize/js/materialize.min.js"></script>
+    <script src="../assets/materialize/js/materialize.min.js"></script>
     <script src="../assets/js/jquery.metisMenu.js"></script>
     <script src="../assets/js/morris/raphael-2.1.0.min.js"></script>
     <script src="../assets/js/morris/morris.js"></script>
-	<script src="../assets/js/easypiechart.js"></script>
-	<script src="../assets/js/easypiechart-data.js"></script>
-	<script src="../assets/js/Lightweight-Chart/jquery.chart.js"></script>
-    <script src="../assets/js/custom-scripts.js"></script> 
+    <script src="../assets/js/easypiechart.js"></script>
+    <script src="../assets/js/easypiechart-data.js"></script>
+    <script src="../assets/js/Lightweight-Chart/jquery.chart.js"></script>
+    <script src="../assets/js/custom-scripts.js"></script>
 </body>
-
 </html>
