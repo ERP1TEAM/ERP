@@ -1,4 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
+
+//창고모달열기
 document.getElementById('warehousebtn').addEventListener('click',function(){
 warehousemainmodal();
 });
@@ -23,6 +25,46 @@ warehousemainmodal();
             alert("error");
         });
     });
+
+//검색어
+document.getElementById('warehouseSearchbtn').addEventListener('click', function() {
+   	const warehouseSearchtype = document.getElementById('warehouseSearchtype').value;
+    const warehouseSearch = document.getElementById('warehouseSearch').value.trim();
+    
+    if(!warehouseSearch){
+		alert('검색어를 입력하세요.');
+		return;
+	}
+	
+	fetch(`/main/stock/warehousesearch?warehouseSearchtype=${warehouseSearchtype}&warehouseSearch=${warehouseSearch}`, {
+            method: 'GET',
+            headers: {
+				'Content-Type' : 'application/json'
+			},
+        })
+        .then(response => response.json())
+        .then(data=> {
+			let warehousetbody = document.querySelector('#warehousetbody');
+ 		    warehousetbody.innerHTML = '';
+		
+        if(data.length==0){
+			warehousetbody.innerHTML = '<tr><td colspan="5"> 검색 결과가 없습니다.</td></tr>';
+		}else{
+	data.forEach(warehouse => {
+    let th = `<tr class="odd gradeX">
+                  <th><input type="checkbox" class="checkbox" value="${warehouse.code}"></th>
+                  <td>${warehouse.code}</td>
+                  <td>${warehouse.name}</td>
+                  <td><input type="button" value="메모"></td>
+                  <td><input type="button" value="수정" class="warehousemodifybtn"></td>
+              </tr>`;
+    warehousetbody.innerHTML += th;
+        });
+        }
+}).catch(error =>{
+	alert('오류가 발생했습니다.');
+});
+});
 
 //창고등록
 document.getElementById('warehouseregister').addEventListener('click', function() {
@@ -219,7 +261,7 @@ function warehousemainmodal(){
                     <th><input type="checkbox" class="checkbox" value="${warehouse.code}"></th>
                     <td>${warehouse.code}</td>
                     <td>${warehouse.name}</td>
-                    <td><input type="button" value="메모"></td>
+                    <td>${warehouse.memo}</td>
                     <td><input type="button" value="수정" class="warehousemodifybtn"></td>
                  </tr>`;
 			warehousetbody.innerHTML +=th;

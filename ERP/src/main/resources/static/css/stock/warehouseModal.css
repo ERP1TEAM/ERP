@@ -10,3 +10,13 @@
 .checkbox{
 	position: relative !important;
 }
+.postit-content {
+    background-color: yellow;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 300px;
+    height: 200px;
+    font-family: "Comic Sans MS", cursive, sans-serif;
+    font-size: 14px;
+}

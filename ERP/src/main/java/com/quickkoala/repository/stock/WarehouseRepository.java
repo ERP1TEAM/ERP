@@ -15,4 +15,8 @@ public interface WarehouseRepository extends JpaRepository<WarehouseEntity, Stri
 	boolean existsByCode(String code);
 	
 	WarehouseEntity findByCode(String code);
+	
+	//창고 검색
+	List<WarehouseEntity> findByNameContaining(String name);
+	List<WarehouseEntity> findByCodeContaining(String code);
 }

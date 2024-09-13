@@ -108,4 +108,25 @@ public class WarehouseServiceImpl implements WarehouseService {
 		
 		return false;
 	}
+	
+	//창고검색
+	@Override
+	public List<WarehouseDto> searchWarehouse(String warehouseSearchtype, String warehouseSearch) {
+	
+		List<WarehouseEntity> warehouseSearchresult= new ArrayList<>();
+		
+		//이름
+		if("1".equals(warehouseSearchtype)) {
+			warehouseSearchresult = warehouseRepository.findByNameContaining(warehouseSearch);
+		}
+		//코드
+		else if("2".equals(warehouseSearchtype)) {
+			warehouseSearchresult=warehouseRepository.findByCodeContaining(warehouseSearch);
+		}
+		List<WarehouseDto> warehouseDto = new ArrayList<>();
+		for(WarehouseEntity warehouseEntity : warehouseSearchresult) {
+			warehouseDto.add(convertToWarehouseDto(warehouseEntity));
+		}
+		return warehouseDto;
+	}
 }

@@ -20,13 +20,13 @@ import lombok.NoArgsConstructor;
 public class LocationEntity {
 	
 	@Id
-	@Column(name="code", length=5, nullable=false)
+	@Column(name="code", length=8, nullable=false)
 	private String code;
 	
-	@Column(name="warehouse_code", length=3, nullable=false)
+	@Column(name="warehouse_code", length=2, nullable=false)
 	private String warehouseCode;
 	
-	@Column(name="rack_code", length=2, nullable=false)
+	@Column(name="rack_code", length=3, nullable=false)
 	private String rackCode;
 	
 	@Column(name="row_code", length=2, nullable=false)

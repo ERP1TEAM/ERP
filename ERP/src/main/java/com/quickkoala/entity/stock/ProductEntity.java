@@ -1,3 +1,4 @@
+//상품 테이블 엔티티
 package com.quickkoala.entity.stock;
 
 import java.time.LocalDateTime;
@@ -29,11 +30,8 @@ public class ProductEntity {
     @Column(name = "classification_code", length = 5, nullable = false)
     private String classificationCode;
 
-    @Column(name = "location_code", length = 6, nullable = false)
-    private String locationCode;
-
-    @Column(name = "warehouse_code", length = 3, nullable = false)
-    private String warehouseCode;
+    @Column(name = "storage_location", length = 6, nullable = false)
+    private String storage_location;
 
     @Column(name = "use_flag", nullable = false)
     @Enumerated(EnumType.STRING)
@@ -42,14 +40,8 @@ public class ProductEntity {
     @Column(name = "name", length = 200, nullable = false)
     private String name;
 
-    @Column(name = "safety_inventory", nullable = false)
-    private int safetyInventory;
-
     @Column(name = "price", nullable = false)
     private int price;
-
-    @Column(name = "expiration_dt")
-    private LocalDateTime expirationDt;
 
     @Column(name = "created_dt", nullable = false)
     private LocalDateTime createdDt;

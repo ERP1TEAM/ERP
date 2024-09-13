@@ -17,4 +17,7 @@ public interface WarehouseService {
 	
 	WarehouseDto getWarehouseByCode(String warehouseCode);
 	boolean updateWarehouse(String warehouseCode, WarehouseDto warehouseDto);
+	
+	//창고 검색
+	List<WarehouseDto> searchWarehouse(String warehouseSearchtype,String warehouseSearch);
 }

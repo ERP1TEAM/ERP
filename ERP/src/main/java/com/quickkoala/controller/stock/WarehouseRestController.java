@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.quickkoala.dto.stock.WarehouseDto;
@@ -71,7 +72,18 @@ public class WarehouseRestController {
 		if(updateWarehouse) {
 			return ResponseEntity.ok("창고가 수정되었습니다.");
 		}else {
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("해당 창고 코드를 찾을 수 없습니다.");
+
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("해당 창고 코드를 찾을 수 없습니다.");
 		}
+	}
+	
+	//창고검색
+	@GetMapping("/stock/warehousesearch")
+	public ResponseEntity<List<WarehouseDto>> searchWarehouse
+	(@RequestParam("warehouseSearchtype") String warehouseSearchtype,
+	@RequestParam("warehouseSearch") String warehouseSearch){
+	List<WarehouseDto> warehouseSearchresult=warehouseService.searchWarehouse(warehouseSearchtype, warehouseSearch);
+		
+		return ResponseEntity.ok(warehouseSearchresult);
 	}
 }

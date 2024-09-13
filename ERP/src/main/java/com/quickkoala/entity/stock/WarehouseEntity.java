@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 public class WarehouseEntity {
 
 	@Id
-	@Column(name="code", length=3, nullable=false)
+	@Column(name="code", length=2, nullable=false)
 	private String code;
 	
 	@Column(name="name", length=200, nullable=false)

@@ -16,12 +16,12 @@
                     <div class="card-content">
                     <ul>
         		<li>
-            <select class="product_input1">
+            <select class="product_input1" id="warehouseSearchtype">
                 <option value="1">창고 이름</option>
-                <option value="2">창고 검색</option>
+                <option value="2">창고 코드</option>
             </select>
-            <input type="text" placeholder="검색어 입력">
-            <input type="button" value="검색">
+            <input type="text" placeholder="검색어 입력" id="warehouseSearch">
+            <input type="button" value="검색" id="warehouseSearchbtn">
         		</li>
     			</ul>
                         <div class="table-responsive">
@@ -47,7 +47,6 @@
 					        </div>
 					        </div>
 </div>
-
 <div id="warehouseinmodal" class="modal"  th:fragment="warehouseInModalContent">
 <div class="product_insert">
 <div class="card">

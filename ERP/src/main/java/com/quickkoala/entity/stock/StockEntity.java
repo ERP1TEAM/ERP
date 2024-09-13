@@ -15,6 +15,9 @@ import lombok.NoArgsConstructor;
 public class StockEntity {
 	
 	@Id
+	@Column(name="lot_number", length=20, nullable=false)
+	private String lot_number;
+	
 	@Column(name="product_code", length=8, nullable=false)
 	private String product_code;
 	
@@ -23,8 +26,14 @@ public class StockEntity {
 	
 	@Column(name="available_qty", nullable=false)
 	private int available_qty;
+
+	@Column(name="unavailable_qty", nullable=false)
+	private int unavailable_qty;
 	
 	@Column(name="safety_qty", nullable=false)
 	private int safety_qty;
+	
+    @Column(name = "manager", length = 100, nullable = false)
+    private String manager;
 }
 	
