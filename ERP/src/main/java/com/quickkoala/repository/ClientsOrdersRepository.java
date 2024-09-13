@@ -14,4 +14,6 @@ public interface ClientsOrdersRepository extends JpaRepository<ClientsOrdersEnti
         
     // 주문 날짜를 기준으로 해당 날짜에 존재하는 주문의 수를 세는 메서드
     Long countByOrderDate(LocalDate orderDate);
+    
+    
 }
