@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Table(name = "view_purchase_summary")
 @Data  // Lombok 어노테이션으로 getter, setter, toString, equals, hashCode 메서드 자동 생성
-public class PurchaseSummaryViewEntity {
+public class ViewPurchaseSummaryEntity {
 
 	@Id
     private String orderNumber;

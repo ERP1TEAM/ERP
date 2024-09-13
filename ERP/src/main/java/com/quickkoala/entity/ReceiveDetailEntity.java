@@ -29,4 +29,7 @@ public class ReceiveDetailEntity {
 
     @Column(name = "date", nullable = false, columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime date;
+    
+    @Column(name = "manager", nullable = false)
+    private String manager;
 }

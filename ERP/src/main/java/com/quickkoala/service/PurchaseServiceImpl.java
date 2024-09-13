@@ -43,7 +43,7 @@ public class PurchaseServiceImpl implements PurchaseService{
 	        if (order.getOrderDate() == null) {
 	            order.setOrderDate(LocalDateTime.now());
 	        }
-	        order.setExpectedDate("2024-09-10");
+	        order.setExpectedDate(TodayUtils.getSevenDaysAfter());
 	        order.setStatus("입고대기");
 	        orderEntities.add(order);
 	        number += 1;

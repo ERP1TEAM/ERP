@@ -31,6 +31,7 @@ public class ReceiveDetailServiceImpl implements ReceiveDetailService{
 		receiveDetailEntity.setOrderNumber(orderNumber);
 		receiveDetailEntity.setQuantity(ea);
 		receiveDetailEntity.setDate(LocalDateTime.now());
+		receiveDetailEntity.setManager("홍길동");
 		return receiveDetailRepository.save(receiveDetailEntity);
 	}
 	

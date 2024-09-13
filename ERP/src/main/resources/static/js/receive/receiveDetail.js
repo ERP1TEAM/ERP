@@ -33,7 +33,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 	//테이블 출력
 	const tableData = (pno) => {
-		fetch(`./deliveryData/${pno}`, {
+		fetch(`../main/receive/detailData/${pno}`, {
 			method: 'GET'
 		})
 			.then(response => response.json())
@@ -44,15 +44,17 @@ document.addEventListener("DOMContentLoaded", function() {
 				let tbody = document.querySelector('#tbody');
 				tbody.innerHTML = '';
 				items.forEach(function(item) {
-					const rdt = formatDate(item.date);
+					const rdt = formatDate(item.receiveDate);
 					let th = `
 				    <tr class="odd gradeX">
-				        <td>${item.deliveryCode}</td>
+				        <td>${item.receiveCode}</td>
 				        <td>${item.orderNumber}</td>
+				        <td>${item.supplierName}</td>
 				        <td>${item.productCode}</td>
 				        <td>${item.productName}</td>
-				        <td>${item.quantity}</td>
+				        <td>${item.receiveQuantity}</td>
 				        <td>${rdt}</td>
+				        <td>${item.manager}</td>
 				    </tr>`;
 					tbody.innerHTML += th;
 				})

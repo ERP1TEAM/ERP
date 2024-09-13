@@ -5,5 +5,4 @@ import com.quickkoala.entity.LotEntity;
 
 public interface LotService {
 	LotEntity addLot(ReceivingDto dto);
-	long getCountOfOrdersToday();
 }

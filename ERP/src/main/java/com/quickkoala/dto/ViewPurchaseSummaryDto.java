@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class PurchaseSummaryViewDto {
+public class ViewPurchaseSummaryDto {
 	private String orderNumber, productCode, name, quantity, price, totalPrice, orderDate;
 	private int wtQuantity;
 	

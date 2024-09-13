@@ -20,22 +20,24 @@ import com.quickkoala.dto.PurchaseDto;
 import com.quickkoala.dto.PurchaseListDto;
 import com.quickkoala.dto.ReceiveModalDto;
 import com.quickkoala.dto.ReceivingDto;
-import com.quickkoala.entity.PurchaseDetailViewEntity;
+import com.quickkoala.entity.ViewPurchaseDetailEntity;
 import com.quickkoala.entity.PurchaseEntity;
 import com.quickkoala.entity.ReceiveDetailEntity;
 import com.quickkoala.entity.ReceiveReturnEntity;
 import com.quickkoala.entity.ReceiveTempEntity;
 import com.quickkoala.entity.SupplierEntity;
+import com.quickkoala.entity.ViewReceiveReturnEntity;
 import com.quickkoala.entity.ReceiveTempViewEntity;
 import com.quickkoala.service.PurchaseViewService;
-import com.quickkoala.service.PurchaseDetailViewService;
+import com.quickkoala.service.ViewPurchaseDetailService;
 import com.quickkoala.service.PurchaseService;
 import com.quickkoala.service.ReceiveDetailService;
 import com.quickkoala.service.ReceiveReturnService;
 import com.quickkoala.service.ReceiveSummaryViewService;
 import com.quickkoala.service.ReceiveTempService;
-import com.quickkoala.service.ReceiveViewService;
+import com.quickkoala.service.ViewReceiveService;
 import com.quickkoala.service.SupplierService;
+import com.quickkoala.service.ViewReceiveReturnService;
 import com.quickkoala.service.ReceiveTempViewService;
 import com.quickkoala.utils.ExcelUpload;
 
@@ -56,22 +58,16 @@ public class ReceiveController {
 	private PurchaseViewService purchaseViewService;
 
 	@Autowired
-	private ReceiveDetailService receiveDetailService;
-
-	@Autowired
-	private ReceiveReturnService receiveReturnService;
-
-	@Autowired
-	private ReceiveTempService receiveTempService;
-
-	@Autowired
 	private ReceiveSummaryViewService receiveSummaryViewService;
 
 	@Autowired
-	private ReceiveViewService receiveViewService;
+	private ViewReceiveService receiveViewService;
 
 	@Autowired
-	private PurchaseDetailViewService purchaseDetailViewService;
+	private ViewPurchaseDetailService purchaseDetailViewService;
+
+	@Autowired
+	private ViewReceiveReturnService viewReceiveReturnService;
 
 	// 발주요청 페이지
 	@GetMapping("purchaseOrder")
@@ -81,11 +77,9 @@ public class ReceiveController {
 	}
 
 	// 발주내역 페이지
-	@GetMapping("purchaseOrderList")
-	public String listPage(Model model, String status) {
-		List<PurchaseDetailViewEntity> item = purchaseDetailViewService.getData();
-		model.addAttribute("items", item);
-		return "receive/purchaseOrderList";
+	@GetMapping("purchaseDetail")
+	public String listPage() {
+		return "receive/purchaseDetail";
 	}
 
 	// 가입고 페이지
@@ -95,7 +89,7 @@ public class ReceiveController {
 		model.addAttribute("items", item);
 		return "receive/temporaryReceive";
 	}
-	
+
 	// 입고현황(진) 페이지
 	@GetMapping("receiveSummary")
 	public String receiveSummary(Model model) {
@@ -105,9 +99,15 @@ public class ReceiveController {
 
 	// 입고내역 페이지
 	@GetMapping("receiveDetail")
-	public String receiveDetail(Model model) {
-		model.addAttribute("items", receiveViewService.getData());
+	public String receiveDetail() {
 		return "receive/receiveDetail";
+	}
+
+	// 반품내역 페이지
+	@GetMapping("receiveReturn")
+	public String receiveReturn(Model model) {
+		model.addAttribute("items",viewReceiveReturnService.getAllData());
+		return "receive/receiveReturn";
 	}
 
 	// 발주요청
@@ -145,8 +145,6 @@ public class ReceiveController {
 		return ResponseEntity.ok(data);
 	}
 
-	
-
 	// 입고확정 모달
 	@GetMapping("receivingModal")
 	public ResponseEntity<ReceiveModalDto> receivingModal(@RequestParam("ornum") String ornum,
@@ -160,4 +158,5 @@ public class ReceiveController {
 		dto.setWqty(wqty);
 		return ResponseEntity.ok(dto);
 	}
+
 }

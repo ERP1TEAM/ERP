@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 @Table(name = "view_receive")
-public class ReceiveViewEntity {
+public class ViewReceiveEntity {
 	@Id
 	@Column(name = "receive_code")
 	private String receiveCode;

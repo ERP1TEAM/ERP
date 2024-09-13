@@ -1,6 +1,7 @@
 package com.quickkoala.utils;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 public class TodayUtils {
@@ -18,4 +19,16 @@ public class TodayUtils {
 		return today;
 	}
 	
+	public static String getSevenDaysAfter() {
+        Date today = new Date();
+        
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(today);
+        calendar.add(Calendar.DAY_OF_MONTH, 7);
+        
+        Date futureDate = calendar.getTime();
+        
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        return sdf.format(futureDate);
+	}
 }

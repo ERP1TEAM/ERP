@@ -14,6 +14,6 @@ public interface ReceiveTempViewRepository extends JpaRepository<ReceiveTempView
 	// wtQuantity가 0인 엔티티를 code 기준으로 내림차순 정렬하여 가져오는 메서드
     List<ReceiveTempViewEntity> findByWtQuantityOrderByCodeDesc(int wtQuantity);
     
- // wtQuantity가 0이 아닌 엔티티를 code 기준으로 내림차순 정렬하여 가져오는 메서드
+    // wtQuantity가 0이 아닌 엔티티를 code 기준으로 내림차순 정렬하여 가져오는 메서드
     List<ReceiveTempViewEntity> findByWtQuantityNotOrderByCodeDesc(int wtQuantity);
 }

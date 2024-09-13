@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 @Table(name = "view_purchase_detail")
-public class PurchaseDetailViewEntity {
+public class ViewPurchaseDetailEntity {
 	@Id
     @Column(name = "order_number", length = 14)
     private String orderNumber;

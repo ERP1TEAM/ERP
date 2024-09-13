@@ -11,7 +11,7 @@ import lombok.Data;
 @Entity
 @Table(name = "view_delivery_detail")
 @Data
-public class DeliveryDetailViewEntity {
+public class ViewDeliveryDetailEntity {
 
 	@Id
     @Column(name = "delivery_code", length = 14, nullable = false)

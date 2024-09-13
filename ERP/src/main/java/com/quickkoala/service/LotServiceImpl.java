@@ -27,21 +27,22 @@ public class LotServiceImpl implements LotService{
 	public LotEntity addLot(ReceivingDto dto) {
 		LotEntity data = new LotEntity();
 		LocalDate today = LocalDate.now();
+		LocalDate sevenDaysAgo = today.minusDays(7);
+		LocalDateTime todayT = LocalDateTime.now();
 		PurchaseEntity ent = purchaseServiceImpl.getOrderByNumber(dto.getOrderNumber());
 		Optional<Integer> maxSerialOpt = lotRepository.findMaxSerialNumberByProductCodeAndDate(ent.getProductCode(), today);
 		int nextSerial = maxSerialOpt.orElse(0) + 1;
 		String serialFormatted = String.format("%03d", nextSerial);
+		
 		data.setLotNumber(ent.getProductCode()+"-"+TodayUtils.getTodayS()+"-"+serialFormatted);
 		data.setProductCode(ent.getProductCode());
+		data.setSupplierCode("");
+		data.setStorageLocation("");
 		data.setQuantity(dto.getReQty());
-		data.setReceiveDate(LocalDateTime.now());
-		return lotRepository.save(data);
-	}
-	
-	@Override
-	public long getCountOfOrdersToday() {
-		LocalDate today = LocalDate.now();
+		data.setProductionDate(sevenDaysAgo);
+		data.setReceiveDate(todayT);
+		data.setLastUpdate(todayT);
 		
-		return lotRepository.countByOrderDate(today);
+		return lotRepository.save(data);
 	}
 }

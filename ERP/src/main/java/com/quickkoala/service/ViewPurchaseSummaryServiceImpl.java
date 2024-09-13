@@ -6,31 +6,31 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.quickkoala.dto.PurchaseSummaryViewDto;
-import com.quickkoala.entity.PurchaseSummaryViewEntity;
+import com.quickkoala.dto.ViewPurchaseSummaryDto;
+import com.quickkoala.entity.ViewPurchaseSummaryEntity;
 import com.quickkoala.entity.ReceiveSummaryEntity;
-import com.quickkoala.repository.PurchaseSummaryViewRepository;
+import com.quickkoala.repository.ViewPurchaseSummaryRepository;
 import com.quickkoala.repository.ReceiveSummaryViewRepository;
 
 @Service
-public class PurchaseSummaryViewServiceImpl implements PurchaseSummaryViewService{
+public class ViewPurchaseSummaryServiceImpl implements ViewPurchaseSummaryService{
 
 	@Autowired
-	private PurchaseSummaryViewRepository purchaseProductViewRepository;
+	private ViewPurchaseSummaryRepository purchaseProductViewRepository;
 	
 	@Override
-	public List<PurchaseSummaryViewDto> getAllOrders() {
-		List<PurchaseSummaryViewEntity> result = purchaseProductViewRepository.findAllByOrderByOrderNumberDesc();
-		List<PurchaseSummaryViewDto> data = new ArrayList<>();
-		for(PurchaseSummaryViewEntity ppve : result) {
-			PurchaseSummaryViewDto dto = new PurchaseSummaryViewDto();
+	public List<ViewPurchaseSummaryDto> getAllOrders() {
+		List<ViewPurchaseSummaryEntity> result = purchaseProductViewRepository.findByTotalWtQuantityGreaterThan(0);
+		List<ViewPurchaseSummaryDto> data = new ArrayList<>();
+		for(ViewPurchaseSummaryEntity ppve : result) {
+			ViewPurchaseSummaryDto dto = new ViewPurchaseSummaryDto();
 			dto.setOrderNumber(ppve.getOrderNumber());
 			dto.setProductCode(ppve.getProductCode());
 			dto.setName(ppve.getProductName());
 			dto.setQuantity(String.format("%,d", ppve.getQuantity()));
 			dto.setPrice(String.format("%,d", ppve.getPrice()));
 			dto.setTotalPrice(String.format("%,d", ppve.getTotalPrice()));
-			dto.setOrderDate(String.valueOf(ppve.getDate()).replace("T", " "));
+			dto.setOrderDate(String.valueOf(ppve.getDate()).replace("T", " ").substring(0,19));
 			dto.setWtQuantity(ppve.getTotalWtQuantity());
 			data.add(dto);
 		}

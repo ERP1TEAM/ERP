@@ -1,0 +1,28 @@
+.pagination {
+	display: inline-block;
+	background-color: transparent !important; /* 배경색을 투명으로 설정 */
+}
+
+.page-item {
+	background-color: transparent !important; /* 배경색 제거 */
+}
+
+
+.page-item.current-page .page-link {
+	background-color: #D3D3D3 !important;
+    color: white;
+}
+
+.pagination-wrapper {
+            display: flex;
+            justify-content: center; /* 가로 가운데 정렬 */
+            align-items: center; /* 세로 가운데 정렬 (선택 사항) */
+            width: 100%; /* 부모 요소의 가로 크기를 전체로 설정 */
+        }
+        
+nav.no-bg {
+	background-color: transparent !important; /* 배경색을 투명으로 설정 */
+	color: #000 !important; /* 텍스트 색상 설정 */
+	display: flex !important;
+	justify-content: center;
+}
