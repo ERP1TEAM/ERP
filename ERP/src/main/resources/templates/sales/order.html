@@ -50,8 +50,8 @@
                                     <br><br>
                                     
                                     <!-- 파일 업로드 UI -->
-                                    <div class="file-upload-container" style="border: 2px dashed #cccccc; padding: 50px; text-align: center; cursor: pointer;">
-                                        <h5>등록할 주문의 csv 파일을 여기에 드래그하거나 클릭하여 업로드하세요</h5>
+                                    <div class="file-upload-container" style="border: 2px dashed #cccccc; padding: 100px; text-align: center; cursor: pointer;">
+                                        <h5>등록할 주문의 .xlsx 파일을 여기에 드래그하거나 클릭하여 업로드하세요</h5>
                                         <input type="file" id="fileInput" style="display: none;" />
                                     </div>
                                     <br>
@@ -96,6 +96,7 @@
 
         fileUploadContainer.addEventListener('drop', function (e) {
             e.preventDefault();
+            document.getElementById('uploadStatus').innerText = '';
             fileInput.files = e.dataTransfer.files;
             fileUploadContainer.style.borderColor = '#cccccc';
             displaySelectedFile();
@@ -115,21 +116,20 @@
             }
         }
 
-        // 파일 업로드 함수
+     // 파일 업로드 함수
         function uploadFile() {
             const file = fileInput.files[0];
             if (file) {
                 const formData = new FormData();
                 formData.append('file', file);
 
-                fetch('/uploadFile', {
+                fetch('./uploadFile', {
                     method: 'POST',
                     body: formData
                 })
                 .then(response => response.text())
                 .then(result => {
-                    document.getElementById('uploadStatus').innerText = '주문 완료';
-                    location.href="./orderlist";
+                    document.getElementById('uploadStatus').innerText = result;  // 서버 응답 메시지 출력
                 })
                 .catch(error => {
                     document.getElementById('uploadStatus').innerText = '파일 업로드 실패';
