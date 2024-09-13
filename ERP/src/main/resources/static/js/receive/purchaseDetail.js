@@ -13,8 +13,10 @@ document.addEventListener("DOMContentLoaded", function() {
 
 		return result;
 	}
-
+	//파라미터 값 갖고오고 null일 경우 기본값 설정
 	let params = getQueryParams(["p","s"]);
+	let pa1 = (params[0] && params[0]["p"]) ? params[0]["p"] : 1;
+	let pa2 = (params[1] && params[1]["s"]) ? params[1]["s"] : "all";
 	
 	//paging 함수를 전역으로 설정
 	window.paging = function(p) {
@@ -29,6 +31,7 @@ document.addEventListener("DOMContentLoaded", function() {
 		params = getQueryParams(["p","s"]);
 		tableData(1,params[1]["s"]);
 	}
+	//날짜를 yyyy-MM-dd HH-mm-ss형식으로 변환
 	function formatDate(isoString) {
 
 		const date = new Date(isoString);
@@ -50,9 +53,10 @@ document.addEventListener("DOMContentLoaded", function() {
 		})
 			.then(response => response.json())
 			.then(data => {
+				pno = parseInt(pno);
 				const items = data.content;
 				totalPages = data.totalPages;
-
+				
 				let tbody = document.querySelector('#tbody');
 				tbody.innerHTML = '';
 				items.forEach(function(item) {
@@ -108,13 +112,16 @@ document.addEventListener("DOMContentLoaded", function() {
 				alert(error);
 			});
 	}
-
-	tableData(1,"all");
+	
+	//페이지 로드시 실행
+	const start = () => {
+		tableData(pa1,pa2);		
+	}
+	start();
 
 	// 스타일을 설정하는 함수
 	function setActiveStyle(activeElement) {
 		const elements = [document.getElementById("wait"), document.getElementById("finish"), document.getElementById("all")];
-
 		elements.forEach(element => {
 			if (element === activeElement) {
 				element.style.backgroundColor = "#007BFF";
@@ -125,8 +132,20 @@ document.addEventListener("DOMContentLoaded", function() {
 			}
 		});
 	}
-	setActiveStyle(document.getElementById("all"));
-
+	
+	// 새로고침해도 탭부분 스타일 유지
+	if(params[1]["s"] === "wa"){
+		let le = document.getElementById("wait");
+		setActiveStyle(le);
+	}else if(params[1]["s"] === "su"){
+		let le = document.getElementById("finish");
+		setActiveStyle(le);
+	}else if(params[1]["s"] === null){
+		let le = document.getElementById("all");
+		setActiveStyle(1,le);
+	}
+	
+	
 	// 데이터 로딩 함수
 	function loadData(status) {
 		tableData(1,status);
