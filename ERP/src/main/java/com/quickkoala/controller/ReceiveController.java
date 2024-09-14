@@ -27,18 +27,18 @@ import com.quickkoala.entity.ReceiveReturnEntity;
 import com.quickkoala.entity.ReceiveTempEntity;
 import com.quickkoala.entity.SupplierEntity;
 import com.quickkoala.entity.ViewReceiveReturnEntity;
-import com.quickkoala.entity.ReceiveTempViewEntity;
+import com.quickkoala.entity.ViewReceiveTempEntity;
 import com.quickkoala.service.PurchaseViewService;
 import com.quickkoala.service.ViewPurchaseDetailService;
 import com.quickkoala.service.PurchaseService;
 import com.quickkoala.service.ReceiveDetailService;
 import com.quickkoala.service.ReceiveReturnService;
-import com.quickkoala.service.ReceiveSummaryViewService;
+import com.quickkoala.service.ViewReceiveSummaryService;
 import com.quickkoala.service.ReceiveTempService;
 import com.quickkoala.service.ViewReceiveService;
 import com.quickkoala.service.SupplierService;
 import com.quickkoala.service.ViewReceiveReturnService;
-import com.quickkoala.service.ReceiveTempViewService;
+import com.quickkoala.service.ViewReceiveTempService;
 import com.quickkoala.utils.ExcelUpload;
 
 @Controller
@@ -49,25 +49,13 @@ public class ReceiveController {
 	private PurchaseService purchaseService;
 
 	@Autowired
-	private ReceiveTempViewService temporaryReceiveViewService;
+	private ViewReceiveTempService temporaryReceiveViewService;
 
 	@Autowired
 	private SupplierService supplierService;
 
 	@Autowired
 	private PurchaseViewService purchaseViewService;
-
-	@Autowired
-	private ReceiveSummaryViewService receiveSummaryViewService;
-
-	@Autowired
-	private ViewReceiveService receiveViewService;
-
-	@Autowired
-	private ViewPurchaseDetailService purchaseDetailViewService;
-
-	@Autowired
-	private ViewReceiveReturnService viewReceiveReturnService;
 
 	// 발주요청 페이지
 	@GetMapping("purchaseOrder")
@@ -85,15 +73,14 @@ public class ReceiveController {
 	// 가입고 페이지
 	@GetMapping("temporaryReceive")
 	public String tempPage(Model model, String status) {
-		List<ReceiveTempViewEntity> item = temporaryReceiveViewService.getAllOrders(status);
+		List<ViewReceiveTempEntity> item = temporaryReceiveViewService.getAllOrders(status);
 		model.addAttribute("items", item);
 		return "receive/temporaryReceive";
 	}
 
-	// 입고현황(진) 페이지
+	// 입고현황 페이지
 	@GetMapping("receiveSummary")
-	public String receiveSummary(Model model) {
-		model.addAttribute("items", receiveSummaryViewService.getData());
+	public String receiveSummary() {
 		return "receive/receiveSummary";
 	}
 
@@ -105,8 +92,7 @@ public class ReceiveController {
 
 	// 반품내역 페이지
 	@GetMapping("receiveReturn")
-	public String receiveReturn(Model model) {
-		model.addAttribute("items",viewReceiveReturnService.getAllData());
+	public String receiveReturn() {
 		return "receive/receiveReturn";
 	}
 

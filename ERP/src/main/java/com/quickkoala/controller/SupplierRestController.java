@@ -19,7 +19,7 @@ public class SupplierRestController {
 	
 	@GetMapping("deliveryData/{pno}")
 	public Page<ViewDeliveryDetailEntity> deliveryData(@PathVariable Integer pno){
-		int size = 10;
+		int size = 3;
 		return viewDeliveryDetailService.getPaginatedData(pno, size);
 	}
 }

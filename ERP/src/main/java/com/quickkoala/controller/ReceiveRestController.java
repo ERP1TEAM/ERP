@@ -15,23 +15,26 @@ import com.quickkoala.dto.ReceivingDto;
 import com.quickkoala.entity.ViewPurchaseDetailEntity;
 import com.quickkoala.entity.ReceiveDetailEntity;
 import com.quickkoala.entity.ReceiveReturnEntity;
-import com.quickkoala.entity.ReceiveTempViewEntity;
+import com.quickkoala.entity.ViewReceiveTempEntity;
 import com.quickkoala.entity.ViewReceiveEntity;
-import com.quickkoala.repository.ViewPurchaseDetailRepository;
+import com.quickkoala.entity.ViewReceiveReturnEntity;
+import com.quickkoala.entity.ViewReceiveSummaryEntity;
 import com.quickkoala.service.LotService;
 import com.quickkoala.service.ReceiveDetailService;
 import com.quickkoala.service.ReceiveReturnService;
 import com.quickkoala.service.ReceiveTempService;
-import com.quickkoala.service.ReceiveTempViewService;
+import com.quickkoala.service.ViewReceiveTempService;
 import com.quickkoala.service.ViewPurchaseDetailService;
+import com.quickkoala.service.ViewReceiveReturnService;
 import com.quickkoala.service.ViewReceiveService;
+import com.quickkoala.service.ViewReceiveSummaryService;
 
 @RestController
 @RequestMapping("main")
 public class ReceiveRestController {
 
 	@Autowired
-	private ReceiveTempViewService receiveTempViewService;
+	private ViewReceiveTempService viewReceiveTempService;
 	
 	@Autowired
 	private ReceiveDetailService receiveDetailService;
@@ -46,18 +49,21 @@ public class ReceiveRestController {
 	private LotService lotService;
 	
 	@Autowired
-	private ViewPurchaseDetailRepository purchaseDetailViewRepository;
-	
-	@Autowired
 	private ViewPurchaseDetailService viewPurchaseDetailService;
 
 	@Autowired
 	private ViewReceiveService viewReceiveService;
 	
+	@Autowired
+	private ViewReceiveReturnService viewReceiveReturnService;
+	
+	@Autowired
+	private ViewReceiveSummaryService viewReceiveSummaryService;
+	
 	// 발주내역 페이지 데이터
 	@GetMapping("receive/purchaseData/{pno}/{status}")
 	public Page<ViewPurchaseDetailEntity> purchaseData(@PathVariable Integer pno, @PathVariable String status){
-		int size = 5;
+		int size = 2;
 		Page<ViewPurchaseDetailEntity> items = null;
 		if(status.equals("all")) {
 			items = viewPurchaseDetailService.getPaginatedData(pno, size);
@@ -69,8 +75,16 @@ public class ReceiveRestController {
 	
 	// 가입고 페이지 데이터
 	@GetMapping("receive/temporaryData/{status}")
-	public List<ReceiveTempViewEntity> tempData(@PathVariable String status) {
-		return receiveTempViewService.getAllOrders(status);
+	public List<ViewReceiveTempEntity> tempData(@PathVariable String status) {
+		return viewReceiveTempService.getAllOrders(status);
+	}
+	
+	// 가입고 페이지 데이터
+	@GetMapping("receive/tempReceiveData/{pno}")
+	public Page<ViewReceiveTempEntity> tempReceiveData(@PathVariable Integer pno) {
+		System.out.println(pno);
+		int size=2;
+		return viewReceiveTempService.getPaginatedData(pno, size);
 	}
 
 	// 입고확정
@@ -95,11 +109,25 @@ public class ReceiveRestController {
 		}
 	}
 	
+	// 입고현황 데이터 + 페이징
+	@GetMapping("receive/summaryData/{pno}")
+	public Page<ViewReceiveSummaryEntity> summaryData(@PathVariable Integer pno) {
+		int size = 3;
+		return viewReceiveSummaryService.getPaginatedData(pno, size);
+	}
+	
 	// 입고내역 데이터 + 페이징
 	@GetMapping("receive/detailData/{pno}")
 	public Page<ViewReceiveEntity> detailData(@PathVariable Integer pno) {
-		int size = 10;
+		int size = 5;
 		return viewReceiveService.getPaginatedData(pno, size);
+	}
+	
+	// 입고반품 데이터 + 페이징
+	@GetMapping("receive/returnData/{pno}")
+	public Page<ViewReceiveReturnEntity> returnData(@PathVariable Integer pno) {
+		int size = 2;
+		return viewReceiveReturnService.getPaginatedData(pno, size);
 	}
 
 }

@@ -8,9 +8,9 @@ import org.springframework.stereotype.Service;
 
 import com.quickkoala.dto.ViewPurchaseSummaryDto;
 import com.quickkoala.entity.ViewPurchaseSummaryEntity;
-import com.quickkoala.entity.ReceiveSummaryEntity;
+import com.quickkoala.entity.ViewReceiveSummaryEntity;
 import com.quickkoala.repository.ViewPurchaseSummaryRepository;
-import com.quickkoala.repository.ReceiveSummaryViewRepository;
+import com.quickkoala.repository.ViewReceiveSummaryRepository;
 
 @Service
 public class ViewPurchaseSummaryServiceImpl implements ViewPurchaseSummaryService{

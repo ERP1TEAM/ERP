@@ -28,7 +28,7 @@ public class ViewReceiveServiceImpl implements ViewReceiveService {
 	@Override
 	public Page<ViewReceiveEntity> getPaginatedData(int pno, int size) {
 		Pageable pageable = PageRequest.of(pno - 1, size); // 페이지 번호는 0부터 시작하므로 pno - 1
-        return viewReceiveRepository.findAll(pageable);
+        return viewReceiveRepository.findAllByOrderByReceiveCodeDesc(pageable);
 	}
 	
 }

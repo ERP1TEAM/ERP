@@ -1,5 +1,8 @@
 document.addEventListener("DOMContentLoaded", function() {
 	var totalPages = 1;
+	var startPage = 0;
+	var endPage = 0;
+	const pageSize = 3; // 페이지 번호 그룹 크기 설정
 
 	const getQueryParam = (param) => {
 		const urlParams = new URLSearchParams(window.location.search);
@@ -12,11 +15,12 @@ document.addEventListener("DOMContentLoaded", function() {
 		tableData(p);
 	}
 	window.pgNext = function() {
-		tableData(totalPages);
+		tableData(endPage+1);
 	}
 	window.pgPrev = function() {
-		tableData(1);
+		tableData(startPage-1);
 	}
+	
 	function formatDate(isoString) {
 		
 		const date = new Date(isoString);
@@ -59,17 +63,25 @@ document.addEventListener("DOMContentLoaded", function() {
 
 				const paging = document.getElementById("paging");
 				paging.innerHTML = ''; // 'innerHTML'로 수정
+				
+				// 페이지 그룹의 시작과 끝 계산
+				startPage = Math.floor((pno - 1) / pageSize) * pageSize + 1;
+				endPage = Math.min(startPage + pageSize - 1, totalPages);
 
 				// 페이징 HTML 생성
-				let paginationHTML = `
-				    <ul class="pagination">
-				        <li class="page-item"><a class="page-link" aria-label="Previous" onclick="pgPrev()">
-				            <span aria-hidden="true">&laquo;</span>
-				        </a></li>
-				`;
+				let paginationHTML = `<ul class="pagination">`;
+				
+				// 'Precious' 링크 추가
+				if(startPage > pageSize){
+					paginationHTML += `
+					        <li class="page-item"><a class="page-link" aria-label="Previous" onclick="pgPrev()">
+					            <span aria-hidden="true">&laquo;</span>
+					        </a></li>
+					`;
+				}
 
 				// 페이지 번호 링크 추가
-				for (let i = 1; i <= totalPages; i++) {
+				for (let i = startPage; i <= endPage; i++) {
 					const className = pno === i ? 'page-item current-page' : 'page-item';
 					paginationHTML += `
 		                <li class="${className}"><a class="page-link" onclick="paging(${i})">${i}</a></li>
@@ -77,12 +89,15 @@ document.addEventListener("DOMContentLoaded", function() {
 				}
 
 				// 'Next' 링크 추가
-				paginationHTML += `
-				        <li class="page-item"><a class="page-link" aria-label="Next" onclick="pgNext()">
-				            <span aria-hidden="true">&raquo;</span>
-				        </a></li>
-				    </ul>
-				`;
+				if(endPage < totalPages){
+					paginationHTML += `
+					        <li class="page-item"><a class="page-link" aria-label="Next" onclick="pgNext()">
+					            <span aria-hidden="true">&raquo;</span>
+					        </a></li>
+					`;
+				}
+				
+				paginationHTML += `</ul>`;
 
 				// 페이징 HTML을 페이지에 삽입
 				paging.innerHTML = paginationHTML;

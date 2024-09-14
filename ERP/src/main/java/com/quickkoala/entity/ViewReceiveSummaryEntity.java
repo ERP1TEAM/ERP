@@ -1,7 +1,5 @@
 package com.quickkoala.entity;
 
-import java.time.LocalDateTime;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -15,7 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 @Table(name = "view_receive_summary")
-public class ReceiveSummaryEntity {
+public class ViewReceiveSummaryEntity {
 	@Id
 	@Column(name = "order_number")
 	private String orderNumber;

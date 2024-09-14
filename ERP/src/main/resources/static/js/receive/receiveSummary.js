@@ -20,24 +20,10 @@ document.addEventListener("DOMContentLoaded", function() {
 	window.pgPrev = function() {
 		tableData(startPage-1);
 	}
-	
-	function formatDate(isoString) {
-		
-		const date = new Date(isoString);
-
-		const year = date.getFullYear();
-		const month = String(date.getMonth() + 1).padStart(2, '0');
-		const day = String(date.getDate()).padStart(2, '0');
-		const hours = String(date.getHours()).padStart(2, '0');
-		const minutes = String(date.getMinutes()).padStart(2, '0');
-		const seconds = String(date.getSeconds()).padStart(2, '0');
-
-		return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-	}
 
 	//테이블 출력
 	const tableData = (pno) => {
-		fetch(`../main/receive/detailData/${pno}`, {
+		fetch(`../main/receive/summaryData/${pno}`, {
 			method: 'GET'
 		})
 			.then(response => response.json())
@@ -48,17 +34,14 @@ document.addEventListener("DOMContentLoaded", function() {
 				let tbody = document.querySelector('#tbody');
 				tbody.innerHTML = '';
 				items.forEach(function(item) {
-					const rdt = formatDate(item.receiveDate);
 					let th = `
 				    <tr class="odd gradeX">
-				        <td>${item.receiveCode}</td>
 				        <td>${item.orderNumber}</td>
-				        <td>${item.supplierName}</td>
-				        <td>${item.productCode}</td>
 				        <td>${item.productName}</td>
-				        <td>${item.receiveQuantity}</td>
-				        <td>${rdt}</td>
-				        <td>${item.manager}</td>
+				        <td>${item.purchaseQuantity}</td>
+				        <td>${item.totalWtQuantity}</td>
+				        <td>${item.totalReceiveQuantity}</td>
+				        <td>${item.totalReturnQuantity}</td>
 				    </tr>`;
 					tbody.innerHTML += th;
 				})

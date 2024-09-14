@@ -13,5 +13,5 @@ import com.quickkoala.entity.ViewReceiveEntity;
 public interface ViewReceiveRepository extends JpaRepository<ViewReceiveEntity, String>{
 	List<ViewReceiveEntity> findAllByOrderByReceiveCodeDesc();
 	long count();
-	Page<ViewReceiveEntity> findAll(Pageable pageable);
+	Page<ViewReceiveEntity> findAllByOrderByReceiveCodeDesc(Pageable pageable);
 }

@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Table(name = "view_receive_temp")
 @Data
-public class ReceiveTempViewEntity {
+public class ViewReceiveTempEntity {
 
 	@Id
     @Column(name = "code")
