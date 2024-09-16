@@ -23,6 +23,9 @@ public class ReceiveReturnEntity {
 
 	@Column(name = "order_number", nullable = false, length = 14)
 	private String orderNumber;
+	
+	@Column(name = "delivery_code", nullable = false, length = 20)
+	private String deliveryCode;
 
 	@Column(name = "reason", nullable = false, columnDefinition = "TEXT")
 	private String reason;

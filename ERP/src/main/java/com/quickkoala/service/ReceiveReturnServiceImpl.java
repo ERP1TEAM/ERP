@@ -1,5 +1,6 @@
 package com.quickkoala.service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.quickkoala.dto.ReceivingDto;
 import com.quickkoala.entity.ReceiveReturnEntity;
+import com.quickkoala.repository.DeliveryDetailRepository;
 import com.quickkoala.repository.ReceiveReturnRepository;
 import com.quickkoala.utils.TodayUtils;
 
@@ -18,9 +20,15 @@ public class ReceiveReturnServiceImpl implements ReceiveReturnService{
 	
 	@Override
 	public ReceiveReturnEntity addData(ReceivingDto dto) {
+		System.out.println(dto.getDeliveryCode());		
+		
+		int number = (int)this.countReturnsToday()+1;
+		String formattedNumber = String.format("%03d", number);
+		
 		ReceiveReturnEntity data = new ReceiveReturnEntity();
-		data.setCode("RT"+TodayUtils.getToday()+"");
+		data.setCode("RE"+TodayUtils.getToday()+"-"+formattedNumber);
 		data.setOrderNumber(dto.getOrderNumber());
+		data.setDeliveryCode(dto.getDeliveryCode());
 		data.setQuantity(dto.getCaQty());
 		data.setReason(dto.getCon());
 		data.setMemo(dto.getMemo());
@@ -30,4 +38,13 @@ public class ReceiveReturnServiceImpl implements ReceiveReturnService{
 		
 		return receiveReturnRepository.save(data);
 	}
+	
+	public long countReturnsToday() {
+        LocalDate today = LocalDate.now();
+        LocalDateTime startOfDay = today.atStartOfDay();
+        LocalDateTime endOfDay = today.plusDays(1).atStartOfDay();
+
+        return receiveReturnRepository.countByDateRange(startOfDay, endOfDay);
+    }
+	
 }

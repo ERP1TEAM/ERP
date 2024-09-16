@@ -23,6 +23,9 @@ public class ReceiveTempEntity {
 
     @Column(name = "order_number", length = 14, nullable = false)
     private String orderNumber;
+    
+    @Column(name = "delivery_code", nullable = false, length = 14)
+	private String deliveryCode;
 
     @Column(name = "quantity", nullable = false)
     private Integer quantity;

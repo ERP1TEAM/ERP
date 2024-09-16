@@ -58,7 +58,7 @@ public class ReceiveTempServiceImpl implements ReceiveTempService{
 	}
 	
 	@Override
-	public ReceiveTempEntity addDelivery(String data, Integer ea) {
+	public ReceiveTempEntity addDelivery(String data, Integer ea, String code) {
 		int number = (int)this.getCountOfOrdersToday()+1;
 		
 		PurchaseEntity purchaseEntity = purchaseRepository.findByOrderNumber(data);
@@ -66,6 +66,7 @@ public class ReceiveTempServiceImpl implements ReceiveTempService{
 		String formattedNumber = String.format("%03d", number);
 		receiveTempEntity.setCode("RT"+TodayUtils.getToday()+"-"+formattedNumber);
 		receiveTempEntity.setOrderNumber(purchaseEntity.getOrderNumber());
+		receiveTempEntity.setDeliveryCode(code);
 		receiveTempEntity.setQuantity(purchaseEntity.getQuantity());
 		receiveTempEntity.setWtQuantity(ea);
 		receiveTempEntity.setDate(LocalDateTime.now());

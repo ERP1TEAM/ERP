@@ -49,8 +49,8 @@ public class ReceiveController {
 	private PurchaseService purchaseService;
 
 	@Autowired
-	private ViewReceiveTempService temporaryReceiveViewService;
-
+	private ViewReceiveTempService viewReceiveTempService;
+	
 	@Autowired
 	private SupplierService supplierService;
 
@@ -73,7 +73,7 @@ public class ReceiveController {
 	// 가입고 페이지
 	@GetMapping("temporaryReceive")
 	public String tempPage(Model model, String status) {
-		List<ViewReceiveTempEntity> item = temporaryReceiveViewService.getAllOrders(status);
+		List<ViewReceiveTempEntity> item = viewReceiveTempService.getAllOrders(status);
 		model.addAttribute("items", item);
 		return "receive/temporaryReceive";
 	}
@@ -135,10 +135,11 @@ public class ReceiveController {
 	@GetMapping("receivingModal")
 	public ResponseEntity<ReceiveModalDto> receivingModal(@RequestParam("ornum") String ornum,
 			@RequestParam("code") String code, @RequestParam("name") String name, @RequestParam("qty") Integer qty,
-			@RequestParam("wqty") Integer wqty) {
+			@RequestParam("wqty") Integer wqty, @RequestParam("deli") String deli) {
 		ReceiveModalDto dto = new ReceiveModalDto();
 		dto.setOrnum(ornum);
 		dto.setCode(code);
+		dto.setDeli(deli);
 		dto.setName(name);
 		dto.setQty(qty);
 		dto.setWqty(wqty);

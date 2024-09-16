@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.quickkoala.dto.SupplierDeliveryDto;
+import com.quickkoala.entity.DeliveryDetailEntity;
 import com.quickkoala.entity.PurchaseEntity;
 import com.quickkoala.entity.ViewPurchaseSummaryEntity;
 import com.quickkoala.service.DeliveryDetailService;
@@ -85,9 +86,15 @@ public class SupplierController {
 		if(purchaseEntity.getQuantity() < ea) {
 			return ResponseEntity.ok("over");			
 		}else {
-			receiveTempService.addDelivery(data, ea);
-			deliveryDetailService.addDelivery(data, ea);
+			DeliveryDetailEntity ent = deliveryDetailService.addDelivery(data, ea);
+			receiveTempService.addDelivery(data, ea, ent.getCode());
 			return ResponseEntity.ok("ok");
 		}
+	}
+	
+	//반품내역
+	@GetMapping("supplierReturn")
+	public String supplierReturn() {
+		return "supplier/supplierReturn";
 	}
 }

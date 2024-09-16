@@ -6,6 +6,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ReceivingDto {
-	private String orderNumber,code,con,memo,manager;
+	private String orderNumber,deliveryCode,code,con,memo,manager;
 	private Integer wqty,reQty,caQty;
 }

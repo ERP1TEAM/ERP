@@ -25,6 +25,6 @@ public class ViewDeliveryDetailServiceImpl implements ViewDeliveryDetailService{
 	@Override
 	public Page<ViewDeliveryDetailEntity> getPaginatedData(int pno, int size) {
 		Pageable pageable = PageRequest.of(pno - 1, size);
-		return viewDeliveryDetailRepository.findAll(pageable);
+		return viewDeliveryDetailRepository.findAllByOrderByDeliveryCodeDesc(pageable);
 	}
 }

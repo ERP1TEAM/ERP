@@ -5,4 +5,5 @@ import com.quickkoala.entity.ReceiveReturnEntity;
 
 public interface ReceiveReturnService {
 	ReceiveReturnEntity addData(ReceivingDto dto);
+	public long countReturnsToday();
 }

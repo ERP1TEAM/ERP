@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	var totalPages = 1;
 	var startPage = 0;
 	var endPage = 0;
-	const pageSize = 5; // 페이지 번호 그룹 크기 설정
+	const pageSize = 3; // 페이지 번호 그룹 크기 설정
 
 	const getQueryParam = (param) => {
 		const urlParams = new URLSearchParams(window.location.search);
@@ -37,7 +37,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 	//테이블 출력
 	const tableData = (pno) => {
-		fetch(`./deliveryData/${pno}`, {
+		fetch(`./returnData/${pno}`, {
 			method: 'GET'
 		})
 			.then(response => response.json())
@@ -48,14 +48,17 @@ document.addEventListener("DOMContentLoaded", function() {
 				let tbody = document.querySelector('#tbody');
 				tbody.innerHTML = '';
 				items.forEach(function(item) {
-					const rdt = formatDate(item.date);
+					const rdt = formatDate(item.returnDate);
 					let th = `
 				    <tr class="odd gradeX">
 				        <td>${item.deliveryCode}</td>
 				        <td>${item.orderNumber}</td>
 				        <td>${item.productCode}</td>
 				        <td>${item.productName}</td>
-				        <td>${item.quantity}</td>
+				        <td>${item.deliveryQuantity}</td>
+				        <td>${item.returnQuantity}</td>
+				        <td>${item.returnReason}</td>
+				        <td>${item.returnMemo}</td>
 				        <td>${rdt}</td>
 				    </tr>`;
 					tbody.innerHTML += th;

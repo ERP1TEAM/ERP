@@ -45,7 +45,8 @@ document.addEventListener("DOMContentLoaded", function() {
 				        <td>${item.wtQuantity}</td>
 				        <td>${item.date}</td>
 				        <td>${item.manager}</td>
-				        <td><button type="button" class="small-tap receiving"
+				        <td><button type="button" class="small-tap receiving" 
+				        			data-deli="${item.deliveryCode}"
 									data-on="${item.orderNumber}"
 									data-code="${item.code}"
 									data-name="${item.productName}"
@@ -114,7 +115,8 @@ document.addEventListener("DOMContentLoaded", function() {
 			const name = btn.getAttribute("data-name");
 			const qty = btn.getAttribute("data-qty");
 			const wqty = btn.getAttribute("data-wqty");
-			receivingModal(orNum, code, name, qty, wqty);
+			const deli = btn.getAttribute("data-deli");
+			receivingModal(orNum, code, name, qty, wqty, deli);
 		}
 	});
 
@@ -126,8 +128,8 @@ document.addEventListener("DOMContentLoaded", function() {
 	});
 
 	//입고확정 모달 출력
-	function receivingModal(orNum, code, name, qty, wqty) {
-		fetch(`./receivingModal?ornum=${encodeURIComponent(orNum)}&code=${encodeURIComponent(code)}&name=${encodeURIComponent(name)}&qty=${encodeURIComponent(qty)}&wqty=${encodeURIComponent(wqty)}`, {
+	function receivingModal(orNum, code, name, qty, wqty, deli) {
+		fetch(`./receivingModal?ornum=${encodeURIComponent(orNum)}&code=${encodeURIComponent(code)}&name=${encodeURIComponent(name)}&qty=${encodeURIComponent(qty)}&wqty=${encodeURIComponent(wqty)}&deli=${encodeURIComponent(deli)}`, {
 			method: 'GET'
 		})
 			.then(response => response.json())
@@ -142,6 +144,7 @@ document.addEventListener("DOMContentLoaded", function() {
 			    <tr class="odd gradeX">
 			        <input type="hidden" id="ornum" value="${data.ornum}">
 			        <input type="hidden" id="code" value="${data.code}">
+			        <input type="hidden" id="deli" value="${data.deli}">
 			        <td>${data.name}</td>
 			        <td><input type="text" id="qty" value="${data.qty}" readonly class="no-style"></td>
 			        <td><input type="text" id="wqty" value="${data.wqty}" readonly class="no-style"></td>
@@ -203,6 +206,7 @@ document.addEventListener("DOMContentLoaded", function() {
 		let caQty = parseInt(document.getElementById("ca-qty").value);
 		let con = document.getElementById("condition").value;
 		let memo = document.getElementById("memo").value;
+		let deli = document.getElementById("deli").value;
 
 		if (!reQty && reQty !== 0) {
 			alert("입고수량을 입력하셔야 합니다.");
@@ -214,10 +218,10 @@ document.addEventListener("DOMContentLoaded", function() {
 			alert("대기수량을 확인해주세요");
 			return;
 		}
-
 		const formData = new FormData();
 		formData.append("orderNumber", orNum);
 		formData.append("code", code);
+		formData.append("deliveryCode", deli);
 		formData.append("wqty", wqty);
 		formData.append("reQty", reQty);
 		formData.append("caQty", caQty);

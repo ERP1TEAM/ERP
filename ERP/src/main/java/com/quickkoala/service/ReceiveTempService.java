@@ -7,7 +7,7 @@ import com.quickkoala.entity.ReceiveTempEntity;
 
 public interface ReceiveTempService {
 	List<ReceiveTempEntity> addAllReceive(SupplierDeliveryListDto orders);
-	ReceiveTempEntity addDelivery(String data, Integer ea);
+	ReceiveTempEntity addDelivery(String data, Integer ea, String code);
 	long getCountOfOrdersToday();
 	List<ReceiveTempEntity> getAllTemp();
 	ReceiveTempEntity getOne(String data);

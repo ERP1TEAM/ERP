@@ -26,6 +26,9 @@ public class ViewReceiveTempEntity {
 
     @Column(name = "supplier_name")
     private String supplierName;
+    
+    @Column(name = "delivery_code")
+    private String deliveryCode;
 
     @Column(name = "product_code")
     private String productCode;

@@ -16,4 +16,6 @@ public interface DeliveryDetailRepository extends JpaRepository<DeliveryDetailEn
     long countByDate(@Param("today") LocalDate today);
 	
 	List<DeliveryDetailEntity> findAllByOrderByCodeDesc();
+	
+	DeliveryDetailEntity findByOrderNumber(String orderNumber);
 }

@@ -63,7 +63,7 @@ public class ReceiveRestController {
 	// 발주내역 페이지 데이터
 	@GetMapping("receive/purchaseData/{pno}/{status}")
 	public Page<ViewPurchaseDetailEntity> purchaseData(@PathVariable Integer pno, @PathVariable String status){
-		int size = 2;
+		int size = 5;
 		Page<ViewPurchaseDetailEntity> items = null;
 		if(status.equals("all")) {
 			items = viewPurchaseDetailService.getPaginatedData(pno, size);
@@ -83,7 +83,7 @@ public class ReceiveRestController {
 	@GetMapping("receive/tempReceiveData/{pno}")
 	public Page<ViewReceiveTempEntity> tempReceiveData(@PathVariable Integer pno) {
 		System.out.println(pno);
-		int size=2;
+		int size = 5;
 		return viewReceiveTempService.getPaginatedData(pno, size);
 	}
 
@@ -112,7 +112,7 @@ public class ReceiveRestController {
 	// 입고현황 데이터 + 페이징
 	@GetMapping("receive/summaryData/{pno}")
 	public Page<ViewReceiveSummaryEntity> summaryData(@PathVariable Integer pno) {
-		int size = 3;
+		int size = 5;
 		return viewReceiveSummaryService.getPaginatedData(pno, size);
 	}
 	
@@ -126,7 +126,7 @@ public class ReceiveRestController {
 	// 입고반품 데이터 + 페이징
 	@GetMapping("receive/returnData/{pno}")
 	public Page<ViewReceiveReturnEntity> returnData(@PathVariable Integer pno) {
-		int size = 2;
+		int size = 5;
 		return viewReceiveReturnService.getPaginatedData(pno, size);
 	}
 

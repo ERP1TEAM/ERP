@@ -12,5 +12,5 @@ import com.quickkoala.entity.ViewDeliveryDetailEntity;
 @Repository
 public interface ViewDeliveryDetailRepository extends JpaRepository<ViewDeliveryDetailEntity, String>{
 	List<ViewDeliveryDetailEntity> findAllByOrderByDeliveryCodeDesc();
-	Page<ViewDeliveryDetailEntity> findAll(Pageable pageable);
+	Page<ViewDeliveryDetailEntity> findAllByOrderByDeliveryCodeDesc(Pageable pageable);
 }
