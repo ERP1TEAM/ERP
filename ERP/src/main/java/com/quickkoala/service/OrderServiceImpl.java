@@ -21,6 +21,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -165,5 +166,20 @@ public class OrderServiceImpl implements OrderService {
             orderDTO.getTel(),
             orderDTO.getOrderDate()
         ).orElse(null);  // 존재하지 않으면 null 반환
+    }
+    
+    @Override
+    public List<ClientsOrderProductsDTO> getOrderProductsByOrderId(String orderId) {
+        List<ClientsOrderProductsEntity> productEntities = clientsOrderProductsRepository.findByClientsOrdersOrderId(orderId);
+        return productEntities.stream().map(this::convertToDto).collect(Collectors.toList());
+    }
+
+    // Entity를 DTO로 변환
+    private ClientsOrderProductsDTO convertToDto(ClientsOrderProductsEntity entity) {
+        ClientsOrderProductsDTO dto = new ClientsOrderProductsDTO();
+        dto.setProductCode(entity.getProductCode());
+        dto.setProductName(entity.getProductName());
+        dto.setQty(entity.getQty());
+        return dto;
     }
 }
