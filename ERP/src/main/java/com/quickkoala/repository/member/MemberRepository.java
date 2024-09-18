@@ -1,4 +1,4 @@
-package com.quickkoala.repository;
+package com.quickkoala.repository.member;
 
 import com.quickkoala.entity.member.MemberEntity;
 import org.springframework.data.jpa.repository.JpaRepository;

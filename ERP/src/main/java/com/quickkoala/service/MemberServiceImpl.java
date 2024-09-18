@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.quickkoala.entity.member.MemberEntity;
-import com.quickkoala.repository.MemberRepository;
+import com.quickkoala.repository.member.MemberRepository;
 
 @Service
 public class MemberServiceImpl implements MemberService {
@@ -29,5 +29,6 @@ public class MemberServiceImpl implements MemberService {
     public List<MemberEntity> getAllData() {
         return memberRepository.findAll();
     }
+    
     
 }

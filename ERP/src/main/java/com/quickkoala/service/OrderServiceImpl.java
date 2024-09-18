@@ -5,19 +5,23 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.quickkoala.dto.ClientsOrderProductsDTO;
-import com.quickkoala.dto.ClientsOrdersDTO;
-import com.quickkoala.entity.ClientsOrderProductsEntity;
-import com.quickkoala.entity.ClientsOrdersEntity;
-import com.quickkoala.repository.ClientsOrderProductsRepository;
-import com.quickkoala.repository.ClientsOrdersRepository;
+import com.quickkoala.dto.sales.ClientsOrderProductsDTO;
+import com.quickkoala.dto.sales.ClientsOrdersDTO;
+import com.quickkoala.entity.sales.ClientsOrderProductsEntity;
+import com.quickkoala.entity.sales.ClientsOrdersEntity;
+import com.quickkoala.repository.sales.ClientsOrderProductsRepository;
+import com.quickkoala.repository.sales.ClientsOrdersRepository;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -182,4 +186,35 @@ public class OrderServiceImpl implements OrderService {
         dto.setQty(entity.getQty());
         return dto;
     }
+    
+    
+    public Page<ClientsOrdersEntity> searchOrders(String searchType, String searchText, LocalDate searchDate, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+
+        if (searchDate != null) {
+            // 날짜로 검색할 때
+            if (searchType.equals("orderId")) {
+                // 주문번호와 날짜로 검색
+                return clientsOrdersRepository.findByOrderIdContainingAndOrderDate(searchText, searchDate, pageable);
+            } else if (searchType.equals("name")) {
+                // 주문자명과 날짜로 검색
+                return clientsOrdersRepository.findByNameContainingAndOrderDate(searchText, searchDate, pageable);
+            } else {
+                // 날짜로만 검색
+                return clientsOrdersRepository.findByOrderDate(searchDate, pageable);
+            }
+        } else if (searchType.equals("orderId")) {
+            // 주문번호로만 검색
+            return clientsOrdersRepository.findByOrderIdContaining(searchText, pageable);
+        } else if (searchType.equals("name")) {
+            // 주문자명으로만 검색
+            return clientsOrdersRepository.findByNameContaining(searchText, pageable);
+        }
+
+        // 기본값: 전체 조회
+        return clientsOrdersRepository.findAll(pageable);
+    }
+
+
+    
 }

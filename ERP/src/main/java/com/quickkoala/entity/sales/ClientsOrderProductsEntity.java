@@ -1,4 +1,6 @@
-package com.quickkoala.entity;
+package com.quickkoala.entity.sales;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -19,6 +21,7 @@ public class ClientsOrderProductsEntity {
 
     @ManyToOne
     @JoinColumn(name = "order_id", nullable = false)
+    @JsonBackReference
     private ClientsOrdersEntity clientsOrders;  // order_id 필드를 ClientsOrdersEntity와 연결
 
     private String productCode;

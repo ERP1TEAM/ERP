@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>SALES MAIN</title> 
+    <title>공지사항 목록</title> 
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 	<link rel="stylesheet" href="../assets/materialize/css/materialize.min.css" media="screen,projection" />
     <link href="../assets/css/bootstrap.css" rel="stylesheet" />
@@ -20,32 +20,15 @@
 		
 		<!-- Dropdown Structure -->
 		<ul id="dropdown1" class="dropdown-content">
-		<li><a href="#"><i class="fa fa-user fa-fw"></i>내정보 확인</a>
-		</li>
-		<li><a href="#"><i class="fa fa-gear fa-fw"></i>페이지 셋팅</a>
-		</li> 
-		<li><a href="#"><i class="fa fa-sign-out fa-fw"></i>로그아웃</a>
+		<li><a href="/api/auth/logout"><i class="fa fa-sign-out fa-fw"></i>로그아웃</a>
 		</li>
 		</ul>
 
-
-
-
 	  <div th:insert="~{/sales/sidebar :: sidebar}" id="sidebar"></div>
-	  
-	  
-	  
 	  
       <div id="page-wrapper" style="background-color: #dcebdb">
 		  	<div class="header"> 
-	            <h1 class="page-header">Vendor Main Page</h1>
-					<ol class="breadcrumb">
-						<li><a href="#" style="color: #1A4870;">Home</a></li>
-						  <!--
-						  <li><a href="#">페이지 tap1</a></li>
-						  <li class="active">페이지 tap2</li>
-						  -->
-					</ol> 			
+	            <h1 class="page-header">Home</h1>		
 			</div>
 			
     <!-- main views-->
@@ -56,7 +39,7 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-action">
-                         공지사항 (NOTICE) <span style="float: right;">+ MORE</span>
+                         공지사항 <span style="float: right;"><a href="./noticeWrite" style="color: black;">+ 공지사항 작성</a></span>
                     </div>
                     <div class="card-content">
                         <div class="table-responsive">
@@ -71,32 +54,22 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr class="odd gradeX">
-                                        <td class="center">2</td>
-                                        <td>창고 화재 안전 관련 공지사항</td>
-                                        <td class="center">홍길동</td>
-                                        <td class="center">49</td>
-                                        <td class="center">2021-09-03</td>
+                                    <tr th:each="notice : ${notices}">
+                                        <td class="center" th:text="${notice.id}"></td>
+                                        <td><a th:href="@{/sales/noticeView/{id}(id=${notice.id})}" th:text="${notice.title}"></a></td>
+                                        <td class="center" th:text="${notice.manager}"></td>
+                                        <td class="center" th:text="${notice.views}"></td>
+                                        <td class="center" th:text="${#temporals.format(notice.createdAt, 'yyyy-MM-dd')}"></td>
                                     </tr>
-                                    <tr class="even gradeX">
-                                        <td class="center">1</td>
-                                        <td>창고 화재 안전 관련 공지사항</td>
-                                        <td class="center">홍길동</td>
-                                        <td class="center">149</td>
-                                        <td class="center">2021-09-02</td>
-                                    </tr>
-                                   
                                 </tbody>
                             </table>
                         </div> 
                     </div>
-
                 </div>
             </div>
     </div>
 		
-   <footer><p>Copyright 2024 ⓒ quickkoala.com by <i class="fa fa-love"></i><a href="http://quickkoala.com">Quick Koala All right reserved.</a>
-</p></footer>
+   <footer><p>Copyright 2024 ⓒ quickkoala.com by <i class="fa fa-love"></i><a href="http://quickkoala.com">Quick Koala All right reserved.</a></p></footer>
             </div>
         </div>
     </div>

@@ -1,9 +1,14 @@
 package com.quickkoala.controller.sales;
 
 import java.io.File;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,8 +19,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.quickkoala.dto.ClientsOrderProductsDTO;
-import com.quickkoala.dto.ClientsOrdersDTO;
+import com.quickkoala.dto.sales.ClientsOrderProductsDTO;
+import com.quickkoala.dto.sales.ClientsOrdersDTO;
+import com.quickkoala.entity.sales.ClientsOrdersEntity;
 import com.quickkoala.service.OrderServiceImpl;
 
 @RestController
@@ -47,6 +53,33 @@ public class OrderRestController {
     @GetMapping("/{orderId}/products")
     public List<ClientsOrderProductsDTO> getOrderProducts(@PathVariable("orderId") String orderId) {
         return orderService.getOrderProductsByOrderId(orderId);
+    }
+    
+    // 검색 및 페이징 처리 엔드포인트
+    @GetMapping("/filter")
+    public Map<String, Object> filterOrders(
+            @RequestParam("searchType") String searchType,
+            @RequestParam("searchText") String searchText,
+            @RequestParam(value = "searchDate", required = false) String searchDateStr,
+            @RequestParam("page") int page,
+            @RequestParam("size") int size) {
+
+        LocalDate searchDate = null;
+        if (searchDateStr != null && !searchDateStr.isEmpty()) {
+            searchDate = LocalDate.parse(searchDateStr, DateTimeFormatter.ISO_DATE);
+        }
+
+        // Service를 통해 검색 및 페이징 처리
+        Page<ClientsOrdersEntity> ordersPage = orderService.searchOrders(searchType, searchText, searchDate, page, size);
+
+        // 결과를 DTO로 변환하여 필요한 데이터만 반환
+        Map<String, Object> response = new HashMap<>();
+        response.put("content", ordersPage.getContent()); // 실제 데이터 리스트
+        response.put("currentPage", ordersPage.getNumber()); // 현재 페이지 번호
+        response.put("totalItems", ordersPage.getTotalElements()); // 전체 아이템 수
+        response.put("totalPages", ordersPage.getTotalPages()); // 전체 페이지 수
+
+        return response;
     }
 
 }

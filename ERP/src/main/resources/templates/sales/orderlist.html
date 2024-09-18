@@ -12,14 +12,83 @@
     <link href="../assets/css/custom-styles.css" rel="stylesheet" />
     <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
     <link rel="stylesheet" href="../assets/js/Lightweight-Chart/cssCharts.css">
-
 </head>
+
+<style>
+/* 모달의 오른쪽 상단에 X 버튼 배치 */
+.modal-close-x {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 24px;
+    cursor: pointer;
+    color: #333;
+}
+
+.modal-close-x:hover {
+    color: #d9534f; /* 호버 시 X 버튼 색 변경 (빨간색) */
+}
+/* 검색 필드와 검색 버튼을 우측 상단에 배치하고 60%의 공간만 사용 */
+.search-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+    align-items: center;
+    width: 80%;
+    float: right;
+}
+
+.search-container select{
+	margin-left: 30px;
+	margin-bottom: 10px;
+} 
+.search-container input{
+	margin-left: 10px;
+} 
+.search-container button {
+    margin-left: 10px;
+    margin-bottom: 15px;
+    margin-right: 50px;
+}
+
+.search-container input[type="date"] {
+    width: 160px;
+}
+
+.search-container input[type="text"] {
+    width: 200px;
+}
+
+.search-container select {
+    width: 120px;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.pagination li {
+    display: inline-block;
+    margin: 0 5px;
+}
+
+.pagination a {
+    padding: 8px 16px;
+    border: 1px solid #ccc;
+    color: #333;
+}
+
+.pagination a:hover {
+    background-color: #ddd;
+}
+</style>
 
 <body>
     <div id="wrapper">
         <nav th:insert="~{/sales/header :: header}"></nav>
-        
-        <!-- Dropdown Structure -->
+
         <ul id="dropdown1" class="dropdown-content">
             <li><a href="#"><i class="fa fa-user fa-fw"></i>내정보 확인</a></li>
             <li><a href="#"><i class="fa fa-gear fa-fw"></i>페이지 셋팅</a></li>
@@ -32,33 +101,42 @@
             <div class="header">
                 <h1 class="page-header">주문 목록</h1>
                 <ol class="breadcrumb">
-                    <li><a href="#" style="color: #1A4870;">Home</a></li>
+                    <li><a href="./home" style="color: #1A4870;">Home</a></li>
                 </ol>
             </div>
 
-            <!-- Main content -->
-            <div id="page-inner">
+            <!-- 검색 영역: 날짜 선택, 검색 옵션, 검색 필드 -->
+            <div class="search-container">
+                <input type="date" id="searchDate" class="form-control" placeholder="날짜 선택">
+                <select id="searchOption" class="form-control">
+                    <option value="orderId">주문번호</option>
+                    <option value="name">주문자명</option>
+                </select>
+                <input type="text" id="searchInput" class="form-control" placeholder="검색어를 입력하세요">
+                <button type="button" class="btn btn-primary" onclick="filterOrders()">검색</button>
+            </div>
+
+            <!-- 주문 목록 테이블 -->
+            <div id="page-inner" style="min-height: 0px;">
                 <div class="row">
                     <div class="col-md-12">
                         <div class="card">
-                            <div class="card-action">
-                                주문 목록
-                            </div>
+                            <div class="card-action">주문 목록</div>
                             <div class="card-content">
                                 <div class="table-responsive">
-                                    <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+                                    <table class="table table-striped table-bordered table-hover" id="orderTable">
                                         <thead>
                                             <tr>
-                                                <th class="center" style="width: 10%;">주문번호</th>
-                                                <th class="center" style="width: 10%;">주문자명</th>
-                                                <th class="center" style="width: 10%;">연락처</th>
-                                                <th class="center" style="width: 15%;">이메일</th>
-                                                <th class="center" style="width: 30%;">배송지</th>
-                                                <th class="center" style="width: 10%;">주문날짜</th>
-                                                <th class="center" style="width: 5%;">상세보기</th>
+                                                <th class="center">주문번호</th>
+                                                <th class="center">주문자명</th>
+                                                <th class="center">연락처</th>
+                                                <th class="center">이메일</th>
+                                                <th class="center">배송지</th>
+                                                <th class="center">주문날짜</th>
+                                                <th class="center">주문상품</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
+                                        <tbody id="orderTableBody">
                                             <!-- Thymeleaf를 이용한 데이터 반복 출력 -->
                                             <tr th:each="order : ${orders}" th:data-order-id="${order.orderId}">
                                                 <td class="center" th:text="${order.orderId}"></td>
@@ -73,43 +151,29 @@
                                             </tr>
                                         </tbody>
                                     </table>
+
+                                    <!-- 페이징 처리 -->
+                                    <ul class="pagination">
+                                        <li><a href="#">1</a></li>
+                                        <li><a href="#">2</a></li>
+                                        <li><a href="#">3</a></li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-
             <footer>
                 <p>Copyright 2024 ⓒ quickkoala.com by <i class="fa fa-love"></i>
                     <a href="http://quickkoala.com">Quick Koala All right reserved.</a>
                 </p>
             </footer>
+            </div>
+
         </div>
     </div>
 
-    <!-- 주문 상세 정보를 표시하는 모달 -->
-    <div id="orderDetailModal" class="modal">
-        <div class="modal-content">
-            <h4>주문 상세 정보</h4>
-            <p id="modalOrderId">주문번호: </p>
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>상품코드</th>
-                        <th>상품이름</th>
-                        <th>상품수량</th>
-                    </tr>
-                </thead>
-                <tbody id="orderProductDetails">
-                    <!-- 주문 상품 정보가 이곳에 추가됩니다 -->
-                </tbody>
-            </table>
-        </div>
-        <div class="modal-footer">
-            <button class="modal-close btn btn-primary">닫기</button>
-        </div>
-    </div>
+	<div th:insert="~{/sales/orderlistModal :: orderlistModal}"></div>
 
     <script src="../assets/js/jquery-1.10.2.js"></script>
     <script src="../assets/js/bootstrap.min.js"></script>
@@ -122,8 +186,8 @@
     <script src="../assets/js/Lightweight-Chart/jquery.chart.js"></script>
     <script src="../assets/js/custom-scripts.js"></script>
 
-<!-- Materialize JavaScript -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <!-- Materialize JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     
 </body>
 
@@ -157,12 +221,89 @@
                 console.error('Error fetching order products:', error);
             });
     }
+    
+    
+	//페이징 UI와 검색 기능을 구현
+    let currentPage = 0;
+    let totalPages = 0;
+
+    function filterOrders(page = 0) {
+        const searchType = document.getElementById('searchOption').value;
+        const searchText = document.getElementById('searchInput').value.toLowerCase();
+        const searchDate = document.getElementById('searchDate').value;
+
+        const size = 50;  // 한 페이지에 표시할 데이터 수
+
+        fetch(`/sales/filter?searchType=${searchType}&searchText=${searchText}&searchDate=${searchDate}&page=${page}&size=${size}`)
+            .then(response => response.json())
+            .then(data => {
+                // 주문 목록을 업데이트
+                const tbody = document.getElementById('orderTableBody');
+                tbody.innerHTML = ''; // 기존 데이터 비우기
+                data.content.forEach(order => {
+                    const row = `
+                        <tr data-order-id="${order.orderId}">
+                            <td class="center">${order.orderId}</td>
+                            <td class="center">${order.name}</td>
+                            <td class="center">${order.tel}</td>
+                            <td class="center">${order.email}</td>
+                            <td>[${order.post}] ${order.address} ${order.addressDetail}</td>
+                            <td class="center">${order.orderDate}</td>
+                            <td class="center">
+                                <button type="button" class="btn btn-primary" style="background-color: #474B54; border: none;" onclick="showOrderDetails(this)">상세보기</button>
+                            </td>
+                        </tr>`;
+                    tbody.insertAdjacentHTML('beforeend', row);
+                });
+
+                // 페이징 정보 업데이트
+                currentPage = data.number;
+                totalPages = data.totalPages;
+                updatePagination();
+            })
+            .catch(error => console.error('Error fetching filtered orders:', error));
+    }
+
+    // 페이징 UI 업데이트
+    function updatePagination() {
+        const pagination = document.querySelector('.pagination');
+        pagination.innerHTML = '';
+
+        // < 버튼
+        if (currentPage > 0) {
+            pagination.innerHTML += `<li><a href="#" onclick="filterOrders(${currentPage - 1})">&lt;</a></li>`;
+        }
+
+        // 페이지 번호들
+        for (let i = 0; i < totalPages; i++) {
+            pagination.innerHTML += `<li><a href="#" onclick="filterOrders(${i})">${i + 1}</a></li>`;
+        }
+
+        // > 버튼
+        if (currentPage < totalPages - 1) {
+            pagination.innerHTML += `<li><a href="#" onclick="filterOrders(${currentPage + 1})">&gt;</a></li>`;
+        }
+    }
+
+	 // 초기화
+    document.addEventListener('DOMContentLoaded', function() {
+        filterOrders();  // 페이지 로드 시 첫 페이지 로드
+    });
+	
+
 
     // Materialize 초기화
     document.addEventListener('DOMContentLoaded', function() {
         var modals = document.querySelectorAll('.modal');
         M.Modal.init(modals);
     });
+    	
+    function closeModal() {
+        var modal = document.getElementById('orderDetailModal');
+        var instance = M.Modal.getInstance(modal);
+        instance.close();
+    }
 </script>
 
 </html>
+

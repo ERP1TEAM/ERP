@@ -1,4 +1,4 @@
-package com.quickkoala.dto;
+package com.quickkoala.dto.sales;
 
 import java.time.LocalDate;
 import java.util.List;

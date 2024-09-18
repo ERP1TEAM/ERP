@@ -1,4 +1,4 @@
-package com.quickkoala.entity;
+package com.quickkoala.entity.sales;
 
 import java.time.LocalDate;
 import java.util.List;

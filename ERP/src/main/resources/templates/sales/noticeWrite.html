@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>공지사항 작성</title> 
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/materialize/css/materialize.min.css" media="screen,projection" />
+    <link href="../assets/css/bootstrap.css" rel="stylesheet" />
+    <link href="../assets/css/font-awesome.css" rel="stylesheet" />
+    <link href="../assets/js/morris/morris-0.4.3.min.css" rel="stylesheet" />
+    <link href="../assets/css/custom-styles.css" rel="stylesheet" />
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
+    <link rel="stylesheet" href="../assets/js/Lightweight-Chart/cssCharts.css"> 
+    <script src="https://cdn.ckeditor.com/4.22.1/standard/ckeditor.js"></script>
+</head>
+
+<body>
+    <div id="wrapper">
+        <nav th:insert="~{/sales/header :: header}"></nav>
+
+        <div th:insert="~{/sales/sidebar :: sidebar}" id="sidebar"></div>
+
+        <div id="page-wrapper" style="background-color: #dcebdb">
+            <div class="header"> 
+                <h1 class="page-header">공지사항 작성</h1>		
+            </div>
+            
+            <!-- main views-->
+            <div id="page-inner">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-action">
+                                 공지사항 작성
+                            </div>
+                            <div class="card-content">
+                                <form th:action="@{/sales/save}" th:object="${notice}" method="post">
+                                    <div class="input-field">
+                                        <input type="text" th:field="*{title}" required>
+                                        <label for="title">제목</label>
+                                    </div>
+                                    <div class="input-field">
+                                        <input type="text" th:field="*{manager}" required>
+                                        <label for="manager">작성자</label>
+                                    </div>
+                                    <div class="input-field">
+                                        <!-- CKEditor를 적용할 textarea -->
+                                        <textarea id="editor" th:field="*{content}" required></textarea>
+                                    </div>
+                                    <button class="btn" type="submit">공지사항 저장</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <footer><p>Copyright 2024 ⓒ quickkoala.com by <i class="fa fa-love"></i><a href="http://quickkoala.com">Quick Koala All right reserved.</a></p></footer>
+        </div>
+    </div>
+    
+    <script src="../assets/js/jquery-1.10.2.js"></script>
+    <script src="../assets/js/bootstrap.min.js"></script>
+    <script src="../assets/materialize/js/materialize.min.js"></script>
+    <script src="../assets/js/jquery.metisMenu.js"></script>
+    <script src="../assets/js/morris/raphael-2.1.0.min.js"></script>
+    <script src="../assets/js/morris/morris.js"></script>
+    <script src="../assets/js/easypiechart.js"></script>
+    <script src="../assets/js/easypiechart-data.js"></script>
+    <script src="../assets/js/Lightweight-Chart/jquery.chart.js"></script>
+    <script src="../assets/js/custom-scripts.js"></script> 
+    
+    <!-- CKEditor 적용 -->
+    <script>
+        CKEDITOR.replace('editor', {
+            removePlugins: 'uploadimage,uploadfile,filebrowser'
+        });
+        
+        // 폼 제출 시 HTML 태그 제거
+        document.querySelector('form').addEventListener('submit', function(event) {
+            var editorData = CKEDITOR.instances.editor.getData();
+            var strippedData = editorData.replace(/<\/?[^>]+(>|$)/g, "");  // HTML 태그 제거
+            CKEDITOR.instances.editor.setData(strippedData);
+        });
+    </script>
+</body>
+</html>
