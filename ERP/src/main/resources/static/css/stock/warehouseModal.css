@@ -20,3 +20,10 @@
     font-family: "Comic Sans MS", cursive, sans-serif;
     font-size: 14px;
 }
+.modalmarginleft{
+	margin-left : 10px !important;
+	margin-right : 10px !important;
+}
+.modalwidth{
+	width: 50% !important;
+}

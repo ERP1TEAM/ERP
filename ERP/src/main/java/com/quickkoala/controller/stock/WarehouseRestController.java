@@ -18,8 +18,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.quickkoala.dto.stock.LocationDto;
 import com.quickkoala.dto.stock.WarehouseDto;
+import com.quickkoala.entity.stock.LocationEntity;
 import com.quickkoala.entity.stock.WarehouseEntity;
+import com.quickkoala.service.stock.LocationService;
 import com.quickkoala.service.stock.WarehouseService;
 
 @RestController
@@ -38,14 +41,14 @@ public class WarehouseRestController {
 	
     @PostMapping("/stock/warehouses")
     public ResponseEntity<String> registerWarehouse(@RequestBody WarehouseDto warehouseDto) {
-    	boolean insave = warehouseService.saveWarehouse(warehouseDto);
-        if(!insave) {
+    	WarehouseEntity warehousesave = warehouseService.saveWarehouse(warehouseDto);
+        if(warehousesave == null) {
     	return ResponseEntity.status(HttpStatus.CONFLICT).body("이미 존재하는 창고 코드 입니다.");
         }
     	return ResponseEntity.ok("창고가 등록되었습니다.");
     }
     
-    @DeleteMapping("/stock/{warehouseCodes}")
+    @DeleteMapping("/stock/warehouses/{warehouseCodes}")
     public ResponseEntity<Map<String, Object>> deleteWarehouses(@PathVariable String warehouseCodes) {
     	List<String> warehouseCodeList = Arrays.asList(warehouseCodes.split(","));
         Map<String, Object> warehouseresponse = warehouseService.deleteWarehouse(warehouseCodeList);
@@ -86,4 +89,39 @@ public class WarehouseRestController {
 		
 		return ResponseEntity.ok(warehouseSearchresult);
 	}
+	
+	
+	//****location 부분****//
+	
+	@Autowired
+	private LocationService locationService;
+	
+	//로케이션 등록
+	@PostMapping("/stock/locations")
+    public ResponseEntity<String> saveLocation(@RequestBody LocationDto locationDto) {
+    	
+		LocationEntity savelocation = locationService.saveLocation(locationDto);
+        if(savelocation == null) {
+    	return ResponseEntity.status(HttpStatus.CONFLICT).body("이미 존재하는 로케이션 코드 입니다.");
+        }
+    	return ResponseEntity.ok("로케이션이 등록되었습니다.");
+    }
+	
+	//로케이션 리스트
+	@GetMapping("/stock/locations")
+	public  ResponseEntity<List<LocationDto>> locationList() {
+    	List<LocationDto> locationList=locationService.getAllOrdersByCode();
+    	return ResponseEntity.ok(locationList);
+	}
+	
+	//로케이션 삭제
+    @DeleteMapping("/stock/locations/{locationCodes}")
+    public ResponseEntity<Map<String, Object>> deletelocations(@PathVariable String locationCodes) {
+    	List<String> locationCodeList = Arrays.asList(locationCodes.split(","));
+        Map<String, Object> locationdelresponse = locationService.deleteLocation(locationCodeList);
+        
+        locationdelresponse.put("ok", true);
+        
+        return ResponseEntity.ok(locationdelresponse);
+    }
 }

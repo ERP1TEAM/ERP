@@ -24,9 +24,11 @@ public class StockController {
 		return "stock/inventoryList";
 	}
 	
+
 	
 	
-	//창고
+	
+	//창고,location
 	
 	@GetMapping("/stock/locationStatus")
 	public String locationStatus() {
@@ -38,9 +40,10 @@ public class StockController {
     	return "stock/warehouseModal :: warehouseInModalContent";
     }
     
-    @GetMapping("/stock/locationIn")
+    @GetMapping("/stock/locationList")
     public String locationIn() {
-		return "stock/locationIn";
+		return "stock/locationList";
 	}
+    
 }
 

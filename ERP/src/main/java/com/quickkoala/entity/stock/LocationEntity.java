@@ -33,7 +33,7 @@ public class LocationEntity {
 	private String rowCode;
 	
 	@Column(name="level_code", length=1, nullable=false)
-	private String levelCode;
+	private Integer levelCode;
 	
 	@Column(name = "use_flag", nullable = false)
     @Enumerated(EnumType.STRING)

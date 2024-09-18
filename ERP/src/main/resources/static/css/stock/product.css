@@ -147,6 +147,7 @@
     background-color: rgb(81, 61, 61);
     color: white;
     cursor: pointer;
+    margin-right: 5px;
 }
 .p_button_color1 {
     background-color: rgb(0, 0, 0);
@@ -239,6 +240,18 @@
     color:white;
     font-size:20px;
     cursor: pointer;
+}
+.product_btn3 {
+    height: 30px;
+    background-color: rgb(31, 40, 55);
+    border:0;
+    width : 100px;
+    color:white;
+    font-size:13px;
+    cursor : pointer;
+    left : 0;
+    bottom : -5px; 
+    position : relative;
 }
 .product_label {
     width: auto;

@@ -1,0 +1,65 @@
+<div th:fragment="locationin">
+<div id="locationoverlay" class="modal-overlay"></div>
+<div id="locationinmodal" class="modal modalwidth">
+<div>
+        <span class="close" id="locationclosemodal">&times;</span>
+    </div>
+<div class="product_insert row modalmarginleft"><br>
+                    <div class="card-action">
+			          <h2>로케이션 등록</h2><br>
+                    </div>
+    <ul>
+        <li>창고명</li>
+        <li>
+            <select class="product_input1" id="warehouseSelect"></select>
+            <input type="button" value="+" title="+" class="product_btn2" id="warehousebtn">
+        </li>
+    </ul>
+    
+    <div th:insert="~{stock/warehouseModal :: warehouselist}"></div>
+    
+    
+    <ul>
+        <li>로케이션 코드</li>
+        <li>
+		<input type="text" class="product_input1 black_font" readonly="readonly" id="locationcode"> *자동으로 입력됩니다.
+        </li>
+    </ul>
+    <ul>
+        <li>선반 열</li>
+        <li>
+        <input type="text" class="product_input1" maxlength=3 id="rackcode">
+        </li>
+    </ul>
+    <ul>
+        <li>선반 행</li>
+        <li>
+        <select id="rowcode" class="product_input1"></select>
+        </li>
+    </ul>
+     <ul>
+        <li>선반 층</li>
+        <li>
+        <select id="levelcode" class="product_input1"></select>
+        </li>
+    </ul>
+     <ul>
+        <li>메모</li>
+        <li>
+        <input type=text id="locationmemo" class="product_input1">
+        </li>
+    </ul>
+    <ul>
+        <li>사용 유/무</li>
+        <li>
+            <label><input type="radio" name="locationuseflag" class="rdo" value ="Y" checked> 사용</label>
+            <label><input type="radio" name="locationuseflag" class="rdo" value="N" > 미사용</label>
+        </li>
+    </ul>
+<div class="subpage_view4" style="text-align:center; margin-bottom: 100px;">
+    <input type="button" value="등록" class="p_button p_button_color2" id="locationIn">
+    <input type="button" value="취소" class="p_button p_button_color1" id="locationcancle">
+</div> 
+</div>
+</div>
+</div>

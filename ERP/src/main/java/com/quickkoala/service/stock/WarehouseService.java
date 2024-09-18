@@ -11,7 +11,7 @@ public interface WarehouseService {
 	
 	List<WarehouseDto> getAllOrdersByCode();
 	
-	boolean saveWarehouse(WarehouseDto warehouseDto);
+	WarehouseEntity saveWarehouse(WarehouseDto warehouseDto);
 	
 	Map<String, Object> deleteWarehouse(List<String> warehouseCodes);
 	

@@ -134,7 +134,7 @@ document.getElementById('warehousedelete').addEventListener('click',function(){
     
     const warehouseCodePath=selectWarehouse.join(',');
     
-    fetch(`/main/stock/${warehouseCodePath}`, {
+    fetch(`/main/stock/warehouses/${warehouseCodePath}`, {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',
@@ -256,16 +256,24 @@ function warehousemainmodal(){
     	warehousetbody.innerHTML='';
     	
     	data.forEach(function(warehouse){
+		
+		let warehousememo;
+		if(warehouse.memo){
+			warehousememo = warehouse.memo;
+		}else{
+			warehousememo='';
+		}
 			
     	let th = `<tr class="odd gradeX">
                     <th><input type="checkbox" class="checkbox" value="${warehouse.code}"></th>
                     <td>${warehouse.code}</td>
                     <td>${warehouse.name}</td>
-                    <td>${warehouse.memo}</td>
+                    <td>${warehousememo}</td>
                     <td><input type="button" value="수정" class="warehousemodifybtn"></td>
                  </tr>`;
 			warehousetbody.innerHTML +=th;
 		});
+	document.getElementById('warehouseinmodal').style.display = 'none';
     document.getElementById('warehouselistmodal').style.display = 'block';
     document.getElementById('overlay').style.display = 'block';   // 오버레이 숨기기
     document.body.style.overflow = 'hidden';  // 배경 스크롤 다시 활성화
@@ -277,18 +285,23 @@ function warehousemainmodal(){
 });
 
 //모달닫기
-document.getElementById('closemodal').addEventListener('click',function(){
+document.querySelectorAll('.closemodal').forEach(function(warehouseclosebtn) {
+    warehouseclosebtn.addEventListener('click',function(){
+    document.getElementById('warehouseinmodal').style.display = 'none';
     document.getElementById('warehouselistmodal').style.display = 'none';
     document.getElementById('overlay').style.display = 'none';   // 오버레이 숨기기
     document.body.style.overflow = 'auto';  // 배경 스크롤 다시 활성화
+});
 });
 
 // 모달 외부를 클릭하면 모달 닫기
 window.addEventListener('click', function(event) {
     const warehouselistmodal = document.getElementById('warehouselistmodal');
+    const warehouseinmodal = document.getElementById('warehouseinmodal');
     const overlay = document.getElementById('overlay');
     
     if (event.target == warehouselistmodal || event.target == overlay) {
+         warehouseinmodal.style.display = 'none'; 
         warehouselistmodal.style.display = 'none';
         overlay.style.display = 'none';
         document.body.style.overflow = 'auto';

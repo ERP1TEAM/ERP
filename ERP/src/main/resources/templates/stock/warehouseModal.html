@@ -3,24 +3,21 @@
 
 <div th:fragment="warehouselist">
 <div id="overlay" class="modal-overlay"></div>
-<div id="warehouselistmodal" class="modal">
+<div id="warehouselistmodal" class="modal modalwidth">
     <div>
-        <span class="close" id="closemodal">&times;</span>
+        <span class="close closemodal">&times;</span>
     </div>
-    <div class="row">
-            <div class="col-md-12">
-                <div class="card">
+    <div class="row modalmarginleft"><br>
                     <div class="card-action">
-			          <h2>창고 리스트</h2>
+			          <h2>창고 리스트</h2><br>
                     </div>
-                    <div class="card-content">
                     <ul>
         		<li>
-            <select class="product_input1" id="warehouseSearchtype">
+            <select class="product_input1 stocksearch" id="warehouseSearchtype">
                 <option value="1">창고 이름</option>
                 <option value="2">창고 코드</option>
             </select>
-            <input type="text" placeholder="검색어 입력" id="warehouseSearch">
+            <input type="text" placeholder="검색어 입력" id="warehouseSearch" class="stocksearchwidth">
             <input type="button" value="검색" id="warehouseSearchbtn">
         		</li>
     			</ul>
@@ -28,7 +25,7 @@
                             <table class="table table-striped table-bordered table-hover" id="dataTables-example">
                                 <thead>
                                     <tr>
-                                     	<th class="center" style="width: 2%;"><input type="checkbox" class="checkbox"></th>
+                                     	<th class="center" style="width: 2%;"></th>
 		                                <th class="center" style="width: 12%;">창고코드</th>
 		                                <th class="center" style="width: 20%;">창고이름</th>
 		                                <th class="center" style="width: 5%;">메모</th>
@@ -43,15 +40,14 @@
                             <input class="cd-paging-right-btn" type="button" value="창고등록" id="warehousein">
                             <input class="cd-paging-right-btn" type="button" value="창고삭제" id="warehousedelete">
 					        </div>
-					        </div>
-					        </div>
-					        </div>
 </div>
-<div id="warehouseinmodal" class="modal"  th:fragment="warehouseInModalContent">
-<div class="product_insert">
-<div class="card">
+<div id="warehouseinmodal" class="modal modalwidth"  th:fragment="warehouseInModalContent">
+<div>
+        <span class="close closemodal">&times;</span>
+    </div>
+<div class="product_insert row modalmarginleft"><br>
                     <div class="card-action">
-			          <h2>창고 등록</h2>
+			          <h2>창고 등록</h2><br>
                     </div>
     <ul>
         <li>창고 코드</li>
@@ -71,7 +67,6 @@
         <input type="text" class="product_input1" id="warehouseMemo">
         </li>
     </ul>
-</div>
 <div class="subpage_view4" style="text-align:center; margin-bottom: 100px;">
     <input type="button" value="등록"  class="p_button p_button_color2" style="margin-right: 5px;" id="warehouseregister">
     <input type="button" value="취소"  class="p_button p_button_color1" id="warehouseinback" >
@@ -79,11 +74,13 @@
 </div>
 </div>
 
-<div id="warehousemodifymodal" class="modal" >
-<div class="product_insert">
-<div class="card">
+<div id="warehousemodifymodal" class="modal modalwidth" >
+	<div>
+        <span class="close closemodal">&times;</span>
+    </div>
+<div class="product_insert row modalmarginleft"><br>
                     <div class="card-action">
-			          <h2>창고 수정</h2>
+			          <h2>창고 수정</h2><br>
                     </div>
     <ul>
         <li>창고 코드</li>
@@ -103,7 +100,6 @@
         <input type="text" class="product_input1" id="warehouseMmemo">
         </li>
     </ul>
-</div>
 <div class="subpage_view4" style="text-align:center; margin-bottom: 100px;">
     <input type="button" value="수정"  class="p_button p_button_color2" style="margin-right: 5px;" id="warehouseModifybtn">
     <input type="button" value="취소"  class="p_button p_button_color1"  id="warehousemodifyback">

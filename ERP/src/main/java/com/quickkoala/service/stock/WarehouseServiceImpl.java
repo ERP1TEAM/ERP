@@ -51,16 +51,15 @@ public class WarehouseServiceImpl implements WarehouseService {
 	}
 
 	@Override
-	public boolean saveWarehouse(WarehouseDto warehouseDto) {
+	public WarehouseEntity saveWarehouse(WarehouseDto warehouseDto) {
 		
 		WarehouseEntity warehouseEntity = convertToWarehouseEntity(warehouseDto);
 
 		if(warehouseRepository.existsByCode(warehouseEntity.getCode())) {
-			return false;
+			return null;
 		}
 		
-		warehouseRepository.save(warehouseEntity);
-		return true;
+		return warehouseRepository.save(warehouseEntity);
 	}
 	
 	@Override

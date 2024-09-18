@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="https://www.thymeleaf.org">
+<head th:insert="~{layout/stockHeader :: topheader}"></head>
+<body>
+    <div id="wrapper">
+	<div th:insert="~{/layout/stockHeader::top}"></div>
+	<div th:insert="~{/sidebar::sidebar}"></div>
+        <!-- nav  -->
+      <div id="page-wrapper"  style="background-color:#F7FFF0;">
+	  <div th:insert="~{layout/stockHeader :: header}"></div>
+	   
+     <div id="page-inner">
+
+        <div class="row">
+            <div class="col-md-12">
+	   		 <input type="button" value="로케이션 등록" class="product_btn3" id="locationbtn"> 
+                <div class="card">
+                    <div class="card-content">
+                        <div class="table-responsive">
+                        <ul>
+                        <li>
+            <select class="product_input1 stocksearch" id="locationSearchtype">
+                <option value="1">로케이션 코드</option>
+                <option value="2">창고 코드</option>
+                <option value="3">선반 열</option>
+                <option value="4">선반 행</option>
+                <option value="5">선반 층</option>
+                <option value="6">사용 유/무</option>
+            </select>
+            <input type="text" placeholder="검색어 입력" id="locationSearch" class="stocksearchwidth">
+            <input type="button" value="검색" id="locationSearchbtn">
+        		</li>
+        		</ul>
+                        	<form id="order_frm">
+                            <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+                                <thead>
+                                    <tr>
+		                               <th class="center" style="width: 2%;"></th>
+		                                <th class="center" style="width: 12%;">로케이션 코드</th>
+		                                <th class="center" style="width: 5%;">창고 코드</th>
+		                                <th class="center" style="width: 5%;">선반 열</th>
+		                                <th class="center" style="width: 5%;">선반 행</th>
+		                                <th class="center" style="width: 5%;">선반 층</th>
+		                                <th class="center" style="width: 5%;">사용 유/무</th>
+		                                <th class="center" style="width: 5%;">메모</th>
+		                                <th class="center" style="width: 5%;">관리</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="locationlisttbody">
+                                </tbody>
+                            </table>
+                            </form>
+						        <input type="button" value="로케이션 삭제" id="locationdelete">
+					        <div th:insert="~{stock/locationModal :: locationin}"></div>
+                        </div> 
+                    </div>
+	   			</div>
+	   		</div>
+	   	</div>
+	   </div>
+	   
+	   
+	   
+	   
+	   <footer th:insert="~{layout/stockfooter :: footer}"></footer>
+        </div>
+    </div>
+    
+<div th:insert="~{layout/stockfooter :: src}"></div>
+</body>
+</html>
