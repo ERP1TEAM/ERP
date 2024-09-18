@@ -9,17 +9,24 @@ document.addEventListener("DOMContentLoaded", function() {
 		return urlParams.get(param);
 	}
 	let p = parseInt(getQueryParam("p")) || 1;
+	let searchCode = getQueryParam("code") || '납품번호';  // 검색 코드
+    let searchWord = getQueryParam("word") || '';  // 검색어
+    
+    document.getElementById("search_code").value = searchCode;
+    document.getElementById("search_word").value = searchWord;
 
 	//paging 함수를 전역으로 설정
-	window.paging = function(p) {
-		tableData(p);
-	}
-	window.pgNext = function() {
-		tableData(endPage+1);
-	}
-	window.pgPrev = function() {
-		tableData(startPage-1);
-	}
+	window.paging = function(p, code = searchCode, word = searchWord) {
+        tableData(p, code, word);
+    }
+
+    window.pgNext = function() {
+        tableData(endPage + 1, searchCode, searchWord);
+    }
+
+    window.pgPrev = function() {
+        tableData(startPage - 1, searchCode, searchWord);
+    }
 	
 	function formatDate(isoString) {
 		
@@ -36,8 +43,8 @@ document.addEventListener("DOMContentLoaded", function() {
 	}
 
 	//테이블 출력
-	const tableData = (pno) => {
-		fetch(`./deliveryData/${pno}`, {
+	const tableData = (pno, code = '', word = '') => {
+		fetch(`./deliveryData/${pno}?code=${code}&word=${word}`, {
 			method: 'GET'
 		})
 			.then(response => response.json())
@@ -101,14 +108,27 @@ document.addEventListener("DOMContentLoaded", function() {
 
 				// 페이징 HTML을 페이지에 삽입
 				paging.innerHTML = paginationHTML;
-				history.replaceState({}, '', location.pathname + `?p=${pno}`);
+				// URL 업데이트 (검색 조건도 포함)
+                if(word === ""){
+	                history.replaceState({}, '', location.pathname + `?p=${pno}`);			
+				}else{
+					history.replaceState({}, '', location.pathname + `?p=${pno}&code=${code}&word=${word}`);
+				}
 			})
 			.catch(function(error) {
 				alert(error);
 			});
 	}
 
-	tableData(p);
+	tableData(p, searchCode, searchWord);
+	
+	//검색
+    document.getElementById("search_form").addEventListener("submit", function(event) {
+        event.preventDefault(); // 기본 폼 제출 방지
+        searchCode = document.getElementById("search_code").value;
+        searchWord = document.getElementById("search_word").value;
+		paging(1, searchCode, searchWord); // 검색 후 첫 페이지부터 시작				
+    });
 
 
 });

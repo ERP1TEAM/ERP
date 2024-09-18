@@ -6,7 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.quickkoala.service.SupplierService;
+import com.quickkoala.service.supplier.SupplierService;
 
 @Controller
 @RequestMapping("client")
@@ -17,9 +17,7 @@ public class ClientController {
 	
 	@GetMapping("supplierList")
 	public String supplierList(Model model) {
-		System.out.println("1번");
 		model.addAttribute("items",supplierService.getAllData());
-		System.out.println("2번");
 		return "client/supplierList";
 	}
 }

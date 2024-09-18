@@ -8,20 +8,19 @@
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
 	rel="stylesheet">
 <link rel="stylesheet"
-	href="../assets/materialize/css/materialize.min.css"
+	href="../../assets/materialize/css/materialize.min.css"
 	media="screen,projection" />
-<link href="../assets/css/bootstrap.css" rel="stylesheet" />
-<link href="../assets/css/font-awesome.css" rel="stylesheet" />
-<link href="../assets/js/morris/morris-0.4.3.min.css" rel="stylesheet" />
-<link href="../assets/css/custom-styles.css" rel="stylesheet" />
-<link href="../css/temporaryReceive.css" rel="stylesheet" />
+<link href="../../assets/css/bootstrap.css" rel="stylesheet" />
+<link href="../../assets/css/font-awesome.css" rel="stylesheet" />
+<link href="../../assets/js/morris/morris-0.4.3.min.css" rel="stylesheet" />
+<link href="../../assets/css/custom-styles.css" rel="stylesheet" />
+<link href="../../css/purchaseOrderList.css" rel="stylesheet" />
 <link href='http://fonts.googleapis.com/css?family=Open+Sans'
 	rel='stylesheet' type='text/css' />
 <link rel="stylesheet"
-	href="../assets/js/Lightweight-Chart/cssCharts.css">
-<link rel="stylesheet" href="../css/warehouseModal.css">
-<link rel="stylesheet" href="../css/product.css">
-<link href="../css/paging.css" rel="stylesheet">
+	href="../../assets/js/Lightweight-Chart/cssCharts.css">
+<link href="../../css/paging.css" rel="stylesheet">
+<link href="../../css/searching.css" rel="stylesheet">
 </head>
 
 <body>
@@ -40,10 +39,6 @@
 				<h1 class="page-header">입고관리</h1>
 				<ol class="breadcrumb">
 					<li><a href="#" style="color: #1A4870;">Home</a></li>
-					<!--
-					  <li><a href="#">페이지 tap1</a></li>
-					  <li class="active">페이지 tap2</li>
-					  -->
 				</ol>
 
 			</div>
@@ -57,6 +52,18 @@
 							<div class="card-action">
 								가입고 <span style="float: right;">+ MORE</span>
 							</div>
+							<form id="search_form">
+								<div class="search">
+									<select id="search_code">
+										<option value="가입고코드">가입고코드</option>
+										<option value="발주번호">발주번호</option>
+										<option value="제조사">제조사</option>
+										<option value="상품명">상품명</option>
+									</select> <input type="text" placeholder="검색어를 입력하세요"
+										style="width: 200px; border: 1px;" id="search_word">
+									<button type="submit" id="search_btn">검색</button>
+								</div>
+							</form>
 							<div class="card-content">
 								<div class="table-responsive">
 									<form id="order_frm">
@@ -68,7 +75,7 @@
 													<th class="center" style="width: 7%;">발주번호</th>
 													<th class="center" style="width: 7%;">제조사</th>
 													<th class="center" style="width: 8%;">품목코드</th>
-													<th class="center" style="width: 28%;">품목명</th>
+													<th class="center" style="width: 28%;">상품명</th>
 													<th class="center" style="width: 7%;">발주수량</th>
 													<th class="center" style="width: 7%;">대기수량</th>
 													<th class="center" style="width: 10%;">가입고일시</th>
@@ -102,17 +109,17 @@
 			</div>
 		</div>
 	</div>
-	<script src="../assets/js/jquery-1.10.2.js"></script>
-	<script src="../assets/js/bootstrap.min.js"></script>
-	<script src="../assets/materialize/js/materialize.min.js"></script>
-	<script src="../assets/js/jquery.metisMenu.js"></script>
-	<script src="../assets/js/morris/raphael-2.1.0.min.js"></script>
-	<script src="../assets/js/morris/morris.js"></script>
-	<script src="../assets/js/easypiechart.js"></script>
-	<script src="../assets/js/easypiechart-data.js"></script>
-	<script src="../assets/js/Lightweight-Chart/jquery.chart.js"></script>
-	<script src="../assets/js/custom-scripts.js"></script>
-	<script src="../js/receive/temporaryReceive.js"></script>
+	<script src="../../assets/js/jquery-1.10.2.js"></script>
+	<script src="../../assets/js/bootstrap.min.js"></script>
+	<script src="../../assets/materialize/js/materialize.min.js"></script>
+	<script src="../../assets/js/jquery.metisMenu.js"></script>
+	<script src="../../assets/js/morris/raphael-2.1.0.min.js"></script>
+	<script src="../../assets/js/morris/morris.js"></script>
+	<script src="../../assets/js/easypiechart.js"></script>
+	<script src="../../assets/js/easypiechart-data.js"></script>
+	<script src="../../assets/js/Lightweight-Chart/jquery.chart.js"></script>
+	<script src="../../assets/js/custom-scripts.js"></script>
+	<script src="../../js/receive/temporaryReceive.js"></script>
 </body>
 
 </html>

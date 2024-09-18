@@ -6,33 +6,42 @@ document.addEventListener("DOMContentLoaded", function() {
 
 	const getQueryParams = (params) => {
 		const urlParams = new URLSearchParams(window.location.search);
-		const result = [];
+		const result = {};
 
-		// 주어진 파라미터 배열을 순회하면서 각 파라미터 값을 배열에 추가
+		// 주어진 파라미터 배열을 순회하면서 각 파라미터 값을 객체에 추가
 		params.forEach(param => {
 			const value = urlParams.get(param);
-			result.push({ [param]: value });
+			result[param] = value;
 		});
 
 		return result;
 	}
-	//파라미터 값 갖고오고 null일 경우 기본값 설정
-	let params = getQueryParams(["p", "s"]);
-	let pa1 = (params[0] && params[0]["p"]) ? params[0]["p"] : 1;
-	let pa2 = (params[1] && params[1]["s"]) ? params[1]["s"] : "all";
+
+	// 쿼리 파라미터 가져오기
+	const queryParams = getQueryParams(["p", "s", "code", "word"]);
+
+	// 파라미터 값 갖고오기 및 기본값 설정
+	let pa1 = queryParams["p"] || 1;
+	let pa2 = queryParams["s"] || "all";
+	let searchCode = queryParams["code"] || '발주번호';
+	let searchWord = queryParams["word"] || '';
+	
+	// 검색 코드와 단어를 폼 필드에 설정
+    document.getElementById("search_code").value = searchCode;
+    document.getElementById("search_word").value = searchWord;
 
 	//paging 함수를 전역으로 설정
-	window.paging = function(p) {
-		params = getQueryParams(["p", "s"]);
-		tableData(p, params[1]["s"]);
+	window.paging = function(p, code = searchCode, word = searchWord) {
+		params = getQueryParams(["p", "s", "code", "word"]);
+		tableData(p, params["s"], code, word);
 	}
 	window.pgNext = function() {
-		params = getQueryParams(["p", "s"]);
-		tableData(endPage+1, params[1]["s"]);
+		params = getQueryParams(["p", "s", "code", "word"]);
+		tableData(endPage + 1, params["s"], code, word);
 	}
 	window.pgPrev = function() {
-		params = getQueryParams(["p", "s"]);
-		tableData(startPage-1, params[1]["s"]);
+		params = getQueryParams(["p", "s", "code", "word"]);
+		tableData(startPage - 1, params["s"], code, word);
 	}
 	//날짜를 yyyy-MM-dd HH-mm-ss형식으로 변환
 	function formatDate(isoString) {
@@ -50,8 +59,8 @@ document.addEventListener("DOMContentLoaded", function() {
 	}
 
 	//테이블 출력
-	const tableData = (pno, sta) => {
-		fetch(`../main/receive/purchaseData/${pno}/${sta}`, {
+	const tableData = (pno, sta, code = '', word = '') => {
+		fetch(`./purchaseData/${pno}/${sta}?code=${code}&word=${word}`, {
 			method: 'GET'
 		})
 			.then(response => response.json())
@@ -89,9 +98,9 @@ document.addEventListener("DOMContentLoaded", function() {
 
 				// 페이징 HTML 생성
 				let paginationHTML = `<ul class="pagination">`;
-				
+
 				// 'Precious' 링크 추가
-				if(startPage > pageSize){
+				if (startPage > pageSize) {
 					paginationHTML += `
 					        <li class="page-item"><a class="page-link" aria-label="Previous" onclick="pgPrev()">
 					            <span aria-hidden="true">&laquo;</span>
@@ -108,19 +117,25 @@ document.addEventListener("DOMContentLoaded", function() {
 				}
 
 				// 'Next' 링크 추가
-				if(endPage < totalPages){
+				if (endPage < totalPages) {
 					paginationHTML += `
 					        <li class="page-item"><a class="page-link" aria-label="Next" onclick="pgNext()">
 					            <span aria-hidden="true">&raquo;</span>
 					        </a></li>
 					`;
 				}
-				
+
 				paginationHTML += `</ul>`;
 
 				// 페이징 HTML을 페이지에 삽입
 				paging.innerHTML = paginationHTML;
-				history.replaceState({}, '', location.pathname + `?p=${pno}` + `&s=${sta}`);
+
+				// URL 업데이트 (검색 조건도 포함)
+				if (word === "") {
+					history.replaceState({}, '', location.pathname + `?p=${pno}` + `&s=${sta}`);
+				} else {
+					history.replaceState({}, '', location.pathname + `?p=${pno}` + `&s=${sta}&code=${code}&word=${word}`);
+				}
 			})
 			.catch(function(error) {
 				alert(error);
@@ -129,9 +144,11 @@ document.addEventListener("DOMContentLoaded", function() {
 
 	//페이지 로드시 실행
 	const start = () => {
-		tableData(pa1, pa2);
+		tableData(pa1, pa2, searchCode, searchWord);
 	}
 	start();
+
+
 
 	// 스타일을 설정하는 함수
 	function setActiveStyle(activeElement) {
@@ -148,10 +165,10 @@ document.addEventListener("DOMContentLoaded", function() {
 	}
 
 	// 새로고침해도 탭부분 스타일 유지
-	if (params[1]["s"] === "wa") {
+	if (queryParams["s"] === "wa") {
 		let le = document.getElementById("wait");
 		setActiveStyle(le);
-	} else if (params[1]["s"] === "su") {
+	} else if (queryParams["s"] === "su") {
 		let le = document.getElementById("finish");
 		setActiveStyle(le);
 	} else {
@@ -162,6 +179,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 	// 데이터 로딩 함수
 	function loadData(status) {
+		document.getElementById("search_word").value = "";
 		tableData(1, status);
 	}
 
@@ -186,4 +204,13 @@ document.addEventListener("DOMContentLoaded", function() {
 
 	// 초기화
 	setupEventListeners();
+
+	//검색
+	document.getElementById("search_form").addEventListener("submit", function(event) {
+		event.preventDefault(); // 기본 폼 제출 방지
+		searchCode = document.getElementById("search_code").value || '발주번호';
+		searchWord = document.getElementById("search_word").value;
+		paging(1, searchCode, searchWord); // 검색 후 첫 페이지부터 시작		
+		setActiveStyle(document.getElementById("all"));		
+	});
 });

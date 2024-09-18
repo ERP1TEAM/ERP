@@ -10,10 +10,10 @@ document.addEventListener("DOMContentLoaded", function() {
 	//발주요청
 	document.querySelector("#purchase_request").addEventListener("click", function() {
 		formData = new FormData(order_frm);
-
+		
 		function hasEmptyFields(formData) {
 			let hasEmpty = false;
-			formData.forEach((value, key) => {
+			formData.forEach((value) => {
 				if (!value.trim()) { // trim()으로 공백 제거 후 빈 값 확인
 					hasEmpty = true;
 				}
@@ -22,8 +22,13 @@ document.addEventListener("DOMContentLoaded", function() {
 		}
 
 		if (hasEmptyFields(formData)) {
-			alert("모든 필드를 채워주세요.");
+			alert("모든 내용을 입력해주세요.");
 			return; // 빈 값이 있으면 요청을 중단합니다.
+		}
+
+		if (formData.get("quantity") === "0") {
+			alert("수량은 0이 될 수 없습니다.");
+			return;
 		}
 
 		fetch("./purchaseAdd", {
@@ -32,10 +37,10 @@ document.addEventListener("DOMContentLoaded", function() {
 		})
 			.then(response => response.text())
 			.then(data => {
-				if(data === "success"){
+				if (data === "success") {
 					alert("발주등록 되었습니다.");
-					location.reload();					
-				}else{
+					location.reload();
+				} else {
 					alert("오류로 인하여 발주등록에 실패하였습니다.");
 				}
 			})

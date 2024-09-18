@@ -1,0 +1,9 @@
+package com.quickkoala.service.receive;
+
+import com.quickkoala.dto.ReceivingDto;
+import com.quickkoala.entity.receive.ReceiveReturnEntity;
+
+public interface ReceiveReturnService {
+	ReceiveReturnEntity addData(ReceivingDto dto);
+	public long countReturnsToday();
+}
