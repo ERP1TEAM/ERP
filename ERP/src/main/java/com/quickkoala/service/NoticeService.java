@@ -11,5 +11,7 @@ public interface NoticeService {
     NoticeDTO getNoticeById(Long id);
 
     void saveNotice(NoticeDTO noticeDTO);
+    
+    
 
 }
