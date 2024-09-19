@@ -17,7 +17,6 @@ import lombok.NoArgsConstructor;
 @Data
 public class SalesEntity {
 
-
 	@Id
     @Column(name = "code", length = 6, nullable = false)
     private String code;
@@ -34,6 +33,6 @@ public class SalesEntity {
     @Column(name = "address", length = 500, nullable = false)
     private String address;
 
-    @Column(name = "created_date", nullable = false, columnDefinition = "DATETIME DEFAULT NOW()")
-    private LocalDateTime createdDate;
+    @Column(name = "create_date", nullable = false, columnDefinition = "DATETIME DEFAULT NOW()")
+    private LocalDateTime createDate;
 }

@@ -71,9 +71,11 @@ public class JwtTokenProvider {
         response.addCookie(tokenCookie);
     }
 
-    public String createToken(String userId,String role) {
-        Claims claims = Jwts.claims().setSubject(userId); // JWT의 주체로 사용자 이름을 설정합니다.
+    public String createToken(String userId,String role,String name,String code) {
+        Claims claims = Jwts.claims().setSubject(userId); // JWT의 주체로 사용자 아이디를 설정합니다.
         claims.put("role", role); // 역할을 클레임에 추가합니다.
+        claims.put("code", code); //회사이름 추가
+        claims.put("name", name); // 관리자 이름 추가
         Date now = new Date(); // 현재 시간
         Date validity = new Date(now.getTime() + validityInMilliseconds); // 토큰 만료 시간
         String token = Jwts.builder()
@@ -86,8 +88,8 @@ public class JwtTokenProvider {
         Logger.getLogger(JwtTokenProvider.class.getName()).log(Level.INFO, "Generated token: {0}", token);
         return token;
     }
-
-    public String getUsername(String token) {
+    // 토큰에서 UserId 가져오기
+    public String getUserId(String token) {
         try {
             Claims claims = Jwts.parser()
                 .setSigningKey(this.secretKeyBytes)
@@ -99,6 +101,45 @@ public class JwtTokenProvider {
             throw new RuntimeException("Invalid JWT token", e);
         }
     }
+    
+    // 토큰에서 추가적인 클레임 추출
+    public String getClaim(String token, String claimKey) {
+        try {
+            Claims claims = Jwts.parser()
+                    .setSigningKey(this.secretKeyBytes)
+                    .parseClaimsJws(token)
+                    .getBody();
+            return claims.get(claimKey, String.class);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to extract claim from JWT token", e);
+        }
+    }
+    
+    //토큰에서 이름 가져오기
+    public String getName(String token) {
+        try {
+            Claims claims = Jwts.parser()
+                .setSigningKey(this.secretKeyBytes)
+                .parseClaimsJws(token)
+                .getBody();
+            return claims.get("name", String.class); // 토큰에서 'name' 필드 추출
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to extract name from JWT token", e);
+        }
+    }
+    
+	 // 토큰에서 'code' 클레임 추출
+	    public String getCode(String token) {
+	        try {
+	            Claims claims = Jwts.parser()
+	                .setSigningKey(this.secretKeyBytes)
+	                .parseClaimsJws(token)
+	                .getBody();
+	            return claims.get("code", String.class); // 토큰에서 'code' 필드 추출
+	        } catch (Exception e) {
+	            throw new RuntimeException("Failed to extract code from JWT token", e);
+	        }
+	    }
     /**
      * JWT 토큰에서 인증 정보를 추출합니다.
      * @param token - JWT 토큰

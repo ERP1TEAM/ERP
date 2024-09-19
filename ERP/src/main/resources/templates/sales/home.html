@@ -1,87 +1,117 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"> 
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>공지사항 목록</title> 
-	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-	<link rel="stylesheet" th:href="@{/assets/materialize/css/materialize.min.css}" media="screen,projection" />
-	<link rel="stylesheet" th:href="@{/assets/css/bootstrap.css}" />
-	<link rel="stylesheet" th:href="@{/assets/css/font-awesome.css}" />
-	<link rel="stylesheet" th:href="@{/assets/js/morris/morris-0.4.3.min.css}" />
-	<link rel="stylesheet" th:href="@{/assets/css/custom-styles.css}" />
-	<link rel="stylesheet" th:href="@{/assets/js/Lightweight-Chart/cssCharts.css}" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/assets/materialize/css/materialize.min.css}" media="screen,projection" />
+    <link rel="stylesheet" th:href="@{/assets/css/bootstrap.css}" />
+    <link rel="stylesheet" th:href="@{/assets/css/font-awesome.css}" />
+    <link rel="stylesheet" th:href="@{/assets/js/morris/morris-0.4.3.min.css}" />
+    <link rel="stylesheet" th:href="@{/assets/css/custom-styles.css}" />
+    <link rel="stylesheet" th:href="@{/assets/js/Lightweight-Chart/cssCharts.css}" />
     <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
+    <style>
+        /* 우측 하단 고정 버튼 스타일 */
+        .floating-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background-color: #1F2837;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 15px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+            transition: background-color 0.3s ease;
+            cursor: pointer;
+        }
+
+        .floating-btn:hover {
+            background-color: #474B54;
+        }
+
+        .floating-btn i {
+            margin-right: 8px;
+        }
+    </style>
 </head>
 
 <body>
     <div id="wrapper">
-		<nav th:insert="~{/sales/header :: header}"></nav>
-		<!-- Dropdown Structure -->
-		<ul id="dropdown1" class="dropdown-content">
-		<li><a href="/api/logout"><i class="fa fa-sign-out fa-fw"></i>로그아웃</a>
-		</li>
-		</ul>
+        <nav th:insert="~{/sales/header :: header}"></nav>
+        <!-- Dropdown Structure -->
+        <ul id="dropdown1" class="dropdown-content">
+            <li><a href="/api/logout"><i class="fa fa-sign-out fa-fw"></i>로그아웃</a></li>
+        </ul>
 
-	  <div th:insert="~{/sales/sidebar :: sidebar}" id="sidebar"></div>
-	  
-      <div id="page-wrapper" style="background-color: #dcebdb">
-		  	<div class="header"> 
-	            <h1 class="page-header">Home</h1>		
-			</div>
+        <div th:insert="~{/sales/sidebar :: sidebar}" id="sidebar"></div>
+
+        <div id="page-wrapper" style="background-color: #dcebdb">
+            <div class="header"> 
+                <h1 class="page-header">Home</h1>		
+            </div>
 			
-    <!-- main views-->
-     <div id="page-inner">
-
-        <!--공지사항 출력 페이지 -->
-        <div class="row">
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="card-action">
-                         공지사항 <span style="float: right;"><a href="./noticeWrite" style="color: black;">+ 공지사항 작성</a></span>
-                    </div>
-                    <div class="card-content">
-                        <div class="table-responsive">
-                            <table class="table table-striped table-bordered table-hover" id="dataTables-example">
-                                <thead>
-                                    <tr>
-                                        <th class="center" style="width: 5%;">NO</th>
-                                        <th class="center" style="width: 65%;">제목</th>
-                                        <th class="center" style="width: 10%;">작성자</th>
-                                        <th class="center" style="width: 10%;">조회수</th>
-                                        <th class="center" style="width: 10%;">작성일자</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr th:each="notice : ${notices}">
-                                        <td class="center" th:text="${notice.id}"></td>
-                                        <td><a th:href="@{/sales/noticeView/{id}(id=${notice.id})}" th:text="${notice.title}"></a></td>
-                                        <td class="center" th:text="${notice.manager}"></td>
-                                        <td class="center" th:text="${notice.views}"></td>
-                                        <td class="center" th:text="${#temporals.format(notice.createdAt, 'yyyy-MM-dd')}"></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div> 
+            <!-- main views-->
+            <div id="page-inner">
+                <!-- 공지사항 출력 페이지 -->
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-action">
+                                공지사항
+                            </div>
+                            <div class="card-content">
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+                                        <thead>
+                                            <tr>
+                                                <th class="center" style="width: 5%;">NO</th>
+                                                <th class="center" style="width: 65%;">제목</th>
+                                                <th class="center" style="width: 10%;">작성자</th>
+                                                <th class="center" style="width: 10%;">조회수</th>
+                                                <th class="center" style="width: 10%;">작성일자</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr th:each="notice : ${notices}">
+                                                <td class="center" th:text="${notice.id}"></td>
+                                                <td><a th:href="@{/sales/noticeView/{id}(id=${notice.id})}" th:text="${notice.title}"></a></td>
+                                                <td class="center" th:text="${notice.manager}"></td>
+                                                <td class="center" th:text="${notice.views}"></td>
+                                                <td class="center" th:text="${#temporals.format(notice.createdAt, 'yyyy-MM-dd')}"></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div> 
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-    </div>
-		
-   <footer><p>Copyright 2024 ⓒ quickkoala.com by <i class="fa fa-love"></i><a href="http://quickkoala.com">Quick Koala All right reserved.</a></p></footer>
+
+                <footer><p>Copyright 2024 ⓒ quickkoala.com by <i class="fa fa-love"></i><a href="http://quickkoala.com">Quick Koala All right reserved.</a></p></footer>
             </div>
         </div>
     </div>
-	<script th:src="@{/assets/js/jquery-1.10.2.js}"></script>
-	<script th:src="@{/assets/js/bootstrap.min.js}"></script>
-	<script th:src="@{/assets/materialize/js/materialize.min.js}"></script>
-	<script th:src="@{/assets/js/jquery.metisMenu.js}"></script>
-	<script th:src="@{/assets/js/morris/raphael-2.1.0.min.js}"></script>
-	<script th:src="@{/assets/js/morris/morris.js}"></script>
-	<script th:src="@{/assets/js/easypiechart.js}"></script>
-	<script th:src="@{/assets/js/easypiechart-data.js}"></script>
-	<script th:src="@{/assets/js/Lightweight-Chart/jquery.chart.js}"></script>
-	<script th:src="@{/assets/js/custom-scripts.js}"></script>
+
+    <!-- 공지사항 작성 버튼 -->
+    <a href="./noticeWrite" class="floating-btn">
+        <i class="fa fa-pencil"></i> 공지사항 작성
+    </a>
+
+    <script th:src="@{/assets/js/jquery-1.10.2.js}"></script>
+    <script th:src="@{/assets/js/bootstrap.min.js}"></script>
+    <script th:src="@{/assets/materialize/js/materialize.min.js}"></script>
+    <script th:src="@{/assets/js/jquery.metisMenu.js}"></script>
+    <script th:src="@{/assets/js/morris/raphael-2.1.0.min.js}"></script>
+    <script th:src="@{/assets/js/morris/morris.js}"></script>
+    <script th:src="@{/assets/js/easypiechart.js}"></script>
+    <script th:src="@{/assets/js/easypiechart-data.js}"></script>
+    <script th:src="@{/assets/js/Lightweight-Chart/jquery.chart.js}"></script>
+    <script th:src="@{/assets/js/custom-scripts.js}"></script>
 </body>
 
 </html>

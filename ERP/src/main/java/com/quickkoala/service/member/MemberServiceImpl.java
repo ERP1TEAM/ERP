@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.quickkoala.dto.member.MemberDTO;
 import com.quickkoala.entity.member.MemberEntity;
 import com.quickkoala.repository.member.MemberRepository;
 
@@ -51,12 +52,16 @@ public class MemberServiceImpl implements MemberService {
         return false;
     }
     
-    //사용자 역할 가져오기
-    public String getRole(String userId) {
-        // User 객체를 Optional로 조회	
-        Optional<MemberEntity> memberOpt = memberRepository.findByUserId(userId);      
-        // User 객체가 존재하면 role 필드를 반환
-        return memberOpt.map(MemberEntity::getRole).orElse(null); // 사용자 없음에는 null 반환
+    // 사용자 역할, 이름, 회사 정보 가져오기
+    @Override
+    public MemberDTO getMemberInfo(String userId) {
+        // 사용자 정보를 Optional로 가져오기
+        Optional<MemberEntity> memberOpt = memberRepository.findByUserId(userId);
+
+        // Optional에서 필요한 데이터가 있을 경우 DTO로 변환하여 반환
+        return memberOpt.map(member -> 
+            new MemberDTO(member.getRole(), member.getCode(), member.getName())
+        ).orElse(null);  // 데이터가 없으면 null 반환
     }
     
 }

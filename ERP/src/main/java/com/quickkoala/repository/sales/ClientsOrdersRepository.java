@@ -1,5 +1,6 @@
 package com.quickkoala.repository.sales;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -24,6 +25,9 @@ public interface ClientsOrdersRepository extends JpaRepository<ClientsOrdersEnti
     
     // 주문자명으로 검색
     Page<ClientsOrdersEntity> findByNameContaining(String name, Pageable pageable);
+    
+    // code에 따라 주문 데이터를 조회하는 쿼리 메서드
+    List<ClientsOrdersEntity> findByCode(String code);
     
     // 주문번호와 날짜로 검색
     @Query("SELECT o FROM ClientsOrdersEntity o WHERE o.orderId LIKE %:orderId% AND o.orderDate = :orderDate")

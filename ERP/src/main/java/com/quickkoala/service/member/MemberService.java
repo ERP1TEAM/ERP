@@ -2,6 +2,7 @@ package com.quickkoala.service.member;
 
 import java.util.List;
 
+import com.quickkoala.dto.member.MemberDTO;
 import com.quickkoala.entity.member.MemberEntity;
 
 public interface MemberService {
@@ -12,5 +13,5 @@ public interface MemberService {
     // 회원 등록
     void saveMember(MemberEntity member);
     
-    
+    MemberDTO getMemberInfo(String userId);
 }

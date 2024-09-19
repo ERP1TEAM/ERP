@@ -1,11 +1,13 @@
 package com.quickkoala.controller.member;
 
+import com.quickkoala.dto.member.MemberDTO;
 import com.quickkoala.entity.SupplierEntity; 
 import com.quickkoala.entity.member.MemberEntity;
 import com.quickkoala.entity.sales.SalesEntity;
 import com.quickkoala.service.SupplierService;
 import com.quickkoala.service.member.MemberService;
 import com.quickkoala.service.member.MemberServiceImpl;
+import com.quickkoala.service.sales.SalesService;
 import com.quickkoala.service.sales.SalesServiceImpl;
 import com.quickkoala.token.config.JwtTokenProvider;
 
@@ -27,14 +29,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api")
-public class RegisterController {
+public class MemberRestController {
 
     @Autowired
     private MemberServiceImpl memberService;
+    
     @Autowired
     private SupplierService supplierService;
+    
     @Autowired
-    private SalesServiceImpl salesService;
+    private SalesService salesService;
     
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
@@ -51,14 +55,18 @@ public class RegisterController {
     public ResponseEntity<String> login(@RequestBody MemberEntity member, HttpServletResponse response) {
         boolean isAuthenticated = memberService.authenticateUser(member.getUserId(), member.getPassword());
         if (isAuthenticated) {
-        	String role= memberService.getRole(member.getUserId());
-            String token = jwtTokenProvider.createToken(member.getUserId(), role);
+            // 사용자 정보 조회
+            MemberDTO memberInfo = memberService.getMemberInfo(member.getUserId());
+
+            // 토큰 생성: userId, role, name, company 정보를 포함
+            String token = jwtTokenProvider.createToken(member.getUserId(), memberInfo.getRole(), memberInfo.getCode(), memberInfo.getName());
+
             // JWT를 HTTP-Only 쿠키에 설정
             jwtTokenProvider.setJwtCookies(response, token);
 
-            // 역할에 따라 리디렉션 URL을 결정
+            // 역할에 따라 리디렉션 URL 결정
             String redirectUrl;
-            switch (role) {
+            switch (memberInfo.getRole()) {
                 case "Sales":
                     redirectUrl = "/sales/home";
                     break;

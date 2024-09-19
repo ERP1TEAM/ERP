@@ -18,7 +18,8 @@ public class ClientsOrdersEntity {
     @Id
     @Column(name = "order_id", nullable = false)
     private String orderId;  // order_id 필드를 String으로 변경
-
+    @Column(name = "code", nullable = false)
+    private String code;
     private String name;
     private String tel;
     private String email;

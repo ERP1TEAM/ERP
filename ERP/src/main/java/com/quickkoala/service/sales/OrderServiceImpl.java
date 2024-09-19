@@ -186,7 +186,7 @@ public class OrderServiceImpl implements OrderService {
         return dto;
     }
     
-    
+    //검색
     public Page<ClientsOrdersEntity> searchOrders(String searchType, String searchText, LocalDate searchDate, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
 
@@ -212,6 +212,11 @@ public class OrderServiceImpl implements OrderService {
 
         // 기본값: 전체 조회
         return clientsOrdersRepository.findAll(pageable);
+    }
+    
+    public List<ClientsOrdersEntity> findByCode(String code) {
+        // 특정 code와 일치하는 주문 목록을 조회
+        return clientsOrdersRepository.findByCode(code);
     }
     
     public List<ClientsOrdersEntity> findAll(){

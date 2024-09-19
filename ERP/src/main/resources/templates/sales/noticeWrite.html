@@ -45,8 +45,8 @@
                                         <label for="title">제목</label>
                                     </div>
                                     <div class="input-field">
-                                        <input type="text" th:field="*{manager}" required>
-                                        <label for="manager">작성자</label>
+                                        <label for="manager" class="active">작성자</label>
+                                        <input type="text" id="manager" th:field="*{manager}" readonly required>
                                     </div>
                                     <div class="input-field">
                                         <!-- CKEditor를 적용할 textarea -->
@@ -54,6 +54,7 @@
                                         <br><br>
                                     <button class="btn" type="submit" style="background-color: #474B54; float: right;">공지사항 저장</button><br><br>
                                     </div><br>
+                                    <input type="hidden" id="companyCode">
                                 </form>
                             </div>
                         </div>

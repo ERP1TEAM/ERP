@@ -2,6 +2,8 @@ package com.quickkoala.token.controller;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -100,7 +102,7 @@ public class TokenRestController {
     }
     
     
-    
+    //토큰 연장
     @PostMapping("/extend-session")
     public ResponseEntity<?> extendSession(HttpServletRequest request) {
         // 쿠키에서 토큰을 추출
@@ -117,9 +119,16 @@ public class TokenRestController {
         }
 
         if (token != null && jwtTokenProvider.validateToken(token)) {
+            // 기존 토큰에서 사용자 정보 추출
+            String userId = jwtTokenProvider.getUserId(token);
+            String role = jwtTokenProvider.getRole(token);
+            String name = jwtTokenProvider.getClaim(token, "name");
+            String code = jwtTokenProvider.getClaim(token, "code");
+
+            // 새로운 만료 시간으로 토큰 재생성
             Date now = new Date();
             Date newExpirationTime = new Date(now.getTime() + jwtTokenProvider.getValidityInMilliseconds());
-            String newToken = jwtTokenProvider.createToken(jwtTokenProvider.getUsername(token), jwtTokenProvider.getRole(token));
+            String newToken = jwtTokenProvider.createToken(userId, role, name, code);
 
             HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
             if (response != null) {
@@ -146,4 +155,30 @@ public class TokenRestController {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid token");
     }
     
+    // 토큰에서 사용자 이름을 추출하는 엔드포인트
+    @GetMapping("/user-info")
+    public ResponseEntity<Map<String, String>> getUserInfo(HttpServletRequest request) {
+        String token = jwtTokenProvider.resolveToken(request); // 요청에서 JWT 토큰 추출
+        if (token != null && jwtTokenProvider.validateToken(token)) {
+            String name = jwtTokenProvider.getName(token); // 토큰에서 이름을 추출
+            Map<String, String> response = new HashMap<>();
+            response.put("name", name);
+            return ResponseEntity.ok(response); // 사용자 이름을 반환
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
+    }
+    
+    @GetMapping("/code-info")
+    public ResponseEntity<Map<String, String>> getCodeInfo(HttpServletRequest request) {
+        String token = jwtTokenProvider.resolveToken(request); // 요청에서 JWT 토큰 추출
+        if (token != null && jwtTokenProvider.validateToken(token)) {
+            String code = jwtTokenProvider.getCode(token); // 토큰에서 이름을 추출
+            Map<String, String> response = new HashMap<>();
+            response.put("code", code);
+            return ResponseEntity.ok(response); // 사용자 이름을 반환
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
+    }
 }
