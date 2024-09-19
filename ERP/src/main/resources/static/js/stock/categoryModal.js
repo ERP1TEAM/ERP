@@ -1,5 +1,8 @@
 document.addEventListener('DOMContentLoaded',function(){
 
+//카테고리 등록
+
+
 //카테고리 리스트
 function categorymainmodal() {
     fetch('/main/stock/categories', {
