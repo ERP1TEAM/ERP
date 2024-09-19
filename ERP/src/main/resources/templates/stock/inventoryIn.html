@@ -77,15 +77,18 @@
         <li>
             <select class="product_input1">
                 <option></option>
-            </select><input type="button" value="+" title="+" class="product_btn2"> <span class="help_text">※ 해당 카테고리가 없을 경우 신규 등록하시길 바랍니다.</span>
+            </select><input type="button" value="+" title="+" class="product_btn2 categorybtn"> <span class="help_text">※ 해당 카테고리가 없을 경우 신규 등록하시길 바랍니다.</span>
         </li>
     </ul>
+    
+    <div th:insert="~{stock/categoryModal :: categorylist}"></div>
+    
     <ul>
         <li>소메뉴</li>
         <li>
             <select class="product_input1">
                 <option></option>
-            </select><input type="button" value="+" title="+" class="product_btn2">
+            </select><input type="button" value="+" title="+" class="product_btn2 categorybtn">
         </li>
     </ul>
     <ul>

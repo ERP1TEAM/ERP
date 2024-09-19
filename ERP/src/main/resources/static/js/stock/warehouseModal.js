@@ -276,7 +276,7 @@ function warehousemainmodal(){
 	document.getElementById('warehouseinmodal').style.display = 'none';
     document.getElementById('warehouselistmodal').style.display = 'block';
     document.getElementById('overlay').style.display = 'block';   // 오버레이 숨기기
-    document.body.style.overflow = 'hidden';  // 배경 스크롤 다시 활성화
+    document.body.style.overflow = 'hidden';
 		})
 		.catch(function(error){
 			alert("error");
@@ -287,6 +287,7 @@ function warehousemainmodal(){
 //모달닫기
 document.querySelectorAll('.closemodal').forEach(function(warehouseclosebtn) {
     warehouseclosebtn.addEventListener('click',function(){
+    document.getElementById('warehousemodifymodal').style.display = 'none';
     document.getElementById('warehouseinmodal').style.display = 'none';
     document.getElementById('warehouselistmodal').style.display = 'none';
     document.getElementById('overlay').style.display = 'none';   // 오버레이 숨기기
@@ -298,11 +299,13 @@ document.querySelectorAll('.closemodal').forEach(function(warehouseclosebtn) {
 window.addEventListener('click', function(event) {
     const warehouselistmodal = document.getElementById('warehouselistmodal');
     const warehouseinmodal = document.getElementById('warehouseinmodal');
+    const warehousemodifymodal = document.getElementById('warehousemodifymodal');
     const overlay = document.getElementById('overlay');
     
-    if (event.target == warehouselistmodal || event.target == overlay) {
-         warehouseinmodal.style.display = 'none'; 
+    if (event.target == overlay) {
+        warehouseinmodal.style.display = 'none'; 
         warehouselistmodal.style.display = 'none';
+        warehousemodifymodal.style.display = 'none';
         overlay.style.display = 'none';
         document.body.style.overflow = 'auto';
     }
