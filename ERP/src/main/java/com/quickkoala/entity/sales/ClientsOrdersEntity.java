@@ -18,7 +18,7 @@ public class ClientsOrdersEntity {
     @Id
     @Column(name = "order_id", nullable = false)
     private String orderId;  // order_id 필드를 String으로 변경
-
+    
     private String name;
     private String tel;
     private String email;
@@ -29,9 +29,15 @@ public class ClientsOrdersEntity {
     @Column(name = "order_date")
     private LocalDate orderDate;   // 주문 날짜 추가
 
-    private String clientMemo;
+    @Column(name = "client_memo")
+    private String clientMemo; // 주문자 메모 필드
+    
     private String manager;
-    private String managerCompanyCode;
+    
+    @Column(name = "manager_company_code") 
+    private String code;
+    
+    @Column(name = "manager_memo")
     private String managerMemo;
 
     @OneToMany(mappedBy = "clientsOrders", cascade = CascadeType.ALL)

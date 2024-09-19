@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"> 
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>주문등록</title> 
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<link rel="stylesheet" th:href="@{/assets/materialize/css/materialize.min.css}" media="screen,projection" />
+	<link rel="stylesheet" th:href="@{/assets/css/bootstrap.css}" />
+	<link rel="stylesheet" th:href="@{/assets/css/font-awesome.css}" />
+	<link rel="stylesheet" th:href="@{/assets/js/morris/morris-0.4.3.min.css}" />
+	<link rel="stylesheet" th:href="@{/assets/css/custom-styles.css}" />
+	<link rel="stylesheet" th:href="@{/assets/js/Lightweight-Chart/cssCharts.css}" />
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
+</head>
+
+<body>
+    <div id="wrapper">
+        <nav th:replace="~{/sales/header :: header}"></nav>
+        
+        <div th:replace="~{/sales/dropdown :: dropdown}"></div>
+
+        <div th:replace="~{/sales/sidebar :: sidebar}" id="sidebar"></div>
+        
+        <div id="page-wrapper" style="background-color: #dcebdb">
+            <div class="header"> 
+                <h1 class="page-header">주문 등록</h1>
+                <ol class="breadcrumb">
+                    <li><a href="./home" style="color: #1A4870;">Home</a></li>
+                </ol>             
+            </div>
+            
+            <!-- main views-->
+            <div id="page-inner">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-action">
+                                 주문등록
+                            </div>
+                            <div class="card-content">
+                                <div class="table-responsive">
+                                    <!-- 주문등록(서식) 파일 다운로드 링크 추가 -->
+                                    <a href="/csv/주문등록(서식).xlsx" class="btn btn-primary" style="background-color: #126d1d; border: none;" download>주문등록 서식 다운로드 (.xlsx)</a>
+                                    <br><br>
+                                    
+                                    <!-- 파일 업로드 UI -->
+                                    <div class="file-upload-container" style="border: 2px dashed #cccccc; padding: 100px; text-align: center; cursor: pointer;">
+                                        <h5>등록할 주문의 .xlsx 파일을 여기에 드래그하거나 클릭하여 업로드하세요</h5>
+                                        <input type="file" id="fileInput" style="display: none;" />
+                                    </div>
+                                    <br>
+                                    <!-- 선택한 파일명 표시 -->
+                                    <p id="fileName" style="color: #126d1d;"></p>
+
+                                    <button id="uploadButton" class="btn btn-primary" style="border: none; background-color:#474B54; " onclick="uploadFile()" disabled>주문 등록</button>
+                                    <p id="uploadStatus"></p>
+                                </div> 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <footer>
+                    <p>Copyright 2024 ⓒ quickkoala.com by <i class="fa fa-love"></i><a href="http://quickkoala.com">Quick Koala All right reserved.</a></p>
+                </footer>
+            </div>
+        </div>
+    </div>
+
+    <script th:src="@{/js/order.js}"></script>
+
+    <script th:src="@{/assets/js/jquery-1.10.2.js}"></script>
+    <script th:src="@{/assets/js/bootstrap.min.js}"></script>
+    <script th:src="@{/assets/materialize/js/materialize.min.js}"></script>
+    <script th:src="@{/assets/js/jquery.metisMenu.js}"></script>
+    <script th:src="@{/assets/js/morris/raphael-2.1.0.min.js}"></script>
+    <script th:src="@{/assets/js/morris/morris.js}"></script>
+    <script th:src="@{/assets/js/easypiechart.js}"></script>
+    <script th:src="@{/assets/js/easypiechart-data.js}"></script>
+    <script th:src="@{/assets/js/Lightweight-Chart/jquery.chart.js}"></script>
+    <script th:src="@{/assets/js/custom-scripts.js}"></script>
+	
+</body>
+</html>

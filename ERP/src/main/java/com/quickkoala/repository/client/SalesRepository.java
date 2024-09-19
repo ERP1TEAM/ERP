@@ -1,6 +1,7 @@
 package com.quickkoala.repository.client;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,6 +12,8 @@ import com.quickkoala.entity.client.SalesEntity;
 
 @Repository
 public interface SalesRepository extends JpaRepository<SalesEntity, String>{
+	Optional<SalesEntity> findByCode(String code);
+	
 	List<SalesEntity> findAllByOrderByCreateDateDesc();
 	
 	List<SalesEntity> findByNameContainingIgnoreCase(String term);

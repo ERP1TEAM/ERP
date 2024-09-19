@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>공지사항 작성</title> 
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<link rel="stylesheet" th:href="@{/assets/materialize/css/materialize.min.css}" media="screen,projection" />
+	<link rel="stylesheet" th:href="@{/assets/css/bootstrap.css}" />
+	<link rel="stylesheet" th:href="@{/assets/css/font-awesome.css}" />
+	<link rel="stylesheet" th:href="@{/assets/js/morris/morris-0.4.3.min.css}" />
+	<link rel="stylesheet" th:href="@{/assets/css/custom-styles.css}" />
+	<link rel="stylesheet" th:href="@{/assets/js/Lightweight-Chart/cssCharts.css}" />
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
+    <script src="https://cdn.ckeditor.com/4.22.1/standard/ckeditor.js"></script>
+</head>
+
+<body>
+    <div id="wrapper">
+        <nav th:replace="~{/sales/header :: header}"></nav>
+        
+        <div th:replace="~{/sales/dropdown :: dropdown}"></div>
+
+        <div th:replace="~{/sales/sidebar :: sidebar}" id="sidebar"></div>
+
+        <div id="page-wrapper" style="background-color: #dcebdb">
+            <div class="header"> 
+                <h1 class="page-header">공지사항 작성</h1>		
+            </div>
+            
+            <!-- main views-->
+            <div id="page-inner">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-action">
+                                 공지사항 작성
+                            </div>
+                            <div class="card-content">
+                                <form th:action="@{/sales/save}" th:object="${notice}" method="post">
+                                    <div class="input-field">
+                                        <input type="text" th:field="*{title}" required>
+                                        <label for="title">제목</label>
+                                    </div>
+                                    <div class="input-field">
+                                        <label for="manager" class="active">작성자</label>
+                                        <input type="text" id="manager" th:field="*{manager}" readonly required>
+                                    </div>
+                                    <div class="input-field">
+                                        <!-- CKEditor를 적용할 textarea -->
+                                        <textarea id="editor" th:field="*{content}" required></textarea>
+                                        <br><br>
+                                    <button class="btn" type="submit" style="background-color: #474B54; float: right;">공지사항 저장</button><br><br>
+                                    </div><br>
+                                    <input type="hidden" id="companyCode">
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <footer><p>Copyright 2024 ⓒ quickkoala.com by <i class="fa fa-love"></i><a href="http://quickkoala.com">Quick Koala All right reserved.</a></p></footer>
+        </div>
+    </div>
+    
+    <script th:src="@{/js/noticeWrite.js}"></script>
+    
+	<script th:src="@{/assets/js/jquery-1.10.2.js}"></script>
+	<script th:src="@{/assets/js/bootstrap.min.js}"></script>
+	<script th:src="@{/assets/materialize/js/materialize.min.js}"></script>
+	<script th:src="@{/assets/js/jquery.metisMenu.js}"></script>
+	<script th:src="@{/assets/js/morris/raphael-2.1.0.min.js}"></script>
+	<script th:src="@{/assets/js/morris/morris.js}"></script>
+	<script th:src="@{/assets/js/easypiechart.js}"></script>
+	<script th:src="@{/assets/js/easypiechart-data.js}"></script>
+	<script th:src="@{/assets/js/Lightweight-Chart/jquery.chart.js}"></script>
+	<script th:src="@{/assets/js/custom-scripts.js}"></script>
+</body>
+</html>

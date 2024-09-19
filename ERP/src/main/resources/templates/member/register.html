@@ -1,0 +1,172 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Hugo 0.101.0">
+    <title>Register Admin</title>
+    <link href="assets/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #e0e8f5 !important;
+        }
+        .div-container {
+            width: 800px;
+            height: auto;
+            max-width: 100%;
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+            margin: 0 auto;
+            margin-top: 50px;
+            opacity: 0; /* 초기에는 투명하게 설정 */
+            transform: scale(0.95); /* 약간 작게 보이도록 설정 */
+            transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+        }
+        .div-container.fade-in {
+            opacity: 1; /* 완전히 불투명하게 설정 */
+            transform: scale(1); /* 원래 크기로 복원 */
+        }
+        .btn-back {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background-color: #474B54;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        .btn-back:hover {
+            background-color: #1F2837;
+        }
+        .form-control {
+            margin-bottom: 15px;
+        }
+        .btn-primary {
+            background-color: #1F2837;
+            border: none;
+        }
+        .btn-primary:hover {
+            background-color: #474B54;
+        }
+        .input-group {
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+        .company-info, .error-message, .id-message {
+            margin-left: 10px;
+            white-space: nowrap;
+        }
+        .company-info {
+            color: blue;
+        }
+        .error-message, .id-message {
+            color: red;
+        }
+        .input-group > .form-control {
+            flex: 1; /* 입력란이 가용 공간을 모두 차지하도록 설정 */
+        }
+        .input-group > .company-info, 
+        .input-group > .error-message,
+        .input-group > .id-message {
+            flex: none; /* 텍스트가 입력란의 크기에 영향을 미치지 않도록 설정 */
+            font-size: small;
+        }
+		.message-inside {
+		    position: absolute;
+		    right: 10px;
+		    top: 50%;
+		    transform: translateY(-50%);
+		    font-size: small;
+		    color: red;
+		    pointer-events: none; /* 메시지가 입력을 방해하지 않도록 설정 */
+		}
+        
+    </style> 
+    <link href="assets/css/form-validation.css" rel="stylesheet">
+</head>
+<body>
+    <div class="div-container" id="div-container">
+        <button class="btn-back" onclick="goBack()">←</button>
+        <div class="text-center">
+            <img class="d-block mx-auto mb-4" src="img/logo.png" alt="" width="280px;" height="200px;">
+            <h2>Register</h2>
+            <br>
+        </div>
+        <h4 class="mb-3">Admin Information</h4>
+        <form id="form">
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="code">Code</label>
+                        <input type="text" id="code" name="code" class="form-control" placeholder="권한코드를 입력하세요" maxlength="6" required>
+                </div>
+                <div class="col-md-6 mb-3" style="margin-top: 13px; padding-left: 5px;">
+                    <label></label>
+                    <div id="company-info" class="company-info"></div>
+                    <div id="error-message" class="error-message">권한 코드를 입력하세요</div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="company">Company</label>
+                    <input type="text" class="form-control" id="company" name="company" placeholder="소속사의 권한코드를 입력하세요"  value="" readonly required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="department">Department</label>
+                    <input type="text" class="form-control" id="department" name="department" placeholder="부서명을 입력하세요" maxlength="20" value="" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="name">Name</label>
+                    <input type="text" class="form-control" id="name" name="name" placeholder="이름을 입력하세요" value="" maxlength="20" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="userId">ID</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="userId" name="userId" placeholder="아이디를 입력하세요" maxlength="20" required>
+                        <div id="id-message" class="id-message"></div>
+                    </div>
+                </div>
+				<div class="col-md-6 mb-3">
+				    <label for="mpass">Password</label>
+				    <div class="input-group">
+				        <input type="password" class="form-control" id="mpass" name="mpass" placeholder="패스워드를 입력하세요" required>
+				        <div id="password-message" class="message-inside"></div>
+				    </div>
+				</div>
+				<div class="col-md-6 mb-3">
+				    <label for="mpass2">Check Password</label>
+				    <div class="input-group">
+				        <input type="password" class="form-control" id="mpass2" name="mpass2" placeholder="동일한 패스워드를 입력하세요" required>
+				        <div id="password-check-message" class="message-inside"></div>
+				    </div>
+				</div>
+                <div class="col-md-6 mb-3">
+                    <label for="mtel">TEL</label>
+                    <input type="text" class="form-control" id="mtel" name="mtel" placeholder="연락처를 입력하세요 (숫자만)" maxlength="11" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="email">Email</label>
+                    <input type="email" class="form-control" id="email" name="email" placeholder="이메일을 입력하세요" required>
+                </div>
+            </div>
+
+            <hr class="mb-4">
+            <input type="button" class="btn btn-primary btn-lg btn-block" value="관리자 등록" onclick="register()">
+        </form>
+    </div>
+
+    <script th:src="@{/js/register.js}"></script>
+</body>
+</html>

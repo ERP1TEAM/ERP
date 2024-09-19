@@ -31,7 +31,7 @@ import com.quickkoala.service.stock.WarehouseService;
 @CrossOrigin(origins="*", allowedHeaders = "*")
 public class WarehouseRestController {
 
-	private final int SIZE = 5;
+	private final int SIZE = 10;
 	
 	@Autowired
 	private WarehouseService warehouseService;

@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	var totalPages = 1;
     var startPage = 0;
     var endPage = 0;
-    const pageSize = 3; // 페이지 번호 그룹 크기 설정
+    const pageSize = 5; // 페이지 번호 그룹 크기 설정
 
     const getQueryParam = (param) => {
         const urlParams = new URLSearchParams(window.location.search);

@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>주문 목록</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<link rel="stylesheet" th:href="@{/assets/materialize/css/materialize.min.css}" media="screen,projection" />
+	<link rel="stylesheet" th:href="@{/assets/css/bootstrap.css}" />
+	<link rel="stylesheet" th:href="@{/assets/css/font-awesome.css}" />
+	<link rel="stylesheet" th:href="@{/assets/js/morris/morris-0.4.3.min.css}" />
+	<link rel="stylesheet" th:href="@{/assets/css/custom-styles.css}" />
+	<link rel="stylesheet" th:href="@{/assets/js/Lightweight-Chart/cssCharts.css}" />
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
+</head>
+
+<style>
+/* 모달의 오른쪽 상단에 X 버튼 배치 */
+.modal-close-x {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 24px;
+    cursor: pointer;
+    color: #333;
+}
+
+.modal-close-x:hover {
+    color: #d9534f; /* 호버 시 X 버튼 색 변경 (빨간색) */
+}
+/* 검색 필드와 검색 버튼을 우측 상단에 배치하고 60%의 공간만 사용 */
+.search-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+    align-items: center;
+    width: 80%;
+    float: right;
+}
+
+.search-container select{
+	margin-left: 30px;
+	margin-bottom: 10px;
+} 
+.search-container input{
+	margin-left: 10px;
+} 
+.search-container button {
+    margin-left: 10px;
+    margin-bottom: 15px;
+    margin-right: 50px;
+}
+
+.search-container input[type="date"] {
+    width: 160px;
+}
+
+.search-container input[type="text"] {
+    width: 200px;
+}
+
+.search-container select {
+    width: 120px;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.pagination li {
+    display: inline-block;
+    margin: 0 5px;
+}
+
+.pagination a {
+    padding: 8px 16px;
+    border: 1px solid #ccc;
+    color: #333;
+}
+
+.pagination a:hover {
+    background-color: #ddd;
+}
+</style>
+
+<body>
+    <div id="wrapper">
+        <nav th:replace="~{/sales/header :: header}"></nav>
+        
+        <div th:replace="~{/sales/dropdown :: dropdown}"></div>
+
+        <div th:replace="~{/sales/sidebar :: sidebar}" id="sidebar"></div>
+
+        <div id="page-wrapper" style="background-color: #dcebdb">
+            <div class="header">
+                <h1 class="page-header">주문 목록</h1>
+                <ol class="breadcrumb">
+                    <li><a href="./home" style="color: #1A4870;">Home</a></li>
+                </ol>
+            </div>
+
+            <!-- 검색 영역: 날짜 선택, 검색 옵션, 검색 필드 -->
+            <div class="search-container">
+                <input type="date" id="searchDate" class="form-control" placeholder="날짜 선택">
+                <select id="searchOption" class="form-control">
+                    <option value="orderId">주문번호</option>
+                    <option value="name">주문자명</option>
+                </select>
+                <input type="text" id="searchInput" class="form-control" placeholder="검색어를 입력하세요">
+                <button type="button" class="btn btn-primary" onclick="filterOrders()">검색</button>
+            </div>
+
+            <!-- 주문 목록 테이블 -->
+            <div id="page-inner" style="min-height: 0px;">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-action">주문 목록</div>
+                            <div class="card-content">
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-bordered table-hover" id="orderTable">
+										<thead>
+										    <tr>
+										        <th class="center">주문번호</th>
+										        <th class="center">주문자명</th>
+										        <th class="center">연락처</th>
+										        <th class="center">이메일</th>
+										        <th class="center">배송지</th>
+										        <th class="center">주문날짜</th>
+										        <th class="center">관리자메모</th>
+										        <th class="center">주문상품</th>
+										    </tr>
+										</thead>
+										<tbody id="orderTableBody">
+										    <!-- Thymeleaf를 이용한 데이터 반복 출력 -->
+										    <tr th:each="order : ${orders}" th:data-order-id="${order.orderId}">
+										        <td class="center" th:text="${order.orderId}"></td>
+										        <td class="center" th:text="${order.name}"></td>
+										        <td class="center" th:text="${order.tel}"></td>
+										        <td class="center" th:text="${order.email}"></td>
+										        <td th:text="${'['+ order.post +'] ' + ' ' + order.address + ' ' + order.addressDetail}"></td>
+										        <td class="center" th:text="${order.orderDate}"></td>
+										        <td th:text="${order.managerMemo}"></td>
+										        <td class="center">
+										            <button type="button" class="btn btn-primary" style="background-color: #474B54; border: none;" onclick="showOrderDetails(this)">상세보기</button>
+										        </td>
+										    </tr>
+										</tbody>
+
+                                    </table>
+
+                                    <!-- 페이징 처리 -->
+                                    <ul class="pagination">
+                                        <li><a href="#">1</a></li>
+                                        <li><a href="#">2</a></li>
+                                        <li><a href="#">3</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <footer>
+                <p>Copyright 2024 ⓒ quickkoala.com by <i class="fa fa-love"></i>
+                    <a href="http://quickkoala.com">Quick Koala All right reserved.</a>
+                </p>
+            </footer>
+            </div>
+
+        </div>
+    </div>
+
+	<div th:insert="~{/sales/orderlistModal :: orderlistModal}"></div>
+	
+	
+	
+    <script th:src="@{/assets/js/jquery-1.10.2.js}"></script>
+    <script th:src="@{/assets/js/bootstrap.min.js}"></script>
+    <script th:src="@{/assets/materialize/js/materialize.min.js}"></script>
+    <script th:src="@{/assets/js/jquery.metisMenu.js}"></script>
+    <script th:src="@{/assets/js/morris/raphael-2.1.0.min.js}"></script>
+    <script th:src="@{/assets/js/morris/morris.js}"></script>
+    <script th:src="@{/assets/js/easypiechart.js}"></script>
+    <script th:src="@{/assets/js/easypiechart-data.js}"></script>
+    <script th:src="@{/assets/js/Lightweight-Chart/jquery.chart.js}"></script>
+    <script th:src="@{/assets/js/custom-scripts.js}"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    
+	<script th:src="@{/js/orderlist.js}"> </script>
+    
+</body>
+
+
+</html>
+
