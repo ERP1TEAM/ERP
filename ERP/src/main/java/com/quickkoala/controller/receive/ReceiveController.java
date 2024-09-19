@@ -18,16 +18,16 @@ import org.springframework.web.multipart.MultipartFile;
 import com.quickkoala.dto.PurchaseListDto;
 import com.quickkoala.dto.receive.PurchaseDto;
 import com.quickkoala.dto.receive.ReceiveModalDto;
-import com.quickkoala.entity.supplier.SupplierEntity;
+import com.quickkoala.entity.client.SupplierEntity;
+import com.quickkoala.service.client.SupplierService;
 import com.quickkoala.service.receive.ViewPurchaseService;
 import com.quickkoala.service.supplier.PurchaseService;
-import com.quickkoala.service.supplier.SupplierService;
 import com.quickkoala.utils.ExcelUpload;
 
 @Controller
 @RequestMapping("main")
 public class ReceiveController {
-
+	
 	@Autowired
 	private PurchaseService purchaseService;
 

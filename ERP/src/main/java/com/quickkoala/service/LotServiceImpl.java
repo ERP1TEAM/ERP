@@ -8,9 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.quickkoala.dto.ReceivingDto;
-import com.quickkoala.entity.LotEntity;
+import com.quickkoala.entity.stock.LotEntity;
 import com.quickkoala.entity.supplier.PurchaseEntity;
-import com.quickkoala.repository.LotRepository;
+import com.quickkoala.repository.stock.LotRepository;
 import com.quickkoala.service.supplier.PurchaseServiceImpl;
 import com.quickkoala.utils.TodayUtils;
 

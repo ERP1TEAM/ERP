@@ -9,7 +9,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.quickkoala.entity.receive.ViewReceiveEntity;
-import com.quickkoala.entity.receive.ViewReceiveSummaryEntity;
 import com.quickkoala.repository.receive.ViewReceiveRepository;
 
 @Service

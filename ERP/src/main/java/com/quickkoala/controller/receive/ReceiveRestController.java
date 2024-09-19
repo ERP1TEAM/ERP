@@ -31,7 +31,9 @@ import com.quickkoala.service.receive.ViewReceiveTempService;
 @RestController
 @RequestMapping("main")
 public class ReceiveRestController {
-
+	
+	private final int SIZE = 5;
+	
 	@Autowired
 	private ViewReceiveTempService viewReceiveTempService;
 	
@@ -63,19 +65,18 @@ public class ReceiveRestController {
 	@GetMapping("receive/purchaseData/{pno}/{status}")
 	public Page<ViewPurchaseDetailEntity> purchaseData(@PathVariable Integer pno, @PathVariable String status, @RequestParam String code, @RequestParam String word){
 		
-		int size = 5;
 		Page<ViewPurchaseDetailEntity> result = null;
 		if(status.equals("all")) {
 			if(code.equals("") || word.equals("")) {
-				result = viewPurchaseDetailService.getPaginatedData(pno, size);
+				result = viewPurchaseDetailService.getPaginatedData(pno, SIZE);
 			}else {
-				result = viewPurchaseDetailService.getPaginatedData(pno, size, code, word);				
+				result = viewPurchaseDetailService.getPaginatedData(pno, SIZE, code, word);				
 			}
 		}else {
 			if(code.equals("") || word.equals("")) {
-				result = viewPurchaseDetailService.getPaginatedDataByStatus(status, pno, size);																
+				result = viewPurchaseDetailService.getPaginatedDataByStatus(status, pno, SIZE);																
 			}else {
-				result = viewPurchaseDetailService.getPaginatedData(pno, size, code, word);
+				result = viewPurchaseDetailService.getPaginatedData(pno, SIZE, code, word);
 			}
 		}
 		return result; 
@@ -85,11 +86,10 @@ public class ReceiveRestController {
 	@GetMapping("receive/tempReceiveData/{pno}")
 	public Page<ViewReceiveTempEntity> tempReceiveData(@PathVariable Integer pno, @RequestParam String code, @RequestParam String word) {
 		Page<ViewReceiveTempEntity> result = null;
-		int size = 5;
 		if(code.equals("") || word.equals("")) {
-			result = viewReceiveTempService.getPaginatedData(pno, size);
+			result = viewReceiveTempService.getPaginatedData(pno, SIZE);
 		}else {
-			result = viewReceiveTempService.getPaginatedData(pno, size, code, word);
+			result = viewReceiveTempService.getPaginatedData(pno, SIZE, code, word);
 		}
 		return result;
 	}
@@ -120,11 +120,10 @@ public class ReceiveRestController {
 	@GetMapping("receive/summaryData/{pno}")
 	public Page<ViewReceiveSummaryEntity> summaryData(@PathVariable Integer pno, @RequestParam String code, @RequestParam String word) {
 		Page<ViewReceiveSummaryEntity> result = null;
-		int size = 5;
 		if(code.equals("") || word.equals("")) {
-			result = viewReceiveSummaryService.getPaginatedData(pno, size); 
+			result = viewReceiveSummaryService.getPaginatedData(pno, SIZE); 
 		}else {
-			result = viewReceiveSummaryService.getPaginatedData(pno, size, code, word);
+			result = viewReceiveSummaryService.getPaginatedData(pno, SIZE, code, word);
 		}
 		return result;
 	}
@@ -133,11 +132,10 @@ public class ReceiveRestController {
 	@GetMapping("receive/detailData/{pno}")
 	public Page<ViewReceiveEntity> detailData(@PathVariable Integer pno, @RequestParam String code, @RequestParam String word) {
 		Page<ViewReceiveEntity> result = null;
-		int size = 5;
 		if(code.equals("") || word.equals("")) {
-			result = viewReceiveService.getPaginatedData(pno, size); 
+			result = viewReceiveService.getPaginatedData(pno, SIZE); 
 		}else {
-			result = viewReceiveService.getPaginatedData(pno, size, code, word);
+			result = viewReceiveService.getPaginatedData(pno, SIZE, code, word);
 		}
 		return result;
 	}
@@ -146,11 +144,10 @@ public class ReceiveRestController {
 	@GetMapping("receive/returnData/{pno}")
 	public Page<ViewReceiveReturnEntity> returnData(@PathVariable Integer pno, @RequestParam String code, @RequestParam String word) {
 		Page<ViewReceiveReturnEntity> result = null;
-		int size = 5;
 		if(code.equals("") || word.equals("")) {
-			result = viewReceiveReturnService.getPaginatedData(pno, size);
+			result = viewReceiveReturnService.getPaginatedData(pno, SIZE);
 		}else {
-			result = viewReceiveReturnService.getPaginatedData(pno, size, code, word);
+			result = viewReceiveReturnService.getPaginatedData(pno, SIZE, code, word);
 		}
 		return result;
 	}

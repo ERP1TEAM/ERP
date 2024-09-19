@@ -1,0 +1,159 @@
+/* Frame 138 */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px;
+
+position: absolute;
+width: 160px;
+height: 36px;
+left: 554px;
+top: 29px;
+
+transform: matrix(-1, 0, 0, 1, 0, 0);
+
+
+/* Frame 128 */
+
+box-sizing: border-box;
+
+width: 36px;
+height: 36px;
+
+background: #E3F5FF;
+border-width: 0.5px 0px 0.5px 0.5px;
+border-style: solid;
+border-color: #20CEC6;
+border-radius: 5px 0px 0px 5px;
+transform: matrix(-1, 0, 0, 1, 0, 0);
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Vector */
+
+position: absolute;
+left: 69.44%;
+right: -11.11%;
+top: 66.67%;
+bottom: 0%;
+
+border: 1.5px solid #2B2E3F;
+transform: rotate(-180deg);
+
+
+/* Frame 130 */
+
+box-sizing: border-box;
+
+width: 88px;
+height: 36px;
+
+background: #F7F9FB;
+border-width: 0.5px 1px;
+border-style: solid;
+border-color: #00C7BE;
+transform: matrix(-1, 0, 0, 1, 0, 0);
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* Frame 131 */
+
+position: absolute;
+width: 24px;
+height: 24px;
+left: 17px;
+top: 6px;
+
+
+
+/* 04 */
+
+position: absolute;
+width: 19px;
+height: 20px;
+left: 3px;
+top: 2px;
+
+/* 14 Semibold */
+font-family: 'Inter';
+font-style: normal;
+font-weight: 600;
+font-size: 14px;
+line-height: 20px;
+/* identical to box height, or 143% */
+font-feature-settings: 'ss01' on, 'cv01' on, 'cv11' on;
+
+color: #2B2B2B;
+
+
+
+/* Frame 132 */
+
+position: absolute;
+width: 30px;
+height: 24px;
+left: 41px;
+top: 6px;
+
+
+
+/* / 23 */
+
+position: absolute;
+width: 27px;
+height: 20px;
+left: 3px;
+top: 2px;
+
+/* 14 Semibold */
+font-family: 'Inter';
+font-style: normal;
+font-weight: 600;
+font-size: 14px;
+line-height: 20px;
+/* identical to box height, or 143% */
+font-feature-settings: 'ss01' on, 'cv01' on, 'cv11' on;
+
+color: #797979;
+
+
+
+/* Frame 129 */
+
+box-sizing: border-box;
+
+width: 36px;
+height: 36px;
+
+background: #F7F9FB;
+border-width: 0.5px 0px 0.5px 0.5px;
+border-style: solid;
+border-color: #00C7BE;
+border-radius: 5px 0px 0px 5px;
+transform: matrix(1, 0, 0, -1, 0, 0);
+
+/* Inside auto layout */
+flex: none;
+order: 2;
+flex-grow: 0;
+
+
+/* Vector */
+
+position: absolute;
+left: 27.78%;
+right: 30.56%;
+top: 33.33%;
+bottom: 33.33%;
+
+border: 1.5px solid #2B2E3F;

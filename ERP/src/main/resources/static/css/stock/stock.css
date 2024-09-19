@@ -1,0 +1,21 @@
+@charset "UTF-8";
+
+@import url("./locationStatus.css");
+@import url("./warehouseModal.css");
+
+@import url("./main.css");
+@import url("./product.css");
+
+.black_font{
+	color:rgba(0, 0, 0, 1) !important;
+}
+.stocksearch{
+	display: inline-block !important;
+}
+.stocksearchwidth{
+	width:200px !important;
+}
+.stockmodal-scroll{
+	max-height: 600px;  /* 모달 내용 부분의 최대 높이 */
+    overflow-y: auto;   /* 내용이 넘치면 수직 스크롤을 생성 */	
+}

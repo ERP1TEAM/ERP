@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="https://www.thymeleaf.org">
+<head th:insert="~{layout/stockHeader :: topheader}"></head>
+<body>
+    <div id="wrapper">
+	<div th:insert="~{layout/stockHeader::top}"></div>
+	<div th:insert="~{/sidebar::sidebar}"></div>
+        <!-- nav  -->
+      <div id="page-wrapper"  style="background-color:#F7FFF0;">
+	  
+<div th:insert="~{layout/stockHeader :: header}"></div>
+
+ <div id="page-inner">		
+<div class="location_frame1">
+    <div class="location_large_controller">
+        <button class="rackbutton r1_button" onclick="r_button(this)">R1</button>
+        <button class="rackbutton r2_button" onclick="r_button(this)">R2</button>
+        <button class="rackbutton r3_button" onclick="r_button(this)">R3</button>
+        <button class="rackbutton r4_button" onclick="r_button(this)">R4</button>
+        <button class="rackbutton r5_button" onclick="r_button(this)">R5</button>
+        <button class="rackbutton r6_button" onclick="r_button(this)">R6</button>
+    </div>
+    <div class="location_stocklist_box_frame">
+        <select id="warehouse_select" onchange="change_warehouse()">
+            <option value="W1">경기도 남양주 창고</option>
+        </select>
+        <div class="location_frame2">
+        </div>
+    </div>
+    <div class="location_frame3" id="showbutton">
+        <div class="location_1a">
+            <button class="locationbutton" onclick="l_button(this)">1A</button>
+        </div>
+        <div class="location_2a">
+            <button class="locationbutton" onclick="l_button(this)">2A</button>
+        </div>
+        <div class="location_2b">
+            <button class="locationbutton" onclick="l_button(this)">2B</button>
+        </div>
+        <div class="location_3a">
+            <button class="locationbutton" onclick="l_button(this)">3A</button>
+        </div>
+        <div class="location_3b">
+            <button class="locationbutton" onclick="l_button(this)">3B</button>
+        </div>
+        <div class="location_3c">
+            <button class="locationbutton" onclick="l_button(this)">3C</button>
+        </div>
+        <div class="location_4a">
+            <button class="locationbutton" onclick="l_button(this)">4A</button>
+        </div>
+        <div class="location_4b">
+            <button class="locationbutton" onclick="l_button(this)">4B</button>
+        </div>
+        <div class="location_4c">
+            <button class="locationbutton" onclick="l_button(this)">4C</button>
+        </div>
+        <div class="location_4d">
+            <button class="locationbutton" onclick="l_button(this)">4D</button>
+        </div>
+    </div>
+        <!--공지사항 출력 페이지 -->
+        <div class="location_table" id="showinventory">
+               <table>
+               <thead>
+               <tr>
+               <th>제조사</th>
+               <th>상품명</th>
+               <th>수량</th>
+               </tr>
+               </thead>
+               <tbody>
+               </tbody>
+               </table>
+               </div>
+</div>
+           
+                </div>
+	   
+	   <footer th:insert="~{layout/stockfooter :: footer}"></footer>
+        </div>
+    </div>
+    
+<div th:insert="~{layout/stockfooter :: src}"></div>
+</body>
+</html>
