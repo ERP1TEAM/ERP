@@ -78,10 +78,10 @@
 <body>
     <div class="login-container" id="login-container">
         <h2><img src="/img/logo.png" style="width: 140px; height:95px;"></h2>
-        <form>
-            <input type="text" placeholder="아이디" required><br>
-            <input type="password" placeholder="패스워드" required><br>
-            <button type="button" class="primary">로그인</button>
+        <form id="loginForm">
+            <input type="text" id="userId" name="userId" placeholder="아이디" required><br>
+            <input type="password" id="password" name="password" placeholder="패스워드" required><br>
+            <button type="button" class="primary" id="loginButton">로그인</button>
         </form>
         <div class="admin-register">
             <button onclick="redirectToRegister()">관리자 등록</button>
@@ -106,9 +106,46 @@
             const loginContainer = document.getElementById('login-container');
             loginContainer.classList.add('fade-out');
             setTimeout(() => {
-                window.location.href = '/register.do';
+                window.location.href = '/register';
             }, 500); // 애니메이션 시간 (0.5초)과 일치시킴
         }
+        
+        // 로그인 버튼 클릭 이벤트
+        document.getElementById('loginButton').addEventListener('click', async function() {
+            // 폼 데이터를 가져옵니다.
+            const userId = document.getElementById('userId').value;
+            const password = document.getElementById('password').value;
+
+            if (!userId || !password) {
+                alert('아이디와 비밀번호를 입력해주세요.');
+                return;
+            }
+
+            try {
+                // 로그인 요청을 서버로 전송
+                const response = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ userId, password }),
+                    credentials: 'include' // 쿠키를 포함하는 옵션
+                });
+
+                if (response.ok) {
+                    // 서버에서 리디렉션 URL을 반환하면 해당 URL로 이동
+                    const redirectUrl = await response.text();
+                    window.location.href = redirectUrl;
+                } else {
+                    // 로그인 실패 시 에러 메시지 처리
+                    const errorText = await response.text();
+                    alert('로그인 실패: ' + errorText);
+                }
+            } catch (error) {
+                console.error('Error during login:', error);
+                alert('로그인 중 에러가 발생했습니다.');
+            }
+        });
     </script>
 </body>
 </html>

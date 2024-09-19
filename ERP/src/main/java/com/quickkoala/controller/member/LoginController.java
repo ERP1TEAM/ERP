@@ -17,11 +17,11 @@ public class LoginController {
 	public String register() {
 		return "/member/register";
 	}
-	@GetMapping("/main/distribution")
+	@GetMapping("/main/home")
 	public String test1() {
 		return "test1";
 	}
-	@GetMapping("/supplying/supplying")
+	@GetMapping("/supplier/home")
 	public String test2() {
 		return "test2";
 	}

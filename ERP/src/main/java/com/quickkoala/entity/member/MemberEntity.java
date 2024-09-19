@@ -1,9 +1,13 @@
 package com.quickkoala.entity.member;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.Collections;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -32,6 +36,10 @@ public class MemberEntity {
     @Column(nullable = false, length = 50)
     private String role;
 
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return Collections.singletonList(new SimpleGrantedAuthority(this.role));
+    }
+    
     @Column(nullable = false, length = 100)
     private String company;
 

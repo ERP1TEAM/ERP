@@ -187,7 +187,7 @@
 		    const company = document.getElementById('company');
 		
 		    if (codeInput === 'QKOALA') {
-		        companyInfo.innerHTML = 'Distributor: 퀵코알라';
+		        companyInfo.innerHTML = 'Main: 퀵코알라';
 		        company.value = '퀵코알라';
 		        errorMessage.style.display = 'none';
 		        companyInfo.style.display = 'block';
@@ -210,6 +210,26 @@
 		            .catch(error => {
 		                console.error('Error:', error);
 		                companyInfo.innerHTML = 'Supplier: <span style="color: red;">[소속사 미확인]</span>';
+		            });
+		    } else if (codeInput.startsWith('SL')) {
+		        companyInfo.style.display = 'block';
+		        errorMessage.style.display = 'none';
+		
+		        // 서버에 요청하여 소속사 확인 (Sales)
+		        fetch(`/api/checkCompany?code=${codeInput}`)
+		            .then(response => response.json())
+		            .then(data => {
+		                if (data.success) {
+		                    companyInfo.innerHTML = `Sales: <span style="color: blue;">${data.name}</span>`;
+		                    company.value = `${data.name}`;
+		                } else {
+		                    companyInfo.innerHTML = 'Sales: <span style="color: red;">[소속사 미확인]</span>';
+		                    company.value = '';
+		                }
+		            })
+		            .catch(error => {
+		                console.error('Error:', error);
+		                companyInfo.innerHTML = 'Sales: <span style="color: red;">[소속사 미확인]</span>';
 		            });
 		    } else if (codeInput === '') {
 		        companyInfo.style.display = 'none';

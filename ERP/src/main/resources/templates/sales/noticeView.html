@@ -5,21 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>공지사항 상세</title> 
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-	<!-- 상대 경로 대신 th:href 사용 -->
 	<link rel="stylesheet" th:href="@{/assets/materialize/css/materialize.min.css}" media="screen,projection" />
 	<link rel="stylesheet" th:href="@{/assets/css/bootstrap.css}" />
 	<link rel="stylesheet" th:href="@{/assets/css/font-awesome.css}" />
 	<link rel="stylesheet" th:href="@{/assets/js/morris/morris-0.4.3.min.css}" />
 	<link rel="stylesheet" th:href="@{/assets/css/custom-styles.css}" />
 	<link rel="stylesheet" th:href="@{/assets/js/Lightweight-Chart/cssCharts.css}" />
-
     <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
 </head>
 
 <body>
     <div id="wrapper">
 		<nav th:insert="~{/sales/header :: header}"></nav>
-
+		<!-- Dropdown Structure -->
+		<ul id="dropdown1" class="dropdown-content">
+		<li><a href="/api/logout"><i class="fa fa-sign-out fa-fw"></i>로그아웃</a>
+		</li>
+		</ul>
 	  <div th:insert="~{/sales/sidebar :: sidebar}" id="sidebar"></div>
 
       <div id="page-wrapper" style="background-color: #dcebdb">

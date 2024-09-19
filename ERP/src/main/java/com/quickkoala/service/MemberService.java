@@ -12,4 +12,5 @@ public interface MemberService {
     // 회원 등록
     void saveMember(MemberEntity member);
     
+    
 }
