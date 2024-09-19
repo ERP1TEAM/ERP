@@ -22,36 +22,6 @@ categoryCode.value = '';
 categorymainCode.addEventListener('input', updateCategoryCode);
 categorysubCode.addEventListener('input', updateCategoryCode);
 
-//카테고리 페이징
-var categorytotalPages=1;
-var categorystartPage = 0;
-var categoryendPage = 0;
-const categorypageSize = 2; // 페이지 번호 그룹 크기 설정
-
-const getQueryParam = (param) => { //쿼리 파라미터 가져옴
-	const urlParams = new URLSearchParams(window.location.search); //window.location.search: url쿼리문자열 반환 
-	return urlParams.get(param);
-}
-let p = parseInt(getQueryParam("p")) || 1;
-let searchCode = getQueryParam("code") || '가입고코드';  // 검색 코드
-let searchWord = getQueryParam("word") || '';  // 검색어
-
-document.getElementById("search_code").value = searchCode;
-document.getElementById("search_word").value = searchWord;
-
-//paging 함수를 전역으로 설정
-window.paging = function(p, code = searchCode, word = searchWord) {
-    tableData(p, code, word);
-}
-window.pgNext = function() {
-    tableData(endPage + 1, searchCode, searchWord);
-}
-window.pgPrev = function() {
-    tableData(startPage - 1, searchCode, searchWord);
-}
-    
-    
-
 //카테고리 등록
 document.getElementById('categoryregister').addEventListener('click', function() {
         
@@ -112,9 +82,38 @@ document.getElementById('categoryregister').addEventListener('click', function()
         });
     });
 
+//카테고리 페이징
+var categoryTotalPages = 1;
+var categoryStartPage = 0;
+var categoryEndPage = 0;
+const categoryPageSize = 5; // 페이지 번호 그룹 크기 설정
+
+const getCategoryQueryParam = (param) => {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(param);
+}
+
+let categoryP = parseInt(getCategoryQueryParam("p")) || 1;
+let categorySearchCode = getCategoryQueryParam("code") || '1';  // 검색 코드
+let categorySearchWord = getCategoryQueryParam("word") || '';  // 검색어
+document.getElementById("categorySearchtype").value = categorySearchCode;
+document.getElementById("categorySearch").value = categorySearchWord;
+
+// 페이징 함수를 전역으로 설정
+window.categoryPaging = function(p = categoryP, code = categorySearchCode, word = categorySearchWord) {
+      categorylistmain(p, code, word);
+}
+
+window.categoryPgNext = function() {
+      categorylistmain(categoryEndPage + 1,categorySearchCode, categorySearchWord);
+}
+
+window.categoryPgPrev = function() {
+      categorylistmain(categoryStartPage - 1, categorySearchCode, categorySearchWord);
+}
 //카테고리 리스트
-function categorymainmodal() {
-    fetch('/main/stock/categories', {
+function categorymainmodal(pno, code = '', word = '') {
+    fetch(`/main/stock/categories/${pno}?code=${code}&word=${word}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -124,9 +123,11 @@ function categorymainmodal() {
     .then(data => {
         let categorytbody = document.querySelector('#categorytbody');
         categorytbody.innerHTML = '';
-
-		/*
-        data.forEach(function(category) {
+		
+		const items = data.content;
+		categoryTotalPages = data.totalPages;
+		
+        items.forEach(function(category) {
            
             let categorymemo;
 			if(category.memo){
@@ -156,8 +157,52 @@ function categorymainmodal() {
                       </tr>`;
             categorytbody.innerHTML += categoryth;
         });
-        */
         
+        const categoryPaging = document.getElementById("categorypaging");
+		categoryPaging.innerHTML = '';
+        
+        // 페이지 그룹의 시작과 끝 계산
+         categoryStartPage = Math.floor((pno - 1) / categoryPageSize) * categoryPageSize + 1;
+         categoryEndPage = Math.min(categoryStartPage + categoryPageSize - 1, categoryTotalPages);
+
+         // 페이징 HTML 생성
+         let paginationHTML = `<ul class="pagination">`;
+
+         // 'Precious' 링크 추가
+         if (startPage > pageSize) {
+        	 paginationHTML += `
+        	 <li class="page-item"><a class="page-link" aria-label="Previous" onclick="pgPrev()">
+        	 <span aria-hidden="true">&laquo;</span>
+        	 </a></li>`;
+             }
+         // 페이지 번호 링크 추가
+                for (let i = startPage; i <= endPage; i++) {
+                    const className = pno === i ? 'page-item current-page' : 'page-item';
+                    paginationHTML += `
+                        <li class="${className}"><a class="page-link" onclick="paging(${i})">${i}</a></li>
+                    `;
+                }
+
+                // 'Next' 링크 추가
+                if (endPage < totalPages) {
+                    paginationHTML += `
+                        <li class="page-item"><a class="page-link" aria-label="Next" onclick="pgNext()">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a></li>
+                    `;
+                }
+
+                paginationHTML += `</ul>`;
+
+                // 페이징 HTML을 페이지에 삽입
+                paging.innerHTML = paginationHTML;
+				
+                // URL 업데이트 (검색 조건도 포함)
+                if(word === ""){
+	                history.replaceState({}, '', location.pathname + `?p=${pno}`);			
+				}else{
+					history.replaceState({}, '', location.pathname + `?p=${pno}&code=${code}&word=${word}`);
+				}
         document.getElementById('categoryoverlay').style.display = 'block';
         document.getElementById('categorylistmodal').style.display = 'block';
         document.body.style.overflow = 'hidden';

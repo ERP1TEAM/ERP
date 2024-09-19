@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="https://www.thymeleaf.org">
-<head th:insert="~{layout/stockHeader :: topheader}"></head>
-<link rel="stylesheet" th:href="@{/css/stock/stock.css?v=1}">
+<head>
+<th:block th:replace="~{layout/stockHeader :: topheader}"></th:block>
+<link th:href="@{/css/stock/stock.css}" rel="stylesheet">
+</head>
 <body>
     <div id="wrapper">
 	<div th:insert="~{layout/stockHeader::top}"></div>
 	<div th:insert="~{/sidebar::sidebar}"></div>
         <!-- nav  -->
-      <div id="page-wrapper"  style="background-color:#F7FFF0;">
+      <div id="page-wrapper">
 	  
 <div th:insert="~{layout/stockHeader :: header}"></div>
 
@@ -60,7 +62,6 @@
             <button class="locationbutton" onclick="l_button(this)">4D</button>
         </div>
     </div>
-        <!--공지사항 출력 페이지 -->
         <div class="location_table" id="showinventory">
                <table>
                <thead>

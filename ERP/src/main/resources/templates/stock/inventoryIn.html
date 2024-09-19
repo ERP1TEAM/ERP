@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="https://www.thymeleaf.org">
-<head th:insert="~{layout/stockHeader :: topheader}"></head>
-<link rel="stylesheet" th:href="@{/css/stock/stock.css?v=1}">
+<head>
+<th:block th:replace="~{layout/stockHeader :: topheader}"></th:block>
+<link th:href="@{/css/stock/stock.css}" rel="stylesheet">
+</head>
 <body class="bg-light">
     <div id="wrapper">
 	<div th:insert="~{/layout/stockHeader::top}"></div>
