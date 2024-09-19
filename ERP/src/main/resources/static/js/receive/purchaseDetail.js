@@ -37,11 +37,11 @@ document.addEventListener("DOMContentLoaded", function() {
 	}
 	window.pgNext = function() {
 		params = getQueryParams(["p", "s", "code", "word"]);
-		tableData(endPage + 1, params["s"], code, word);
+		tableData(endPage + 1, params["s"], searchCode, searchWord);
 	}
 	window.pgPrev = function() {
 		params = getQueryParams(["p", "s", "code", "word"]);
-		tableData(startPage - 1, params["s"], code, word);
+		tableData(startPage - 1, params["s"], searchCode, searchWord);
 	}
 	//날짜를 yyyy-MM-dd HH-mm-ss형식으로 변환
 	function formatDate(isoString) {

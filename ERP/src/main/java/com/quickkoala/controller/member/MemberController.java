@@ -23,7 +23,7 @@ public class MemberController {
 	}
 	@GetMapping("/supplier/home")
 	public String test2() {
-		return "test2";
+		return "/supplier/test2";
 	}
 	@GetMapping("/sales/sales")
 	public String test3() {

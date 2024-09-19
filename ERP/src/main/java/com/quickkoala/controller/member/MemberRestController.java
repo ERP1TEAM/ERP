@@ -71,7 +71,7 @@ public class MemberRestController {
                 case "Supplier":
                     redirectUrl = "/supplier/home";
                     break;
-                case "Distributor":
+                case "Main":
                     redirectUrl = "/main/home";
                     break;
                 default:
