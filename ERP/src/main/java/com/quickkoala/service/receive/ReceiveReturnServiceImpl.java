@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.quickkoala.dto.ReceivingDto;
+import com.quickkoala.dto.receive.ReceivingDto;
 import com.quickkoala.entity.receive.ReceiveReturnEntity;
 import com.quickkoala.repository.receive.ReceiveReturnRepository;
 import com.quickkoala.repository.supplier.DeliveryDetailRepository;
@@ -20,8 +20,6 @@ public class ReceiveReturnServiceImpl implements ReceiveReturnService{
 	
 	@Override
 	public ReceiveReturnEntity addData(ReceivingDto dto) {
-		System.out.println(dto.getDeliveryCode());		
-		
 		int number = (int)this.countReturnsToday()+1;
 		String formattedNumber = String.format("%03d", number);
 		

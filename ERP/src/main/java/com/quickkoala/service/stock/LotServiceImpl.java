@@ -1,4 +1,4 @@
-package com.quickkoala.service;
+package com.quickkoala.service.stock;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -7,7 +7,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.quickkoala.dto.ReceivingDto;
+import com.quickkoala.dto.receive.ReceivingDto;
 import com.quickkoala.entity.stock.LotEntity;
 import com.quickkoala.entity.supplier.PurchaseEntity;
 import com.quickkoala.repository.stock.LotRepository;

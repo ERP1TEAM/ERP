@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -30,6 +31,8 @@ import com.quickkoala.service.stock.WarehouseService;
 @CrossOrigin(origins="*", allowedHeaders = "*")
 public class WarehouseRestController {
 
+	private final int SIZE = 5;
+	
 	@Autowired
 	private WarehouseService warehouseService;
 	
@@ -108,10 +111,18 @@ public class WarehouseRestController {
     }
 	
 	//로케이션 리스트
-	@GetMapping("/stock/locations")
-	public  ResponseEntity<List<LocationDto>> locationList() {
-    	List<LocationDto> locationList=locationService.getAllOrdersByCode();
-    	return ResponseEntity.ok(locationList);
+	@GetMapping("/stock/locations/{pno}")
+	public  Page<LocationEntity> locationList(@PathVariable Integer pno, @RequestParam String code,
+			@RequestParam String word) {
+		System.out.println(code);
+		System.out.println(word);
+    	Page<LocationEntity> result = locationService.getPaginatedData(pno, SIZE);
+    	if (code.equals("") || word.equals("")) {
+			result = locationService.getPaginatedData(pno, SIZE);
+		} else {
+			result = locationService.getPaginatedData(pno, SIZE, code, word);
+		}
+    	return result;
 	}
 	
 	//로케이션 삭제

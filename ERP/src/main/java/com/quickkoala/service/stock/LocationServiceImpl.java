@@ -6,6 +6,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.quickkoala.dto.stock.LocationDto;
@@ -102,5 +105,33 @@ public class LocationServiceImpl implements LocationService {
 		}
 		
 		return locationDelresult;
+	}
+	
+	@Override
+	public Page<LocationEntity> getPaginatedData(int pno, int size) {
+		Pageable pageable = PageRequest.of(pno-1, size);
+		return locationRepository.findAllByOrderByCodeDesc(pageable);
+	}
+	
+	@Override
+	public Page<LocationEntity> getPaginatedData(int pno, int size, String code, String word) {
+		Page<LocationEntity> result = null;
+		Pageable pageable = PageRequest.of(pno-1, size);
+		if(code.equals("1")) {
+			result = locationRepository.findByCodeContainingOrderByCodeDesc(word, pageable);
+		}else if(code.equals("2")) {
+			result = locationRepository.findByWarehouseCodeContainingOrderByCodeDesc(word, pageable);
+		}else if(code.equals("3")) {
+			result = locationRepository.findByRackCodeContainingOrderByCodeDesc(word, pageable);
+		}else if(code.equals("4")) {
+			result = locationRepository.findByRowCodeContainingOrderByCodeDesc(word, pageable);
+		}else if(code.equals("5")) {
+			try {
+				result = locationRepository.findByLevelCodeOrderByCodeDesc(Integer.valueOf(word), pageable);
+			}catch(Exception e) {
+				result = locationRepository.findAllByOrderByCodeDesc(pageable);
+			}
+		}
+		return result;
 	}
 }

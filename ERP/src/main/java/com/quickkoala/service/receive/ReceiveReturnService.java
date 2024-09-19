@@ -1,6 +1,6 @@
 package com.quickkoala.service.receive;
 
-import com.quickkoala.dto.ReceivingDto;
+import com.quickkoala.dto.receive.ReceivingDto;
 import com.quickkoala.entity.receive.ReceiveReturnEntity;
 
 public interface ReceiveReturnService {

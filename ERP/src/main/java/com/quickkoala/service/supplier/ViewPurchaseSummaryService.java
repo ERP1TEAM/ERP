@@ -1,11 +1,7 @@
 package com.quickkoala.service.supplier;
 
-import java.util.List;
-
 import org.springframework.data.domain.Page;
 
-import com.quickkoala.dto.ViewPurchaseSummaryDto;
-import com.quickkoala.entity.supplier.ViewDeliveryReturnEntity;
 import com.quickkoala.entity.supplier.ViewPurchaseSummaryEntity;
 
 public interface ViewPurchaseSummaryService {
