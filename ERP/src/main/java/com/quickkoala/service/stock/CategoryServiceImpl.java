@@ -56,6 +56,15 @@ public class CategoryServiceImpl implements CategoryService{
 	}
 	
 	@Override
+	public CategoryEntity saveCategory(CategoryDto categorydto) {
+		CategoryEntity categoryEntity = convertToCategoryEntity(categorydto);
+		if(categoryRepository.existsByCode(categoryEntity.getCode())) {
+		return null;
+		}
+		return categoryRepository.save(categoryEntity);
+	}
+	
+	@Override
 	public List<CategoryDto> getAllOrdersByCode() {
 		List<CategoryEntity> listCategoryEntity = categoryRepository.findAllByOrderByCodeDesc();
 		List<CategoryDto> listCategoryDto = new ArrayList<>();

@@ -66,7 +66,7 @@ function autolocationcode(){
     
     
 //로케이션 등록
-document.getElementById('locationIn').addEventListener('click', function() {
+document.getElementById('locationregister').addEventListener('click', function() {
 	
 	const rackcodeval = document.getElementById('rackcode').value.trim();
     const warehouseSelectval = document.getElementById('warehouseSelect').value;

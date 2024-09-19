@@ -290,7 +290,7 @@ document.querySelectorAll('.closemodal').forEach(function(warehouseclosebtn) {
     document.getElementById('warehousemodifymodal').style.display = 'none';
     document.getElementById('warehouseinmodal').style.display = 'none';
     document.getElementById('warehouselistmodal').style.display = 'none';
-    document.getElementById('overlay').style.display = 'none';   // 오버레이 숨기기
+    document.getElementById('overlay').style.display = 'none';
     document.body.style.overflow = 'auto';  // 배경 스크롤 다시 활성화
 });
 });

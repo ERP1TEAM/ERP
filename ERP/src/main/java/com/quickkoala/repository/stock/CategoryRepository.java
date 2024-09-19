@@ -10,4 +10,6 @@ import com.quickkoala.entity.stock.CategoryEntity;
 @Repository
 public interface CategoryRepository extends JpaRepository<CategoryEntity, String> {
 	List<CategoryEntity> findAllByOrderByCodeDesc();
+	
+	boolean existsByCode (String code);
 }

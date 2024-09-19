@@ -16,6 +16,7 @@
 	width:200px !important;
 }
 .stockmodal-scroll{
-	max-height: 600px;  /* 모달 내용 부분의 최대 높이 */
+	max-height: 800px;  /* 모달 내용 부분의 최대 높이 */
     overflow-y: auto;   /* 내용이 넘치면 수직 스크롤을 생성 */	
+    overflow-x: hidden;
 }

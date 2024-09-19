@@ -15,9 +15,6 @@ import lombok.NoArgsConstructor;
 public class StockEntity {
 	
 	@Id
-	@Column(name="lot_number", length=20, nullable=false)
-	private String lot_number;
-	
 	@Column(name="product_code", length=8, nullable=false)
 	private String product_code;
 	
