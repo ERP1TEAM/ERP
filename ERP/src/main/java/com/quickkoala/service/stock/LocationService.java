@@ -11,7 +11,8 @@ import com.quickkoala.entity.stock.LocationEntity;
 public interface LocationService {
 
 	LocationEntity saveLocation (LocationDto locationdto);
-
+	LocationDto convertToLocationDto(LocationEntity locationEntity);
+	
 	List<LocationDto> getAllOrdersByCode();
 	
 	Map<String, Object> deleteLocation(List<String> locationCodes);

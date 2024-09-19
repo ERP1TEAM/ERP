@@ -24,8 +24,12 @@ public class LocationServiceImpl implements LocationService {
 	@Autowired
 	private LocationRepository locationRepository;
 	
+	
+	
+	
 	//Entity -> DTO 변환
-	private LocationDto convertToLocationDto(LocationEntity locationEntity) {
+	@Override
+	public LocationDto convertToLocationDto(LocationEntity locationEntity) {
 		LocationDto maptoLocationDto = new LocationDto();
 		maptoLocationDto.setCode(locationEntity.getCode());
 		maptoLocationDto.setWarehouseCode(locationEntity.getWarehouseCode());
@@ -37,6 +41,7 @@ public class LocationServiceImpl implements LocationService {
 		
 		return maptoLocationDto;
 	}
+	
 	
 	//DTO -> Entity 변환
 	private LocationEntity convertToLocationEntity(LocationDto locationDto) {

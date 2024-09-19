@@ -24,6 +24,7 @@ import com.quickkoala.dto.stock.WarehouseDto;
 import com.quickkoala.entity.stock.LocationEntity;
 import com.quickkoala.entity.stock.WarehouseEntity;
 import com.quickkoala.service.stock.LocationService;
+import com.quickkoala.service.stock.LocationServiceImpl;
 import com.quickkoala.service.stock.WarehouseService;
 
 @RestController
@@ -101,13 +102,14 @@ public class WarehouseRestController {
 	
 	//로케이션 등록
 	@PostMapping("/stock/locations")
-    public ResponseEntity<String> saveLocation(@RequestBody LocationDto locationDto) {
+    public ResponseEntity<LocationDto> saveLocation(@RequestBody LocationDto locationDto) {
     	
 		LocationEntity savelocation = locationService.saveLocation(locationDto);
         if(savelocation == null) {
-    	return ResponseEntity.status(HttpStatus.CONFLICT).body("이미 존재하는 로케이션 코드 입니다.");
+    	return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
         }
-    	return ResponseEntity.ok("로케이션이 등록되었습니다.");
+        LocationDto savelocationDto = locationService.convertToLocationDto(savelocation);
+    	return ResponseEntity.ok(savelocationDto);
     }
 	
 	//로케이션 리스트

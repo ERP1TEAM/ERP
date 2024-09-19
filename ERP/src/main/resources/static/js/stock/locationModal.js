@@ -42,7 +42,6 @@ function htmlwarehouselist(){
 		});
 	})
 	.catch(error=>{
-		console.log(error);
 		alert("error!");
 	});
 }
@@ -67,7 +66,6 @@ function autolocationcode(){
     
 //로케이션 등록
 document.getElementById('locationregister').addEventListener('click', function() {
-	
 	const rackcodeval = document.getElementById('rackcode').value.trim();
     const warehouseSelectval = document.getElementById('warehouseSelect').value;
     const rowcodeval = document.getElementById('rowcode').value;
@@ -99,21 +97,43 @@ document.getElementById('locationregister').addEventListener('click', function()
       },
       body: JSON.stringify(locationData),
     })
-    .then(response => {
-          if (response.ok) {
-          	  return response.text();
-          }else if(response.status == 409){
-			  return response.text();
-		  }else{
-			  alert('로케이션 등록에 실패했습니다.');
-		  }
-    })
+    .then(response => response.json())
     .then(data => {
-          alert(data);
-          if(data=='로케이션이 등록되었습니다.'){
+		let datamemo;
+		if(data.memo){
+			datamemo= data.memo;
+		}else{
+			datamemo='';
+		}
+		
+		let datauseFlag;
+                if (data.useFlag == 'Y') {
+                    datauseFlag = '사용';
+                } else if (data.useFlag == 'N') {
+                    datauseFlag = '미사용';
+                }
+			const locationlisttbody = document.getElementById('locationlisttbody');  // 로케이션 리스트가 출력되는 DOM 요소
+            const locationlisttr = document.createElement('tr');  // 새 행 생성
+            locationlisttr.innerHTML = `
+             	<td><input type="checkbox" class="checkbox" value="${data.code}"></td7>
+                <td>${data.code}</td>
+                <td>${data.warehouseCode}</td>
+                <td>${data.rackCode}</td>
+                <td>${data.rowCode}</td>
+                <td>${data.levelCode}</td>
+                <td>${datauseFlag}</td>
+                <td>${datamemo}</td>
+                <td><input type="button" value="수정" class="locationlistmodifybtn"></td>
+            `;
+            locationlisttbody.appendChild(locationlisttr);
+            alert('등록이 완료되었습니다.');
+            document.getElementById('rackcode').value = '';
+            document.getElementById('locationcode').value = '';
+            
              document.getElementById('locationinmodal').style.display = 'none';
              document.getElementById('locationoverlay').style.display = 'none';
-          }
+         	 document.body.style.overflow = 'auto';
+
     })
     .catch(error => {
            alert('오류가 발생했습니다.');
