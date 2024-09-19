@@ -42,13 +42,11 @@
 
 <body>
     <div id="wrapper">
-        <nav th:insert="~{/sales/header :: header}"></nav>
-        <!-- Dropdown Structure -->
-        <ul id="dropdown1" class="dropdown-content">
-            <li><a href="/api/logout"><i class="fa fa-sign-out fa-fw"></i>로그아웃</a></li>
-        </ul>
+        <nav th:replace="~{/sales/header :: header}"></nav>
+        
+        <div th:replace="~{/sales/dropdown :: dropdown}"></div>
 
-        <div th:insert="~{/sales/sidebar :: sidebar}" id="sidebar"></div>
+        <div th:replace="~{/sales/sidebar :: sidebar}" id="sidebar"></div>
 
         <div id="page-wrapper" style="background-color: #dcebdb">
             <div class="header"> 

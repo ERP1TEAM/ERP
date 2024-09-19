@@ -55,6 +55,7 @@ function filterOrders(page = 0) {
                         <td class="center">${order.email}</td>
                         <td>[${order.post}] ${order.address} ${order.addressDetail}</td>
                         <td class="center">${order.orderDate}</td>
+						<td>${order.managerMemo ?? ''}</td>						
                         <td class="center">
                             <button type="button" class="btn btn-primary" style="background-color: #474B54; border: none;" onclick="showOrderDetails(this)">상세보기</button>
                         </td>

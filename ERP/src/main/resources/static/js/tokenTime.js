@@ -88,7 +88,7 @@ async function checkSessionStatus() {
             remainingTime = data;
             
             if (remainingTime <= 0) {
-                alert("로그인 인증 시간이 만료되어 자동으로 로그아웃 되었습니다.");
+                alert("로그인 인증이 만료되어 자동으로 로그아웃 되었습니다.");
                 location.href = "/api/logout";
             }
 

@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import com.quickkoala.dto.sales.ClientsOrdersDTO;
 import com.quickkoala.entity.sales.ClientsOrdersEntity;
 
 public interface ClientsOrdersRepository extends JpaRepository<ClientsOrdersEntity, String> {

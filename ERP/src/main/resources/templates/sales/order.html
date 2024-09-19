@@ -16,15 +16,11 @@
 
 <body>
     <div id="wrapper">
-        <nav th:insert="~{/sales/header :: header}"></nav>
+        <nav th:replace="~{/sales/header :: header}"></nav>
         
-		<!-- Dropdown Structure -->
-		<ul id="dropdown1" class="dropdown-content">
-		<li><a href="/api/logout"><i class="fa fa-sign-out fa-fw"></i>로그아웃</a>
-		</li>
-		</ul>
-        
-        <nav th:insert="~{/sales/sidebar :: sidebar}"></nav>
+        <div th:replace="~{/sales/dropdown :: dropdown}"></div>
+
+        <div th:replace="~{/sales/sidebar :: sidebar}" id="sidebar"></div>
         
         <div id="page-wrapper" style="background-color: #dcebdb">
             <div class="header"> 
@@ -74,15 +70,16 @@
 
     <script th:src="@{/js/order.js}"></script>
 
-	<script th:src="@{/assets/js/jquery-1.10.2.js}"></script>
-	<script th:src="@{/assets/js/bootstrap.min.js}"></script>
-	<script th:src="@{/assets/materialize/js/materialize.min.js}"></script>
-	<script th:src="@{/assets/js/jquery.metisMenu.js}"></script>
-	<script th:src="@{/assets/js/morris/raphael-2.1.0.min.js}"></script>
-	
-	<script th:src="@{/assets/js/easypiechart.js}"></script>
-	<script th:src="@{/assets/js/easypiechart-data.js}"></script>
-	<script th:src="@{/assets/js/Lightweight-Chart/jquery.chart.js}"></script>
+    <script th:src="@{/assets/js/jquery-1.10.2.js}"></script>
+    <script th:src="@{/assets/js/bootstrap.min.js}"></script>
+    <script th:src="@{/assets/materialize/js/materialize.min.js}"></script>
+    <script th:src="@{/assets/js/jquery.metisMenu.js}"></script>
+    <script th:src="@{/assets/js/morris/raphael-2.1.0.min.js}"></script>
+    <script th:src="@{/assets/js/morris/morris.js}"></script>
+    <script th:src="@{/assets/js/easypiechart.js}"></script>
+    <script th:src="@{/assets/js/easypiechart-data.js}"></script>
+    <script th:src="@{/assets/js/Lightweight-Chart/jquery.chart.js}"></script>
+    <script th:src="@{/assets/js/custom-scripts.js}"></script>
 	
 </body>
 </html>

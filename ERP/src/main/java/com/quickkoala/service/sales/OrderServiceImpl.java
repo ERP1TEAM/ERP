@@ -54,7 +54,7 @@ public class OrderServiceImpl implements OrderService {
                 order.setClientMemo(orderDTO.getClientMemo());
                 //관리자
                 order.setManager(orderDTO.getManager());
-                order.setManagerCompanyCode(orderDTO.getManagerCompanyCode());
+                order.setCode(orderDTO.getManagerCompanyCode());
                 order.setManagerMemo(orderDTO.getManagerMemo());
 
                 // 주문 날짜 설정
