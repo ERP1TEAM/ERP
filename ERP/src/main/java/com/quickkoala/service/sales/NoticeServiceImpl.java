@@ -1,4 +1,4 @@
-package com.quickkoala.service;
+package com.quickkoala.service.sales;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

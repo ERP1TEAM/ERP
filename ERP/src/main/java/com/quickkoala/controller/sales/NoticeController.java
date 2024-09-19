@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.quickkoala.dto.sales.NoticeDTO;
 import com.quickkoala.entity.sales.NoticeEntity;
-import com.quickkoala.service.NoticeServiceImpl;
+import com.quickkoala.service.sales.NoticeServiceImpl;
 
 @Controller
 @RequestMapping("/sales")

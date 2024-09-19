@@ -1,4 +1,4 @@
-package com.quickkoala.service;
+package com.quickkoala.service.member;
 
 import java.util.List;
 

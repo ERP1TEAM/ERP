@@ -1,4 +1,4 @@
-package com.quickkoala.service;
+package com.quickkoala.service.sales;
 
 import java.io.File;
 import java.util.List;

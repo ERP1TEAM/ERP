@@ -1,4 +1,4 @@
-package com.quickkoala.service;
+package com.quickkoala.service.sales;
 
 import org.springframework.data.domain.Page;
 

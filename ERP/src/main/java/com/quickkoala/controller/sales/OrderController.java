@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.quickkoala.entity.sales.ClientsOrdersEntity;
-import com.quickkoala.service.OrderServiceImpl;
+import com.quickkoala.service.sales.OrderServiceImpl;
 
 @Controller
 @RequestMapping("/sales")

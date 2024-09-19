@@ -3,10 +3,10 @@ package com.quickkoala.controller.member;
 import com.quickkoala.entity.SupplierEntity; 
 import com.quickkoala.entity.member.MemberEntity;
 import com.quickkoala.entity.sales.SalesEntity;
-import com.quickkoala.service.MemberService;
-import com.quickkoala.service.MemberServiceImpl;
-import com.quickkoala.service.SalesServiceImpl;
 import com.quickkoala.service.SupplierService;
+import com.quickkoala.service.member.MemberService;
+import com.quickkoala.service.member.MemberServiceImpl;
+import com.quickkoala.service.sales.SalesServiceImpl;
 import com.quickkoala.token.config.JwtTokenProvider;
 
 import jakarta.servlet.http.HttpServletResponse;

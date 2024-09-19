@@ -22,7 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.quickkoala.dto.sales.ClientsOrderProductsDTO;
 import com.quickkoala.dto.sales.ClientsOrdersDTO;
 import com.quickkoala.entity.sales.ClientsOrdersEntity;
-import com.quickkoala.service.OrderServiceImpl;
+import com.quickkoala.service.sales.OrderServiceImpl;
 
 @RestController
 @RequestMapping("/sales")
