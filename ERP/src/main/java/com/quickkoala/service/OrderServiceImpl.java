@@ -213,7 +213,10 @@ public class OrderServiceImpl implements OrderService {
         // 기본값: 전체 조회
         return clientsOrdersRepository.findAll(pageable);
     }
-
+    
+    public List<ClientsOrdersEntity> findAll(){
+    	return clientsOrdersRepository.findAll();
+    }
 
     
 }

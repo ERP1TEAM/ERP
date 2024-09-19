@@ -35,12 +35,12 @@
                     <div class="card-content">
                         <p><strong>작성자:</strong> <span th:text="${notice.manager}"></span></p>
                         <p><strong>작성일:</strong> <span th:text="${#temporals.format(notice.createdAt, 'yyyy-MM-dd')}"></span></p>
-                        <p><strong>조회수:</strong> <span th:text="${notice.views}"></span></p>
+                        <p><strong>조회수:</strong> <span th:text="${notice.views}"></span></p><br>
                         <div>
                             <p th:text="${notice.content}"></p>
                         </div>
                         <br>
-                        <a href="/sales/home" class="btn">목록으로 돌아가기</a>
+                        <a href="/sales/home" class="btn" style="background-color: #474B54">목록으로 돌아가기</a>
                     </div>
                 </div>
             </div>

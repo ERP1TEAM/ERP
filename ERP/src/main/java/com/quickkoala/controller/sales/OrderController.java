@@ -9,16 +9,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.quickkoala.entity.sales.ClientsOrdersEntity;
-import com.quickkoala.repository.sales.ClientsOrdersRepository;
+import com.quickkoala.service.OrderServiceImpl;
 
 @Controller
 @RequestMapping("/sales")
 public class OrderController {
-	
-
-    @Autowired
-    private ClientsOrdersRepository clientsOrdersRepository;
     
+	@Autowired
+	private OrderServiceImpl orderService;
+	
 	@GetMapping("/order")
 	public String order() {
 		return "sales/order";
@@ -26,7 +25,7 @@ public class OrderController {
 	
 	@GetMapping("/orderlist")
 	public String orderlist(Model model) {
-        List<ClientsOrdersEntity> orders = clientsOrdersRepository.findAll();
+        List<ClientsOrdersEntity> orders = orderService.findAll();
         model.addAttribute("orders", orders);
         return "/sales/orderlist"; // Thymeleaf 템플릿 파일 이름 (orders.html)
 	}

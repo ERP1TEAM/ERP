@@ -1,6 +1,5 @@
 package com.quickkoala.repository.sales;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
