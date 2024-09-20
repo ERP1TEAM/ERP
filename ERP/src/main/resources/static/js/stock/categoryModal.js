@@ -101,15 +101,15 @@ document.getElementById("categorySearch").value = categorySearchWord;
 
 // 페이징 함수를 전역으로 설정
 window.categoryPaging = function(p = categoryP, code = categorySearchCode, word = categorySearchWord) {
-      categorylistmain(p, code, word);
+      categorymainmodal(p, code, word);
 }
 
 window.categoryPgNext = function() {
-      categorylistmain(categoryEndPage + 1,categorySearchCode, categorySearchWord);
+      categorymainmodal(categoryEndPage + 1,categorySearchCode, categorySearchWord);
 }
 
 window.categoryPgPrev = function() {
-      categorylistmain(categoryStartPage - 1, categorySearchCode, categorySearchWord);
+      categorymainmodal(categoryStartPage - 1, categorySearchCode, categorySearchWord);
 }
 //카테고리 리스트
 function categorymainmodal(pno, code = '', word = '') {
@@ -169,24 +169,24 @@ function categorymainmodal(pno, code = '', word = '') {
          let paginationHTML = `<ul class="pagination">`;
 
          // 'Precious' 링크 추가
-         if (startPage > pageSize) {
+         if (categoryStartPage > categoryPageSize) {
         	 paginationHTML += `
-        	 <li class="page-item"><a class="page-link" aria-label="Previous" onclick="pgPrev()">
+        	 <li class="page-item"><a class="page-link" aria-label="Previous" onclick="categoryPgPrev()">
         	 <span aria-hidden="true">&laquo;</span>
         	 </a></li>`;
              }
          // 페이지 번호 링크 추가
-                for (let i = startPage; i <= endPage; i++) {
+                for (let i = categoryStartPage; i <= categoryEndPage; i++) {
                     const className = pno === i ? 'page-item current-page' : 'page-item';
                     paginationHTML += `
-                        <li class="${className}"><a class="page-link" onclick="paging(${i})">${i}</a></li>
+                        <li class="${className}"><a class="page-link" onclick="categoryPaging(${i})">${i}</a></li>
                     `;
                 }
 
                 // 'Next' 링크 추가
-                if (endPage < totalPages) {
+                if (categoryEndPage < categoryTotalPages) {
                     paginationHTML += `
-                        <li class="page-item"><a class="page-link" aria-label="Next" onclick="pgNext()">
+                        <li class="page-item"><a class="page-link" aria-label="Next" onclick="categoryPgNext()">
                             <span aria-hidden="true">&raquo;</span>
                         </a></li>
                     `;
@@ -195,7 +195,7 @@ function categorymainmodal(pno, code = '', word = '') {
                 paginationHTML += `</ul>`;
 
                 // 페이징 HTML을 페이지에 삽입
-                paging.innerHTML = paginationHTML;
+                categoryPaging.innerHTML = paginationHTML;
 				
                 // URL 업데이트 (검색 조건도 포함)
                 if(word === ""){
@@ -209,8 +209,17 @@ function categorymainmodal(pno, code = '', word = '') {
     })
     .catch(function(error) {
         alert('카테고리 모달을 불러오는 데 오류가 발생했습니다.');
+        console.log(error);
     });
 }
+
+//검색
+document.getElementById("category_form").addEventListener("submit", function(event) {
+event.preventDefault(); // 기본 폼 제출 방지
+categorySearchCode = document.getElementById("categorySearchtype").value;
+categorySearchWord = document.getElementById("categorySearch").value;
+categoryPaging(1, categorySearchCode, categorySearchWord); // 검색 후 첫 페이지부터 시작				
+    });
 
 //카테고리 등록 취소
 document.getElementById('categoryinback').addEventListener('click',function(){
@@ -227,7 +236,7 @@ document.getElementById('categoryin').addEventListener('click', function() {
 //카테고리 모달 열기	
 document.querySelectorAll(".categorybtn").forEach(function(button) {
 	button.addEventListener("click", function() {
-    categorymainmodal();
+    categorymainmodal(categoryP, categorySearchCode, categorySearchWord);
 	});
 });
 //카테고리 X버튼으로 모달 닫기

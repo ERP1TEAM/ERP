@@ -24,7 +24,6 @@ import com.quickkoala.dto.stock.WarehouseDto;
 import com.quickkoala.entity.stock.LocationEntity;
 import com.quickkoala.entity.stock.WarehouseEntity;
 import com.quickkoala.service.stock.LocationService;
-import com.quickkoala.service.stock.LocationServiceImpl;
 import com.quickkoala.service.stock.WarehouseService;
 
 @RestController
@@ -116,8 +115,6 @@ public class WarehouseRestController {
 	@GetMapping("/stock/locations/{pno}")
 	public Page<LocationEntity> locationList(@PathVariable Integer pno, @RequestParam String code,
 			@RequestParam String word) {
-		System.out.println(code);
-		System.out.println(word);
     	Page<LocationEntity> result = locationService.getPaginatedData(pno, SIZE);
     	if (code.equals("") || word.equals("")) {
 			result = locationService.getPaginatedData(pno, SIZE);
