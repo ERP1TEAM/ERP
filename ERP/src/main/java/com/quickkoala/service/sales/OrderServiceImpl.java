@@ -119,7 +119,7 @@ public class OrderServiceImpl implements OrderService {
                 
                 // 추가된 manager 관련 정보 처리
                 //orderDTO.setManager();  쿠키에서 관리자 정보 추출해야함
-                //orderDTO.setManagerCompanyCode(); 쿠키에서 관리자 정보 추출해야함
+                //orderDTO.setManagerCode(); 쿠키에서 관리자 정보 추출해야함
                 
                 
                 // 담당자 메모 처리 (nullable)
@@ -186,42 +186,37 @@ public class OrderServiceImpl implements OrderService {
         return dto;
     }
     
-    //검색
-    public Page<ClientsOrdersEntity> searchOrders(String searchType, String searchText, LocalDate searchDate, int page, int size) {
+ // 검색 메서드 수정
+    public Page<ClientsOrdersEntity> searchOrders(String managerCompanyCode, String searchType, String searchText, LocalDate searchDate, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
 
         if (searchDate != null) {
             // 날짜로 검색할 때
             if (searchType.equals("orderId")) {
-                // 주문번호와 날짜로 검색
-                return clientsOrdersRepository.findByOrderIdContainingAndOrderDate(searchText, searchDate, pageable);
+                // 주문번호와 날짜로 검색 (회사 코드 필터 추가)
+                return clientsOrdersRepository.findByCodeAndOrderIdContainingAndOrderDate(managerCompanyCode, searchText, searchDate, pageable);
             } else if (searchType.equals("name")) {
-                // 주문자명과 날짜로 검색
-                return clientsOrdersRepository.findByNameContainingAndOrderDate(searchText, searchDate, pageable);
+                // 주문자명과 날짜로 검색 (회사 코드 필터 추가)
+                return clientsOrdersRepository.findByCodeAndNameContainingAndOrderDate(managerCompanyCode, searchText, searchDate, pageable);
             } else {
-                // 날짜로만 검색
-                return clientsOrdersRepository.findByOrderDate(searchDate, pageable);
+                // 날짜로만 검색 (회사 코드 필터 추가)
+                return clientsOrdersRepository.findByCodeAndOrderDate(managerCompanyCode, searchDate, pageable);
             }
         } else if (searchType.equals("orderId")) {
-            // 주문번호로만 검색
-            return clientsOrdersRepository.findByOrderIdContaining(searchText, pageable);
+            // 주문번호로만 검색 (회사 코드 필터 추가)
+            return clientsOrdersRepository.findByCodeAndOrderIdContaining(managerCompanyCode, searchText, pageable);
         } else if (searchType.equals("name")) {
-            // 주문자명으로만 검색
-            return clientsOrdersRepository.findByNameContaining(searchText, pageable);
+            // 주문자명으로만 검색 (회사 코드 필터 추가)
+            return clientsOrdersRepository.findByCodeAndNameContaining(managerCompanyCode, searchText, pageable);
         }
 
-        // 기본값: 전체 조회
-        return clientsOrdersRepository.findAll(pageable);
-    }
-    
-    public List<ClientsOrdersEntity> findByCode(String code) {
-        // 특정 code와 일치하는 주문 목록을 조회
-        return clientsOrdersRepository.findByCode(code);
-    }
-    
-    public List<ClientsOrdersEntity> findAll(){
-    	return clientsOrdersRepository.findAll();
+        // 기본값: 회사 코드 필터 적용하여 전체 조회
+        return clientsOrdersRepository.findByCode(managerCompanyCode, pageable);
     }
 
-    
+    // 회사 코드에 따른 모든 주문 조회
+    public List<ClientsOrdersEntity> findByCode(String managerCompanyCode) {
+        return clientsOrdersRepository.findByCode(managerCompanyCode);
+    }
+
 }

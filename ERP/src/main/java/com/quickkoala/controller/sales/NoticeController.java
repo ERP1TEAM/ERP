@@ -1,5 +1,7 @@
 package com.quickkoala.controller.sales;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -12,8 +14,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.quickkoala.dto.sales.NoticeDTO;
+import com.quickkoala.entity.sales.ClientsOrdersEntity;
 import com.quickkoala.entity.sales.NoticeEntity;
 import com.quickkoala.service.sales.NoticeServiceImpl;
+import com.quickkoala.token.config.JwtTokenProvider;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 @Controller
 @RequestMapping("/sales")
@@ -21,14 +28,21 @@ public class NoticeController {
 	
 	@Autowired
     private NoticeServiceImpl noticeService;
-
+	
+	@Autowired
+    private JwtTokenProvider jwtTokenProvider;
+	
     // 공지사항 목록 조회
     @GetMapping("/home")
     public String home(Model model,
 			            @RequestParam(defaultValue = "0") int page,
-			            @RequestParam(defaultValue = "10") int size) {
+			            @RequestParam(defaultValue = "10") int size,
+			            HttpServletRequest request) {
+    		String token = jwtTokenProvider.resolveToken(request);
+    	    // 토큰에서 code 추출
+    	    String code = jwtTokenProvider.getClaim(token, "code");
 			// 공지사항 목록을 가져와서 모델에 추가
-			Page<NoticeEntity> notices = noticeService.getNotices(page, size);
+			Page<NoticeDTO> notices = noticeService.getNoticesByCompanyCode(code, page, size);
 			model.addAttribute("notices", notices);
 			return "sales/home";
     }
@@ -55,7 +69,7 @@ public class NoticeController {
     @PostMapping("/save")
     public String saveNotice(@ModelAttribute NoticeDTO noticeDTO) {
         noticeService.saveNotice(noticeDTO);
-        return "redirect:/sales/home";
+        return "redirect:sales/home";
     }
     
 }

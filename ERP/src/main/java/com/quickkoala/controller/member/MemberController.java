@@ -9,11 +9,11 @@ public class MemberController {
 	
 
     
-	@GetMapping("login")
+	@GetMapping("/login")
 	public String test() {
 		return "/member/login";
 	}
-	@GetMapping("register")
+	@GetMapping("/register")
 	public String register() {
 		return "/member/register";
 	}

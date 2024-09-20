@@ -95,7 +95,7 @@ function logout() {
 
 async function checkSessionStatus() {
 	// 로그아웃되면 더 이상 실행하지 않도록 설정
-	if (cancelled) return;
+	
     try {
         const response = await fetch('/api/token-remaining-time', {
             method: 'POST',

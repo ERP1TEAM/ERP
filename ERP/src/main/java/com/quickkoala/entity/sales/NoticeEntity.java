@@ -26,7 +26,10 @@ public class NoticeEntity {
     private String content;
 
     private String manager;
-
+    
+    @Column(name = "manager_company_code")
+    private String companyCode;
+    
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 

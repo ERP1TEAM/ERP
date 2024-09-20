@@ -11,6 +11,7 @@ document.querySelector('form').addEventListener('submit', function(event) {
 
 document.addEventListener('DOMContentLoaded', function() {
     fetchUserName();
+	fetchCompanyCode();
 });
 
 // 서버에서 사용자 이름을 가져와 페이지에 표시하는 함수
@@ -34,3 +35,26 @@ async function fetchUserName() {
         console.error('Error fetching user info:', error);
     }
 }
+
+// 서버에서 사용자 이름을 가져와 페이지에 표시하는 함수
+async function fetchCompanyCode() {
+    try {
+        const response = await fetch('/api/code-info', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            credentials: 'include' // 쿠키를 포함하여 요청
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            document.getElementById('companyCode').value = data.code; // 사용자 소속사 코드
+        } else {
+            console.error('Failed to fetch user info');
+        }
+    } catch (error) {
+        console.error('Error fetching user info:', error);
+    }
+}
+
