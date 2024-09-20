@@ -1,4 +1,4 @@
-package com.quickkoala.service.sales;
+package com.quickkoala.service.client;
 
 import java.util.Optional;
 

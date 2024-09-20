@@ -1,4 +1,4 @@
-package com.quickkoala.repository.sales;
+package com.quickkoala.repository.client;
 
 import java.util.Optional;
 

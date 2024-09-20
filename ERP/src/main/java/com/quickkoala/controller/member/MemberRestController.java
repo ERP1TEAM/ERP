@@ -19,8 +19,8 @@ import com.quickkoala.entity.SupplierEntity;
 import com.quickkoala.entity.member.MemberEntity;
 import com.quickkoala.entity.sales.SalesEntity;
 import com.quickkoala.service.SupplierService;
+import com.quickkoala.service.client.SalesService;
 import com.quickkoala.service.member.MemberServiceImpl;
-import com.quickkoala.service.sales.SalesService;
 import com.quickkoala.token.config.JwtTokenProvider;
 
 import jakarta.servlet.http.HttpServletResponse;
