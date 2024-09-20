@@ -69,7 +69,7 @@ public class NoticeController {
     @PostMapping("/save")
     public String saveNotice(@ModelAttribute NoticeDTO noticeDTO) {
         noticeService.saveNotice(noticeDTO);
-        return "redirect:sales/home";
+        return "redirect:/sales/home";
     }
     
 }

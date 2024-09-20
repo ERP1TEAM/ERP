@@ -11,6 +11,7 @@ import lombok.Setter;
 @Setter
 public class NoticeDTO {
     private Long id;
+    private int no;          // 임의로 부여된 NO
     private String title;
     private String content;
     private String manager;

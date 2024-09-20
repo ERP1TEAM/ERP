@@ -76,7 +76,7 @@
                                         </thead>
                                         <tbody>
                                             <tr th:each="notice : ${notices}">
-                                                <td class="center" th:text="${notice.id}"></td>
+                                                <td class="center" th:text="${notice.no}"></td>
                                                 <td><a th:href="@{/sales/noticeView/{id}(id=${notice.id})}" th:text="${notice.title}"></a></td>
                                                 <td class="center" th:text="${notice.manager}"></td>
                                                 <td class="center" th:text="${notice.views}"></td>

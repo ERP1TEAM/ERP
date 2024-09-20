@@ -31,19 +31,19 @@ public class NoticeServiceImpl implements NoticeService {
     }
     
     public Page<NoticeDTO> getNoticesByCompanyCode(String companyCode, int page, int size) {
-    	
         Page<NoticeEntity> notices = noticeRepository.getNoticesByManagerCompanyCode(companyCode, PageRequest.of(page, size));
         
-        // 순번 추가
-        AtomicInteger index = new AtomicInteger(1 + (page * size));
+        // 순번을 역순으로 설정
+        AtomicInteger index = new AtomicInteger((int) notices.getTotalElements() - (page * size));
         List<NoticeDTO> noticeDTOs = notices.map(notice -> {
             NoticeDTO dto = new NoticeDTO(notice);
-            dto.setId((long)index.getAndIncrement()); // 순번 설정
+            dto.setNo(index.getAndDecrement()); // 임의의 순번 설정
             return dto;
         }).getContent();
         
         return new PageImpl<>(noticeDTOs, PageRequest.of(page, size), notices.getTotalElements());
     }
+
 
     
     // 조회수 증가를 포함한 공지사항 조회
