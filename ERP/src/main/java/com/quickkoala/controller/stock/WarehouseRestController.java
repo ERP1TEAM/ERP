@@ -134,4 +134,6 @@ public class WarehouseRestController {
         
         return ResponseEntity.ok(locationdelresponse);
     }
+    
+    
 }

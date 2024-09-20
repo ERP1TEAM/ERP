@@ -1,5 +1,7 @@
 package com.quickkoala.controller.stock;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -14,11 +16,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.quickkoala.dto.stock.CategoryDto;
+import com.quickkoala.dto.stock.LocationDto;
+import com.quickkoala.dto.stock.WarehouseDto;
 import com.quickkoala.entity.stock.CategoryEntity;
 import com.quickkoala.entity.stock.LocationEntity;
 import com.quickkoala.entity.stock.ViewProductStockEntity;
 import com.quickkoala.service.stock.CategoryService;
+import com.quickkoala.service.stock.LocationService;
 import com.quickkoala.service.stock.ViewProductStockService;
+import com.quickkoala.service.stock.WarehouseService;
 
 @RestController
 @RequestMapping("main")
@@ -26,7 +32,26 @@ import com.quickkoala.service.stock.ViewProductStockService;
 public class StockRestController {
 	private final int SIZE = 5;
 
-	//*****재고목록 부분*****//
+	//***** 재고 등록 부분 *****//
+	
+	
+	@Autowired
+	private LocationService locatonService;
+	@GetMapping("/stock/locationselect")
+	public ResponseEntity<List<LocationDto>> locationSelect() {
+	    List<LocationDto> locationOption = locatonService.getAllOrdersByCode();
+	    return ResponseEntity.ok(locationOption);
+	}
+	
+	@Autowired
+	private WarehouseService warehouseService;
+	@GetMapping("/stock/warehouseselect")
+	public ResponseEntity<List<WarehouseDto>> warehouseSelect() {
+	       List<WarehouseDto> warehouseOption = warehouseService.getAllOrdersByCode();
+	       return ResponseEntity.ok(warehouseOption);
+	}
+	
+	//*****재고 리스트 부분*****//
 	@Autowired
 	private ViewProductStockService viewProductStockService;
 	
