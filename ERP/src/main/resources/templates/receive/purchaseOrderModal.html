@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<div id="myModal" class="modal" th:fragment="modal">
+		<div class="modal-content">
+			<span id="close-modal-btn" style="float: right; cursor: pointer;">&times;</span>
+			<h2>상품목록</h2>
+			<br>
+			<form id="search_form">
+				<div class="search">
+					<select id="search_code">
+						<option value="제조사">제조사</option>
+						<option value="상품명">상품명</option>
+					</select> <input type="text" placeholder="검색어를 입력하세요"
+						style="width: 200px; border: 1px;" id="search_word">
+					<button type="submit" id="search_btn">검색</button>
+				</div>
+			</form>
+			<table>
+				<thead>
+					<tr>
+						<th class="center" style="width: 15%;">상품코드</th>
+						<th class="center" style="width: 15%;">제조사</th>
+						<th class="center" style="width: 50%;">상품명</th>
+						<th class="center" style="width: 15%;">단가</th>
+					</tr>
+				</thead>
+				<tbody id="tbody2">
+					
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+</body>
+</html>

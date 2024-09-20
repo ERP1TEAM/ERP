@@ -1,0 +1,66 @@
+/* 오버레이 추가: 모달 뒤에 있는 배경을 어둡게 */
+.modal-overlay {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background-color:rgba(0, 0, 0, 0.5) !important;
+    z-index: 1;
+    display: none;
+}
+.checkbox{
+	position: relative !important;
+}
+
+.modal2 {
+    position: fixed;
+    top: 10%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* 모달을 화면 중앙으로 이동 */
+    background: #fff; /* 모달 배경색 흰색 */
+    padding: 20px; /* 내부 여백 */
+    border-radius: 8px; /* 모서리 둥글기 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 그림자 효과 */
+    z-index: 1000; /* 모달이 오버레이 위에 표시되도록 함 */
+    width: 100%; /* 모달 너비 80% */	
+    max-width: 1100px; /* 최대 너비 900px */
+    max-height: 35vh; /* 최대 높이를 뷰포트의 80%로 제한 */
+    box-sizing: border-box; /* 패딩과 테두리 포함하여 너비 계산 */
+    display: none; /* 기본적으로 숨김 상태 */
+}
+
+.ccd {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* 수평 중앙 정렬 */
+}
+
+/* 버튼 기본 스타일 */
+.button {
+    background-color: #007bff; /* 버튼 배경색 */
+    color: #fff; /* 텍스트 색상 */
+    border: none; /* 테두리 제거 */
+    padding: 10px 20px; /* 내부 여백 (상하좌우) */
+    border-radius: 5px; /* 모서리 둥글기 */
+    font-size: 16px; /* 폰트 크기 */
+    cursor: pointer; /* 마우스 커서를 포인터로 변경 */
+    transition: background-color 0.3s ease, transform 0.2s ease; /* 배경색과 변형에 대한 애니메이션 */
+    outline: none; /* 포커스 시 외곽선 제거 */
+}
+
+/* 버튼 호버 스타일 */
+.button:hover {
+    background-color: #0056b3; /* 호버 시 배경색 변경 */
+    transform: scale(1.05); /* 버튼 크기 확대 */
+}
+
+/* 버튼 클릭 스타일 */
+.button:active {
+    background-color: #004494; /* 클릭 시 배경색 변경 */
+    transform: scale(0.98); /* 클릭 시 버튼 크기 축소 */
+}
+
+/* 버튼 비활성화 스타일 */
+.button:disabled {
+    background-color: #6c757d; /* 비활성화 시 배경색 */
+    cursor: not-allowed; /* 마우스 커서를 금지 모양으로 변경 */
+}

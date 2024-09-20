@@ -27,9 +27,6 @@ public class ReceiveTempServiceImpl implements ReceiveTempService{
 	@Autowired
 	private ReceiveTempRepository receiveTempRepository;
 	
-	@Autowired
-	private DeliveryDetailService deliveryDetailService;
-	
 	@Override
 	public List<ReceiveTempEntity> addAllReceive(SupplierDeliveryListDto orders) {
 		List<ReceiveTempEntity> orderEntities = new ArrayList<>();

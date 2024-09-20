@@ -9,13 +9,13 @@ public class MemberController {
 	
 
     
-	@GetMapping("login")
+	@GetMapping("/login")
 	public String test() {
-		return "/member/login";
+		return "member/login";
 	}
-	@GetMapping("register")
+	@GetMapping("/register")
 	public String register() {
-		return "/member/register";
+		return "member/register";
 	}
 	@GetMapping("/main/home")
 	public String test1() {
@@ -23,7 +23,7 @@ public class MemberController {
 	}
 	@GetMapping("/supplier/home")
 	public String test2() {
-		return "/supplier/test2";
+		return "supplier/test2";
 	}
 	@GetMapping("/sales/sales")
 	public String test3() {

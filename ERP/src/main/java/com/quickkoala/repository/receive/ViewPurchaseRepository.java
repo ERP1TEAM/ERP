@@ -11,4 +11,7 @@ import com.quickkoala.entity.supplier.ViewPurchaseSummaryEntity;
 @Repository
 public interface ViewPurchaseRepository extends JpaRepository<ViewPurchaseEntity, String> {
 	List<ViewPurchaseEntity> findAll();
+	List<ViewPurchaseEntity> findByManufacturerContaining(String manufacturer);
+	List<ViewPurchaseEntity> findByProductNameContaining(String productName);
+	
 }

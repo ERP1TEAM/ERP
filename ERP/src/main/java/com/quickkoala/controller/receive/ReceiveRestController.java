@@ -24,6 +24,7 @@ import com.quickkoala.entity.client.SupplierEntity;
 import com.quickkoala.entity.receive.ReceiveDetailEntity;
 import com.quickkoala.entity.receive.ReceiveReturnEntity;
 import com.quickkoala.entity.receive.ViewPurchaseDetailEntity;
+import com.quickkoala.entity.receive.ViewPurchaseEntity;
 import com.quickkoala.entity.receive.ViewReceiveEntity;
 import com.quickkoala.entity.receive.ViewReceiveReturnEntity;
 import com.quickkoala.entity.receive.ViewReceiveSummaryEntity;
@@ -33,6 +34,7 @@ import com.quickkoala.service.receive.ReceiveDetailService;
 import com.quickkoala.service.receive.ReceiveReturnService;
 import com.quickkoala.service.receive.ReceiveTempService;
 import com.quickkoala.service.receive.ViewPurchaseDetailService;
+import com.quickkoala.service.receive.ViewPurchaseService;
 import com.quickkoala.service.receive.ViewReceiveReturnService;
 import com.quickkoala.service.receive.ViewReceiveService;
 import com.quickkoala.service.receive.ViewReceiveSummaryService;
@@ -45,7 +47,8 @@ import com.quickkoala.utils.ExcelUpload;
 @RequestMapping("main")
 public class ReceiveRestController {
 
-	private final int SIZE = 5;
+	private static final int SIZE = 5;
+	
 
 	@Autowired
 	private PurchaseService purchaseService;
@@ -67,6 +70,9 @@ public class ReceiveRestController {
 
 	@Autowired
 	private ViewPurchaseDetailService viewPurchaseDetailService;
+	
+	@Autowired
+	private ViewPurchaseService viewPurchaseService;
 
 	@Autowired
 	private ViewReceiveService viewReceiveService;
@@ -85,6 +91,18 @@ public class ReceiveRestController {
 	public String purchaseAdd(@ModelAttribute PurchaseListDto orders) {
 		purchaseService.addOrders(orders);
 		return "success";
+	}
+	
+	// 발주요청 페이지 상품목록 모달 데이터
+	@GetMapping("receive/productData")
+	public List<ViewPurchaseEntity> productData(@RequestParam String code, @RequestParam String word){
+		List<ViewPurchaseEntity> result = null;
+		if(code.equals("") || word.equals("")) {
+			result = viewPurchaseService.getAllData(); 
+		}else {
+			result = viewPurchaseService.getSearchData(code, word);
+		}
+		return result;
 	}
 
 	// 발주내역 페이지 데이터
@@ -140,6 +158,7 @@ public class ReceiveRestController {
 	// 입고확정
 	@PostMapping("receive/receiving")
 	public String receiving(@ModelAttribute ReceivingDto dto) {
+		
 		ReceiveDetailEntity result = new ReceiveDetailEntity();
 		ReceiveReturnEntity result2 = new ReceiveReturnEntity();
 

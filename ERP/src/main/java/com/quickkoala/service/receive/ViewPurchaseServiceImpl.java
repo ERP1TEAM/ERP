@@ -18,4 +18,15 @@ public class ViewPurchaseServiceImpl implements ViewPurchaseService{
 	public List<ViewPurchaseEntity> getAllData() {
 		return purchaseViewRepository.findAll();
 	}
+	
+	@Override
+	public List<ViewPurchaseEntity> getSearchData(String code, String word) {
+		List<ViewPurchaseEntity> result = null;
+		if(code.equals("제조사")) {
+			result = purchaseViewRepository.findByManufacturerContaining(word);
+		}else if(code.equals("상품명")) {
+			result = purchaseViewRepository.findByProductNameContaining(word);
+		}
+		return result;
+	}
 }
