@@ -13,8 +13,8 @@
 	<link rel="stylesheet" th:href="@{/assets/js/Lightweight-Chart/cssCharts.css}" />
     <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
     <script src="https://cdn.ckeditor.com/4.22.1/standard/ckeditor.js"></script>
-</head>
 
+</head>
 <body>
     <div id="wrapper">
         <nav th:replace="~{/sales/header :: header}"></nav>
@@ -77,4 +77,9 @@
 	<script th:src="@{/assets/js/Lightweight-Chart/jquery.chart.js}"></script>
 	<script th:src="@{/assets/js/custom-scripts.js}"></script>
 </body>
+<style>
+.cke_notifications_area{
+	    visibility: hidden;
+}
+</style>
 </html>

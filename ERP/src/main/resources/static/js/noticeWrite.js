@@ -57,4 +57,3 @@ async function fetchCompanyCode() {
         console.error('Error fetching user info:', error);
     }
 }
-
