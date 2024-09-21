@@ -27,7 +27,7 @@ import com.quickkoala.repository.sales.ClientsOrderProductsRepository;
 import com.quickkoala.repository.sales.ClientsOrdersRepository;
 
 @Service
-public class OrderServiceImpl implements OrderService {
+public class SalesOrderServiceImpl implements SalesOrderService {
 
     @Autowired
     private ClientsOrdersRepository clientsOrdersRepository;

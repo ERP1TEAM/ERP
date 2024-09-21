@@ -9,17 +9,17 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.quickkoala.entity.sales.ClientsOrdersEntity;
-import com.quickkoala.service.sales.OrderServiceImpl;
+import com.quickkoala.service.sales.SalesOrderServiceImpl;
 import com.quickkoala.token.config.JwtTokenProvider;
 
 import jakarta.servlet.http.HttpServletRequest;
 
 @Controller
 @RequestMapping("/sales")
-public class OrderController {
+public class SalesOrderController {
     
 	@Autowired
-	private OrderServiceImpl orderService;
+	private SalesOrderServiceImpl orderService;
 	
 	@Autowired
 	private JwtTokenProvider jwtTokenProvider;

@@ -12,31 +12,31 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.quickkoala.dto.sales.NoticeDTO;
-import com.quickkoala.entity.sales.NoticeEntity;
-import com.quickkoala.repository.sales.NoticeRepository;
+import com.quickkoala.dto.sales.SalesNoticeDTO;
+import com.quickkoala.entity.sales.SalesNoticeEntity;
+import com.quickkoala.repository.sales.SalesNoticeRepository;
 
 @Service
-public class NoticeServiceImpl implements NoticeService {
+public class SalesNoticeServiceImpl implements SalesNoticeService {
 	
     @Autowired
-    private NoticeRepository noticeRepository;
+    private SalesNoticeRepository noticeRepository;
 
     //전체 공지사항
     @Override
-    public Page<NoticeEntity> getNotices(int page, int size) {
+    public Page<SalesNoticeEntity> getNotices(int page, int size) {
         // 작성일자 기준으로 역순 정렬
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
         return noticeRepository.findAll(pageable);
     }
     
-    public Page<NoticeDTO> getNoticesByCompanyCode(String companyCode, int page, int size) {
-        Page<NoticeEntity> notices = noticeRepository.getNoticesByManagerCompanyCode(companyCode, PageRequest.of(page, size));
+    public Page<SalesNoticeDTO> getNoticesByCompanyCode(String companyCode, int page, int size) {
+        Page<SalesNoticeEntity> notices = noticeRepository.getNoticesByManagerCompanyCode(companyCode, PageRequest.of(page, size));
         
         // 순번을 역순으로 설정
         AtomicInteger index = new AtomicInteger((int) notices.getTotalElements() - (page * size));
-        List<NoticeDTO> noticeDTOs = notices.map(notice -> {
-            NoticeDTO dto = new NoticeDTO(notice);
+        List<SalesNoticeDTO> noticeDTOs = notices.map(notice -> {
+            SalesNoticeDTO dto = new SalesNoticeDTO(notice);
             dto.setNo(index.getAndDecrement()); // 임의의 순번 설정
             return dto;
         }).getContent();
@@ -48,9 +48,9 @@ public class NoticeServiceImpl implements NoticeService {
     
     // 조회수 증가를 포함한 공지사항 조회
     @Transactional
-    public NoticeEntity getNoticeById(Long id) {
+    public SalesNoticeEntity getNoticeById(Long id) {
         // 공지사항을 조회하고
-        NoticeEntity notice = noticeRepository.findById(id)
+        SalesNoticeEntity notice = noticeRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("해당 공지사항을 찾을 수 없습니다. ID: " + id));
         
         // 조회수 증가
@@ -63,15 +63,15 @@ public class NoticeServiceImpl implements NoticeService {
     }
 
     @Override
-    public void saveNotice(NoticeDTO noticeDTO) {
-        NoticeEntity noticeEntity = convertDtoToEntity(noticeDTO);
+    public void saveNotice(SalesNoticeDTO noticeDTO) {
+        SalesNoticeEntity noticeEntity = convertDtoToEntity(noticeDTO);
         noticeRepository.save(noticeEntity);
     }
 
 
 
-    private NoticeEntity convertDtoToEntity(NoticeDTO noticeDTO) {
-        NoticeEntity entity = new NoticeEntity();
+    private SalesNoticeEntity convertDtoToEntity(SalesNoticeDTO noticeDTO) {
+        SalesNoticeEntity entity = new SalesNoticeEntity();
         entity.setId(noticeDTO.getId());
         entity.setTitle(noticeDTO.getTitle());
         entity.setContent(noticeDTO.getContent());

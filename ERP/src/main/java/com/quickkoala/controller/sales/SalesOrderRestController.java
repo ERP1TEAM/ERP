@@ -22,17 +22,17 @@ import org.springframework.web.multipart.MultipartFile;
 import com.quickkoala.dto.sales.ClientsOrderProductsDTO;
 import com.quickkoala.dto.sales.ClientsOrdersDTO;
 import com.quickkoala.entity.sales.ClientsOrdersEntity;
-import com.quickkoala.service.sales.OrderServiceImpl;
+import com.quickkoala.service.sales.SalesOrderServiceImpl;
 import com.quickkoala.token.config.JwtTokenProvider;
 
 import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/sales")
-public class OrderRestController {
+public class SalesOrderRestController {
 
     @Autowired
-    private OrderServiceImpl orderService;
+    private SalesOrderServiceImpl orderService;
     
 	@Autowired
 	private JwtTokenProvider jwtTokenProvider;
