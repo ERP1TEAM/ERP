@@ -37,6 +37,27 @@
         .floating-btn i {
             margin-right: 8px;
         }
+        
+		.pagination {
+		    display: flex;
+		    justify-content: center;
+		    margin-top: 20px;
+		}
+		
+		.pagination li {
+		    display: inline-block;
+		    margin: 0 5px;
+		}
+		
+		.pagination a {
+		    padding: 8px 16px;
+		    border: 1px solid #ccc;
+		    color: #333;
+		}
+		
+		.pagination a:hover {
+		    background-color: #ddd;
+		}
     </style>
 </head>
 
@@ -74,7 +95,7 @@
                                                 <th class="center" style="width: 10%;">작성일자</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
+                                        <tbody id="noticeTableBody">
                                             <tr th:each="notice : ${notices}">
                                                 <td class="center" th:text="${notice.no}"></td>
                                                 <td><a th:href="@{/sales/noticeView/{id}(id=${notice.id})}" th:text="${notice.title}"></a></td>
@@ -84,6 +105,21 @@
                                             </tr>
                                         </tbody>
                                     </table>
+										<!-- 페이징 UI -->
+										<div class="pagination-wrapper">
+										    <ul class="pagination">
+										        <li th:if="${notices.hasPrevious()}" class="page-item">
+										            <a href="#" class="page-link" th:onclick="'filterNotices(' + (${notices.number - 1}) + '); return false;'">&lt;</a>
+										        </li>
+										        <li th:each="i : ${#numbers.sequence(0, notices.totalPages - 1)}" class="page-item" th:classappend="${i == notices.number} ? 'active' : ''">
+										            <a href="#" class="page-link" th:onclick="'filterNotices(' + (${i}) + '); return false;'" th:text="${i + 1}"></a>
+										        </li>
+										        <li th:if="${notices.hasNext()}" class="page-item">
+										            <a href="#" class="page-link" th:onclick="'filterNotices(' + (${notices.number + 1}) + '); return false;'">&gt;</a>
+										        </li>
+										    </ul>
+										</div>
+
                                 </div> 
                             </div>
                         </div>
@@ -94,11 +130,68 @@
             </div>
         </div>
     </div>
-
     <!-- 공지사항 작성 버튼 -->
     <a href="./noticeWrite" class="floating-btn">
         <i class="fa fa-pencil"></i> 공지사항 작성
     </a>
+	<script>
+	// 공지사항 목록 필터링 및 페이징 처리 함수
+	function filterNotices(page = 0) {
+	    const size = 10;  // 한 페이지에 표시할 공지사항 수
+
+	    fetch(`/sales/filterNotices?page=${page}&size=${size}`)
+	        .then(response => response.json())
+	        .then(data => {
+	            const tbody = document.getElementById('noticeTableBody');
+	            tbody.innerHTML = '';  // 기존 데이터 비우기
+
+	            data.content.forEach(notice => {
+	                const row = `
+	                    <tr>
+	                        <td class="center">${notice.no}</td>
+	                        <td><a href="/sales/noticeView/${notice.id}">${notice.title}</a></td>
+	                        <td class="center">${notice.manager}</td>
+	                        <td class="center">${notice.views}</td>
+	                        <td class="center">${new Date(notice.createdAt).toLocaleDateString()}</td>
+	                    </tr>`;
+	                tbody.insertAdjacentHTML('beforeend', row);
+	            });
+
+	            // 페이징 UI 업데이트
+	            currentPage = data.number;
+	            totalPages = data.totalPages;
+	            updatePagination();
+	        })
+	        .catch(error => console.error('Error fetching notices:', error));
+	}
+
+	// 페이징 UI 업데이트 함수
+	function updatePagination() {
+	    const pagination = document.querySelector('.pagination');
+	    pagination.innerHTML = '';
+
+	    // < 버튼
+	    if (currentPage > 0) {
+	        pagination.innerHTML += `<li><a href="#" onclick="filterNotices(${currentPage - 1})">&lt;</a></li>`;
+	    }
+
+	    // 페이지 번호들
+	    for (let i = 0; i < totalPages; i++) {
+	        pagination.innerHTML += `<li><a href="#" onclick="filterNotices(${i})">${i + 1}</a></li>`;
+	    }
+
+	    // > 버튼
+	    if (currentPage < totalPages - 1) {
+	        pagination.innerHTML += `<li><a href="#" onclick="filterNotices(${currentPage + 1})">&gt;</a></li>`;
+	    }
+	}
+
+	// 초기화: 페이지 로드 시 첫 페이지 로드
+	document.addEventListener('DOMContentLoaded', function() {
+	    filterNotices();  // 첫 페이지 로드
+	});
+
+	</script>
 
     <script th:src="@{/assets/js/jquery-1.10.2.js}"></script>
     <script th:src="@{/assets/js/bootstrap.min.js}"></script>
