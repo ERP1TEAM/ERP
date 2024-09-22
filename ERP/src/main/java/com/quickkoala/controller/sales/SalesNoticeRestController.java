@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.quickkoala.dto.sales.SalesNoticeDTO;
 import com.quickkoala.service.sales.SalesNoticeServiceImpl;
-import com.quickkoala.token.config.JwtTokenProvider;
+import com.quickkoala.token.config.JwtTokenProvider; 
 
 import jakarta.servlet.http.HttpServletRequest;
 
