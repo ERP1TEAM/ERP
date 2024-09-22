@@ -163,4 +163,57 @@ document.addEventListener('DOMContentLoaded', function() {
     .catch(error => {
         console.error('Error fetching options:', error);
     });
+    
+    //상품 등록
+    document.getElementById('inventorysave').addEventListener('click', function () {
+        const productcode = document.getElementById('inventorycode').value;
+        const supplierCode = document.getElementById('inventorySuppliercodeoption').value;
+        const mainCategory = document.getElementById('inventorymaincategoryoption').value;
+        const subCategory = document.getElementById('inventorysubcategoryoption').value;
+		const classificationCode = mainCategory+subCategory;
+        const locationCode = document.getElementById('inventoryLocationoption').value;
+        const useFlag = document.querySelector('input[name="inventoryuseflag"]:checked').value;
+        const productname = document.getElementById('inventoryname').value;
+        const productprice = document.getElementById('inventoryprice').value;
+        const memo = document.getElementById('inventorymemo').value;
+        
+        const inventoryData = {
+            code: productcode,
+            supplierCode: supplierCode,
+            classificationCode: classificationCode,
+            locationCode: locationCode,
+            useFlag: useFlag,
+            name: productname,
+            price: productprice,
+            memo: memo
+        };
+
+        fetch('/main/stock/inventories', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(inventoryData),
+        })
+        .then(response => {
+            if (response.ok) {
+                return response.text();
+            }else if(response.status == 409){
+				return response.text();
+				}else{
+				alert('상품 등록에 실패했습니다.');
+			}
+        })
+        .then(data => {
+            alert("상품이 등록 되었습니다.");
+        })
+        .catch(error => {
+            alert('등록 중 오류 발생: ' + error.message);
+        });
+    });
+
+    document.getElementById('inventorycancle').addEventListener('click', function () {
+        document.getElementById('inventoryname').value = '';
+        document.getElementById('inventoryprice').value = '';
+    });
 });

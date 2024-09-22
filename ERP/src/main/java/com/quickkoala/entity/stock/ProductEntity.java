@@ -31,7 +31,7 @@ public class ProductEntity {
     private String classificationCode;
 
     @Column(name = "storage_location", length = 6, nullable = false)
-    private String storage_location;
+    private String storageLocation;
 
     @Column(name = "use_flag", nullable = false)
     @Enumerated(EnumType.STRING)

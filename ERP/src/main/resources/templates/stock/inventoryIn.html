@@ -52,27 +52,26 @@
      <ul>
         <li>상품코드</li>
         <li>
-            <input type="text" class="product_input1"> 
-            <input type="button" value="중복확인" title="중복확인" class="product_btn"> <span class="help_text">※ 상품코드는 절대 중복되지 않도록 합니다.</span>
+            <input type="text" class="product_input1" id="inventorycode" readonly="readonly"> 
         </li>
     </ul>
     <ul>
         <li>상품명</li>
         <li>
-            <input type="text" class="product_input2" maxlength="100"> <span class="help_text">※ 상품명은 최대 100자까지만 적용할 수 있습니다.</span>
+            <input type="text" class="product_input2" maxlength="100" id="inventoryname"> <span class="help_text">※ 상품명은 최대 100자까지만 적용할 수 있습니다.</span>
         </li>
     </ul>
     <ul>
         <li>단가</li>
         <li>
-            <input type="text" class="product_input3" maxlength="7"> <span class="help_text">※ , 없이 숫자만 입력하세요 최대 7자리</span>
+            <input type="text" class="product_input3" maxlength="7" id="inventoryprice"> <span class="help_text">※ , 없이 숫자만 입력하세요 최대 7자리</span>
         </li>
     </ul>
     <ul>
         <li>사용 유/무</li>
         <li>
-            <label><input type="radio" name="a" class="rdo" checked> 사용</label>
-            <label><input type="radio" name="a" class="rdo"> 미사용</label>
+            <label><input type="radio" name="inventoryuseflag" class="rdo" value="Y" checked> 사용</label>
+            <label><input type="radio" name="inventoryuseflag" class="rdo" value="N"> 미사용</label>
         </li>
     </ul>
     <ul>
@@ -94,10 +93,16 @@
             </select><input type="button" value="+" title="+" class="product_btn2 categorybtn">
         </li>
     </ul>
+    <ul>
+        <li>메모</li>
+        <li>
+        <input type="text" class="product_input3" id="inventorymemo">
+        </li>
+    </ul>
 </div>
 <div class="subpage_view4" style="text-align:center; margin-bottom: 100px;">
-    <input type="button" value="등록" title="상품 리스트" class="p_button p_button_color2" style="margin-right: 5px;">
-    <input type="button" value="취소" title="상품 등록" class="p_button p_button_color1">
+    <input type="button" value="등록"  class="p_button p_button_color2" style="margin-right: 5px;" id="inventorysave">
+    <input type="button" value="취소"  class="p_button p_button_color1" id="inventorycancle">
 </div>
 
 
