@@ -31,8 +31,6 @@ import com.quickkoala.service.stock.WarehouseService;
 @CrossOrigin(origins="*", allowedHeaders = "*")
 public class WarehouseRestController {
 
-	private final int SIZE = 10;
-	
 	@Autowired
 	private WarehouseService warehouseService;
 	
@@ -86,36 +84,53 @@ public class WarehouseRestController {
 	//창고검색
 	@GetMapping("/stock/warehousesearch")
 	public ResponseEntity<List<WarehouseDto>> searchWarehouse
-	(@RequestParam("warehouseSearchtype") String warehouseSearchtype,
-	@RequestParam("warehouseSearch") String warehouseSearch){
-	List<WarehouseDto> warehouseSearchresult=warehouseService.searchWarehouse(warehouseSearchtype, warehouseSearch);
-		
-		return ResponseEntity.ok(warehouseSearchresult);
+		(@RequestParam("warehouseSearchtype") String warehouseSearchtype,
+				@RequestParam("warehouseSearch") String warehouseSearch){
+		List<WarehouseDto> warehouseSearchresult=warehouseService.searchWarehouse(warehouseSearchtype, warehouseSearch);
+			
+			return ResponseEntity.ok(warehouseSearchresult);
 	}
-	
-	
+		
+	/*
+		//창고 리스트
+		@GetMapping("/stock/warehouses/{pno}")
+		public Page<WarehouseEntity> warehouseList(@PathVariable Integer pno, @RequestParam String code,
+				@RequestParam String word) {
+	    	Page<WarehouseEntity> result = warehouseService.getPaginatedData(pno, SIZE);
+	    	if (code.equals("") || word.equals("")) {
+				result = warehouseService.getPaginatedData(pno, SIZE);
+			} else {
+				result = warehouseService.getPaginatedData(pno, SIZE, code, word);
+			}
+	    	return result;
+	    	
+		}
+		 
+	*/
 	//****location 부분****//
+	
+	private final int SIZE = 5;
 	
 	@Autowired
 	private LocationService locationService;
 	
-	//로케이션 등록
+	// 로케이션 등록
 	@PostMapping("/stock/locations")
-    public ResponseEntity<String> saveLocation(@RequestBody LocationDto locationDto) {
-    	
-		LocationEntity savelocation = locationService.saveLocation(locationDto);
-        if(savelocation == null) {
-    	return ResponseEntity.status(HttpStatus.CONFLICT).body("이미 존재하는 로케이션 코드 입니다.");
-        }
-    	return ResponseEntity.ok("로케이션이 등록되었습니다.");
-    }
+	public ResponseEntity<LocationDto> saveLocation(@RequestBody LocationDto locationDto) {
+	    try {
+	        LocationEntity savelocation = locationService.saveLocation(locationDto);
+	        LocationDto savelocationDto = locationService.convertToLocationDto(savelocation);
+	        return ResponseEntity.ok(savelocationDto);
+	    } catch (IllegalArgumentException e) {
+	        // 중복된 로케이션 코드일 경우 예외 발생 시 409 상태 코드 반환
+	        return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
+	    }
+	}
 	
 	//로케이션 리스트
 	@GetMapping("/stock/locations/{pno}")
-	public  Page<LocationEntity> locationList(@PathVariable Integer pno, @RequestParam String code,
+	public Page<LocationEntity> locationList(@PathVariable Integer pno, @RequestParam String code,
 			@RequestParam String word) {
-		System.out.println(code);
-		System.out.println(word);
     	Page<LocationEntity> result = locationService.getPaginatedData(pno, SIZE);
     	if (code.equals("") || word.equals("")) {
 			result = locationService.getPaginatedData(pno, SIZE);
@@ -135,4 +150,6 @@ public class WarehouseRestController {
         
         return ResponseEntity.ok(locationdelresponse);
     }
+    
+    
 }

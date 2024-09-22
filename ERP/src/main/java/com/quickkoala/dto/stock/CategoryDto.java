@@ -6,5 +6,5 @@ import lombok.Setter;
 @Getter
 @Setter
 public class CategoryDto {
-	String code,mainCode,mainName,subCode,subName,useFlag,memo;
+	private String code,mainCode,mainName,subCode,subName,useFlag,memo;
 }

@@ -1,15 +1,16 @@
 package com.quickkoala.controller.order;
-
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.quickkoala.dto.order.OrderCancelDto;
-import com.quickkoala.dto.order.OrderOngoingDto;
+import com.quickkoala.entity.order.ViewOrderCancelEntity;
+import com.quickkoala.entity.order.ViewOrderOngoingEntity;
 import com.quickkoala.entity.order.ViewOrderProductsEntity;
 import com.quickkoala.service.order.OrderCancelService;
 import com.quickkoala.service.order.OrderService;
@@ -26,9 +27,6 @@ public class OrderRestController {
 	private OrderService orderService;
 	
 	@Autowired
-	private OrderCancelService orderCancelService;
-	
-	@Autowired
 	private ViewOrderOngoingService viewOrderOngoingService;
 	
 	@Autowired
@@ -37,16 +35,16 @@ public class OrderRestController {
 	@Autowired
 	private ViewOrderCancelService viewOrderCancelService;
 	
+	private final int SIZE=2;
 	
-	private final int size = 5;
-	@PostMapping("order/paging")
-	public List<OrderOngoingDto> paging(@RequestParam int pg){
-		return this.viewOrderOngoingService.getAll(pg,size);
+	@GetMapping("order/page")
+	public Page<ViewOrderOngoingEntity> paging(@RequestParam int pg, @RequestParam(required = false) String select,  @RequestParam(required = false) String param){
+		return this.viewOrderOngoingService.getAll(pg,SIZE,select,param);
 	}
 	
-	@PostMapping("order/cancelpaging")
-	public List<OrderCancelDto> cancelPaging(@RequestParam int pg){
-		return this.viewOrderCancelService.getAll(pg,size);
+	@GetMapping("order/cancel/page")	
+	public Page<ViewOrderCancelEntity> cancelPaging(@RequestParam int pg, @RequestParam(required = false) Integer select,  @RequestParam(required = false) String param){
+		return this.viewOrderCancelService.getAll(pg,SIZE,select,param);
 	}
 	
 	@PostMapping("order/detailok.do")
@@ -54,10 +52,14 @@ public class OrderRestController {
 		return this.viewOrderProductsService.getAll(orderNum);
 	}
 	
+	@GetMapping("order/post{num}")
+	public String getModalContent(@PathVariable("num") int num) {
+	    return "order/post :: post"+num; 
+	}
+	
 	@PutMapping("order/approveok.do")
 	public String approve(@RequestParam String id){
-		//return this.orderService.updateStatus(id,"승인");
-		return this.orderService.updateApproved(id);
+		return this.orderService.updateStatus(id,"승인");
 	}
 	
 	@PutMapping("order/cancelapprovedok.do")
@@ -74,18 +76,6 @@ public class OrderRestController {
 	public String requestReception(@RequestParam String reqPdt,@RequestParam String reqSup,@RequestParam String reqNum){
 		//상품코드 + 발주처 + 주문할 qty -> 입고 요청
 		return null;	// OK | NO
-	}
-	
-	@PostMapping("order/approveSelectedok.do")
-	public String approveSelected(@RequestParam String ids[]){
-		//return this.orderService.updateStatusMultipleIds(Arrays.asList(ids),"승인");
-		return null;
-	}
-	
-	@PostMapping("order/denySelectedok.do")
-	public String denySelected(@RequestParam String ids[]){
-		//return this.orderService.updateStatusMultipleIds(Arrays.asList(ids),"취소");
-		return null;
 	}
 	
 	

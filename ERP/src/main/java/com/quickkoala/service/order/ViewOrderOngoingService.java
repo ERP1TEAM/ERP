@@ -1,10 +1,11 @@
 package com.quickkoala.service.order;
 
-import java.util.List;
 
-import com.quickkoala.dto.order.OrderOngoingDto;
+import org.springframework.data.domain.Page;
+
+import com.quickkoala.entity.order.ViewOrderOngoingEntity;
 public interface ViewOrderOngoingService {
 	
-	List<OrderOngoingDto> getAll(int pg, int size);
+	Page<ViewOrderOngoingEntity> getAll(int pg, int size,String select, String param);
 	
 }

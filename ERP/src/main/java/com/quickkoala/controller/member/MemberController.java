@@ -19,15 +19,11 @@ public class MemberController {
 	}
 	@GetMapping("/main/home")
 	public String test1() {
-		return "test1";
+		return "sales/mainHome";
 	}
 	@GetMapping("/supplier/home")
 	public String test2() {
-		return "supplier/test2";
-	}
-	@GetMapping("/sales/sales")
-	public String test3() {
-		return "test3";
+		return "sales/supplierHome";
 	}
 	
 }

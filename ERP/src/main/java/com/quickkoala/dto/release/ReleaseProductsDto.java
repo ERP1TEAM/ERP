@@ -6,7 +6,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ReleaseProductsDto {
-	String relNumber,lotNumber,dt,manager,memo;
+	String relNumber,lotNumber,dt,manager,memo,productCode,supplierCode;
 	int qty, idx;
 
 }

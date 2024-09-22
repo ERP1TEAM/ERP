@@ -20,46 +20,14 @@ import com.quickkoala.service.order.ViewOrderProductsService;
 @RequestMapping("main")
 public class OrderController {
 		
-	@Autowired
-	private OrderService orderService;
-	
-	@Autowired
-	private OrderCancelService orderCancelService;
-	
-	@Autowired
-	private ViewOrderOngoingService viewOrderOngoingService;
-	
-	@Autowired
-	private ViewOrderProductsService viewOrderProductsService;
-	
-	@Autowired
-	private ViewOrderCancelService viewOrderCancelService;
-	
-	/*
-	Order Ongoing Page
-	*/
-	
 	@GetMapping("order/ongoing")
 	public String ongoing(Model m) {
-		
-		//m.addAttribute("list",this.viewOrderOngoingService.getAll());
 		return "order/ongoing";
 	}
 	
-	/*
-	Order Cancel Page
-	*/
-	
 	@GetMapping("order/cancel")
 	public String cancel(Model m) {
-		//m.addAttribute("list",this.viewOrderCancelService.getAll());
 		return "order/cancel";
 	}
-	
-		
-		
-		
-	
-	
 	
 }

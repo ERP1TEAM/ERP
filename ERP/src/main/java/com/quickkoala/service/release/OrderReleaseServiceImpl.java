@@ -1,6 +1,5 @@
 package com.quickkoala.service.release;
-
-
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -13,21 +12,25 @@ import org.springframework.stereotype.Service;
 
 import com.quickkoala.entity.order.OrderCancelEntity;
 import com.quickkoala.entity.order.OrderEntity;
-import com.quickkoala.entity.order.OrderReleaseEntity;
-import com.quickkoala.entity.order.OrderReleaseEntity.ReleaseStatus;
+import com.quickkoala.entity.release.OrderReleaseEntity;
 import com.quickkoala.entity.release.ReleaseCancelEntity;
 import com.quickkoala.entity.release.ReleaseCompleteEntity;
 import com.quickkoala.entity.release.ReleaseProductsEntity;
+import com.quickkoala.entity.release.OrderReleaseEntity.ReleaseStatus;
 import com.quickkoala.entity.release.ReleaseCancelEntity.ReleaseCancelReason;
 import com.quickkoala.entity.release.ReleaseCancelEntity.ReleaseCancelWho;
 import com.quickkoala.entity.sales.ClientsOrderProductsEntity;
 import com.quickkoala.entity.stock.LotEntity;
-import com.quickkoala.repository.order.OrderReleaseRepository;
+import com.quickkoala.entity.stock.ProductEntity;
+import com.quickkoala.repository.release.OrderReleaseRepository;
 import com.quickkoala.repository.release.ReleaseCancelRepository;
 import com.quickkoala.repository.release.ReleaseCompleteRepository;
 import com.quickkoala.repository.release.ReleaseProductsRepository;
 import com.quickkoala.repository.sales.ClientsOrderProductsRepository;
 import com.quickkoala.repository.stock.LotRepository;
+import com.quickkoala.repository.stock.ProductRepository;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class OrderReleaseServiceImpl implements OrderReleaseService{
@@ -50,16 +53,18 @@ public class OrderReleaseServiceImpl implements OrderReleaseService{
 	@Autowired
 	private LotRepository lotRepository; 
 	
+	@Autowired
+	private ProductRepository  productRepository;
+	
 	@Override
 	public String saveStatus(String id, String status) {
 		int result = orderReleaseRepository.updateStatus(id,OrderReleaseEntity.ReleaseStatus.valueOf(status));
 		Optional<OrderReleaseEntity> optional =  orderReleaseRepository.findById(id);
+		LocalDateTime date = LocalDateTime.now();
 		if(optional.isPresent()) {
-			if(status=="출고지연") {
-				
-			}else if(status=="출고취소") {
+			if(status=="출고취소") {
 				ReleaseCancelEntity releaseCancelEntity = new ReleaseCancelEntity();
-				releaseCancelEntity.setDt(orderReleaseRepository.mysql_now2());
+				releaseCancelEntity.setDt(date);
 				releaseCancelEntity.setManager("김하주");
 				releaseCancelEntity.setMemo(null);
 				releaseCancelEntity.setReason(ReleaseCancelReason.기타);
@@ -69,7 +74,7 @@ public class OrderReleaseServiceImpl implements OrderReleaseService{
 				
 			}else if(status=="출고완료") {
 				ReleaseCompleteEntity releaseCompleteEntity = new ReleaseCompleteEntity();
-				releaseCompleteEntity.setDt(orderReleaseRepository.mysql_now2());
+				releaseCompleteEntity.setDt(date);
 				releaseCompleteEntity.setManager("김하주");
 				releaseCompleteEntity.setMemo(null);
 				releaseCompleteEntity.setRelNumber(optional.get().getNumber());
@@ -78,44 +83,58 @@ public class OrderReleaseServiceImpl implements OrderReleaseService{
 			}
 			
 		}
-		
-		
-		
 		return (result>0)?"OK":"NO";
 	}
+	int n=0;
 	
 	@Override
-	public void addReleaseFromOrder(OrderReleaseEntity entity){
-		entity.setNumber(this.getMaxNumber());
-		entity.setStatus(ReleaseStatus.출고준비);
-		orderReleaseRepository.save(entity);
-		/*
-		 List<ClientsOrderProductsEntity> orderedList = clientsOrderProductsRepository.findByClientsOrdersOrderId(entity.getOrderId());
+	@Transactional
+	public String addReleaseFromOrder(OrderReleaseEntity orderReleaseEntity){
+		boolean asignok = true;
+		String newReleaseNumber = this.asignRelNumber();
+		orderReleaseEntity.setNumber(newReleaseNumber);
+		orderReleaseEntity.setStatus(ReleaseStatus.출고준비);
+		 List<ClientsOrderProductsEntity> orderedList = clientsOrderProductsRepository.findByClientsOrdersOrderId(orderReleaseEntity.getOrderId());
 		 List<ReleaseProductsEntity> releasedList = new ArrayList<ReleaseProductsEntity>();
 		 ReleaseProductsEntity releaseProduct = null;
 		 for(ClientsOrderProductsEntity released : orderedList) {
 			 releaseProduct = new ReleaseProductsEntity();
 			 releaseProduct.setLotNumber(null);
-			 releaseProduct.setDt(entity.getDt());
+			 releaseProduct.setDt(orderReleaseEntity.getDt());
 			 releaseProduct.setManager("김하주");
 			 releaseProduct.setMemo(null);
 			 releaseProduct.setQty(released.getQty());
-			 releaseProduct.setRelNumber(entity.getNumber());
-			 releaseProduct.setIdx(0);
-			 releasedList.addAll((ArrayList)this.asignLotNumber(released.getProductCode(),entity.getSalesCode(),released.getQty(),releaseProduct));
+			 releaseProduct.setRelNumber(orderReleaseEntity.getNumber());
+			 releaseProduct.setProductCode(released.getProductCode());
+			 Optional<ProductEntity> pe =productRepository.findByCode(released.getProductCode());
+			 if(pe.isPresent()) {
+				 releaseProduct.setSupplierCode(pe.get().getSupplierCode());
+			 }else {
+				 releaseProduct.setSupplierCode("error-code");
+			 }
+			 productRepository.flush();
+			 ArrayList<ReleaseProductsEntity> asignResult =  (ArrayList)this.asignLotNumber(released.getProductCode(),orderReleaseEntity.getSalesCode(),released.getQty(),releaseProduct);
+			 if(asignResult==null) {
+				 asignok=false;
+				 break;
+			 }
+			 
+			 releasedList.addAll(asignResult);
 		 }
-		 releaseProductsRepository.saveAll(releasedList);
-		 */
-	}
-	
-	@Override
-	public void addAllReleaseFromOrder(List<OrderReleaseEntity> list){
 		
+		 if(asignok) {
+			 orderReleaseRepository.save(orderReleaseEntity);
+			 releaseProductsRepository.saveAll(releasedList);
+			 return "OK";
+		 }else {
+			 return "STOCKERROR";
+		 }
 	}
 	
 	@Override
-	public String getMaxNumber() {
-		String today = orderReleaseRepository.mysql_now();
+	public String asignRelNumber() {
+		String today = LocalDate.now().toString();
+		System.out.println(today);
 		List<OrderReleaseEntity> li = orderReleaseRepository.findByNumberLikeOrderByNumberDesc("L"+today+"-%");
 		String number =(li.size()==0)?"001":""+String.format("%03d",Integer.valueOf(li.get(0).getNumber().split("-")[1])+1);
 		return "L"+today+"-"+number;
@@ -123,32 +142,35 @@ public class OrderReleaseServiceImpl implements OrderReleaseService{
 	
 	@Override
 	public List<ReleaseProductsEntity> asignLotNumber(String pcode, String scode, Integer qty, ReleaseProductsEntity entity) {
-	    //List<LotEntity> list = lotRepository.findAllByProductCodeAndSupplierCodeOrderByLostNumberDesc(pcode, scode);
 		List<LotEntity> list = lotRepository.findAllByProductCodeOrderByLotNumberDesc(pcode);
 	    List<ReleaseProductsEntity> rpe = new ArrayList<>();
 	    Iterator<LotEntity> it = list.iterator();
-	    asignLotRecursively(entity, qty, it, rpe);
-	    return rpe;
+	    return asignLotRecursively(entity, qty, it, rpe)?rpe:null;
 	}
 
-	private void asignLotRecursively(ReleaseProductsEntity entity, Integer remainingQty, Iterator<LotEntity> lotIterator, List<ReleaseProductsEntity> rpe) {
+	private boolean asignLotRecursively(ReleaseProductsEntity entity, Integer remainingQty, Iterator<LotEntity> lotIterator, List<ReleaseProductsEntity> rpe) {
 	    if (!lotIterator.hasNext() || remainingQty <= 0) {
 	        if (remainingQty > 0) {
-	            System.out.println("할당할 수량 부족");
+	            return false;
 	        }
-	        return;
+	        return true;
 	    }
 	    LotEntity lot = lotIterator.next();
 	    int lotQty = lot.getQuantity();
-	    
 	    ReleaseProductsEntity entity2 = new ReleaseProductsEntity();
 	    entity2.setDt(entity.getDt());
-	    entity2.setIdx(0);
 	    entity2.setManager(entity.getManager());
 	    entity2.setMemo(entity.getMemo());
 	    entity2.setRelNumber(entity.getRelNumber());
 	    entity2.setLotNumber(lot.getLotNumber());
-	    
+	    entity2.setProductCode(entity.getProductCode());
+	    Optional<ProductEntity> pe =productRepository.findByCode(entity.getProductCode());
+		 if(pe.isPresent()) {
+			 entity2.setSupplierCode(pe.get().getSupplierCode());
+		 }else {
+			return false;
+		 }
+		 productRepository.flush();
 	    if (remainingQty <= lotQty) {
 	        entity2.setQty(remainingQty);
 	        rpe.add(entity2);
@@ -158,7 +180,7 @@ public class OrderReleaseServiceImpl implements OrderReleaseService{
 	        rpe.add(entity2);
 	        remainingQty -= lotQty;
 	    }
-	    asignLotRecursively(entity, remainingQty, lotIterator, rpe);
+	    return asignLotRecursively(entity, remainingQty, lotIterator, rpe);
 	}
 	
 	

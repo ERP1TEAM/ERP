@@ -22,82 +22,23 @@ import com.quickkoala.service.release.ViewReleaseReturnProductsService;
 @RequestMapping("main")
 public class ReleaseController {
 	
-	@Autowired
-	private OrderReleaseService orderReleaseService;
-	
-	@Autowired
-	private ReleaseCancelService releaseCancelService;
-	
-	@Autowired
-	private ReleaseCompleteService releaseCompleteService;
-	
-	@Autowired
-	private ReleaseProductsService releaseProductsService;
-	
-	@Autowired
-	private ReleaseReturnProductsService releaseReturnPrdouctsService;
-	
-	@Autowired
-	private ViewReleaseOngoingService viewReleaseOngoingService;
-	
-	@Autowired
-	private ViewReleaseCancelService viewReleaseCancelService;
-	
-	@Autowired
-	private ViewReleaseCompleteService viewReleaseCompleteService;
-	
-	@Autowired
-	private ViewReleaseProductsService viewReleaseProductsService;
-	
-	@Autowired
-	private ViewReleaseReturnProductsService viewReleaseReturnPrdouctsService;
-	
-	/*
-	 * ongoing
-	 */
-	
 	@GetMapping("release/ongoing")
 	public String ongoing(Model m) {
-		//m.addAttribute("list",this.viewReleaseOngoingService.getAll());
 		return "release/ongoing";
 	}
 	
-	
-	
-	
-	
-	/*
-	 * complete
-	 */
 	@GetMapping("release/complete")
 	public String complete(Model m) {
-		//m.addAttribute("list",this.viewReleaseCompleteService.getAll());
 		return "release/complete";
 	}
 	
-	
-	
-	
-	
-	/*
-	 * cancel
-	 */
 	@GetMapping("release/cancel")
 	public String cancel(Model m) {
-		//m.addAttribute("list",this.viewReleaseCancelService.getAll());
 		return "release/cancel";
 	}
 	
-	
-	
-	
-	
-	/*
-	 * refund
-	 */
 	@GetMapping("release/return")
 	public String returnMapping(Model m) {
-		//m.addAttribute("list",this.viewReleaseReturnPrdouctsService.getAll());
 		return "release/return";
 	}
 }

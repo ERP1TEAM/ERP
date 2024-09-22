@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.quickkoala.dto.stock.CategoryDto;
@@ -56,6 +59,15 @@ public class CategoryServiceImpl implements CategoryService{
 	}
 	
 	@Override
+	public CategoryEntity saveCategory(CategoryDto categorydto) {
+		CategoryEntity categoryEntity = convertToCategoryEntity(categorydto);
+		if(categoryRepository.existsByCode(categoryEntity.getCode())) {
+		return null;
+		}
+		return categoryRepository.save(categoryEntity);
+	}
+	
+	@Override
 	public List<CategoryDto> getAllOrdersByCode() {
 		List<CategoryEntity> listCategoryEntity = categoryRepository.findAllByOrderByCodeDesc();
 		List<CategoryDto> listCategoryDto = new ArrayList<>();
@@ -65,6 +77,30 @@ public class CategoryServiceImpl implements CategoryService{
 			listCategoryDto.add(categoryDto);
 		}
 		return listCategoryDto;
+	}
+	
+	@Override
+	public Page<CategoryEntity> getPaginatedData(int pno, int size) {
+		Pageable pageable = PageRequest.of(pno-1, size);
+		return categoryRepository.findAllByOrderByCodeDesc(pageable);
+	}
+	
+	@Override
+	public Page<CategoryEntity> getPaginatedData(int pno, int size, String code, String word) {
+		Page<CategoryEntity> result = null;
+		Pageable pageable = PageRequest.of(pno-1, size);
+		if(code.equals("1")) {
+			result = categoryRepository.findByCodeContainingOrderByCodeDesc(word, pageable);
+		}else if(code.equals("2")) {
+			result = categoryRepository.findByMainCodeContainingOrderByCodeDesc(word, pageable);
+		}else if(code.equals("3")) {
+			result = categoryRepository.findByMainNameContainingOrderByCodeDesc(word, pageable);
+		}else if(code.equals("4")) {
+			result = categoryRepository.findBySubCodeContainingOrderByCodeDesc(word, pageable);
+		}else if(code.equals("5")) {
+			result = categoryRepository.findBySubNameContainingOrderByCodeDesc(word, pageable);
+		}
+		return result;
 	}
 	
 	

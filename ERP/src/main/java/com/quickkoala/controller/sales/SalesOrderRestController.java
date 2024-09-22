@@ -23,6 +23,9 @@ import com.quickkoala.dto.sales.ClientsOrderProductsDTO;
 import com.quickkoala.dto.sales.ClientsOrdersDTO;
 import com.quickkoala.entity.sales.ClientsOrdersEntity;
 import com.quickkoala.service.sales.SalesOrderServiceImpl;
+import com.quickkoala.token.config.JwtTokenProvider;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/sales")
@@ -30,6 +33,9 @@ public class SalesOrderRestController {
 
     @Autowired
     private SalesOrderServiceImpl orderService;
+    
+	@Autowired
+	private JwtTokenProvider jwtTokenProvider;
 
     //주문등록 (액셀 등록)
     @PostMapping("/uploadFile")
@@ -55,22 +61,28 @@ public class SalesOrderRestController {
         return orderService.getOrderProductsByOrderId(orderId);
     }
     
-    // 검색 및 페이징 처리 엔드포인트
+ // 검색 및 페이징 처리 엔드포인트
     @GetMapping("/filter")
     public Map<String, Object> filterOrders(
+            HttpServletRequest request, // request 객체 추가
             @RequestParam("searchType") String searchType,
             @RequestParam("searchText") String searchText,
             @RequestParam(value = "searchDate", required = false) String searchDateStr,
             @RequestParam("page") int page,
             @RequestParam("size") int size) {
 
+        // JWT 토큰에서 code 추출
+        String token = jwtTokenProvider.resolveToken(request);
+        String code = jwtTokenProvider.getClaim(token, "code");
+
         LocalDate searchDate = null;
         if (searchDateStr != null && !searchDateStr.isEmpty()) {
             searchDate = LocalDate.parse(searchDateStr, DateTimeFormatter.ISO_DATE);
         }
 
-        // Service를 통해 검색 및 페이징 처리
-        Page<ClientsOrdersEntity> ordersPage = orderService.searchOrders(searchType, searchText, searchDate, page, size);
+        // Service를 통해 검색 및 페이징 처리 (companyCode 추가)
+        Page<ClientsOrdersEntity> ordersPage = orderService.searchOrders(
+                code, searchType, searchText, searchDate, page, size);
 
         // 결과를 DTO로 변환하여 필요한 데이터만 반환
         Map<String, Object> response = new HashMap<>();

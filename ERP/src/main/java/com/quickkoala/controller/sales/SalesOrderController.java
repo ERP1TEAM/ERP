@@ -43,7 +43,7 @@ public class SalesOrderController {
 	    // 조회된 주문 정보를 모델에 추가
 	    model.addAttribute("orders", orders);
 	    
-	    return "/sales/orderlist"; // Thymeleaf 템플릿 파일 이름 (orderlist.html)
+	    return "sales/orderlist"; // Thymeleaf 템플릿 파일 이름 (orderlist.html)
 	}
 
 	

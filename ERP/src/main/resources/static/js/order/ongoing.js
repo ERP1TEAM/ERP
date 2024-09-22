@@ -1,48 +1,82 @@
-
 let modal_opened=false;
 let post_opened=false;
 let post_onum=null;
 let myModal = document.querySelector("#modal1");
 let tBody = document.querySelector("#tbody");
-paging(0);
+import Paging from '../module/paging.js';
+const pagingIns= new Paging();
+window.clickPageBtn = function(pg,sel,par) {
+	console.log("hi");
+    paging(pg-1, sel, par);
+};
 
-function paging(pg) {
-    fetch("./paging", {
-        method: "POST",
-        headers: { "content-type": "application/x-www-form-urlencoded" },
-        body: "pg=" + encodeURIComponent(pg)
-    })
-    .then(function(response) {
-        return response.json();
-    })
-    .then(function(list) {
+document.addEventListener("DOMContentLoaded", function() {
+	
+   
+    paging(pagingIns.currentPage_);
+});
+window.pgNext = function() {
+    pagingIns.pgNext();
+     paging(pagingIns.currentPage_ - 1, pagingIns.select_, pagingIns.param_);
+};
+
+window.pgPrev = function() {
+    pagingIns.pgPrev();
+     paging(pagingIns.currentPage_ - 1, pagingIns.select_, pagingIns.param_);
+};
+window.approve=approve;
+window.cancelOrder=cancelOrder;
+window.expand_post=expand_post;
+document.querySelector("#all").addEventListener("click",function(){
+	paging(0);
+	
+});
+document.querySelector("#apv").addEventListener("click",function(){
+	paging(0,"4","승인");
+});
+document.querySelector("#wait").addEventListener("click",function(){
+	paging(0,"4","미승인");
+});
+document.querySelector("#ccl").addEventListener("click",function(){
+	paging(0,"4","취소");
+});
+window.onload = function() {
+	pagingIns.currentPage_=localStorage.getItem("currentpg");
+	pagingIns.mapping_=localStorage.getItem("mapping");
+	pagingIns.param_=localStorage.getItem("param");
+	pagingIns.totalPages_=localStorage.getItem("totalpg");
+	pagingIns.select_=localStorage.getItem("select");
+	paging(pagingIns.currentPage_ - 1, pagingIns.select_, pagingIns.param_);
+};
+function paging(_page,_select,_param){
+	pagingIns.getPage("./page",_page,_select,_param).then(result => {
+		let list = result.content;
         while (tBody.firstChild) {
             tBody.removeChild(tBody.firstChild);
         }
-        
         let html = "";
         if (list.length === 0) {
             html = "<tr><td colspan='8'>데이터가 존재하지 않습니다.</td></tr>";
         } else {
             list.forEach(function(order) {
                 let btns = "";
-                if (order.status === '미승인') {
+                let approveDt="";
+                if (order.status.toString() === '미승인') {
                     btns = `
                         <input type="button" value="승인" onclick="approve(event, '${order.number}')">
-                        <input type="button" value="취소" onclick="cancel(event, '${order.number}')">
+                        <input type="button" value="취소" onclick="cancelOrder(event, '${order.number}')">
                     `;
-                } else if (order.status === '승인') {
-                    btns = `
-                        <input type="button" value="취소" onclick="cancel(event, '${order.number}')">
-                    `;
-                }
+                }else if(order.status.toString() === '승인'){
+					approveDt=`${pagingIns.dateFormat(order.approvedDt)}`;
+					
+				}
                 html += `
                     <tr class='odd gradeX' onclick='expand_post(this, "${order.number}")'>
-                        <td><input type='checkbox' onclick='event.stopPropagation();'></td>
                         <td>${order.number}</td>
                         <td>${order.salesName}</td>
-                        <td>상품123출력</td>
                         <td>${order.manager}</td>
+                        <td>${pagingIns.dateFormat(order.dt)}</td>
+                        <td>${approveDt}</td>
                         <td>${order.orderTotal}</td>
                         <td>${order.status}</td>
                         <td>${btns}</td>
@@ -50,11 +84,10 @@ function paging(pg) {
                 `;
             });
         }
-       
+        pagingIns.appendPagingTag();
         tBody.innerHTML = html;
     });
 }
-
 
 function expand_post(thisElement,onum){
 	let post = document.getElementById("post-content");
@@ -75,7 +108,7 @@ function expand_post(thisElement,onum){
 				return response.json();
 			})
 			.then(function(result){
-				let tr = document.createElement("tr");
+			let tr = document.createElement("tr");
 				tr.id="post-content";
 				let td = document.createElement("td");
 					result.forEach(data => {
@@ -131,7 +164,6 @@ function expand_post(thisElement,onum){
 }
 
 function approve(e,num){
-	
 	e.stopPropagation();
 			fetch("./approveok.do",{
 				method : "PUT",
@@ -142,12 +174,18 @@ function approve(e,num){
 				return response.text();
 			})
 			.then(function(data){
-				console.log(data);
 				if(data=="OK"){
+					localStorage.setItem("currentpg",pagingIns.currentPage_);
+					localStorage.setItem("mapping",pagingIns.mapping_);
+					localStorage.setItem("param",pagingIns.param_);
+					localStorage.setItem("totalpg",pagingIns.totalPages_);
+					localStorage.setItem("select",pagingIns.select_);
 					window.location.reload();
 					alert('해당 주문이 승인되었습니다');
 					
-				}else{
+				}else if("STOCKERROR"){
+					alert('재고 오류로 승인되지 않았습니다');
+					}else{
 					alert('오류 발생으로 상태가 변경되지 않았습니다');
 				}
 				
@@ -156,9 +194,7 @@ function approve(e,num){
 				alert('오류 발생으로 상태가 변경되지 않았습니다');
 			});	
 }
-
-function cancel(e,num){
-	
+function cancelOrder(e,num){
 	e.stopPropagation();
 			fetch("./cancelok.do",{
 				method : "PUT",
@@ -170,6 +206,11 @@ function cancel(e,num){
 			})
 			.then(function(data){
 				if(data=="OK"){
+					localStorage.setItem("currentpg",pagingIns.currentPage_);
+					localStorage.setItem("mapping",pagingIns.mapping_);
+					localStorage.setItem("param",pagingIns.param_);
+					localStorage.setItem("totalpg",pagingIns.totalPages_);
+					localStorage.setItem("select",pagingIns.select_);
 					window.location.reload();
 					alert('해당 주문이 취소되었습니다');
 					
@@ -200,36 +241,33 @@ function close_modal(){
 }
 
 document.querySelector("#reqOk").addEventListener("click",function(){
-	fetch("./requestReceptionok.do",{
-				method : "POST",
-				headers : {"content-type":"application/x-www-form-urlencoded"},
-				body : "reqNum=" +encodeURIComponent(document.getElementById("reqNum").value)+"&reqPdt="+encodeURIComponent(document.getElementById("reqPdt").value)
-			})
-			.then(function(response){
-				return response.text();
-			})
-			.then(function(data){
-				if(data=="OK"){
-					window.location.reload();
-					alert('입고 요청되었습니다.');
-					
-				}else{
-					myModal.style="display:none;";
-					modal_opened=false;
-					alert('오류 발생으로 입고 요쳥 실패하였습니다');
+	console.log("서비스 준비중입니다 !!!!!!!!!!!!");
+	/*
+	formData = new FormData();
+	formData.set("total_price", totalPrice);
+	fetch("../receive/purchaseAdd",{
+				method: "POST",
+			body: formData
+		})
+			.then(response => response.text())
+			.then(data => {
+				if (data === "success") {
+					alert("발주등록 되었습니다.");
+					location.reload();
+				} else {
+					alert("오류로 인하여 발주등록에 실패하였습니다.");
 				}
 			})
-			.catch(function(error){
-				myModal.style="display:none;";
-				modal_opened=false;
-				alert('오류 발생으로 입고 요쳥 실패하였습니다');
-			});	
-	
-});
-document.querySelector("#page-test").addEventListener("change",function(){
-	paging(this.value-1);
+			.catch(error => {
+				console.log(error);
+			})
+			*/
 });
 document.querySelector("#reqNo").addEventListener("click",function(){
-	myModal.style="display:none;";
-	modal_opened=false;
+	close_modal();
+});
+document.querySelector("#searchbtn").addEventListener("click",function(){
+	let select=document.querySelector("#searchselect").value;
+	let prm=document.querySelector("#searchtxt").value;
+	paging(0,select,prm);
 });

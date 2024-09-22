@@ -5,57 +5,57 @@
 <link th:href="@{/css/stock/stock.css}" rel="stylesheet">
 </head>
 <body>
-    <div id="wrapper">
-	<div th:insert="~{/layout/stockHeader::top}"></div>
-	<div th:insert="~{/sidebar::sidebar}"></div>
-        <!-- nav  -->
-      <div id="page-wrapper">
-	  <div th:insert="~{layout/stockHeader :: header}"></div>
-	   
-	       <!-- main views-->
-     <div id="page-inner">
+	<div id="wrapper">
+		<div th:insert="~{/layout/stockHeader::top}"></div>
+		<div th:insert="~{/sidebar::sidebar}"></div>
+		<div id="page-wrapper">
+			<div th:insert="~{layout/stockHeader :: header}"></div>
+
+			<div id="page-inner">
 
         <div class="row">
             <div class="col-md-12">
+            <input type="button" value="데일리 재고내역" class="product_btn3" id="dailyinventorybtn">
                 <div class="card">
                     <div class="card-content">
                         <div class="table-responsive">
-                        	<form id="order_frm">
+                        	<form id="inventorylist_form">
+									<ul>
+										<li><select class="product_input1 stocksearch" id="inventorylistSearchtype">
+												<option value="1">상품코드</option>
+												<option value="2">상품명</option>
+												<option value="3">제조사 코드</option>
+												<option value="4">로케이션 코드</option>
+												<option value="5">카테고리 코드</option>
+										</select> <input type="text" placeholder="검색어 입력" id="inventorylistSearch" class="stocksearchwidth"> 
+											<button type="submit" id="inventorylistSearchbtn">검색</button></li>
+									</ul>
+									</form>
                             <table class="table table-striped table-bordered table-hover" id="dataTables-example">
                                 <thead>
                                     <tr>
-		                                <th class="center" style="width: 10%;">제조사코드</th>
-		                                <th class="center" style="width: 10%;">상품코드</th>
-		                                <th class="center" style="width: 15%;">제조사</th>
+		                                <th class="center" style="width: 5%;">상품코드</th>
 		                                <th class="center" style="width: 10%;">상품명</th>
-		                                <th class="center" style="width: 6%;">상품수량</th>
-		                                <th class="center" style="width: 5%;">가용재고</th>
-		                                <th class="center" style="width: 5%;">안전재고</th>
-		                                <th class="center" style="width: 10%;">마지막입고날짜</th>
-		                                <th class="center" style="width: 4%;">메모</th>
-		                                <th class="center" style="width: 4%;">관리</th>
+		                                <th class="center" style="width: 6%;">제조사코드</th>
+		                                <th class="center" style="width: 6%;">로케이션 코드</th>
+		                                <th class="center" style="width: 6%;">카테고리 코드</th>
+		                                <th class="center" style="width: 4%;">단가</th>
+		                                <th class="center" style="width: 5%;">총 개수</th>
+		                                <th class="center" style="width: 5%;">가용 개수</th>
+		                                <th class="center" style="width: 6%;">불가용 개수</th>
+		                                <th class="center" style="width: 6%;">안전 재고 개수</th>
+		                                <th class="center" style="width: 4%;">사용유/무</th>
+		                                <th class="center" style="width: 4%;">담당자</th>
+		                                <th class="center" style="width: 5%;">메모</th>
+		                                <th class="center" style="width: 3%;">관리</th>
                                     </tr>
                                 </thead>
-                                <tbody id="tbody">
-                                	<tr class="odd gradeX" th:each="item : ${items}">
-		                                <td th:text="${item.orderNumber}"></td>
-		                                <td th:text="${item.productCode}"></td>
-		                                <td>상품명</td>
-		                                <td th:text="${item.quantity}"></td>
-		                                <td th:text="${item.price}"></td>
-		                                <td th:text="${item.totalPrice}"></td>
-		                                <td><input type="text"></td>
-		                                <td><input type="text"></td>
-		                                <td><input type="button">메모</td>
-		                                <td><input type="button">상세보기</td>
-		                            </tr>
+                                <tbody id="inventorylisttbody">
                                 </tbody>
                             </table>
-                            </form>
-                            <form id="excel_frm">
-						        <input type="file" name="excel" id="excel">
-						        <button class="cc-btn" type="button" id="excel_btn">엑셀 불러오기</button>
-					        </form>
+    						<nav class="no-bg" aria-label="Page navigation" id="inventorylistPaging">
+
+							</nav>                        
                         </div> 
                     </div>
 	   			</div>

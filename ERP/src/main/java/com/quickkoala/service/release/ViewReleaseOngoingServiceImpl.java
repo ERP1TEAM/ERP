@@ -11,10 +11,14 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.quickkoala.dto.release.ReleaseOngoingDto;
-import com.quickkoala.entity.order.OrderReleaseEntity;
-import com.quickkoala.entity.order.OrderReleaseEntity.ReleaseStatus;
+import com.quickkoala.entity.order.OrderEntity.OrderStatus;
+import com.quickkoala.entity.release.OrderReleaseEntity;
 import com.quickkoala.entity.release.ViewReleaseOngoingEntity;
+import com.quickkoala.entity.release.ViewReleaseProductsEntity;
+import com.quickkoala.entity.release.ViewReleaseReturnProductsEntity;
+import com.quickkoala.entity.release.OrderReleaseEntity.ReleaseStatus;
 import com.quickkoala.repository.release.ViewReleaseOngoingRepository;
+import com.quickkoala.repository.release.ViewReleaseProductsRepository;
 
 @Service
 public class ViewReleaseOngoingServiceImpl implements ViewReleaseOngoingService{
@@ -22,26 +26,36 @@ public class ViewReleaseOngoingServiceImpl implements ViewReleaseOngoingService{
 	@Autowired
 	private ViewReleaseOngoingRepository viewReleaseOngoingRepository;
 	
+	@Autowired
+	private ViewReleaseProductsRepository viewReleaseProductsRepository;
+	
 	@Override
-	public List<ReleaseOngoingDto> getAll(int pg, int size) {
-		ReleaseStatus[] status = {ReleaseStatus.출고준비,ReleaseStatus.출고지연};
+	public Page<ViewReleaseOngoingEntity> getAll(int pg, int size,String select, String param) {
 		Pageable pageable = (Pageable) PageRequest.of(pg, size, Sort.by(Sort.Order.desc("number")));
-		List<ViewReleaseOngoingEntity> before = viewReleaseOngoingRepository.findByStatusIn(status,pageable).getContent();
-		List<ReleaseOngoingDto> after = new ArrayList<ReleaseOngoingDto>();
-		for(ViewReleaseOngoingEntity item: before) {
-			ReleaseOngoingDto dto = new ReleaseOngoingDto();
-			dto.setNumber(item.getNumber());
-			dto.setOrderNumber(item.getOrderNumber());
-			dto.setOrderId(item.getOrderId());
-			dto.setSalesCode(item.getSalesCode());
-			dto.setSalesName(item.getSalesName());
-			dto.setDt(item.getDt().toString());
-			dto.setStatus(item.getStatus().toString());
-			dto.setManager(item.getManager());
-			dto.setMemo(item.getMemo());
-			after.add(dto);
+		System.out.println(pg+"||"+size+"||"+select+"||"+param);
+		if(select.equals(null)||select.equals("null")) {
+			return viewReleaseOngoingRepository.findAll(pageable);
+		}else if(select.equals("1")&&param!=null) {
+			return viewReleaseOngoingRepository.findByNumberContainingOrderByNumberDesc(param,pageable);
+		}else if(select.equals("2")&&param!=null) {
+			return viewReleaseOngoingRepository.findByOrderNumberContainingOrderByNumberDesc(param,pageable);
+		}else if(select.equals("3")&&param!=null) {
+			return viewReleaseOngoingRepository.findBySalesNameContainingOrderByNumberDesc(param,pageable);
+		}else if(select.equals("4")&&param!=null) {
+			try {
+				ReleaseStatus status = ReleaseStatus.valueOf(param.intern());
+				Page<ViewReleaseOngoingEntity> temp = viewReleaseOngoingRepository.findByStatus(status,pageable);
+		        return temp;
+		    } catch (IllegalArgumentException e) {
+		        return Page.empty(); 
+		    }
+		}else {
+			return Page.empty();
 		}
-		return after;
+	}
+	
+	public List<ViewReleaseProductsEntity> getProducts(String relNumber){
+		return viewReleaseProductsRepository.findByRelNumberOrderByLotNumberDesc(relNumber);
 	}
 	
 	

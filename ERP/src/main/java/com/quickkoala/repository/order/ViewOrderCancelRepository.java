@@ -11,14 +11,14 @@ import com.quickkoala.dto.order.OrderCancelDto;
 import com.quickkoala.entity.order.ViewOrderCancelEntity;
 import com.quickkoala.entity.order.ViewOrderOngoingEntity;
 
-
 @Repository
 public interface ViewOrderCancelRepository extends JpaRepository<ViewOrderCancelEntity,String> {
 	
 	List<ViewOrderCancelEntity> findAllByOrderByOrderNumberDesc();
 	
 	Page<ViewOrderCancelEntity> findAll(Pageable pageable);
-
-
-	
+	Page<ViewOrderCancelEntity> findByOrderNumberContainingOrderByOrderNumberDesc(String param, Pageable pageable);
+	Page<ViewOrderCancelEntity> findBySalesNameContainingOrderByOrderNumberDesc(String param, Pageable pageable);
+	Page<ViewOrderCancelEntity> findByManagerContainingOrderByOrderNumberDesc(String param, Pageable pageable);
 }
+

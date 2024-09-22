@@ -1,29 +1,23 @@
 package com.quickkoala.controller.release;
-
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.quickkoala.dto.release.ReleaseCancelDto;
-import com.quickkoala.dto.release.ReleaseCompleteDto;
-import com.quickkoala.dto.release.ReleaseOngoingDto;
-import com.quickkoala.dto.release.ReleaseReturnDto;
+import com.quickkoala.entity.release.ViewReleaseCancelEntity;
+import com.quickkoala.entity.release.ViewReleaseCompleteEntity;
+import com.quickkoala.entity.release.ViewReleaseOngoingEntity;
+import com.quickkoala.entity.release.ViewReleaseProductsEntity;
+import com.quickkoala.entity.release.ViewReleaseReturnProductsEntity;
 import com.quickkoala.service.release.OrderReleaseService;
-import com.quickkoala.service.release.ReleaseCancelService;
-import com.quickkoala.service.release.ReleaseCompleteService;
-import com.quickkoala.service.release.ReleaseProductsService;
 import com.quickkoala.service.release.ReleaseReturnProductsService;
 import com.quickkoala.service.release.ViewReleaseCancelService;
 import com.quickkoala.service.release.ViewReleaseCompleteService;
 import com.quickkoala.service.release.ViewReleaseOngoingService;
-import com.quickkoala.service.release.ViewReleaseProductsService;
 import com.quickkoala.service.release.ViewReleaseReturnProductsService;
 
 @RestController
@@ -32,15 +26,6 @@ public class ReleaseRestController {
 	
 	@Autowired
 	private OrderReleaseService orderReleaseService;
-	
-	@Autowired
-	private ReleaseCancelService releaseCancelService;
-	
-	@Autowired
-	private ReleaseCompleteService releaseCompleteService;
-	
-	@Autowired
-	private ReleaseProductsService releaseProductsService;
 	
 	@Autowired
 	private ReleaseReturnProductsService releaseRefundPrdouctsService;
@@ -55,37 +40,33 @@ public class ReleaseRestController {
 	private ViewReleaseCompleteService viewReleaseCompleteService;
 	
 	@Autowired
-	private ViewReleaseProductsService viewReleaseProductsService;
-	
-	@Autowired
 	private ViewReleaseReturnProductsService viewReleaseRefundPrdouctsService;
 	
-	@GetMapping("release/test")
-	public String test() {
-		orderReleaseService.getMaxNumber();
-		return null;
+	private final int SIZE=10;
+	
+	@GetMapping("release/page")
+	public Page<ViewReleaseOngoingEntity> paging(@RequestParam int pg, @RequestParam(required = false) String select,  @RequestParam(required = false) String param){
+		return viewReleaseOngoingService.getAll(pg,SIZE,select,param);
 	}
 	
-	private final int size=5;
-	
-	@PostMapping("release/paging")
-	public List<ReleaseOngoingDto> paging(@RequestParam int pg) {
-		return viewReleaseOngoingService.getAll(pg,size);
+	@GetMapping("release/cancel/page")
+	public Page<ViewReleaseCancelEntity> cancelpaging(@RequestParam int pg,@RequestParam(required = false) String select,  @RequestParam(required = false) String param){
+		return viewReleaseCancelService.getAll(pg,SIZE,select,param);
 	}
 	
-	@PostMapping("release/cancelpaging")
-	public List<ReleaseCancelDto> cancelpaging(@RequestParam int pg) {
-		return viewReleaseCancelService.getAll(pg,size);
+	@GetMapping("release/complete/page")
+	public Page<ViewReleaseCompleteEntity> completepaging(@RequestParam int pg, @RequestParam(required = false) String select,  @RequestParam(required = false) String param){
+		return viewReleaseCompleteService.getAll(pg,SIZE,select,param);
 	}
 	
-	@PostMapping("release/completepaging")
-	public List<ReleaseCompleteDto> completepaging(@RequestParam int pg) {
-		return (List<ReleaseCompleteDto>) viewReleaseCompleteService.getAll(pg,size);
+	@GetMapping("release/return/page")
+	public Page<ViewReleaseReturnProductsEntity> refundpaging(@RequestParam int pg, @RequestParam(required = false) String select,  @RequestParam(required = false) String param){
+		return viewReleaseRefundPrdouctsService.getAll(pg,SIZE,select,param);
 	}
 	
-	@PostMapping("release/refundpaging")
-	public List<ReleaseReturnDto> refundpaging(@RequestParam int pg) {
-		return viewReleaseRefundPrdouctsService.getAll(pg,size);
+	@PostMapping("release/detail")
+	public List<ViewReleaseProductsEntity> detail(@RequestParam String id) {
+		return viewReleaseOngoingService.getProducts(id);
 	}
 	
 	@PostMapping("release/cancel.do")
@@ -102,8 +83,15 @@ public class ReleaseRestController {
 	public String postpone(@RequestParam String id) {
 		return orderReleaseService.saveStatus(id,"출고지연");
 	}
-
 	
+	@PostMapping("release/return/discard")
+	public String returnDiscard(@RequestParam("relNum") String relNum,@RequestParam("lotNum") String lotNum,@RequestParam("qty") int qty) {
+		return releaseRefundPrdouctsService.saveStatus(relNum,lotNum,qty,"폐기");
+	}
 	
+	@PostMapping("release/return/receive")
+	public String returnReceive(@RequestParam("relNum") String relNum,@RequestParam("lotNum") String lotNum,@RequestParam("qty") int qty) {
+		return releaseRefundPrdouctsService.saveStatus(relNum,lotNum,qty,"입고");
+	}
 	
 }

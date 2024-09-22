@@ -2,8 +2,7 @@ package com.quickkoala.entity.release;
 
 import java.time.LocalDateTime;
 
-import com.quickkoala.entity.order.OrderReleaseEntity;
-import com.quickkoala.entity.order.OrderReleaseEntity.ReleaseStatus;
+import com.quickkoala.entity.release.OrderReleaseEntity.ReleaseStatus;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

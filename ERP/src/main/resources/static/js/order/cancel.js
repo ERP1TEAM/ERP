@@ -1,45 +1,55 @@
 let tBody = document.querySelector("#tbody");
-paging(0);
-function paging(pg) {
-    fetch("./cancelpaging", {
-        method: "POST",
-        headers: { "content-type": "application/x-www-form-urlencoded" },
-        body: "pg=" + encodeURIComponent(pg)
-    })
-    .then(function(response) {
-        return response.json();
-    })
-    .then(function(list) {
-        while (tBody.firstChild) {
+import Paging from '../module/paging.js';
+const pagingIns= new Paging();
+window.clickPageBtn = function(pg,sel,par) {
+    console.log(pg);
+    paging(pg-1, sel, par);
+};
+window.pgNext = function() {
+    pagingIns.pgNext();
+     paging(pagingIns.currentPage_ - 1, pagingIns.select_, pagingIns.param_);
+};
+
+window.pgPrev = function() {
+    pagingIns.pgPrev();
+     paging(pagingIns.currentPage_ - 1, pagingIns.select_, pagingIns.param_);
+};
+document.addEventListener("DOMContentLoaded", function() {
+    paging(pagingIns.currentPage_);
+});
+window.expand_post=expand_post;
+function paging(_pg,_select,_param){
+	pagingIns.getPage("./cancel/page",_page,_select,_param).then(result => {
+		let data = result.content;
+		while (tBody.firstChild) {
             tBody.removeChild(tBody.firstChild);
         }
-        
         let html = "";
-        if (list.length === 0) {
+        if (data.length === 0) {
             html = "<tr><td colspan='8'>데이터가 존재하지 않습니다.</td></tr>";
         } else {
-            list.forEach(function(order) {
+            data.forEach(function(order) {
                 html += `
                     <tr class='odd gradeX' onclick='expand_post(this, "${order.orderNumber}")'>
-                        <td><input type='checkbox' onclick='event.stopPropagation();'></td>
                         <td>${order.orderNumber}</td>
                         <td>${order.salesName}</td>
-                        <td>상품123출력</td>
                         <td>${order.manager}</td>
+                        <td>${pagingIns.dateFormat(order.dt)}</td>
                         <td>${order.orderTotal}</td>
-                        <td>주문취소</td>
                         <td><input type="button" value="삭제" onclick="approve(event,'${order.orderNumber}')"></td>
                     </tr>
                 `;
             });
         }
-       
+        pagingIns.appendPagingTag();
         tBody.innerHTML = html;
-    });
+		});
 }
 
-document.querySelector("#page-test").addEventListener("change",function(){
-	paging(this.value-1);
+document.querySelector("#searchbtn").addEventListener("click",function(){
+	let select=document.querySelector("#searchselect").value;
+	let prm=document.querySelector("#searchtxt").value;
+	paging(page,select,prm);
 });
 
 function expand_post(thisElement,onum){

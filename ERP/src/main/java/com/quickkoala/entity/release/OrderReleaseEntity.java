@@ -1,4 +1,4 @@
-package com.quickkoala.entity.order;
+package com.quickkoala.entity.release;
 
 import java.time.LocalDateTime;
 

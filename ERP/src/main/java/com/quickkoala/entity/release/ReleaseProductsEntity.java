@@ -8,6 +8,8 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -22,6 +24,7 @@ import lombok.NoArgsConstructor;
 public class ReleaseProductsEntity {
 	
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY) 
 	@Column(name = "idx", length = 8, nullable = false)
 	private int idx;
 	
@@ -43,6 +46,10 @@ public class ReleaseProductsEntity {
 	@Column(name = "qty", nullable = false)
 	private int qty;
 	
+	@Column(name="product_code", nullable=false)
+	private String productCode;
 	
+	@Column(name="supplier_code", nullable=false)
+	private String supplierCode;
 	
 }

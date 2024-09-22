@@ -5,18 +5,18 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import com.quickkoala.entity.receive.ViewReceiveSummaryEntity;
 import com.quickkoala.entity.stock.LocationEntity;
 
 @Repository
 public interface LocationRepository extends JpaRepository<LocationEntity, String> {
 
-	boolean existsByCode(String code);
-
+	boolean existsByCode (String code);
+	
 	List<LocationEntity> findAllByOrderByCodeDesc();
-
+	
 	Page<LocationEntity> findAllByOrderByCodeDesc(Pageable pageable);
 
 	Page<LocationEntity> findByCodeContainingOrderByCodeDesc(String code, Pageable pageable);
@@ -28,4 +28,7 @@ public interface LocationRepository extends JpaRepository<LocationEntity, String
 	Page<LocationEntity> findByRowCodeContainingOrderByCodeDesc(String rowCode, Pageable pageable);
 	
 	Page<LocationEntity> findByLevelCodeOrderByCodeDesc(Integer levelCode, Pageable pageable);
+	
+	
+	
 }

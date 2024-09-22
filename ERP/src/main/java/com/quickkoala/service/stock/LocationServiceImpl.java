@@ -24,8 +24,12 @@ public class LocationServiceImpl implements LocationService {
 	@Autowired
 	private LocationRepository locationRepository;
 	
+	
+	
+	
 	//Entity -> DTO 변환
-	private LocationDto convertToLocationDto(LocationEntity locationEntity) {
+	@Override
+	public LocationDto convertToLocationDto(LocationEntity locationEntity) {
 		LocationDto maptoLocationDto = new LocationDto();
 		maptoLocationDto.setCode(locationEntity.getCode());
 		maptoLocationDto.setWarehouseCode(locationEntity.getWarehouseCode());
@@ -37,6 +41,7 @@ public class LocationServiceImpl implements LocationService {
 		
 		return maptoLocationDto;
 	}
+	
 	
 	//DTO -> Entity 변환
 	private LocationEntity convertToLocationEntity(LocationDto locationDto) {
@@ -65,11 +70,10 @@ public class LocationServiceImpl implements LocationService {
 	
 	@Override
 	public LocationEntity saveLocation(LocationDto locationDto) {
-
 		LocationEntity locationEntity =convertToLocationEntity(locationDto);
 		
 		if(locationRepository.existsByCode(locationEntity.getCode())) {
-			return null;
+			throw new IllegalArgumentException("이미 존재하는 로케이션 코드입니다");
 		}
 		return locationRepository.save(locationEntity);
 	}

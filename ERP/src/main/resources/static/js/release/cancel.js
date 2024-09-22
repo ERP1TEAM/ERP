@@ -1,15 +1,26 @@
 let tBody = document.querySelector("#tbody");
-paging(0);
-function paging(pg) {
-    fetch("./cancelpaging", {
-        method: "POST",
-        headers: { "content-type": "application/x-www-form-urlencoded" },
-        body: "pg=" + encodeURIComponent(pg)
-    })
-    .then(function(response) {
-        return response.json();
-    })
-    .then(function(list) {
+import Paging from '../module/paging.js';
+const pagingIns = new Paging();
+window.clickPageBtn = function(pg,sel,par) {
+    console.log(pg);
+    paging(pg-1, sel, par);
+};
+document.addEventListener("DOMContentLoaded", function() {
+    paging(pagingIns.currentPage_);
+});
+window.expand_post=expand_post;
+window.pgNext = function() {
+    pagingIns.pgNext();
+     paging(pagingIns.currentPage_ - 1, pagingIns.select_, pagingIns.param_);
+};
+
+window.pgPrev = function() {
+    pagingIns.pgPrev();
+     paging(pagingIns.currentPage_ - 1, pagingIns.select_, pagingIns.param_);
+};
+function paging(_page,_select,_param){
+	pagingIns.getPage("./cancel/page",_page,_select,_param).then(result => {
+		let list = result.content;
         while (tBody.firstChild) {
             tBody.removeChild(tBody.firstChild);
         }
@@ -21,28 +32,25 @@ function paging(pg) {
             list.forEach(function(release) {
                 html += `
                     <tr class='odd gradeX' onclick='expand_post(this, "${release.number}")'>
-                        <td><input type='checkbox' onclick='event.stopPropagation();'></td>
                         <td>${release.relNumber}</td>
                         <td>${release.orderNumber}</td>
                         <td>${release.salesName}</td>
-                        <td>상품123출력</td>
                         <td>${release.manager}</td>
                         <td>${release.reason}</td>
-                        <td><input type="button" value="삭제" onclick="remove(event,'${release.number}')"></td>
+                        <td>${pagingIns.dateFormat(release.dt)}</td>
+                        <td></td>
                     </tr>
                 `;
             });
         }
-       
+        pagingIns.appendPagingTag();
         tBody.innerHTML = html;
     });
 }
-document.querySelector("#page-test").addEventListener("change",function(){
-	paging(this.value-1);
+document.querySelector("#searchbtn").addEventListener("click",function(){
+	let select=document.querySelector("#searchselect").value;
+	let prm=document.querySelector("#searchtxt").value;
+	paging(0,select,prm);
 });
 function expand_post(thisElement,onum){
-}
-
-function remove(e, rnum){
-	
 }

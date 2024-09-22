@@ -45,7 +45,7 @@ public class OrderEntity {
 	private String memo;
 	
 	@Column(name = "order_total", nullable = false)
-	private Integer order_total;
+	private Integer orderTotal;
 	
 	public enum OrderStatus{
 		미승인,

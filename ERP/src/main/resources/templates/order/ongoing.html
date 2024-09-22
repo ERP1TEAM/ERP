@@ -11,8 +11,11 @@
     <link href="../../assets/js/morris/morris-0.4.3.min.css" rel="stylesheet" />
     <link href="../../assets/css/custom-styles.css" rel="stylesheet" />
     <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
+    <link href="../../css/paging.css" rel="stylesheet">
+	<link href="../../css/receive/purchaseDetail.css" rel="stylesheet" />
+	<link href="../../css/searching.css" rel="stylesheet">
     <link rel="stylesheet" href="../../assets/js/Lightweight-Chart/cssCharts.css"> 
-     <script src="../../js/order/ongoing.js?v=1" defer></script>
+     <script src="../../js/order/ongoing.js?v=1" type="module" defer></script>
 </head>
 
 <body>
@@ -37,8 +40,7 @@
 					  <li><a href="#">페이지 tap1</a></li>
 					  <li class="active">페이지 tap2</li>
 					  -->
-					</ol> 
-									
+					</ol> 			
 		</div>
     <!-- main views-->
      <div id="page-inner">
@@ -48,19 +50,33 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-action">
-                         주문진행 <span style="float: right;">+ MORE</span>
+                         주문진행
                     </div>
+                    <div class="search">
+                    <select id="searchselect" style="display:block;">
+						<option value="1">주문번호</option>
+						<option value="2">거래처</option>
+						<option value="3">담당자</option>
+					</select>
+					<input type="text" id="searchtxt">
+					<button type="button" id="searchbtn">search</button>
+                    </div>
+                    <div class="small-tap" id="all">전체</div>
+							<div class="small-tap" id="apv">승인</div>
+							<div class="small-tap" id="wait">미승인</div>
+							<div class="small-tap" id="ccl">취소</div>
+							<br>
+							<br>
                     <div class="card-content">
                         <div class="table-responsive">
                             <table class="table table-striped table-bordered table-hover" id="dataTables-example">
                                 <thead>
                                     <tr>
-                                    	<th class="center" style="width: 6%;"><input type="checkbox"></th>
                                     	<th class="center" style="width: 10%;">주문번호</th>
 		                                <th class="center" style="width: 7%;">거래처</th>
-		                                <th class="center" style="width: 20%;">상품</th><!-- 모니터 외 2가지.. -->
 		                                <th class="center" style="width: 8%;">담당자</th>
-		                                <th class="center" style="width: 8%;">총 금액</th>
+		                                <th class="center" style="width: 8%;">주문일시</th>
+		                                <th class="center" style="width: 8%;">승인일시</th>
 		                                <th class="center" style="width: 9%;">진행상황</th>
 		                                <th class="center" style="width: 15%;">관리</th>
                                     </tr>
@@ -68,14 +84,72 @@
                                 <tbody id="tbody">
                                 </tbody>
                             </table>
-                            
+                            <nav class="no-bg" aria-label="Page navigation" id="paging">
+
+									</nav>
                         </div> 
                     </div>
                 </div>
             </div>
-		<input type="number" value="1" id="page-test">
     </div>
-     <div th:insert="~{order/modal :: modals}"></div>
+     <div id="modal1" class="modal">
+    <div>
+        <span class="close" id="closemodal">&times;</span>
+    </div>
+    <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-action">
+			          <h2>입고 신청</h2>
+                    </div>
+                    <div class="card-content">
+                    <ul>
+        		<li>
+           
+        		</li>
+    			</ul>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+                                <thead>
+                                    <tr>
+		                                <th class="center" style="width: 21%;">상품</th>
+		                                <th class="center" id="pdt" style="width: 79%;"></th>
+                                    </tr>
+                                    <tr>
+		                                <th class="center" style="width: 21%;">발주처</th>
+		                                <th class="center" id="sup" style="width: 79%;"></th>
+                                    </tr>
+                                    <tr>
+		                                <th class="center" style="width: 21%;">주문수량</th>
+		                                <th class="center" id="qty" style="width: 79%;"></th>
+                                    </tr>
+                                    <tr>
+		                                <th class="center" style="width: 21%;">가용재고</th>
+		                                <th class="center" id="avqty" style="width: 79%;"></th>
+                                    </tr>
+                                    <tr>
+		                                <th class="center" style="width: 21%;">비고</th>
+		                                <th class="center" id="memo "style="width: 79%;"></th>
+                                    </tr>
+                                     <tr>
+		                                <th class="center" style="width: 21%;">입고 신청 수량</th>
+		                                <th class="center" style="width: 79%;"><input id="reqNum" type="number" max="9999"></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="warehousetbody">
+                                	
+                                </tbody>
+                            </table>
+                            <input type="hidden" id="reqPdt">
+					        </div>
+					        <span>입고 신청 하시겠습니까 ? </span><br>
+                            <input class="cd-paging-right-btn" type="button" value="확인" id="reqOk">
+                            <input class="cd-paging-right-btn" type="button" value="취소" id="reqNo">
+					        </div>
+					        </div>
+					        </div>
+					        </div>
+</div>
 		
    <footer><p>Copyright 2024 ⓒ quickkoala.com by <i class="fa fa-love"></i><a href="http://quickkoala.com">Quick Koala All right reserved.</a>
 </p></footer>

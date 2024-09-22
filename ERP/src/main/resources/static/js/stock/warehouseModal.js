@@ -25,18 +25,136 @@ warehousemainmodal();
             alert("error");
         });
     });
+/*
+//창고 페이징
+	var warehouseTotalPages = 1;
+    var warehouseStartPage = 0;
+    var warehouseEndPage = 0;
+    const warehousePageSize = 3;
+const getWarehouseQueryParam = (param) => {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(param);
+} 
+let warehouseP = parseInt(getWarehouseQueryParam("p")) || 1;
+let warehouseSearchCode = getWarehouseQueryParam("code") || '1';  // 검색 코드
+let warehouseSearchWord = getWarehouseQueryParam("word") || '';  // 검색어   
 
+document.getElementById("warehouseSearchtype").value = warehouseSearchCode;
+document.getElementById("warehouseSearch").value = warehouseSearchWord;
+
+// 페이징 함수를 전역으로 설정
+window.warehousePaging = function(p = warehouseP, code = warehouseSearchCode, word = warehouseSearchWord) {
+      warehouselistmain(p, code, word);
+}
+
+window.warehousePgNext = function() {
+      warehouselistmain(warehouseEndPage + 1, warehouseSearchCode, warehouseSearchWord);
+}
+
+window.warehousePgPrev = function() {
+      warehouselistmain(warehouseStartPage - 1, warehouseSearchCode, warehouseSearchWord);
+}
+// 창고 리스트 조회 및 페이징 구현
+    function warehouselistmain(pno, code = '', word = '') {
+        fetch(`/main/stock/warehouses/${pno}?code=${code}&word=${word}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            }    
+        })
+        .then(response => {
+			console.log(response.status);
+        return response.json();})
+        .then(data => {
+			console.log(data);
+			console.log(data.totalPages);
+            let warehousetbody = document.querySelector('#warehousetbody');
+            warehousetbody.innerHTML = '';
+
+            const items = data.content;
+            warehouseTotalPages = data.totalPages;
+
+            items.forEach(function(warehouse) {
+                let warehousememo = warehouse.memo ? warehouse.memo : '';
+                let warehouseth = `<tr class="odd gradeX">
+                    <th><input type="checkbox" class="checkbox" value="${warehouse.code}"></th>
+                    <td>${warehouse.code}</td>
+                    <td>${warehouse.name}</td>
+                    <td>${warehousememo}</td>
+                    <td><input type="button" value="수정" class="warehousemodifybtn"></td>
+                </tr>`;
+                warehousetbody.innerHTML += warehouseth;
+            });
+
+            const pagingElement = document.getElementById("warehouselistpaging");
+            pagingElement.innerHTML = '';
+
+            // 페이지 그룹의 시작과 끝 계산
+            warehouseStartPage = Math.floor((pno - 1) / warehousePageSize) * warehousePageSize + 1;
+            warehouseEndPage = Math.min(warehouseStartPage + warehousePageSize - 1, warehouseTotalPages);
+
+            // 페이징 HTML 생성
+            let paginationHTML = `<ul class="pagination">`;
+
+            if (warehouseStartPage > warehousePageSize) {
+                paginationHTML += `
+                <li class="page-item"><a class="page-link" aria-label="Previous" onclick="warehousePgPrev()">
+                <span aria-hidden="true">&laquo;</span>
+                </a></li>`;
+            }
+
+            // 페이지 번호 링크 추가
+            for (let i = warehouseStartPage; i <= warehouseEndPage; i++) {
+                const className = pno == i ? 'page-item current-page' : 'page-item';
+                paginationHTML += `
+                    <li class="${className}"><a class="page-link" onclick="warehousePaging(${i})">${i}</a></li>
+                `;
+            }
+
+            // 'Next' 링크 추가
+            if (warehouseEndPage < warehouseTotalPages) {
+                paginationHTML += `
+                    <li class="page-item"><a class="page-link" aria-label="Next" onclick="warehousePgNext()">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a></li>
+                `;
+            }
+
+            paginationHTML += `</ul>`;
+
+            // 페이징 HTML을 페이지에 삽입
+            pagingElement.innerHTML = paginationHTML;
+
+            // URL 업데이트 (검색 조건도 포함)
+            if(word == "") {
+                history.replaceState({}, '', location.pathname + `?p=${pno}`);            
+            } else {
+                history.replaceState({}, '', location.pathname + `?p=${pno}&code=${code}&word=${word}`);
+            }  
+        })
+        .catch(function(error) {
+            alert("error");
+            console.log(error);
+        });
+    }
+
+*/
 //검색어
 document.getElementById('warehouseSearchbtn').addEventListener('click', function() {
    	const warehouseSearchtype = document.getElementById('warehouseSearchtype').value;
     const warehouseSearch = document.getElementById('warehouseSearch').value.trim();
     
-    if(!warehouseSearch){
-		alert('검색어를 입력하세요.');
-		return;
-	}
+    let fetchUrl;
+    
+    if (!warehouseSearch) {
+        // 검색어가 없을 경우 전체 리스트를 불러오는 URL로 설정
+        fetchUrl = '/main/stock/warehouses';
+    } else {
+        // 검색어가 있을 경우 검색 결과를 불러오는 URL로 설정
+        fetchUrl = `/main/stock/warehousesearch?warehouseSearchtype=${warehouseSearchtype}&warehouseSearch=${warehouseSearch}`;
+    }
 	
-	fetch(`/main/stock/warehousesearch?warehouseSearchtype=${warehouseSearchtype}&warehouseSearch=${warehouseSearch}`, {
+	fetch(fetchUrl, {
             method: 'GET',
             headers: {
 				'Content-Type' : 'application/json'

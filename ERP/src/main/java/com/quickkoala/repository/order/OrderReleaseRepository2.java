@@ -12,12 +12,12 @@ import jakarta.transaction.Transactional;
 
 import org.springframework.stereotype.Repository;
 
-import com.quickkoala.entity.order.OrderReleaseEntity;
+import com.quickkoala.entity.order.OrderReleaseEntity2;
 
 @Repository
-public interface OrderReleaseRepository extends JpaRepository<OrderReleaseEntity,String> {
+public interface OrderReleaseRepository2 extends JpaRepository<OrderReleaseEntity2,String> {
 	
-	List<OrderReleaseEntity> findAllByOrderByNumberDesc();
+	List<OrderReleaseEntity2> findAllByOrderByNumberDesc();
 	
 	@Query("SELECT DATE_FORMAT(NOW(), '%Y%m%d')")
 	public String mysql_now();
@@ -25,12 +25,12 @@ public interface OrderReleaseRepository extends JpaRepository<OrderReleaseEntity
 	@Query("SELECT now()")
 	public LocalDateTime mysql_now2();
 	
-	public List<OrderReleaseEntity> findByNumberLikeOrderByNumberDesc(String day);
+	public List<OrderReleaseEntity2> findByNumberLikeOrderByNumberDesc(String day);
 	
 	@Transactional
 	@Modifying
 	@Query("update OrderReleaseEntity set status =:status where number = :id")
-	public int updateStatus(@Param("id") String id,  @Param("status") OrderReleaseEntity.ReleaseStatus status);
+	public int updateStatus(@Param("id") String id,  @Param("status") OrderReleaseEntity2.ReleaseStatus status);
 	
 	
 }

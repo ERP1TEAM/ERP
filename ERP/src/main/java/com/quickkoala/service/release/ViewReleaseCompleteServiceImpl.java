@@ -1,17 +1,13 @@
 package com.quickkoala.service.release;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
-import com.quickkoala.dto.release.ReleaseCancelDto;
-import com.quickkoala.dto.release.ReleaseCompleteDto;
-import com.quickkoala.entity.release.ViewReleaseCancelEntity;
 import com.quickkoala.entity.release.ViewReleaseCompleteEntity;
+import com.quickkoala.entity.release.ViewReleaseOngoingEntity;
 import com.quickkoala.repository.release.ViewReleaseCompleteRepository;
 
 @Service
@@ -21,21 +17,20 @@ public class ViewReleaseCompleteServiceImpl implements ViewReleaseCompleteServic
 	private ViewReleaseCompleteRepository viewReleaseCompleteRepository;
 	
 	@Override
-	public List<ReleaseCompleteDto> getAll(int pg,int size) {
+	public Page<ViewReleaseCompleteEntity> getAll(int pg, int size,String select, String param) {
 		Pageable pageable = (Pageable) PageRequest.of(pg, size, Sort.by(Sort.Order.desc("relNumber")));
-		List<ViewReleaseCompleteEntity> before = viewReleaseCompleteRepository.findAll(pageable).getContent();
-		List<ReleaseCompleteDto> after = new ArrayList<ReleaseCompleteDto>();
-		for(ViewReleaseCompleteEntity item: before) {
-			ReleaseCompleteDto dto = new ReleaseCompleteDto();
-			dto.setRelNumber(item.getRelNumber());
-			dto.setOrderNumber(item.getOrderNumber());
-			dto.setDt(item.getDt().toString());
-			dto.setManager(item.getManager());
-			dto.setMemo(item.getMemo());
-			dto.setSalesCode(item.getSalesCode());
-			dto.setSalesName(item.getSalesName());
-			after.add(dto);
+		if(select.equals(null)||select.equals("null")) {
+			return viewReleaseCompleteRepository.findAll(pageable);
+		}else if(select.equals("1")&&param!=null) {
+			return viewReleaseCompleteRepository.findByRelNumberContainingOrderByRelNumberDesc(param,pageable);
+		}else if(select.equals("2")&&param!=null) {
+			return viewReleaseCompleteRepository.findByOrderNumberContainingOrderByRelNumberDesc(param,pageable);
+			
+		}else if(select.equals("3")&&param!=null) { 
+			return viewReleaseCompleteRepository.findBySalesNameContainingOrderByRelNumberDesc(param,pageable);
+			
+		}else{
+			return Page.empty();
 		}
-		return after;
 	}
 }

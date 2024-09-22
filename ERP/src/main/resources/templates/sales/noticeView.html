@@ -33,23 +33,28 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-content">
-                        <p><strong>작성자:</strong> <span th:text="${notice.manager}"></span></p>
-                        <p><strong>작성일:</strong> <span th:text="${#temporals.format(notice.createdAt, 'yyyy-MM-dd')}"></span></p>
-                        <p><strong>조회수:</strong> <span th:text="${notice.views}"></span></p><br>
+                        <p><strong>작성자 : </strong> <span th:text="${notice.manager}"></span></p>
+                        <p><strong>작성시간 : </strong> <span th:text="${#temporals.format(notice.createdAt, 'yyyy-MM-dd HH:mm')}"></span></p>
+                        <p><strong>조회수 : </strong> <span th:text="${notice.views}"></span></p><br>
                         <div>
                             <p th:text="${notice.content}"></p>
                         </div>
                         <br>
                         <a href="/sales/home" class="btn" style="background-color: #474B54">목록으로 돌아가기</a>
+                        <button id="deleteButton" class="btn" style="background-color: #d9534f; float:right;" title="작성자 삭제가능" disabled>삭제</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-		
+    
+    <input type="hidden" id="noticeManager" th:value="${notice.manager}">
+	<input type="hidden" id="currentManager" value="">
+	
    <footer><p>Copyright 2024 ⓒ quickkoala.com by <i class="fa fa-love"></i><a href="http://quickkoala.com">Quick Koala All right reserved.</a></p></footer>
             </div>
         </div>
+    <script th:src="@{/js/noticeView.js}"></script>
     
 	<script th:src="@{/assets/js/jquery-1.10.2.js}"></script>
 	<script th:src="@{/assets/js/bootstrap.min.js}"></script>
