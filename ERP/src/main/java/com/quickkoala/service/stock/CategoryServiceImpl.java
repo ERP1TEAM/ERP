@@ -80,6 +80,15 @@ public class CategoryServiceImpl implements CategoryService{
 	}
 	
 	@Override
+	public CategoryDto getCategoryByCode(String code) {
+		CategoryEntity categoryEntity= categoryRepository.findByCode(code);
+		if(categoryEntity != null) {
+		return convertToCategoryDto(categoryEntity);
+		}
+		return null;
+	}
+	
+	@Override
 	public Page<CategoryEntity> getPaginatedData(int pno, int size) {
 		Pageable pageable = PageRequest.of(pno-1, size);
 		return categoryRepository.findAllByOrderByCodeDesc(pageable);

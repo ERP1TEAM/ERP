@@ -191,7 +191,7 @@
     width: 85%;
     margin-left: 5px;
 }
-
+/*옵션은 무조건 product_input1*/
 .product_input1 {
     display:block;
     width: 150px !important;
@@ -204,17 +204,19 @@
 .product_input2 {
     width: 250px;
     height: 30px;
-    border: 1px solid rgb(81, 61, 61);
     text-indent: 5px;
     margin-right: 10px;
+    border-bottom: none !important;
+    margin-bottom: 0 !important;
 }
 .product_input3 {
-    width: 50px;
+    width: auto !important;
     height: 30px;
-    border: 1px solid rgb(81, 61, 61);
     padding-right: 5px;
     margin-right: 10px;
     text-align: left;
+    border-bottom: 1px solid rgb(81, 61, 61);
+    margin-bottom: 0 !important;
 }
 
 .product_input4 {
@@ -248,6 +250,18 @@
     width : 100px;
     color:white;
     font-size:13px;
+    cursor : pointer;
+    left : 0;
+    bottom : -5px; 
+    position : relative;
+}
+.product_btn4 {
+    height: 30px;
+    background-color: rgb(31, 40, 55);
+    border:0;
+    width : 130px;
+    color:white;
+    font-size:15px;
     cursor : pointer;
     left : 0;
     bottom : -5px; 

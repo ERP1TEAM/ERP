@@ -27,7 +27,7 @@ public class ProductEntity {
     @Column(name = "supplier_code", length = 6, nullable = false)
     private String supplierCode;
 
-    @Column(name = "classification_code", length = 5, nullable = false)
+    @Column(name = "classification_code", length = 6, nullable = false)
     private String classificationCode;
 
     @Column(name = "storage_location", length = 6, nullable = false)

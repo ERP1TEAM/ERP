@@ -19,14 +19,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.quickkoala.dto.stock.CategoryDto;
 import com.quickkoala.dto.stock.LocationDto;
+import com.quickkoala.dto.stock.ProductDto;
 import com.quickkoala.dto.stock.WarehouseDto;
 import com.quickkoala.entity.client.SupplierEntity;
 import com.quickkoala.entity.stock.CategoryEntity;
 import com.quickkoala.entity.stock.LocationEntity;
+import com.quickkoala.entity.stock.ProductEntity;
 import com.quickkoala.entity.stock.ViewProductStockEntity;
 import com.quickkoala.service.client.SupplierService;
 import com.quickkoala.service.stock.CategoryService;
 import com.quickkoala.service.stock.LocationService;
+import com.quickkoala.service.stock.ProductService;
 import com.quickkoala.service.stock.ViewProductStockService;
 import com.quickkoala.service.stock.WarehouseService;
 
@@ -38,7 +41,6 @@ public class StockRestController {
 
 	//***** 재고 등록 부분 *****//
 	
-	
 	@Autowired
 	private LocationService locationService;
 	
@@ -48,6 +50,26 @@ public class StockRestController {
 	@Autowired
 	private SupplierService supplierService;
 	
+	@Autowired
+	private ProductService productService;
+	
+	   
+	 @PostMapping("/stock/inventories")
+	 public ResponseEntity<ProductDto> saveProduct(@RequestBody ProductDto productDto,@RequestParam String manager) {
+		 if (manager == null || manager.isEmpty()) {
+		        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null); // 매니저가 없을 때 400 에러 반환
+		 }
+		 System.out.println(manager);
+		 try {
+	        ProductEntity saveproduct = productService.saveProduct(productDto, manager);
+	        ProductDto saveproductDto = productService.convertToProductDto(saveproduct);
+	        return ResponseEntity.ok(saveproductDto);
+	    } catch (IllegalArgumentException e) {
+	        return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
+	    }
+	 }
+	 
+	 //옵션
 	 @GetMapping("/stock/inventoryselectoptions")
 	 public ResponseEntity<Map<String, Object>> getAllOptions() {
         List<LocationDto> locationOption = locationService.getAllOrdersByCode();
@@ -64,6 +86,18 @@ public class StockRestController {
 	    return ResponseEntity.ok(response);
 	    }
 	
+	 //난수 생성 + 중복 체크
+	 @GetMapping("/stock/inventoryrandomcode")
+	 public ResponseEntity<String> inventoryrandomcode(){
+		 try {
+		 String randomcode= productService.checkduplicateCode();
+		 return ResponseEntity.ok(randomcode);
+		 }catch(Exception e) {
+			 return ResponseEntity.status(HttpStatus.CONFLICT).body("상품코드가 중복됐습니다.");
+		 }
+	 }
+	 
+	 
 	//*****재고 리스트 부분*****//
 	@Autowired
 	private ViewProductStockService viewProductStockService;
@@ -108,4 +142,13 @@ public class StockRestController {
 		return ResponseEntity.ok("카테고리가 등록되었습니다.");
 	}
 	
+	@GetMapping("/stock/category/{categoryCode}")
+	public ResponseEntity<CategoryDto> getCategory(@PathVariable String categoryCode) {
+	     CategoryDto categoryDto = categoryService.getCategoryByCode(categoryCode);
+	     if (categoryDto != null) {
+	    	 return ResponseEntity.ok(categoryDto);
+	     } else {
+	         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+	     }
+	}
 }

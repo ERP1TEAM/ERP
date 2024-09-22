@@ -13,6 +13,8 @@ public interface CategoryService {
 	
 	CategoryEntity saveCategory (CategoryDto categorydto);
 	
+	CategoryDto getCategoryByCode(String code);
+	
 	Page<CategoryEntity> getPaginatedData(int pno, int size);
 	
 	Page<CategoryEntity> getPaginatedData(int pno, int size, String code, String word);

@@ -20,3 +20,10 @@
     overflow-y: auto;   /* 내용이 넘치면 수직 스크롤을 생성 */	
     overflow-x: hidden;
 }
+.stockallleft{
+	margin-left: 20px;
+}
+.stocksearchbtn{
+	height:43px !important;
+	width : 45px;
+}

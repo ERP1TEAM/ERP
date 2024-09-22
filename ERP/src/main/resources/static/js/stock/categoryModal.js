@@ -82,6 +82,61 @@ document.getElementById('categoryregister').addEventListener('click', function()
         });
     });
 
+// 카테고리 수정 시 코드 동적 업데이트
+const categoryModifyMainCode = document.getElementById('categoryModifymainCode');
+const categoryModifySubCode = document.getElementById('categoryModifysubCode');
+const categoryModifyCode = document.getElementById('categoryModifyCode');
+
+function updateModifyCategoryCode() {
+    const mainCode = categoryModifyMainCode.value.trim();
+    const subCode = categoryModifySubCode.value.trim();
+
+    if (mainCode && subCode) {
+        const autoCode = `${mainCode}${subCode}`;
+        categoryModifyCode.value = autoCode;
+    } else {
+        categoryModifyCode.value = '';
+    }
+}
+
+categoryModifyMainCode.addEventListener('input', updateModifyCategoryCode);
+categoryModifySubCode.addEventListener('input', updateModifyCategoryCode);
+
+//카테고리 수정 틀 갖고오기
+document.querySelector('#categorytbody').addEventListener('click', function(event) {
+if (event.target && event.target.classList.contains('categorymodifybtn')) {
+    let categoryCode = event.target.closest('tr').querySelector('.checkbox').value;
+    fetch(`/main/stock/category/${categoryCode}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response=>response.json())
+        .then(data => {
+			console.log(data);
+			document.getElementById('categoryModifyCode').value = data.code;
+            document.getElementById('categoryModifymainCode').value =  data.mainCode;
+            document.getElementById('categoryModifymainName').value = data.mainName;
+            document.getElementById('categoryModifysubCode').value = data.subCode;
+            document.getElementById('categoryModifysubName').value = data.subName;
+            document.getElementById('categoryModifymemo').value = data.memo;
+            
+             if (data.useFlag === 'Y') {
+                  document.querySelector('input[name="categoryModifyuseflag"][value="Y"]').checked = true;
+             } else {
+                  document.querySelector('input[name="ccategoryModifyuseflag"][value="N"]').checked = true;
+             }
+            document.getElementById('categorymodifymodal').style.display = 'block';
+            document.getElementById('categoryoverlay').style.display = 'block';
+		})
+		.catch(error => {
+            console.error('Error fetching warehouse info:', error);
+            alert('카테고리 정보를 불러오는 데 실패했습니다.');
+        });
+    }
+});
+
 //카테고리 페이징
 var categoryTotalPages = 1;
 var categoryStartPage = 0;
@@ -226,6 +281,11 @@ document.getElementById('categoryinback').addEventListener('click',function(){
     document.getElementById('categoryinmodal').style.display = 'none';
     document.getElementById('categorylistmodal').style.display = 'block';
 });
+//카테고리 수정 취소
+document.getElementById('categorymodifyback').addEventListener('click',function(){
+    document.getElementById('categorymodifymodal').style.display = 'none';
+    document.getElementById('categorylistmodal').style.display = 'block';
+});
 
 //카테고리 등록 모달 출력
 document.getElementById('categoryin').addEventListener('click', function() {
@@ -245,6 +305,7 @@ document.querySelectorAll(".categoryclosemodal").forEach(function(button) {
         document.getElementById("categoryoverlay").style.display = "none";
         document.getElementById("categorylistmodal").style.display = "none";
         document.getElementById("categoryinmodal").style.display = "none";
+        document.getElementById("categorymodifymodal").style.display = "none";
         document.body.style.overflow = "auto";
     });
 });
@@ -253,11 +314,13 @@ document.querySelectorAll(".categoryclosemodal").forEach(function(button) {
 window.addEventListener('click', function(event) {
     const categorylistmodal = document.getElementById('categorylistmodal');
     const categoryinmodal = document.getElementById('categoryinmodal');
+    const categorymodifymodal = document.getElementById('categorymodifymodal');
     const categoryoverlay = document.getElementById('categoryoverlay');
     
     if (event.target == categoryoverlay) {
         categorylistmodal.style.display = 'none';
         categoryinmodal.style.display = 'none';
+        categorymodifymodal.style.display = 'none';
         categoryoverlay.style.display = 'none';
         document.body.style.overflow = 'auto';
     }

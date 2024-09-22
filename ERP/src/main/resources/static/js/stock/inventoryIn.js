@@ -181,14 +181,15 @@ document.addEventListener('DOMContentLoaded', function() {
             code: productcode,
             supplierCode: supplierCode,
             classificationCode: classificationCode,
-            locationCode: locationCode,
+            storageLocation: locationCode,
             useFlag: useFlag,
             name: productname,
             price: productprice,
             memo: memo
         };
+        const manager = "김중앙";
 
-        fetch('/main/stock/inventories', {
+        fetch(`/main/stock/inventories?manager=${encodeURIComponent(manager)}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -201,19 +202,63 @@ document.addEventListener('DOMContentLoaded', function() {
             }else if(response.status == 409){
 				return response.text();
 				}else{
-				alert('상품 등록에 실패했습니다.');
+				throw new Error('상품 등록에 실패했습니다.');
 			}
         })
         .then(data => {
             alert("상품이 등록 되었습니다.");
-        })
+    		document.getElementById('inventoryname').value = '';
+    		document.getElementById('inventoryprice').value = '';
+    		document.getElementById('inventorymemo').value = '';
+    		 
+    		 fetch('/main/stock/inventoryrandomcode')
+      			 .then(response => {
+            	 if (response.ok) {
+               		 return response.text();
+            	} else {
+              	  throw new Error('새로운 상품코드를 받는 데 실패했습니다.');
+         	    }
+       		    })
+        		.then(newcode=> {
+            		document.getElementById('inventorycode').value = newcode;
+        		})
+        		.catch(error => {
+            		alert("새로운 상품코드를 가져오는 중 오류 발생");
+        		});
+        	})
         .catch(error => {
-            alert('등록 중 오류 발생: ' + error.message);
+            alert("오류발생");
         });
     });
 
-    document.getElementById('inventorycancle').addEventListener('click', function () {
-        document.getElementById('inventoryname').value = '';
-        document.getElementById('inventoryprice').value = '';
-    });
+//난수번호
+const productcode = document.getElementById("inventorycode");
+fetch('/main/stock/inventoryrandomcode')
+.then(response=>{
+	if(response.ok){
+	return response.text();
+	}else if(response.status == 409){
+		 return response.text().then(errorMessage => {
+               	alert(errorMessage);
+         });
+	}else{
+		throw new Error("서버 오류"); 
+	}
+	})
+.then(data=>{
+	if(data){
+	productcode.value=data;
+	}
+})
+.catch(error=>{
+	alert("오류가 발생했습니다.");
+});
+
+
+	
+document.getElementById('inventorycancle').addEventListener('click', function () {
+    document.getElementById('inventoryname').value = '';
+    document.getElementById('inventoryprice').value = '';
+    document.getElementById('inventorymemo').value = '';
+});
 });
