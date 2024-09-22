@@ -6,9 +6,13 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.quickkoala.dto.stock.WarehouseDto;
+import com.quickkoala.entity.stock.LocationEntity;
 import com.quickkoala.entity.stock.WarehouseEntity;
 import com.quickkoala.repository.stock.WarehouseRepository;
 
@@ -40,7 +44,7 @@ public class WarehouseServiceImpl implements WarehouseService {
 	
 	@Override
 	public List<WarehouseDto> getAllOrdersByCode() {
-		List<WarehouseEntity> listWarehouseEntity = warehouseRepository.findAllByOrderByCodeDesc();
+		List<WarehouseEntity> listWarehouseEntity = warehouseRepository.findAllByOrderByCode();
 		List<WarehouseDto> listWarehouseDto = new ArrayList<>();
 		
 		for (WarehouseEntity warehouseEntity : listWarehouseEntity) {
@@ -111,9 +115,9 @@ public class WarehouseServiceImpl implements WarehouseService {
 	//창고검색
 	@Override
 	public List<WarehouseDto> searchWarehouse(String warehouseSearchtype, String warehouseSearch) {
-	
-		List<WarehouseEntity> warehouseSearchresult= new ArrayList<>();
 		
+		List<WarehouseEntity> warehouseSearchresult= new ArrayList<>();
+			
 		//이름
 		if("1".equals(warehouseSearchtype)) {
 			warehouseSearchresult = warehouseRepository.findByNameContaining(warehouseSearch);
@@ -127,5 +131,28 @@ public class WarehouseServiceImpl implements WarehouseService {
 			warehouseDto.add(convertToWarehouseDto(warehouseEntity));
 		}
 		return warehouseDto;
+		}
+	
+	
+	@Override
+	public Page<WarehouseEntity> getPaginatedData(int pno, int size) {
+		
+		Pageable pageable = PageRequest.of(pno-1, size);
+		return warehouseRepository.findAllByOrderByCodeDesc(pageable);
+		
 	}
+	@Override
+	public Page<WarehouseEntity> getPaginatedData(int pno, int size, String code, String word) {
+		
+		Page<WarehouseEntity> result = null;
+		Pageable pageable = PageRequest.of(pno-1, size);
+		if(code.equals("1")) {
+			result = warehouseRepository.findByCodeContainingOrderByCodeDesc(word, pageable);
+		}else if(code.equals("2")) {
+			result = warehouseRepository.findByNameContainingOrderByCodeDesc(word, pageable);
+		}
+		return result;
+		
+	}
+	
 }

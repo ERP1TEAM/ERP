@@ -4,22 +4,23 @@
 <th:block th:replace="~{layout/stockHeader :: topheader}"></th:block>
 <link th:href="@{/css/stock/stock.css}" rel="stylesheet">
 </head>
-<body>
-	<div id="wrapper">
-		<div th:insert="~{/layout/stockHeader::top}"></div>
-		<div th:insert="~{/sidebar::sidebar}"></div>
-		<div id="page-wrapper">
-			<div th:insert="~{layout/stockHeader :: header}"></div>
-
+<body class="bg-light">
+    <div id="wrapper">
+	<div th:insert="~{/layout/stockHeader::top}"></div>
+	<div th:insert="~{/sidebar::sidebar}"></div>
+        <!-- nav  -->
+      <div id="page-wrapper">
+	  <div th:insert="~{layout/stockHeader :: header}"></div>
 	  <main class="maincss" >
 
 <div class="product_insert">
     <ul>
         <li>창고명</li>
         <li>
-            <select class="product_input1">
-                <option value="W1">경기도 남양주 창고</option>
-            </select><input type="button" value="+" title="+" class="product_btn2" id="warehousebtn">
+            <select class="product_input1" id="inventoryWarehouseoption">
+                <option value=""></option>
+            </select>
+            <input type="button" value="+" title="+" class="product_btn2" id="warehousebtn">
         </li>
     </ul>
     
@@ -29,7 +30,7 @@
     <ul>
         <li>로케이션 코드</li>
         <li>
-            <select class="product_input1">
+            <select class="product_input1" id="inventoryLocationoption">
                 <option value=""></option>
             </select>
         </li>
@@ -37,7 +38,7 @@
     <ul>
         <li>제조사 코드</li>
         <li>
-            <select class="product_input1">
+            <select class="product_input1" id="inventorySuppliercodeoption">
                 <option value=""></option>
             </select>
         </li>
@@ -45,7 +46,7 @@
     <ul>
         <li>제조사명</li>
         <li>
-        <input type="text" class="product_input1" readonly="readonly">
+        <input type="text" class="product_input1 black_font" readonly="readonly" id="inventorySuppliernameoption">
         </li>
     </ul>
      <ul>
@@ -77,8 +78,8 @@
     <ul>
         <li>대메뉴</li>
         <li>
-            <select class="product_input1">
-                <option></option>
+            <select class="product_input1" id="inventorymaincategoryoption">
+                <option value=""></option>
             </select><input type="button" value="+" title="+" class="product_btn2 categorybtn"> <span class="help_text">※ 해당 카테고리가 없을 경우 신규 등록하시길 바랍니다.</span>
         </li>
     </ul>
@@ -88,21 +89,9 @@
     <ul>
         <li>소메뉴</li>
         <li>
-            <select class="product_input1">
-                <option></option>
+            <select class="product_input1" id="inventorysubcategoryoption">
+                <option value=""></option>
             </select><input type="button" value="+" title="+" class="product_btn2 categorybtn">
-        </li>
-    </ul>
-    <ul>
-        <li>유통기한</li>
-        <li>
-            <input type="text" class="product_input3">
-        </li>
-    </ul>
-    <ul>
-        <li>입고날짜</li>
-        <li>
-            <input type="text" class="product_input3">
         </li>
     </ul>
 </div>
@@ -121,5 +110,6 @@
     </div>
     
 <div th:insert="~{layout/stockfooter :: src}"></div>
+<script th:src="@{/js/stock/inventoryIn.js}"></script>
 </body>
 </html>

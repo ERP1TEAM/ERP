@@ -3,7 +3,10 @@ package com.quickkoala.service.stock;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.data.domain.Page;
+
 import com.quickkoala.dto.stock.WarehouseDto;
+import com.quickkoala.entity.stock.LocationEntity;
 import com.quickkoala.entity.stock.WarehouseEntity;
 
 public interface WarehouseService {
@@ -20,4 +23,8 @@ public interface WarehouseService {
 	
 	//창고 검색
 	List<WarehouseDto> searchWarehouse(String warehouseSearchtype,String warehouseSearch);
+	
+	Page<WarehouseEntity> getPaginatedData(int pno, int size);
+	
+	Page<WarehouseEntity> getPaginatedData(int pno, int size, String code, String word);
 }

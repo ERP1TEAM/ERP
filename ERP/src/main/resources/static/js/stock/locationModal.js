@@ -97,8 +97,19 @@ document.getElementById('locationregister').addEventListener('click', function()
       },
       body: JSON.stringify(locationData),
     })
-    .then(response => response.json())
+    .then(response => {
+    if (!response.ok) {
+        if (response.status == 409) {
+            alert('이미 존재하는 로케이션 코드입니다.');
+        } else {
+            alert('로케이션 등록 중 오류가 발생했습니다.');
+        }
+        return false;
+    }
+    return response.json();
+	})
     .then(data => {
+		if(!data) {return false;}
 		let datamemo;
 		if(data.memo){
 			datamemo= data.memo;
@@ -115,7 +126,7 @@ document.getElementById('locationregister').addEventListener('click', function()
 			const locationlisttbody = document.getElementById('locationlisttbody');  // 로케이션 리스트가 출력되는 DOM 요소
             const locationlisttr = document.createElement('tr');  // 새 행 생성
             locationlisttr.innerHTML = `
-             	<td><input type="checkbox" class="checkbox" value="${data.code}"></td7>
+             	<td><input type="checkbox" class="checkbox" value="${data.code}"></td>
                 <td>${data.code}</td>
                 <td>${data.warehouseCode}</td>
                 <td>${data.rackCode}</td>

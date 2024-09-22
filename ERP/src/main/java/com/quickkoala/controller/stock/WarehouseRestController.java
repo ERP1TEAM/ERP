@@ -84,14 +84,29 @@ public class WarehouseRestController {
 	//창고검색
 	@GetMapping("/stock/warehousesearch")
 	public ResponseEntity<List<WarehouseDto>> searchWarehouse
-	(@RequestParam("warehouseSearchtype") String warehouseSearchtype,
-	@RequestParam("warehouseSearch") String warehouseSearch){
-	List<WarehouseDto> warehouseSearchresult=warehouseService.searchWarehouse(warehouseSearchtype, warehouseSearch);
-		
-		return ResponseEntity.ok(warehouseSearchresult);
+		(@RequestParam("warehouseSearchtype") String warehouseSearchtype,
+				@RequestParam("warehouseSearch") String warehouseSearch){
+		List<WarehouseDto> warehouseSearchresult=warehouseService.searchWarehouse(warehouseSearchtype, warehouseSearch);
+			
+			return ResponseEntity.ok(warehouseSearchresult);
 	}
-	
-	
+		
+	/*
+		//창고 리스트
+		@GetMapping("/stock/warehouses/{pno}")
+		public Page<WarehouseEntity> warehouseList(@PathVariable Integer pno, @RequestParam String code,
+				@RequestParam String word) {
+	    	Page<WarehouseEntity> result = warehouseService.getPaginatedData(pno, SIZE);
+	    	if (code.equals("") || word.equals("")) {
+				result = warehouseService.getPaginatedData(pno, SIZE);
+			} else {
+				result = warehouseService.getPaginatedData(pno, SIZE, code, word);
+			}
+	    	return result;
+	    	
+		}
+		 
+	*/
 	//****location 부분****//
 	
 	private final int SIZE = 5;
@@ -99,17 +114,18 @@ public class WarehouseRestController {
 	@Autowired
 	private LocationService locationService;
 	
-	//로케이션 등록
+	// 로케이션 등록
 	@PostMapping("/stock/locations")
-    public ResponseEntity<LocationDto> saveLocation(@RequestBody LocationDto locationDto) {
-    	
-		LocationEntity savelocation = locationService.saveLocation(locationDto);
-        if(savelocation == null) {
-    	return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
-        }
-        LocationDto savelocationDto = locationService.convertToLocationDto(savelocation);
-    	return ResponseEntity.ok(savelocationDto);
-    }
+	public ResponseEntity<LocationDto> saveLocation(@RequestBody LocationDto locationDto) {
+	    try {
+	        LocationEntity savelocation = locationService.saveLocation(locationDto);
+	        LocationDto savelocationDto = locationService.convertToLocationDto(savelocation);
+	        return ResponseEntity.ok(savelocationDto);
+	    } catch (IllegalArgumentException e) {
+	        // 중복된 로케이션 코드일 경우 예외 발생 시 409 상태 코드 반환
+	        return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
+	    }
+	}
 	
 	//로케이션 리스트
 	@GetMapping("/stock/locations/{pno}")

@@ -72,8 +72,8 @@ function locationlistmain(pno, code = '', word = ''){
                  </tr>`;
 			locationlisttbody.innerHTML +=locationlistth;
 		});
-		const paging = document.getElementById("paging");
-		paging.innerHTML = '';
+		const pagingElement = document.getElementById("locationlistpaging");
+		pagingElement.innerHTML = '';
 		
 		 // 페이지 그룹의 시작과 끝 계산
          locationstartPage = Math.floor((pno - 1) / locationpageSize) * locationpageSize + 1;
@@ -109,7 +109,7 @@ function locationlistmain(pno, code = '', word = ''){
                 paginationHTML += `</ul>`;
 
                 // 페이징 HTML을 페이지에 삽입
-                paging.innerHTML = paginationHTML;
+                pagingElement.innerHTML = paginationHTML;
 				
                 // URL 업데이트 (검색 조건도 포함)
                 if(word == ""){
@@ -153,12 +153,26 @@ document.getElementById('locationdelete').addEventListener('click',function(){
         }
     })
     .then(response => {
-		return response.json();
-		})
+		 if (!response.ok) {
+            alert('로케이션 삭제 중 오류가 발생했습니다.');
+        return false;
+        }
+        return response.json();
+    })
     .then(data => {
+		if(!data){return false;}
         if (data.ok) {
             alert('로케이션이 삭제되었습니다.');
-            locationlistmain(paging(1, locationSearchCode, locationSearchWord));
+            
+             checkboxes.forEach(function (checkbox) {
+                const row = checkbox.closest('tr');
+                if (row) {
+                    row.remove();
+                }
+                });
+            if (typeof locationpaging == 'function')  {
+            locationlistmain(locationP, locationSearchCode, locationSearchWord);
+            }
         } else {
             alert('로케이션 삭제 중 오류가 발생했습니다.');
         }
