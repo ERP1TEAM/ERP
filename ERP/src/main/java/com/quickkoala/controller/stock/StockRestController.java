@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -150,5 +151,16 @@ public class StockRestController {
 	     } else {
 	         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 	     }
+	}
+	     
+    @PutMapping("/stock/category/{categoryCode}")
+    public ResponseEntity<String> updateCategory(@PathVariable String categoryCode,@RequestBody CategoryDto categoryDto){
+    	boolean updateCategory = categoryService.updateCategory(categoryCode, categoryDto);
+    	
+    	if(updateCategory) {
+    		return ResponseEntity.ok("카테고리가 수정 되었습니다.");
+    	}else {
+    		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("해당 카테고리 코드를 찾을 수 없습니다.");
+    	}
 	}
 }

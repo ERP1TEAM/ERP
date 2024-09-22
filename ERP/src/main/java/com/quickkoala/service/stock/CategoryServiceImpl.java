@@ -13,6 +13,7 @@ import com.quickkoala.dto.stock.CategoryDto;
 import com.quickkoala.dto.stock.LocationDto;
 import com.quickkoala.entity.stock.CategoryEntity;
 import com.quickkoala.entity.stock.LocationEntity;
+import com.quickkoala.entity.stock.WarehouseEntity;
 import com.quickkoala.entity.stock.ProductEntity.UseFlag;
 import com.quickkoala.repository.stock.CategoryRepository;
 
@@ -87,6 +88,26 @@ public class CategoryServiceImpl implements CategoryService{
 		}
 		return null;
 	}
+	
+	@Override
+	public boolean updateCategory(String Code, CategoryDto categoryDto) {
+		CategoryEntity categoryEntity= categoryRepository.findById(Code).orElse(null);
+		
+		if(categoryEntity != null) {
+			categoryEntity.setMainName(categoryDto.getMainName());
+			categoryEntity.setSubName(categoryDto.getSubName());
+			try {
+			    categoryEntity.setUseFlag(UseFlag.valueOf(categoryDto.getUseFlag()));
+			} catch (IllegalArgumentException e) {
+			    throw new RuntimeException("유효하지 않은 useFlag값입니다.");
+			}
+			categoryEntity.setMemo(categoryDto.getMemo());
+			categoryRepository.save(categoryEntity);
+			return true;
+		}
+		return false;
+	}
+	
 	
 	@Override
 	public Page<CategoryEntity> getPaginatedData(int pno, int size) {

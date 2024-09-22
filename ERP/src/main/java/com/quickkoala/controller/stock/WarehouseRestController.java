@@ -92,7 +92,7 @@ public class WarehouseRestController {
 	}
 		
 	/*
-		//창고 리스트
+		//창고 리스트 + 페이징
 		@GetMapping("/stock/warehouses/{pno}")
 		public Page<WarehouseEntity> warehouseList(@PathVariable Integer pno, @RequestParam String code,
 				@RequestParam String word) {

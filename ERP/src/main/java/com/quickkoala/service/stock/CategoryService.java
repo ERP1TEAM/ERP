@@ -15,6 +15,8 @@ public interface CategoryService {
 	
 	CategoryDto getCategoryByCode(String code);
 	
+	boolean updateCategory(String Code, CategoryDto categoryDto);
+	
 	Page<CategoryEntity> getPaginatedData(int pno, int size);
 	
 	Page<CategoryEntity> getPaginatedData(int pno, int size, String code, String word);

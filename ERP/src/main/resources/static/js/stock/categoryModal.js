@@ -82,26 +82,6 @@ document.getElementById('categoryregister').addEventListener('click', function()
         });
     });
 
-// 카테고리 수정 시 코드 동적 업데이트
-const categoryModifyMainCode = document.getElementById('categoryModifymainCode');
-const categoryModifySubCode = document.getElementById('categoryModifysubCode');
-const categoryModifyCode = document.getElementById('categoryModifyCode');
-
-function updateModifyCategoryCode() {
-    const mainCode = categoryModifyMainCode.value.trim();
-    const subCode = categoryModifySubCode.value.trim();
-
-    if (mainCode && subCode) {
-        const autoCode = `${mainCode}${subCode}`;
-        categoryModifyCode.value = autoCode;
-    } else {
-        categoryModifyCode.value = '';
-    }
-}
-
-categoryModifyMainCode.addEventListener('input', updateModifyCategoryCode);
-categoryModifySubCode.addEventListener('input', updateModifyCategoryCode);
-
 //카테고리 수정 틀 갖고오기
 document.querySelector('#categorytbody').addEventListener('click', function(event) {
 if (event.target && event.target.classList.contains('categorymodifybtn')) {
@@ -136,6 +116,62 @@ if (event.target && event.target.classList.contains('categorymodifybtn')) {
         });
     }
 });
+
+//카테고리 수정
+document.getElementById('categorymodify').addEventListener('click', function() {
+        
+    const categoryCode = document.getElementById('categoryModifyCode').value;
+    const categorymainCodeval = document.getElementById('categoryModifymainCode').value;
+    const categorymainNameval = document.getElementById('categoryModifymainName').value.trim();
+    const categorysubCodeval = document.getElementById('categoryModifysubCode').value;
+    const categorysubNameval = document.getElementById('categoryModifysubName').value.trim();
+    const categorymemoval = document.getElementById('categoryModifymemo').value.trim();
+    const categoryuseflagval = document.querySelector('input[name="categoryModifyuseflag"]:checked').value;
+        
+        if (!categorymainNameval || !categorysubNameval) {
+        alert('카테고리 대메뉴명과 소메뉴명을 작성해 주세요');
+        return false;
+    	}
+        
+        const categoryData = {
+            code: categoryCode,
+        	mainCode: categorymainCodeval,
+        	mainName: categorymainNameval,
+        	subCode: categorysubCodeval,
+        	subName: categorysubNameval,
+        	useFlag: categoryuseflagval,
+        	memo: categorymemoval
+    	};
+        fetch(`/main/stock/category/${categoryCode}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(categoryData),
+        })
+        .then(response => {
+            if (response.ok) {
+                return response.text();
+            }else if(response.status == 409){
+				return response.text();
+				}else{
+				alert('카테고리 수정에 실패했습니다.');
+			}
+        })
+        .then(data => {
+            alert(data);
+            if(data=='카테고리가 수정되었습니다.'){
+              document.getElementById('categorymodifymodal').style.display = 'none';
+               document.getElementById('categoryoverlay').style.display = 'none';
+              document.getElementById('categorylistmodal').style.display = 'block';
+              categorymainmodal();
+              }
+        })
+        .catch(error => {
+            alert('카테고리 수정 중 오류가 발생했습니다.');
+        });
+    });
+
 
 //카테고리 페이징
 var categoryTotalPages = 1;
