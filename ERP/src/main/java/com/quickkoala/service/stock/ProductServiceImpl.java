@@ -6,10 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.quickkoala.dto.stock.ProductDto;
-import com.quickkoala.entity.stock.LocationEntity;
 import com.quickkoala.entity.stock.ProductEntity;
 import com.quickkoala.entity.stock.ProductEntity.UseFlag;
 import com.quickkoala.repository.stock.ProductRepository;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class ProductServiceImpl implements ProductService{
@@ -71,10 +72,13 @@ public class ProductServiceImpl implements ProductService{
 		if(productRepository.existsByCode(productEntity .getCode())) {
 			throw new IllegalArgumentException("이미 존재하는 상품 코드입니다");
 		}
+		
+		LocalDateTime now = LocalDateTime.now();
+		
 		if (productEntity.getCreatedDt() == null) {
-            productEntity.setCreatedDt(LocalDateTime.now());
+            productEntity.setCreatedDt(now);
             productEntity.setCreatedManager(manager);
-            productEntity.setUpdatedDt(LocalDateTime.now());
+            productEntity.setUpdatedDt(now);
             productEntity.setManager(manager);
 		}
 		return productRepository.save(productEntity);
@@ -94,5 +98,11 @@ public class ProductServiceImpl implements ProductService{
 	private String randomcode() {
 		String saverandomcode="P" + String.format("%07d",(int)(Math.random()*10000000));
 		return saverandomcode;
+	}
+	
+	@Transactional
+	@Override
+	public int modifyLocation(String productCode, String locationCode) {
+		return productRepository.updateLocationCode(productCode, locationCode);
 	}
 }

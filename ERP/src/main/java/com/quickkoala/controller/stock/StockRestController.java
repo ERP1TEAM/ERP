@@ -39,7 +39,7 @@ import com.quickkoala.service.stock.ViewProductStockSupplierService;
 public class StockRestController {
 	private final int SIZE = 5;
 
-	//***** 재고 등록 부분 *****//
+	//***** 재고 *****//
 	
 	@Autowired
 	private LocationService locationService;
@@ -92,8 +92,6 @@ public class StockRestController {
 		 }
 	 }
 	 
-	 
-	//*****재고 리스트 부분*****//
 	@Autowired
 	private ViewProductStockSupplierService viewProductStockService;
 	
@@ -109,6 +107,21 @@ public class StockRestController {
     	return result;
 		
 	}
+	
+	@GetMapping("/stock/inventorymanagement/{pno}")
+	public Page<ViewProductStockSupplierEntity> inventorymanagementLsit(@PathVariable Integer pno, @RequestParam String code,
+			@RequestParam String word) {
+		Page<ViewProductStockSupplierEntity> result = viewProductStockService.getPaginatedData(pno, SIZE);
+		if (code.equals("") || word.equals("")) {
+			result = viewProductStockService.getPaginatedData(pno, SIZE);
+		} else {
+			result = viewProductStockService.getinventoryPaginatedData(pno, SIZE, code, word);
+		}
+		return result;
+		
+	}
+	
+	
 	
 	//******카테고리 모달 부분*****//
 	@Autowired

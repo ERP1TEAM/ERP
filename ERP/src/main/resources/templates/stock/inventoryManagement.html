@@ -41,15 +41,15 @@
                 </div>
                 <form id="inventoryManagement_form">
                 <div class="search stockallleft">
-                <select class="product_input1" id="inventoryManagementSearchtype">
+                <select class="product_input1" id="inventorymanagementSearchtype">
 												<option value="1">품목코드</option>
 												<option value="2">품목명</option>
 												<option value="3">제조사코드</option>
 												<option value="4">제조사명</option>
 												<option value="5">로케이션코드</option>
 												<option value="6">카테고리코드</option>
-										</select> <input type="text" placeholder="검색어 입력" id="inventoryManagementSearch" class="stocksearchwidth"> 
-											<button type="submit" id="inventoryManagementSearchbtn" class="stocksearchbtn">검색</button>
+										</select> <input type="text" placeholder="검색어 입력" id="inventorymanagementSearch" class="stocksearchwidth"> 
+											<button type="submit" id="inventorymanagementSearchbtn" class="stocksearchbtn">검색</button>
                 </div>
 				</form>
                     <div class="card-content">
@@ -65,11 +65,13 @@
 		                                <th class="center" style="width: 6%;">카테고리 코드</th>
 		                                <th class="center" style="width: 6%;">대메뉴명(대메뉴코드)</th>
 		                                <th class="center" style="width: 6%;">소메뉴명(소메뉴코드)</th>
+		                                <th class="center" style="width: 6%;">안전재고</th>
 		                                <th class="center" style="width: 4%;">단가</th>
 		                                <th class="center" style="width: 4%;">사용유/무</th>
+		                                <th class="center" style="width: 4%;">관리</th>
                                     </tr>
                                 </thead>
-                                <tbody id="inventoryManagementtbody">
+                                <tbody id="inventorymanagementtbody">
                                 </tbody>
                             </table>
     						<nav class="no-bg" aria-label="Page navigation" id="inventoryManagementPaging">
@@ -90,5 +92,6 @@
     </div>
     
 <div th:insert="~{layout/stockfooter :: src}"></div>
+<script th:src="@{/js/stock/inventoryManagement.js}"></script>
 </body>
 </html>

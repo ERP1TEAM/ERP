@@ -1,35 +1,35 @@
 document.addEventListener('DOMContentLoaded', function() {
 	var inventorymanagementTotalPages = 1;
-    var inventorylistStartPage = 0;
-    var inventorylistEndPage = 0;
-    const inventorylistPageSize = 3; // 페이지 번호 그룹 크기 설정
+    var inventorymanagementStartPage = 0;
+    var inventorymanagementEndPage = 0;
+    const inventorymanagementPageSize = 3; // 페이지 번호 그룹 크기 설정
     
-    const getinventorylistQueryParam = (param) => {
+    const getinventorymanagementQueryParam = (param) => {
         const urlParams = new URLSearchParams(window.location.search);
         return urlParams.get(param);
     } 
     
-    let inventorylistP = parseInt(getinventorylistQueryParam("p")) || 1;
-    let inventorylistSearchCode = getinventorylistQueryParam("code") || '1';  // 검색 코드
-    let inventorylistSearchWord = getinventorylistQueryParam("word") || '';  // 검색어
+    let inventorymanagementP = parseInt(getinventorymanagementQueryParam("p")) || 1;
+    let inventorymanagementSearchCode = getinventorymanagementQueryParam("code") || '1';  // 검색 코드
+    let inventorymanagementSearchWord = getinventorymanagementQueryParam("word") || '';  // 검색어
     
-    document.getElementById("inventorylistSearchtype").value = inventorylistSearchCode;
-    document.getElementById("inventorylistSearch").value = inventorylistSearchWord;
+    document.getElementById("inventorymanagementSearchtype").value = inventorymanagementSearchCode;
+    document.getElementById("inventorymanagementSearch").value = inventorymanagementSearchWord;
 
-    window.inventorylistPaging = function(p = inventorylistP, code = inventorylistSearchCode, word = inventorylistSearchWord) {
-        inventorylistmain(p, code, word);
+    window.inventorymanagementPaging = function(p = inventorymanagementP, code = inventorymanagementSearchCode, word = inventorymanagementSearchWord) {
+        inventorymanagementmain(p, code, word);
     }
 
-    window.inventorylistPgNext = function() {
-        inventorylistmain(inventorylistEndPage + 1, inventorylistSearchCode, inventorylistSearchWord);
+    window.inventorymanagementPgNext = function() {
+        inventorymanagementmain(inventorymanagementEndPage + 1, inventorymanagementSearchCode, inventorymanagementSearchWord);
     }
 
-    window.inventorylistPgPrev = function() {
-        inventorylistmain(inventorylistStartPage - 1, inventorylistSearchCode, inventorylistSearchWord);
+    window.inventorymanagementPgPrev = function() {
+        inventorymanagementmain(inventorymanagementStartPage - 1, inventorymanagementSearchCode, inventorymanagementSearchWord);
     }
 
-function inventorylistmain(pno, code = '', word = ''){
-	fetch(`/main/stock/viewproductstocks/${pno}?code=${code}&word=${word}`,{
+function inventorymanagementmain(pno, code = '', word = ''){
+	fetch(`/main/stock/inventorymanagement/${pno}?code=${code}&word=${word}`,{
 		method:'GET',
 		headers:{
 				'Content-Type':'application/json',
@@ -38,56 +38,59 @@ function inventorylistmain(pno, code = '', word = ''){
 	.then(response=>response.json())
 	.then(data=>{
 		console.log(data);
-		let inventorylisttbody=document.querySelector('#inventorylisttbody');
-    	inventorylisttbody.innerHTML='';
+		let inventorymanagementtbody=document.querySelector('#inventorymanagementtbody');
+    	inventorymanagementtbody.innerHTML='';
 		
 		const items = data.content;
-		inventorylistTotalPages = data.totalPages;
+		inventorymanagementTotalPages = data.totalPages;
 		
-    	items.forEach(function(inventorylist){
+    	items.forEach(function(inventorymanagement){
 		
-        let inventorylistth = `<tr class="odd gradeX">
-                    <td>${inventorylist.productCode}</td>
-                    <td>${inventorylist.productName}</td>
-                    <td>${inventorylist.supplierCode}</td>
-                    <td>${inventorylist.supplierName}</td>
-                    <td>${inventorylist.totalQty}</td>
-                    <td>${inventorylist.availableQty}</td>
-                    <td>${inventorylist.unavailableQty}</td>
-                    <td>${inventorylist.safetyQty}</td>
-                    <td><input type="button" value="상세보기" class="dailyinventorybtn"></td>
+        let inventorymanagementth = `<tr class="odd gradeX">
+                    <td>${inventorymanagement.productCode}</td>
+                    <td>${inventorymanagement.productName}</td>
+                    <td>${inventorymanagement.supplierCode}</td>
+                    <td>${inventorymanagement.supplierName}</td>
+                    <td>${inventorymanagement.locationCode}</td>
+                    <td>${inventorymanagement.classificationCode}</td>
+                    <td>${inventorymanagement.대메뉴명}(${inventorymanagement.대메뉴코드})</td>
+                    <td>${inventorymanagement.소메뉴명}(${inventorymanagement.소메뉴코드})</td>
+                    <td>${inventorymanagement.safetyQty}</td>
+                    <td>${inventorymanagement.price}</td>
+                    <td>${inventorymanagement.useFlag}</td>
+                    <td><input type="button" value="수정" class="inventorymanagementmodifybtn" value={}></td>
                  </tr>`;
-			inventorylisttbody.innerHTML +=inventorylistth;
+			inventorymanagementtbody.innerHTML +=inventorymanagementth;
 		}); 
-		const inventorylistPaging = document.getElementById("inventorylistPaging");
-		inventorylistPaging.innerHTML = '';
+		const inventorymanagementPaging = document.getElementById("inventorymanagementPaging");
+		inventorymanagementPaging.innerHTML = '';
 		
 		 // 페이지 그룹의 시작과 끝 계산
-         inventorylistStartPage = Math.floor((pno - 1) / inventorylistPageSize) * inventorylistPageSize+ 1;
-         inventorylistEndPage = Math.min(inventorylistStartPage + inventorylistPageSize- 1, inventorylistTotalPages);
+         inventorymanagementStartPage = Math.floor((pno - 1) / inventorymanagementPageSize) * inventorymanagementPageSize+ 1;
+         inventorymanagementEndPage = Math.min(inventorymanagementStartPage + inventorymanagementPageSize- 1, inventorymanagementTotalPages);
 
          // 페이징 HTML 생성
          let paginationHTML = `<ul class="pagination">`;
 
          // 'Precious' 링크 추가
-         if ( inventorylistStartPage >  inventorylistPageSize) {
+         if ( inventorymanagementStartPage >  inventorymanagementPageSize) {
         	 paginationHTML += `
-        	 <li class="page-item"><a class="page-link" aria-label="Previous" onclick=" inventorylistPgPrev()">
+        	 <li class="page-item"><a class="page-link" aria-label="Previous" onclick=" inventorymanagementPgPrev()">
         	 <span aria-hidden="true">&laquo;</span>
         	 </a></li>`;
              }
          // 페이지 번호 링크 추가
-                for (let i =  inventorylistStartPage; i <=  inventorylistEndPage; i++) {
+                for (let i =  inventorymanagementStartPage; i <=  inventorymanagementEndPage; i++) {
                     const className = pno == i ? 'page-item current-page' : 'page-item';
                     paginationHTML += `
-                        <li class="${className}"><a class="page-link" onclick=" inventorylistPaging(${i})">${i}</a></li>
+                        <li class="${className}"><a class="page-link" onclick="inventorymanagementPaging(${i})">${i}</a></li>
                     `;
                 }
 
                 // 'Next' 링크 추가
-                if ( inventorylistEndPage <  inventorylistTotalPages) {
+                if ( inventorymanagementEndPage <  inventorymanagementTotalPages) {
                     paginationHTML += `
-                        <li class="page-item"><a class="page-link" aria-label="Next" onclick=" inventorylistPgNext()">
+                        <li class="page-item"><a class="page-link" aria-label="Next" onclick="inventorymanagementPgNext()">
                             <span aria-hidden="true">&raquo;</span>
                         </a></li>
                     `;
@@ -96,7 +99,7 @@ function inventorylistmain(pno, code = '', word = ''){
                 paginationHTML += `</ul>`;
 
                 // 페이징 HTML을 페이지에 삽입
-                inventorylistPaging.innerHTML = paginationHTML;
+                inventorymanagementPaging.innerHTML = paginationHTML;
 				
                 // URL 업데이트 (검색 조건도 포함)
                 if(word == ""){
@@ -110,13 +113,13 @@ function inventorylistmain(pno, code = '', word = ''){
 			console.log(error);
 		});
 }
-inventorylistmain(inventorylistP, inventorylistSearchCode, inventorylistSearchWord);
+inventorymanagementmain(inventorymanagementP, inventorymanagementSearchCode, inventorymanagementSearchWord);
 
 //검색
-document.getElementById("inventorylist_form").addEventListener("submit", function(event) {
+document.getElementById("inventoryManagement_form").addEventListener("submit", function(event) {
 event.preventDefault(); // 기본 폼 제출 방지
-inventorylistSearchCode = document.getElementById("inventorylistSearchtype").value;
-inventorylistSearchWord = document.getElementById("inventorylistSearch").value;
-inventorylistPaging(1, inventorylistSearchCode, inventorylistSearchWord); // 검색 후 첫 페이지부터 시작	
+inventorymanagementSearchCode = document.getElementById("inventorymanagementSearchtype").value;
+inventorymanagementSearchWord = document.getElementById("inventorymanagementSearch").value;
+inventorymanagementPaging(1, inventorymanagementSearchCode, inventorymanagementSearchWord); // 검색 후 첫 페이지부터 시작	
 })
 });

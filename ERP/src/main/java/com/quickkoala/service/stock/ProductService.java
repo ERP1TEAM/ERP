@@ -8,4 +8,5 @@ public interface ProductService {
 	
 	ProductEntity saveProduct (ProductDto productDto,String manager);
 	ProductDto convertToProductDto(ProductEntity productEntity);
+	int modifyLocation (String productCode, String locationCode);
 }
