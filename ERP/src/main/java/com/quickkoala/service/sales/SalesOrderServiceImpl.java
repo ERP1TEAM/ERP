@@ -156,12 +156,12 @@ public class SalesOrderServiceImpl implements SalesOrderService {
                 // 주문 날짜 처리
                 if (row.getCell(8).getCellType() == CellType.NUMERIC) {
                     // 엑셀에서 날짜 타입으로 읽는 경우 (NUMERIC)
-                    LocalDate orderDate = row.getCell(8).getLocalDateTimeCellValue().toLocalDate();
+                    LocalDateTime orderDate = row.getCell(8).getLocalDateTimeCellValue();
                     orderDTO.setOrderDate(orderDate);
                 } else {
                     // 엑셀에서 문자열 형식으로 읽는 경우
                     String dateStr = row.getCell(8).getStringCellValue();
-                    LocalDate orderDate = LocalDate.parse(dateStr, formatter);
+                    LocalDateTime orderDate = LocalDateTime.parse(dateStr, formatter);
                     orderDTO.setOrderDate(orderDate);
                 }
                 
@@ -196,7 +196,7 @@ public class SalesOrderServiceImpl implements SalesOrderService {
     }
     
     // 주문 날짜를 기반으로 고유한 customOrderId를 생성
-    private String generateOrderId(LocalDate orderDate) {
+    private String generateOrderId(LocalDateTime orderDate) {
         // 해당 날짜에 존재하는 주문의 개수를 가져옴
         Long orderCountForDate = clientsOrdersRepository.countByOrderDate(orderDate);
 

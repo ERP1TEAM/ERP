@@ -28,7 +28,7 @@ public class ClientsOrdersEntity {
     private String addressDetail;
     
     @Column(name = "order_date")
-    private LocalDate orderDate;   // 주문 날짜 추가
+    private LocalDateTime orderDate;   // 주문 날짜 추가
     
     @Column(name="create_dt")
     private LocalDateTime createDt;

@@ -75,36 +75,32 @@
                                     <button id="uploadButton" class="btn btn-primary" style="border: none; background-color:#474B54;" onclick="uploadFile()" disabled>주문 등록</button>
                                     <p id="uploadStatus"></p>
                                     
-                                    <table>
+                                    <table style="font-size: 12px;'">
                                         <tbody>
                                             <!-- 첫 번째 행 -->
                                             <tr>
                                                 <th>수취인</th>
                                                 <td><input type="text" id="recipientName" placeholder="수취인"></td>
-                                                <th>수취인 연락처</th>
+                                                <th>연락처</th>
                                                 <td><input type="text" id="recipientPhone" placeholder="수취인 연락처"></td>
-                                                <th>수취인 이메일</th>
+                                                <th>이메일</th>
                                                 <td><input type="email" id="recipientEmail" placeholder="수취인 이메일"></td>
-                                                <th>수취인 우편번호</th>
+                                                <th>주소 <button type="button" class="btn btn-primary" style="border: none; height:30px; background-color:#F2F2F2; font-size: 12px; color: black;" onclick="findPostcode()">주소 찾기</button></th>
                                                 <td>
                                                     <input type="text" id="recipientPostcode" class="readonly" placeholder="우편번호" readonly>
-                                                    <button type="button" onclick="findPostcode()">주소 찾기</button>
                                                 </td>
-                                                <th>수취인 도로명 주소</th>
                                                 <td><input type="text" id="recipientAddress" class="readonly" placeholder="도로명 주소" readonly></td>
-                                                <th>수취인 상세주소</th>
                                                 <td><input type="text" id="recipientDetailAddress" placeholder="상세주소"></td>
                                             </tr>
-                                            <!-- 세 번째 행 -->
                                             <tr>
-                                                <th>주문 상품코드</th>
+                                                <th>상품코드</th>
                                                 <td><input type="text" id="productCode" placeholder="상품코드" oninput="fetchProductName()"></td>
-                                                <th>주문 상품명</th>
+                                                <th>상품명</th>
                                                 <td><input type="text" id="productName" class="readonly" placeholder="상품명" readonly></td>
-                                                <th>주문 갯수</th>
+                                                <th>주문갯수</th>
                                                 <td><input type="number" id="productQuantity" placeholder="주문 갯수"></td>
-                                                <th>관리자 메모</th>
-                                                <td colspan="5"><input type="text" id="adminMemo" placeholder="관리자 메모" style="width: 100%;"></td>
+                                                <td colspan="3"><input type="text" id="adminMemo" placeholder="수취인 메모" style="width: 100%;"></td>
+                                                <td colspan="3"><input type="text" id="adminMemo" placeholder="관리자 메모" style="width: 100%;"></td>
                                             </tr>
                                         </tbody>
                                     </table>
