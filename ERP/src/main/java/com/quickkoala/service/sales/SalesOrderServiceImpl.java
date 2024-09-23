@@ -118,7 +118,7 @@ public class SalesOrderServiceImpl implements SalesOrderService {
           //salesOrder 저장
             OrderEntity salesOrder = new OrderEntity();
             salesOrder.setDt(now);
-            salesOrder.setManager("khjjjjj");
+            salesOrder.setManager(null);
             salesOrder.setMemo(null);
             salesOrder.setStatus(OrderStatus.미승인);
             salesOrder.setSalesCode(orderDTO.getManagerCompanyCode());
