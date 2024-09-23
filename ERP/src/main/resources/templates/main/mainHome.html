@@ -63,13 +63,13 @@
 
 <body>
     <div id="wrapper">
-        <nav th:replace="~{/sales/header :: header}"></nav>
+        <nav th:replace="~{/main/header :: header}"></nav>
         
-        <div th:replace="~{/sales/dropdown :: dropdown}"></div>
+        <div th:replace="~{/main/dropdown :: dropdown}"></div>
 
-        <div th:replace="~{/sales/sidebar :: sidebar}" id="sidebar"></div>
+        <div th:replace="~{/main/sidebar :: sidebar}" id="sidebar"></div>
 
-        <div id="page-wrapper" style="background-color: #dcebdb">
+        <div id="page-wrapper" style="background-color: #e0e8f5">
             <div class="header"> 
                 <h1 class="page-header">Home</h1>		
             </div>
@@ -98,7 +98,7 @@
                                         <tbody id="noticeTableBody">
                                             <tr th:each="notice : ${notices}">
                                                 <td class="center" th:text="${notice.no}"></td>
-                                                <td><a th:href="@{/sales/noticeView/{id}(id=${notice.id})}" th:text="${notice.title}"></a></td>
+                                                <td><a th:href="@{/main/noticeView/{id}(id=${notice.id})}" th:text="${notice.title}"></a></td>
                                                 <td class="center" th:text="${notice.manager}"></td>
                                                 <td class="center" th:text="${notice.views}"></td>
                                                 <td class="center" th:text="${#temporals.format(notice.createdAt, 'yyyy-MM-dd')}"></td>
@@ -139,7 +139,7 @@
 	function filterNotices(page = 0) {
 	    const size = 10;  // 한 페이지에 표시할 공지사항 수
 
-	    fetch(`/sales/filterNotices?page=${page}&size=${size}`)
+	    fetch(`/main/filterNotices?page=${page}&size=${size}`)
 	        .then(response => response.json())
 	        .then(data => {
 	            const tbody = document.getElementById('noticeTableBody');
@@ -149,7 +149,7 @@
 	                const row = `
 	                    <tr>
 	                        <td class="center">${notice.no}</td>
-	                        <td><a href="/sales/noticeView/${notice.id}">${notice.title}</a></td>
+	                        <td><a href="/main/noticeView/${notice.id}">${notice.title}</a></td>
 	                        <td class="center">${notice.manager}</td>
 	                        <td class="center">${notice.views}</td>
 	                        <td class="center">${new Date(notice.createdAt).toLocaleDateString()}</td>

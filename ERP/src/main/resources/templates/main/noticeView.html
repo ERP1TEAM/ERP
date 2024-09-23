@@ -16,11 +16,11 @@
 
 <body>
     <div id="wrapper">
-        <nav th:replace="~{/supplier/header-s :: header}"></nav>
+        <nav th:replace="~{/main/header :: header}"></nav>
         
-        <div th:replace="~{/supplier/dropdown1-s :: dropdown}"></div>
+        <div th:replace="~{/main/dropdown :: dropdown}"></div>
 
-	  	<div th:insert="~{/supplier/sidebar-s :: sidebar}" id="sidebar"></div>
+        <div th:replace="~{/main/sidebar :: sidebar}" id="sidebar"></div>
 
       <div id="page-wrapper" style="background-color: #dcebdb">
 		  	<div class="header"> 
@@ -40,7 +40,7 @@
                             <p th:text="${notice.content}"></p>
                         </div>
                         <br>
-                        <a href="/sales/home" class="btn" style="background-color: #474B54">목록으로 돌아가기</a>
+                        <a href="/main/home" class="btn" style="background-color: #474B54">목록으로 돌아가기</a>
                         <button id="deleteButton" class="btn" style="background-color: #d9534f; float:right;" title="작성자 삭제가능" disabled>삭제</button>
                     </div>
                 </div>

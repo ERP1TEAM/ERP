@@ -17,10 +17,6 @@ public class MemberController {
 	public String register() {
 		return "member/register";
 	}
-	@GetMapping("/main/home")
-	public String test1() {
-		return "main/mainHome";
-	}
 
 	
 }
