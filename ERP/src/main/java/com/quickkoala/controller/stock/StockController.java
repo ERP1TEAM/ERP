@@ -24,6 +24,12 @@ public class StockController {
 		return "stock/inventoryList";
 	}
 	
+	@GetMapping("/stock/inventoryManagement")
+	public String inventoryManagement() {
+		
+		return "stock/inventoryManagement";
+	}
+	
 
 	
 	

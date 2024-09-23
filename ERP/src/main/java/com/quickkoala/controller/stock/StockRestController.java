@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.quickkoala.dto.stock.CategoryDto;
 import com.quickkoala.dto.stock.LocationDto;
 import com.quickkoala.dto.stock.ProductDto;
-import com.quickkoala.dto.stock.WarehouseDto;
 import com.quickkoala.entity.client.SupplierEntity;
 import com.quickkoala.entity.stock.CategoryEntity;
 import com.quickkoala.entity.stock.ProductEntity;
@@ -33,7 +32,6 @@ import com.quickkoala.service.stock.CategoryService;
 import com.quickkoala.service.stock.LocationService;
 import com.quickkoala.service.stock.ProductService;
 import com.quickkoala.service.stock.ViewProductStockService;
-import com.quickkoala.service.stock.WarehouseService;
 
 @RestController
 @RequestMapping("main")
@@ -45,9 +43,6 @@ public class StockRestController {
 	
 	@Autowired
 	private LocationService locationService;
-	
-	@Autowired
-	private WarehouseService warehouseService;
 	
 	@Autowired
 	private SupplierService supplierService;
@@ -75,13 +70,11 @@ public class StockRestController {
 	 @GetMapping("/stock/inventoryselectoptions")
 	 public ResponseEntity<Map<String, Object>> getAllOptions() {
         List<LocationDto> locationOption = locationService.getAllOrdersByCode();
-        List<WarehouseDto> warehouseOption = warehouseService.getAllOrdersByCode();
         List<CategoryDto> categoryOption = categoryService.getAllOrdersByCode();
         List<SupplierEntity> supplierOption = supplierService.getAllData();
         
         Map<String, Object> response = new HashMap<>();
         response.put("locations", locationOption);
-        response.put("warehouses", warehouseOption);
         response.put("categories", categoryOption);
         response.put("suppliers", supplierOption);
 

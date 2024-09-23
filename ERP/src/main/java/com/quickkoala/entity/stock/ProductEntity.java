@@ -30,7 +30,7 @@ public class ProductEntity {
     @Column(name = "classification_code", length = 6, nullable = false)
     private String classificationCode;
 
-    @Column(name = "storage_location", length = 6, nullable = false)
+    @Column(name = "storage_location", length = 6)
     private String storageLocation;
 
     @Column(name = "use_flag", nullable = false)

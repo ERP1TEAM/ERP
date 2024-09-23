@@ -2,95 +2,107 @@
 <html xmlns:th="https://thymeleaf.org">
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>side bar</title>
 </head>
 <body>
-<nav class="navbar-default navbar-side" role="navigation" th:fragment="sidebar">
-            <div class="sidebar-collapse">
-                <ul class="nav" id="main-menu">
-                    <li>
-                        <a href="#" class="waves-effect waves-dark" style="color:white;"><img src="/img/icon/managingAdminIcon.png" style="margin-right: 10px; margin-left: 5px;"> 고객관리<span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level">
-                            <li>
-                                <a class="active-menu waves-effect waves-dark" href="index.html"> 거래처</a>
-                            </li>
-                            <li>
-                                <a class="active-menu waves-effect waves-dark" href="index.html"> 발주처</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="#" class="waves-effect waves-dark" style="color:white;"><img src="/img/icon/managingOrderIcon.png" style="margin-right: 10px; margin-left: 5px;"> 주문관리<span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level">
-                            <li >
-                                <a class="active-menu waves-effect waves-dark" href="#"  style="color: #E2E2E2;">미처리</a>
-                            </li>
-                            <li>
-                                <a class="active-menu waves-effect waves-dark" href="#"  style="color: #E2E2E2;">처리완료</a>
-                            </li>
-                        </ul>
-                    </li>
-                	<li>
-                        <a href="#" class="waves-effect waves-dark" style="color:white;"><img src="/img/icon/managingProductIcon.png" style="margin-right: 10px; margin-left: 5px;"> 재고관리<span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level">
-                            <li >
-                                <a class="active-menu waves-effect waves-dark" href="/main/stock/inventoryList"  style="color: #E2E2E2;">재고목록</a>
-                            </li>
-                            <li>
-                                <a class="active-menu waves-effect waves-dark" href="/main/stock/inventoryIn"  style="color: #E2E2E2;">상품등록</a>
-                            </li>
-                            <li>
-                                <a class="active-menu waves-effect waves-dark" href="/main/stock/inventoryManagement"  style="color: #E2E2E2;">품목관리</a>
-                            </li>
-                    	</ul>
-                    </li>
-					<li>
-                        <a href="#" class="waves-effect waves-dark" style="color:white;"><img src="/img/icon/managingInputIcon.png" style="margin-right: 10px; margin-left: 5px;"> 입고관리<span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level">
-                            <li >
-                                <a class="active-menu waves-effect waves-dark" href="./purchaseOrder"  style="color: #E2E2E2;">발주요청</a>
-                            </li>
-                            <li>
-                                <a class="active-menu waves-effect waves-dark" href="./purchaseOrderList"  style="color: #E2E2E2;">발주내역</a>
-                            </li>
-                            <li>
-                                <a class="active-menu waves-effect waves-dark" href="#"  style="color: #E2E2E2;">입고현황</a>
-                            </li>
-                            <li>
-                                <a class="active-menu waves-effect waves-dark" href="#"  style="color: #E2E2E2;">입고내역</a>
-                            </li>
-                            <li>
-                                <a class="active-menu waves-effect waves-dark" href="#"  style="color: #E2E2E2;">미입고현황</a>
-                            </li>
-                            <!--  샘플메뉴
-                            <li>
-                                <a class="active-menu waves-effect waves-dark" href="index.html"><i class="fa fa-dashboard"></i> 메뉴1</a>
-                            </li>
-                            -->
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="#" class="waves-effect waves-dark" style="color:white;"><img src="/img/icon/managingOutputIcon.png" style="margin-right: 10px; margin-left: 5px;"> 출고관리<span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level">
-                            <li >
-                                <a class="active-menu waves-effect waves-dark" href="#"  style="color: #E2E2E2;">출고관리</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="#" class="waves-effect waves-dark" style="color:white;"><img src="/img/icon/managingStorageIcon.png" style="margin-right: 10px; margin-left: 5px;"> 창고관리<span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level">
-                            <li >
-                                <a class="active-menu waves-effect waves-dark" href="/main/stock/locationStatus"  style="color: #E2E2E2;">로케이션 현황</a>
-                            </li>
-                            <li>
-                                <a class="active-menu waves-effect waves-dark" href="/main/stock/locationList"  style="color: #E2E2E2;">로케이션 목록</a>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
+	<nav class="navbar-default navbar-side" role="navigation"
+		th:fragment="sidebar">
+		<div class="sidebar-collapse">
+			<ul class="nav" id="main-menu">
+				<li><a href="#" class="waves-effect waves-dark"
+					style="color: white;"><img
+						src="/img/icon/managingAdminIcon.png"> 고객관리<span
+						class="fa arrow"></span></a>
+					<ul class="nav nav-second-level">
+						<li><a class="active-menu waves-effect waves-dark"
+							href="/main/client/salesList"> 거래처</a></li>
+						<li><a class="active-menu waves-effect waves-dark"
+							href="/main/client/supplierList"> 발주처</a></li>
+					</ul></li>
+				<li><a href="#" class="waves-effect waves-dark"
+					style="color: white;"><img
+						src="/img/icon/managingOrderIcon.png"> 주문관리<span
+						class="fa arrow"></span></a>
+					<ul class="nav nav-second-level">
+						<li><a class="active-menu waves-effect waves-dark"
+							href="../../main/order/ongoing" style="color: #E2E2E2;">주문진행</a>
+						</li>
+						<li><a class="active-menu waves-effect waves-dark"
+							href="../../main/order/cancel" style="color: #E2E2E2;">주문취소</a></li>
+					</ul></li>
+				<li><a href="#" class="waves-effect waves-dark"
+					style="color: white;"><img
+						src="/img/icon/managingProductIcon.png"> 재고관리<span
+						class="fa arrow"></span></a>
+					<ul class="nav nav-second-level">
+						<li><a class="active-menu waves-effect waves-dark"
+							href="/main/stock/inventoryList" style="color: #E2E2E2;">재고목록</a>
+						</li>
+						<li><a class="active-menu waves-effect waves-dark"
+							href="/main/stock/inventoryManagement" style="color: #E2E2E2;">품목관리</a></li>
+						<li><a class="active-menu waves-effect waves-dark"
+							href="/main/stock/inventoryIn" style="color: #E2E2E2;">품목등록</a></li>
+					</ul></li>
+				<li><a href="#" class="waves-effect waves-dark"
+					style="color: white;"><img
+						src="/img/icon/managingInputIcon.png"> 입고관리<span
+						class="fa arrow"></span></a>
+					<ul class="nav nav-second-level">
+						<li><a class="active-menu waves-effect waves-dark"
+							href="/main/receive/purchaseOrder" style="color: #E2E2E2;">발주요청</a>
+						</li>
+						<li><a class="active-menu waves-effect waves-dark"
+							href="/main/receive/purchaseDetail" style="color: #E2E2E2;">발주내역</a>
+						</li>
+						<li><a class="active-menu waves-effect waves-dark"
+							href="/main/receive/temporaryReceive" style="color: #E2E2E2;">가입고</a>
+						</li>
+						<li><a class="active-menu waves-effect waves-dark"
+							href="/main/receive/receiveSummary" style="color: #E2E2E2;">입고현황</a>
+						</li>
+						<li><a class="active-menu waves-effect waves-dark"
+							href="/main/receive/receiveDetail" style="color: #E2E2E2;">입고내역</a>
+						</li>
+						<li><a class="active-menu waves-effect waves-dark"
+							href="/main/receive/receiveReturn" style="color: #E2E2E2;">반품내역</a>
+						</li>
+					</ul></li>
+				<li><a href="#" class="waves-effect waves-dark"
+					style="color: white;"><img
+						src="/img/icon/managingOutputIcon.png"> 출고관리<span
+						class="fa arrow"></span></a>
+					<ul class="nav nav-second-level">
 
-            </div>
-        </nav>
+
+
+						<li><a class="active-menu waves-effect waves-dark"
+							href="../../main/release/ongoing" style="color: #E2E2E2;">출고진행</a>
+						</li>
+						<li><a class="active-menu waves-effect waves-dark"
+							href="../../main/release/complete" style="color: #E2E2E2;">출고완료</a>
+						</li>
+						<li><a class="active-menu waves-effect waves-dark"
+							href="../../main/release/return" style="color: #E2E2E2;">출고반품</a>
+						</li>
+						<li><a class="active-menu waves-effect waves-dark"
+							href="../../main/release/cancel" style="color: #E2E2E2;">출고취소</a>
+						</li>
+					</ul></li>
+				<li><a href="#" class="waves-effect waves-dark"
+					style="color: white;"><img
+						src="/img/icon/managingStorageIcon.png"> 창고관리<span
+						class="fa arrow"></span></a>
+					<ul class="nav nav-second-level">
+						<li><a class="active-menu waves-effect waves-dark"
+							href="/main/stock/locationStatus" style="color: #E2E2E2;">로케이션
+								현황</a></li>
+						<li><a class="active-menu waves-effect waves-dark"
+							href="/main/stock/locationList" style="color: #E2E2E2;">로케이션
+								목록</a></li>
+					</ul></li>
+			</ul>
+
+		</div>
+	</nav>
 </body>
 </html>
