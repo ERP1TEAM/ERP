@@ -12,10 +12,6 @@
     <link rel="stylesheet" th:href="@{/assets/css/custom-styles.css}" />
     <link rel="stylesheet" th:href="@{/assets/js/Lightweight-Chart/cssCharts.css}" />
     <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
-
-    <!-- FullCalendar CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.7/main.min.css" />
-
     <style>
         /* 우측 하단 고정 버튼 스타일 */
         .floating-btn {
@@ -62,22 +58,18 @@
 		.pagination a:hover {
 		    background-color: #ddd;
 		}
-
-        /* 캘린더 스타일 */
-        #calendar {
-            max-width: 900px;
-            margin: 40px auto;
-        }
     </style>
 </head>
 
 <body>
     <div id="wrapper">
-        <nav th:replace="~{/sales/header :: header}"></nav>
-        <div th:replace="~{/sales/dropdown :: dropdown}"></div>
-        <div th:replace="~{/sales/sidebar :: sidebar}" id="sidebar"></div>
+        <nav th:replace="~{/supplier/header-s :: header}"></nav>
+        
+        <div th:replace="~{/supplier/dropdown1-s :: dropdown}"></div>
 
-        <div id="page-wrapper" style="background-color: #dcebdb">
+	  	<div th:insert="~{/supplier/sidebar-s :: sidebar}" id="sidebar"></div>
+
+        <div id="page-wrapper" style="background-color: #F7FFF0;">
             <div class="header"> 
                 <h1 class="page-header">Home</h1>		
             </div>
@@ -106,7 +98,7 @@
                                         <tbody id="noticeTableBody">
                                             <tr th:each="notice : ${notices}">
                                                 <td class="center" th:text="${notice.no}"></td>
-                                                <td><a th:href="@{/sales/noticeView/{id}(id=${notice.id})}" th:text="${notice.title}"></a></td>
+                                                <td><a th:href="@{/supplier/noticeView/{id}(id=${notice.id})}" th:text="${notice.title}"></a></td>
                                                 <td class="center" th:text="${notice.manager}"></td>
                                                 <td class="center" th:text="${notice.views}"></td>
                                                 <td class="center" th:text="${#temporals.format(notice.createdAt, 'yyyy-MM-dd')}"></td>
@@ -134,14 +126,6 @@
                     </div>
                 </div>
 
-                <!-- 메모 캘린더 -->
-                <div class="row">
-                    <div class="col-md-12">
-                        <h3>메모 캘린더</h3>
-                        <div id="calendar"></div>
-                    </div>
-                </div>
-
                 <footer><p>Copyright 2024 ⓒ quickkoala.com by <i class="fa fa-love"></i><a href="http://quickkoala.com">Quick Koala All right reserved.</a></p></footer>
             </div>
         </div>
@@ -150,13 +134,12 @@
     <a href="./noticeWrite" class="floating-btn">
         <i class="fa fa-pencil"></i> 공지사항 작성
     </a>
-
 	<script>
 	// 공지사항 목록 필터링 및 페이징 처리 함수
 	function filterNotices(page = 0) {
 	    const size = 10;  // 한 페이지에 표시할 공지사항 수
 
-	    fetch(`/sales/filterNotices?page=${page}&size=${size}`)
+	    fetch(`/supplier/filterNotices?page=${page}&size=${size}`)
 	        .then(response => response.json())
 	        .then(data => {
 	            const tbody = document.getElementById('noticeTableBody');
@@ -166,7 +149,7 @@
 	                const row = `
 	                    <tr>
 	                        <td class="center">${notice.no}</td>
-	                        <td><a href="/sales/noticeView/${notice.id}">${notice.title}</a></td>
+	                        <td><a href="/supplier/noticeView/${notice.id}">${notice.title}</a></td>
 	                        <td class="center">${notice.manager}</td>
 	                        <td class="center">${notice.views}</td>
 	                        <td class="center">${new Date(notice.createdAt).toLocaleDateString()}</td>
@@ -208,31 +191,8 @@
 	    filterNotices();  // 첫 페이지 로드
 	});
 
-	// FullCalendar 초기화
-	document.addEventListener('DOMContentLoaded', function() {
-	    var calendarEl = document.getElementById('calendar');
-	    var calendar = new FullCalendar.Calendar(calendarEl, {
-	        initialView: 'dayGridMonth',
-	        events: [], // 서버에서 가져온 메모 데이터를 여기에 추가할 수 있음
-	        selectable: true,
-	        select: function(info) {
-	            var title = prompt('메모를 입력하세요:');
-	            if (title) {
-	                calendar.addEvent({
-	                    title: title,
-	                    start: info.startStr,
-	                    end: info.endStr,
-	                    allDay: true
-	                });
-	            }
-	        }
-	    });
-	    calendar.render();
-	});
 	</script>
 
-    <!-- FullCalendar JS -->
-    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.7/main.min.js"></script>
     <script th:src="@{/assets/js/jquery-1.10.2.js}"></script>
     <script th:src="@{/assets/js/bootstrap.min.js}"></script>
     <script th:src="@{/assets/materialize/js/materialize.min.js}"></script>

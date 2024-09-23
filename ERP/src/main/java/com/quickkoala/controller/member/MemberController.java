@@ -19,11 +19,8 @@ public class MemberController {
 	}
 	@GetMapping("/main/home")
 	public String test1() {
-		return "sales/mainHome";
+		return "main/mainHome";
 	}
-	@GetMapping("/supplier/home")
-	public String test2() {
-		return "sales/supplierHome";
-	}
+
 	
 }

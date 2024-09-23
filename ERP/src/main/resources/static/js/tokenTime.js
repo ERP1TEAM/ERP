@@ -1,3 +1,5 @@
+
+
 // 서버에서 사용자 이름을 가져와 페이지에 표시하는 함수
 async function fetchUserName() {
     try {
@@ -24,6 +26,8 @@ async function fetchUserName() {
 document.addEventListener('DOMContentLoaded', fetchUserName);
 
 async function extendSession() {
+    if (cancelled) return; // 로그아웃 중이거나 완료되면 extendSession 중지
+
     try {
         const response = await fetch('/api/extend-session', {
             method: 'POST',
@@ -44,6 +48,7 @@ async function extendSession() {
     }
 }
 
+
 function extend() {
     extendSession();
 }
@@ -60,20 +65,37 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // 클릭 이벤트 발생 시 토큰 연장
     document.addEventListener('click', () => {
-        extendSession();
+        if (!cancelled) {
+            extendSession();
+        }
     });
 
     // 페이지 이동 또는 새로고침 시 토큰 연장
     window.addEventListener('beforeunload', function() {
-        extendSession();
+        if (!cancelled) {
+            extendSession();
+        }
     });
 });
+
 
 let cancelled = false; // 취소 여부 플래그
 let remainingTime = 0; // 서버로부터 남은 시간(ms)을 받을 변수
 let intervalId;
 
+// 로그아웃 함수 추가
+function logout() {
+    cancelled = true; // 세션 상태 체크를 중지하기 위해 cancelled를 true로 설정
+    // 페이지 이동 전 extendSession 실행을 막기 위해 event listener 제거
+    window.removeEventListener('beforeunload', extendSession);
+
+    // 실제 로그아웃 요청을 서버로 전송
+    location.href = '/api/logout'; // 로그아웃 경로로 이동
+}
+
 async function checkSessionStatus() {
+	// 로그아웃되면 더 이상 실행하지 않도록 설정
+	
     try {
         const response = await fetch('/api/token-remaining-time', {
             method: 'POST',

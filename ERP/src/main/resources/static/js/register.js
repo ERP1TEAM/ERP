@@ -6,7 +6,7 @@ window.onload = () => {
 
 // 뒤로가기 버튼 클릭 시 로그인 페이지로 이동
 function goBack() {
-    window.location.href = '/login.do';
+    window.location.href = '/login';
 }
 
 // 권한 코드 입력 시 상태 확인
@@ -137,7 +137,7 @@ function register() {
     .then(response => response.text())
     .then(data => {
         alert(data);
-        location.href = ""; // 성공 후 리다이렉트
+        location.href = "/login"; // 성공 후 리다이렉트
     })
     .catch(error => {
         console.error('Error:', error);

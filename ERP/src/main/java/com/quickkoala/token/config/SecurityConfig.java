@@ -37,14 +37,16 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .csrf(csrf -> csrf.disable())
-            .authorizeHttpRequests(authorizeRequests ->
-                authorizeRequests
-                    .requestMatchers("/api/**", "/register", "/login", "/assets/**","/img/**").permitAll()
-                    .requestMatchers("/sales/**").hasAuthority("Sales")
-                    .requestMatchers("/main/**").hasAuthority("Main")
-                    .requestMatchers("/supplier/**").hasAuthority("Supplier")
-                    .anyRequest().authenticated()
-            )
+            .authorizeHttpRequests(authorizeRequests -> 
+            	authorizeRequests
+                // 정적 리소스에 대한 접근을 허용
+                .requestMatchers("/css/**", "/js/**", "/images/**", "/assets/**", "/img/**").permitAll()
+                .requestMatchers("/api/**", "/register", "/login").permitAll()
+                .requestMatchers("/sales/**").hasAuthority("Sales")
+                .requestMatchers("/main/**").hasAuthority("Main")
+                .requestMatchers("/supplier/**").hasAuthority("Supplier")
+                .anyRequest().authenticated()
+        )
             .formLogin(formLogin ->
 	            formLogin
 	                .loginPage("/login")

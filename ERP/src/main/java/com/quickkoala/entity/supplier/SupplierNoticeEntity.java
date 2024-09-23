@@ -1,4 +1,4 @@
-package com.quickkoala.entity.sales;
+package com.quickkoala.entity.supplier;
 
 
 import jakarta.persistence.Column;
@@ -14,8 +14,8 @@ import java.time.LocalDateTime;
 
 @Entity
 @Data
-@Table(name = "sales_notices")
-public class NoticeEntity {
+@Table(name = "supplier_notices")
+public class SupplierNoticeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,7 +26,10 @@ public class NoticeEntity {
     private String content;
 
     private String manager;
-
+    
+    @Column(name = "manager_company_code")
+    private String companyCode;
+    
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 

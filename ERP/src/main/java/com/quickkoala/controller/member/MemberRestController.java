@@ -71,7 +71,7 @@ public class MemberRestController {
                 case "Supplier":
                     redirectUrl = "/supplier/home";
                     break;
-                case "Distributor":
+                case "Main":
                     redirectUrl = "/main/home";
                     break;
                 default:
@@ -82,7 +82,7 @@ public class MemberRestController {
             // 리디렉션 URL을 응답으로 반환
             return ResponseEntity.ok(redirectUrl);
         } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Authentication failed");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("아이디나 패스워드를 확인해주세요");
         }
     }
         
