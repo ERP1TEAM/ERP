@@ -4,8 +4,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import org.hibernate.annotations.CreationTimestamp;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -45,11 +43,7 @@ public class ClientsOrdersEntity {
     
     @Column(name = "manager_memo")
     private String managerMemo;
-    
-    @CreationTimestamp
-    @Column(name = "created_dt")
-    private String createdDt;
-    
+
     @OneToMany(mappedBy = "clientsOrders", cascade = CascadeType.ALL)
     private List<ClientsOrderProductsEntity> products;
 
