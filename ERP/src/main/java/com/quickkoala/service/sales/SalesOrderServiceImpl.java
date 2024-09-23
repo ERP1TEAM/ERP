@@ -79,7 +79,7 @@ public class SalesOrderServiceImpl implements SalesOrderService {
                 order.setOrderDate(orderDTO.getOrderDate());
                 //입력 날짜
                 now = LocalDateTime.now();
-                order.setCreateDt(LocalDateTime.now());
+                order.setCreatedDt(LocalDateTime.now());
 
                 //주문고유식별자
                 // 고유한 주문 ID 생성 (order_id 설정)

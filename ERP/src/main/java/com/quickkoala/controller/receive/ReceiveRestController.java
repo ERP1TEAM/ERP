@@ -44,14 +44,21 @@ import com.quickkoala.service.receive.ViewReceiveTempService;
 import com.quickkoala.service.stock.LotService;
 import com.quickkoala.service.stock.ProductService;
 import com.quickkoala.service.supplier.PurchaseService;
+import com.quickkoala.token.config.JwtTokenProvider;
 import com.quickkoala.utils.ExcelUpload;
+import com.quickkoala.utils.GetToken;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("main")
 public class ReceiveRestController {
 
 	private static final int SIZE = 5;
-
+	
+	@Autowired
+	private JwtTokenProvider jwtTokenProvider;
+	
 	@Autowired
 	private PurchaseService purchaseService;
 
@@ -96,8 +103,8 @@ public class ReceiveRestController {
 
 	// 발주요청
 	@PostMapping("receive/purchaseAdd")
-	public String purchaseAdd(@ModelAttribute PurchaseListDto orders) {
-		purchaseService.addOrders(orders);
+	public String purchaseAdd(@ModelAttribute PurchaseListDto orders, HttpServletRequest request) {
+		purchaseService.addOrders(orders,GetToken.getManagerName(request));
 		return "success";
 	}
 
@@ -180,13 +187,13 @@ public class ReceiveRestController {
 
 	// 입고확정
 	@PostMapping("receive/receiving")
-	public String receiving(@ModelAttribute ReceivingDto dto) {
+	public String receiving(@ModelAttribute ReceivingDto dto, HttpServletRequest request) {
 		ReceiveDetailEntity result = new ReceiveDetailEntity();
 		ReceiveReturnEntity result2 = new ReceiveReturnEntity();
 		
 		// 입고수량이 있을때
 		if (dto.getReQty() != 0) {
-			result = receiveDetailService.addData(dto.getCode(), dto.getReQty());
+			result = receiveDetailService.addData(dto.getCode(), dto.getReQty(), GetToken.getManagerName(request));
 			lotService.addLot(dto);
 			if(!dto.getLocation().equals("N")) {
 				int result3 = productService.modifyLocation(dto.getProductCode(), dto.getLocation());
@@ -195,7 +202,7 @@ public class ReceiveRestController {
 		}
 		// 반품수량이 있을때
 		if (dto.getCaQty() != 0) {
-			result2 = receiveReturnService.addData(dto);
+			result2 = receiveReturnService.addData(dto, GetToken.getManagerName(request));
 		}
 
 		if (result == null || result2 == null) {

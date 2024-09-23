@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import com.quickkoala.dto.receive.ReceivingDto;
 import com.quickkoala.entity.receive.ReceiveReturnEntity;
 import com.quickkoala.repository.receive.ReceiveReturnRepository;
-import com.quickkoala.repository.supplier.DeliveryDetailRepository;
 import com.quickkoala.utils.TodayUtils;
 
 @Service
@@ -19,7 +18,7 @@ public class ReceiveReturnServiceImpl implements ReceiveReturnService{
 	private ReceiveReturnRepository receiveReturnRepository;
 	
 	@Override
-	public ReceiveReturnEntity addData(ReceivingDto dto) {
+	public ReceiveReturnEntity addData(ReceivingDto dto, String manager) {
 		int number = (int)this.countReturnsToday()+1;
 		String formattedNumber = String.format("%03d", number);
 		
@@ -31,8 +30,7 @@ public class ReceiveReturnServiceImpl implements ReceiveReturnService{
 		data.setReason(dto.getCon());
 		data.setMemo(dto.getMemo());
 		data.setDate(LocalDateTime.now());
-		data.setManager(dto.getManager());
-		
+		data.setManager(manager);
 		
 		return receiveReturnRepository.save(data);
 	}

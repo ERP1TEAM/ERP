@@ -30,8 +30,8 @@ public class ClientsOrdersEntity {
     @Column(name = "order_date")
     private LocalDateTime orderDate;   // 주문 날짜 추가
     
-    @Column(name="create_dt")
-    private LocalDateTime createDt;
+    @Column(name="created_dt")
+    private LocalDateTime createdDt;
     
     @Column(name = "client_memo")
     private String clientMemo; // 주문자 메모 필드

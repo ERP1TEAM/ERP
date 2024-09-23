@@ -27,7 +27,7 @@ public class PurchaseServiceImpl implements PurchaseService{
 	private SupplierService supplierService;
 	
 	@Override
-	public List<PurchaseEntity> addOrders(PurchaseListDto orders) {
+	public List<PurchaseEntity> addOrders(PurchaseListDto orders, String manager) {
 		List<PurchaseEntity> orderEntities = new ArrayList<>();
 		int number = (int)this.getCountOfOrdersToday()+1;
 		
@@ -37,7 +37,7 @@ public class PurchaseServiceImpl implements PurchaseService{
 	        order.setOrderNumber(TodayUtils.getToday()+"-" + formattedNumber);
 	        order.setSupplierCode(supplierService.getCode(orders.getSupplier().get(f)).getCode());
 	        order.setProductCode(orders.getProduct_code().get(f));
-	        order.setManager("홍길동");
+	        order.setManager(manager);
 	        order.setQuantity(orders.getQuantity().get(f));
 	        order.setPrice(orders.getPrice().get(f));
 	        order.setTotalPrice(orders.getQuantity().get(f) * orders.getPrice().get(f));

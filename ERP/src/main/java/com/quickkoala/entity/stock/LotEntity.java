@@ -27,9 +27,6 @@ public class LotEntity {
     @Column(name = "supplier_code", nullable = false, length = 6)
     private String supplierCode;
 
-    @Column(name = "storage_location", nullable = false, length = 8)
-    private String storageLocation;
-
     @Column(name = "quantity", nullable = false)
     private int quantity;
 
