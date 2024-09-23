@@ -117,6 +117,11 @@ public class StockRestController {
 		} else {
 			result = viewProductStockService.getinventoryPaginatedData(pno, SIZE, code, word);
 		}
+		
+		List<CategoryDto> categories = categoryService.getAllOrdersByCode();
+		result.put("inventoryData", inventoryData);
+	    result.put("categories", categories);
+		
 		return result;
 		
 	}
