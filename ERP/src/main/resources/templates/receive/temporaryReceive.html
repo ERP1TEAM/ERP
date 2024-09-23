@@ -26,11 +26,9 @@
 
 <body>
 	<div id="wrapper">
-		<nav class="navbar navbar-default top-navbar" role="navigation"
-			th:replace="~{header.html :: header}"></nav>
-		<!-- Dropdown Structure -->
-		<ul id="dropdown1" class="dropdown-content"
-			th:replace="~{dropdown1.html :: dropdown1}"></ul>
+        <nav th:replace="~{/main/header :: header}"></nav>
+        
+        <div th:replace="~{/main/dropdown :: dropdown}"></div>
 		<!--/. NAV TOP  -->
 		<nav class="navbar-default navbar-side" role="navigation"
 			th:replace="~{sidebar.html :: sidebar}"></nav>
