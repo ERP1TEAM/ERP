@@ -190,7 +190,7 @@ public class ReceiveRestController {
 			lotService.addLot(dto);
 			if(!dto.getLocation().equals("N")) {
 				int result3 = productService.modifyLocation(dto.getProductCode(), dto.getLocation());
-				System.out.println(result3); 
+				System.out.println(result3);
 			}
 		}
 		// 반품수량이 있을때
