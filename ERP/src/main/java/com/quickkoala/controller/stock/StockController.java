@@ -18,10 +18,10 @@ public class StockController {
 		return "stock/inventoryIn";
 	}
 	
-	@GetMapping("/stock/inventoryList")
-	public String inventoryList() {
+	@GetMapping("/stock/stockList")
+	public String stockList() {
 		
-		return "stock/inventoryList";
+		return "stock/stockList";
 	}
 	
 	@GetMapping("/stock/inventoryManagement")

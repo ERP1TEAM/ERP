@@ -26,12 +26,12 @@ import com.quickkoala.dto.stock.ProductDto;
 import com.quickkoala.entity.client.SupplierEntity;
 import com.quickkoala.entity.stock.CategoryEntity;
 import com.quickkoala.entity.stock.ProductEntity;
-import com.quickkoala.entity.stock.ViewProductStockEntity;
+import com.quickkoala.entity.stock.ViewProductStockSupplierEntity;
 import com.quickkoala.service.client.SupplierService;
 import com.quickkoala.service.stock.CategoryService;
 import com.quickkoala.service.stock.LocationService;
 import com.quickkoala.service.stock.ProductService;
-import com.quickkoala.service.stock.ViewProductStockService;
+import com.quickkoala.service.stock.ViewProductStockSupplierService;
 
 @RestController
 @RequestMapping("main")
@@ -95,12 +95,12 @@ public class StockRestController {
 	 
 	//*****재고 리스트 부분*****//
 	@Autowired
-	private ViewProductStockService viewProductStockService;
+	private ViewProductStockSupplierService viewProductStockService;
 	
 	@GetMapping("/stock/viewproductstocks/{pno}")
-	public Page<ViewProductStockEntity> viewproductstockList(@PathVariable Integer pno, @RequestParam String code,
+	public Page<ViewProductStockSupplierEntity> viewproductstockList(@PathVariable Integer pno, @RequestParam String code,
 			@RequestParam String word) {
-		Page<ViewProductStockEntity> result = viewProductStockService.getPaginatedData(pno, SIZE);
+		Page<ViewProductStockSupplierEntity> result = viewProductStockService.getPaginatedData(pno, SIZE);
     	if (code.equals("") || word.equals("")) {
 			result = viewProductStockService.getPaginatedData(pno, SIZE);
 		} else {

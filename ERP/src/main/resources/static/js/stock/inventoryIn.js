@@ -9,58 +9,6 @@ document.addEventListener('DOMContentLoaded', function() {
     })
     .then(response => response.json())
     .then(data => {
-		
-        const warehouseSelect = document.getElementById('inventoryWarehouseoption');
-        warehouseSelect.innerHTML = '';
-
-		let warehouseoption;
-		for (let i = 0; i < data.warehouses.length; i++) {
-            if (data.warehouses[i].idx == 1) {
-                warehouseoption = data.warehouses[i];
-                break;
-            }
-        }
-        
-        if (warehouseoption) {
-            let option = document.createElement('option');
-            option.value = warehouseoption.code;
-            option.textContent = option.name;
-            warehouseSelect.appendChild(option);
-        }
-        data.warehouses.forEach(warehouse => {
-            if (warehouse != warehouseoption) {
-                let option = document.createElement('option');
-                option.value = warehouse.code;
-                option.textContent = warehouse.name;
-                warehouseSelect.appendChild(option);
-            }
-        });
-
-        const locationSelect = document.getElementById('inventoryLocationoption');
-        locationSelect.innerHTML = '';
-
-		let locationoption;
-		for (let i = 0; i < data.locations.length; i++) {
-            if (data.locations[i].idx == 1) {
-                locationoption = data.locations[i];
-                break;
-            }
-        }
-         if (locationoption) {
-            let option = document.createElement('option');
-            option.value = locationoption.code;
-            option.textContent = option.code;
-            locationSelect.appendChild(option);
-        }
-        
-        data.locations.forEach(location => {
-            if (location != locationoption) {
-                let option = document.createElement('option');
-                option.value = location.code;
-                option.textContent = location.code;
-                locationSelect.appendChild(option);
-            }
-        });
         
         const supplierSelect = document.getElementById('inventorySuppliercodeoption');
         const supplierNameInput = document.getElementById('inventorySuppliernameoption');

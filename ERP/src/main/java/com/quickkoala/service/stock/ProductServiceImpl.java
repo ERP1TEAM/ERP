@@ -26,7 +26,11 @@ public class ProductServiceImpl implements ProductService{
 		maptoProductDto.setName(productEntity.getName());
 		maptoProductDto.setPrice(productEntity.getPrice());
 		maptoProductDto.setClassificationCode(productEntity.getClassificationCode());
-		maptoProductDto.setStorageLocation(productEntity.getStorageLocation());
+		
+		if (productEntity.getStorageLocation() != null) {
+	        maptoProductDto.setStorageLocation(productEntity.getStorageLocation());
+	    }
+		
 		maptoProductDto.setSupplierCode(productEntity.getSupplierCode());
 		maptoProductDto.setMemo(productEntity.getMemo());
 		maptoProductDto.setUseFlag(productEntity.getUseFlag().name());
@@ -39,7 +43,11 @@ public class ProductServiceImpl implements ProductService{
         maptoProductEntity.setName(productDto.getName());
         maptoProductEntity.setPrice(productDto.getPrice());
         maptoProductEntity.setClassificationCode(productDto.getClassificationCode());
-        maptoProductEntity.setStorageLocation(productDto.getStorageLocation());
+        
+        if (productDto.getStorageLocation() != null) {
+            maptoProductEntity.setStorageLocation(productDto.getStorageLocation());
+        }
+        
         maptoProductEntity.setSupplierCode(productDto.getSupplierCode());
         maptoProductEntity.setMemo(productDto.getMemo());
         

@@ -16,8 +16,8 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name="view_product_stock")
-public class ViewProductStockEntity {
+@Table(name="view_product_stock_supplier")
+public class ViewProductStockSupplierEntity {
 
 	 	@Id
 	 	@Column(name = "product_code",length = 8, nullable=false)
@@ -29,6 +29,9 @@ public class ViewProductStockEntity {
 	 	@Column(name = "supplier_code",length = 6, nullable=false)
 	    private String supplierCode;
 
+	 	@Column(name = "supplier_name",length = 255, nullable=false)
+	 	private String supplierName;
+	 	
 	 	@Column(name = "location_code",length = 8, nullable=false)
 	    private String locationCode;
 
@@ -53,10 +56,4 @@ public class ViewProductStockEntity {
 	 	@Column(name = "use_flag", nullable = false)
 	    @Enumerated(EnumType.STRING)
 	    private UseFlag useFlag;
-
-	 	@Column(name = "manager",length = 100, nullable=false)
-	    private String manager;
-
-	 	@Column(name = "memo",nullable=true, columnDefinition = "text")
-	    private String memo;
 }
