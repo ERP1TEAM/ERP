@@ -20,5 +20,6 @@ public class ClientsOrdersDTO {
     private String managerCompanyCode; 
     private String managerMemo;
     private LocalDate orderDate;
+    private LocalDate createdDt;
     private List<ClientsOrderProductsDTO> products;
 }

@@ -88,7 +88,8 @@
         </div>
     </div> 
 
-    <script>
+<!-- 수정된 스크립트 -->
+<script>
     // 페이지 로드 시 fade-in 효과
     window.onload = () => {
         const loginContainer = document.getElementById('login-container');
@@ -147,12 +148,8 @@
             alert('로그인 중 에러가 발생했습니다.');
         }
     });
-
-    // 로그인 버튼 클릭 이벤트 처리
-    document.getElementById('loginButton').addEventListener('click', function() {
-        document.getElementById('loginForm').dispatchEvent(new Event('submit')); // 폼 제출 이벤트를 트리거
-    });
 </script>
+
 
 </body>
 </html>

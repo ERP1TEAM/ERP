@@ -25,6 +25,7 @@ import com.quickkoala.entity.sales.ClientsOrderProductsEntity;
 import com.quickkoala.entity.sales.ClientsOrdersEntity;
 import com.quickkoala.repository.sales.ClientsOrderProductsRepository;
 import com.quickkoala.repository.sales.ClientsOrdersRepository;
+import com.quickkoala.token.config.JwtTokenProvider;
 
 @Service
 public class SalesOrderServiceImpl implements SalesOrderService {
@@ -34,10 +35,13 @@ public class SalesOrderServiceImpl implements SalesOrderService {
     
     @Autowired
     private ClientsOrderProductsRepository clientsOrderProductsRepository;
+    
+    @Autowired
+    private JwtTokenProvider jwtTokenProvider;
 
     @Transactional
     @Override
-    public void saveOrder(List<ClientsOrdersDTO> orders) {
+    public void saveOrder(List<ClientsOrdersDTO> orders, String token) {
         for (ClientsOrdersDTO orderDTO : orders) {
             ClientsOrdersEntity order = findExistingOrder(orderDTO);
 
@@ -53,13 +57,12 @@ public class SalesOrderServiceImpl implements SalesOrderService {
                 order.setAddressDetail(orderDTO.getAddressDetail());
                 order.setClientMemo(orderDTO.getClientMemo());
                 //관리자
-                order.setManager(orderDTO.getManager());
-                order.setCode(orderDTO.getManagerCompanyCode());
+                order.setManager(jwtTokenProvider.getName(token));
+                order.setCode(jwtTokenProvider.getCode(token));
                 order.setManagerMemo(orderDTO.getManagerMemo());
-
                 // 주문 날짜 설정
                 order.setOrderDate(orderDTO.getOrderDate());
-                
+
                 //주문고유식별자
                 // 고유한 주문 ID 생성 (order_id 설정)
                 String orderId = generateOrderId(orderDTO.getOrderDate());

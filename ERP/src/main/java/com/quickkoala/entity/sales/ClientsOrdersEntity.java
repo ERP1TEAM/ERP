@@ -39,7 +39,10 @@ public class ClientsOrdersEntity {
     
     @Column(name = "manager_memo")
     private String managerMemo;
-
+    
+    @Column(name = "created_dt")
+    private String createdDt;
+    
     @OneToMany(mappedBy = "clientsOrders", cascade = CascadeType.ALL)
     private List<ClientsOrderProductsEntity> products;
 
