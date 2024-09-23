@@ -37,8 +37,7 @@ public class LotServiceImpl implements LotService{
 		
 		data.setLotNumber(ent.getProductCode()+"-"+TodayUtils.getTodayS()+"-"+serialFormatted);
 		data.setProductCode(ent.getProductCode());
-		data.setSupplierCode("");
-		data.setStorageLocation("");
+		data.setSupplierCode(ent.getSupplierCode());
 		data.setQuantity(dto.getReQty());
 		data.setProductionDate(sevenDaysAgo);
 		data.setReceiveDate(todayT);

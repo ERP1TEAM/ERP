@@ -289,7 +289,6 @@ document.addEventListener("DOMContentLoaded", function() {
 		formData.append("caQty", caQty);
 		formData.append("con", con);
 		formData.append("memo", memo);
-		formData.append("manager", "홍길동");
 		formData.append("location", location);
 		formData.append("productCode", productCode);
 

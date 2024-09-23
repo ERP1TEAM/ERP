@@ -21,7 +21,7 @@ public class ReceiveDetailServiceImpl implements ReceiveDetailService{
 	private ReceiveTempService receiveTempService;
 	
 	@Override
-	public ReceiveDetailEntity addData(String data, Integer ea) {
+	public ReceiveDetailEntity addData(String data, Integer ea, String manager) {
 		ReceiveDetailEntity receiveDetailEntity = new ReceiveDetailEntity();
 		String orderNumber = receiveTempService.getOrderNumber(data);
 		
@@ -31,7 +31,7 @@ public class ReceiveDetailServiceImpl implements ReceiveDetailService{
 		receiveDetailEntity.setOrderNumber(orderNumber);
 		receiveDetailEntity.setQuantity(ea);
 		receiveDetailEntity.setDate(LocalDateTime.now());
-		receiveDetailEntity.setManager("홍길동");
+		receiveDetailEntity.setManager(manager);
 		return receiveDetailRepository.save(receiveDetailEntity);
 	}
 	
