@@ -1,4 +1,4 @@
-package com.quickkoala.controller.sales;
+package com.quickkoala.controller.main;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -11,19 +11,19 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.quickkoala.dto.sales.SalesNoticeDTO;
-import com.quickkoala.entity.sales.SalesNoticeEntity;
-import com.quickkoala.service.sales.SalesNoticeServiceImpl;
+import com.quickkoala.dto.main.MainNoticeDTO;
+import com.quickkoala.entity.main.MainNoticeEntity;
+import com.quickkoala.service.main.MainNoticeServiceImpl;
 import com.quickkoala.token.config.JwtTokenProvider;
 
 import jakarta.servlet.http.HttpServletRequest;
 
 @Controller
-@RequestMapping("/sales")
-public class SalesNoticeController {
+@RequestMapping("/main")
+public class MainNoticeController {
 	
 	@Autowired
-    private SalesNoticeServiceImpl noticeService;
+    private MainNoticeServiceImpl noticeService;
 	
 	@Autowired
     private JwtTokenProvider jwtTokenProvider;
@@ -38,34 +38,34 @@ public class SalesNoticeController {
     	    // 토큰에서 code 추출
     	    String code = jwtTokenProvider.getClaim(token, "code");
 			// 공지사항 목록을 가져와서 모델에 추가
-			Page<SalesNoticeDTO> notices = noticeService.getNoticesByCompanyCode(code, page, size);
+			Page<MainNoticeDTO> notices = noticeService.getNoticesByCompanyCode(code, page, size);
 			model.addAttribute("notices", notices);
-			return "sales/salesHome";
+			return "main/mainHome";
     }
 
     // 공지사항 작성 페이지
     @GetMapping("/noticeWrite")
     public String newNotice(Model model) {
-        model.addAttribute("notice", new SalesNoticeDTO());
-        return "sales/noticeWrite";
+        model.addAttribute("notice", new MainNoticeDTO());
+        return "main/noticeWrite";
     }
     
     // 공지사항 상세 조회
     @GetMapping("/noticeView/{id}")
     public String viewNotice(@PathVariable Long id, Model model) {
     	// 공지사항을 조회할 때 조회수를 증가시키는 로직 실행
-        SalesNoticeEntity notice = noticeService.getNoticeById(id);
+        MainNoticeEntity notice = noticeService.getNoticeById(id);
 
         // 모델에 조회된 공지사항을 추가
         model.addAttribute("notice", notice);
-        return "sales/noticeView";
+        return "main/noticeView";
     }
     
 	// 공지사항 저장
     @PostMapping("/save")
-    public String saveNotice(@ModelAttribute SalesNoticeDTO noticeDTO) {
+    public String saveNotice(@ModelAttribute MainNoticeDTO noticeDTO) {
         noticeService.saveNotice(noticeDTO);
-        return "redirect:/sales/home";
+        return "redirect:/main/home";
     }
     
 }

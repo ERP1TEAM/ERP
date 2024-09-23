@@ -17,11 +17,11 @@
 </head>
 <body>
     <div id="wrapper">
-        <nav th:replace="~{/supplier/header-s :: header}"></nav>
+        <nav th:replace="~{/main/header :: header}"></nav>
         
-        <div th:replace="~{/supplier/dropdown1-s :: dropdown}"></div>
+        <div th:replace="~{/main/dropdown :: dropdown}"></div>
 
-	  	<div th:insert="~{/supplier/sidebar-s :: sidebar}" id="sidebar"></div>
+        <div th:replace="~{/main/sidebar :: sidebar}" id="sidebar"></div>
 
         <div id="page-wrapper" style="background-color: #dcebdb">
             <div class="header"> 
@@ -37,7 +37,7 @@
                                  공지사항 작성
                             </div>
                             <div class="card-content">
-                                <form th:action="@{/supplier/save}" th:object="${notice}" method="post">
+                                <form th:action="@{/main/save}" th:object="${notice}" method="post">
                                     <div class="input-field">
                                         <input type="text" th:field="*{title}" required>
                                         <label for="title">제목</label>

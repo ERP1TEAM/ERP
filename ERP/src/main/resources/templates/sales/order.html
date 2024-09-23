@@ -12,6 +12,28 @@
 	<link rel="stylesheet" th:href="@{/assets/css/custom-styles.css}" />
 	<link rel="stylesheet" th:href="@{/assets/js/Lightweight-Chart/cssCharts.css}" />
     <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+            text-align: center;
+        }
+        .readonly {
+            background-color: #f5f5f5;
+        }
+        .table-responsive {
+            overflow-x: auto;
+        }
+    </style>
 </head>
 
 <body>
@@ -33,7 +55,7 @@
                     <div class="col-md-12">
                         <div class="card">
                             <div class="card-action">
-                                 주문등록
+                                 주문 등록
                             </div>
                             <div class="card-content">
                                 <div class="table-responsive">
@@ -50,8 +72,44 @@
                                     <!-- 선택한 파일명 표시 -->
                                     <p id="fileName" style="color: #126d1d;"></p>
 
-                                    <button id="uploadButton" class="btn btn-primary" style="border: none; background-color:#474B54; " onclick="uploadFile()" disabled>주문 등록</button>
+                                    <button id="uploadButton" class="btn btn-primary" style="border: none; background-color:#474B54;" onclick="uploadFile()" disabled>주문 등록</button>
                                     <p id="uploadStatus"></p>
+                                    
+                                    <table>
+                                        <tbody>
+                                            <!-- 첫 번째 행 -->
+                                            <tr>
+                                                <th>수취인</th>
+                                                <td><input type="text" id="recipientName" placeholder="수취인"></td>
+                                                <th>수취인 연락처</th>
+                                                <td><input type="text" id="recipientPhone" placeholder="수취인 연락처"></td>
+                                                <th>수취인 이메일</th>
+                                                <td><input type="email" id="recipientEmail" placeholder="수취인 이메일"></td>
+                                                <th>수취인 우편번호</th>
+                                                <td>
+                                                    <input type="text" id="recipientPostcode" class="readonly" placeholder="우편번호" readonly>
+                                                    <button type="button" onclick="findPostcode()">주소 찾기</button>
+                                                </td>
+                                                <th>수취인 도로명 주소</th>
+                                                <td><input type="text" id="recipientAddress" class="readonly" placeholder="도로명 주소" readonly></td>
+                                                <th>수취인 상세주소</th>
+                                                <td><input type="text" id="recipientDetailAddress" placeholder="상세주소"></td>
+                                            </tr>
+                                            <!-- 세 번째 행 -->
+                                            <tr>
+                                                <th>주문 상품코드</th>
+                                                <td><input type="text" id="productCode" placeholder="상품코드" oninput="fetchProductName()"></td>
+                                                <th>주문 상품명</th>
+                                                <td><input type="text" id="productName" class="readonly" placeholder="상품명" readonly></td>
+                                                <th>주문 갯수</th>
+                                                <td><input type="number" id="productQuantity" placeholder="주문 갯수"></td>
+                                                <th>관리자 메모</th>
+                                                <td colspan="5"><input type="text" id="adminMemo" placeholder="관리자 메모" style="width: 100%;"></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <br>
+                                    <button id="submitOrder" class="btn btn-primary" style="border: none; background-color:#474B54;">주문 등록</button>
                                 </div> 
                             </div>
                         </div>
@@ -65,18 +123,37 @@
         </div>
     </div>
 
-    <script th:src="@{/js/order.js}"></script>
+    <!-- Daum 주소찾기 API -->
+    <script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
+    <script>
+        function findPostcode() {
+            new daum.Postcode({
+                oncomplete: function(data) {
+                    document.getElementById('recipientPostcode').value = data.zonecode;
+                    document.getElementById('recipientAddress').value = data.roadAddress;
+                }
+            }).open();
+        }
 
+        // 주문상품코드를 입력하면 주문상품명을 자동으로 출력
+        function fetchProductName() {
+            const productCode = document.getElementById('productCode').value;
+            const productNameField = document.getElementById('productName');
+
+            // 서버로부터 상품명 조회 (예시로 하드코딩된 데이터를 사용)
+            if (productCode === 'P12345') {
+                productNameField.value = '상품명1';
+            } else if (productCode === 'P54321') {
+                productNameField.value = '상품명2';
+            } else {
+                productNameField.value = ''; // 코드가 없을 경우 빈칸 처리
+            }
+        }
+    </script>
+
+    <script th:src="@{/js/order.js}"></script>
     <script th:src="@{/assets/js/jquery-1.10.2.js}"></script>
     <script th:src="@{/assets/js/bootstrap.min.js}"></script>
     <script th:src="@{/assets/materialize/js/materialize.min.js}"></script>
-    <script th:src="@{/assets/js/jquery.metisMenu.js}"></script>
-    <script th:src="@{/assets/js/morris/raphael-2.1.0.min.js}"></script>
-    <script th:src="@{/assets/js/morris/morris.js}"></script>
-    <script th:src="@{/assets/js/easypiechart.js}"></script>
-    <script th:src="@{/assets/js/easypiechart-data.js}"></script>
-    <script th:src="@{/assets/js/Lightweight-Chart/jquery.chart.js}"></script>
-    <script th:src="@{/assets/js/custom-scripts.js}"></script>
-
 </body>
 </html>

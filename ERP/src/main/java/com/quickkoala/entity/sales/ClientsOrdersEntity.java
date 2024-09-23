@@ -1,7 +1,10 @@
 package com.quickkoala.entity.sales;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
+
+import org.hibernate.annotations.CreationTimestamp;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -28,7 +31,10 @@ public class ClientsOrdersEntity {
     
     @Column(name = "order_date")
     private LocalDate orderDate;   // 주문 날짜 추가
-
+    
+    @Column(name="create_dt")
+    private LocalDateTime createDt;
+    
     @Column(name = "client_memo")
     private String clientMemo; // 주문자 메모 필드
     
@@ -39,7 +45,11 @@ public class ClientsOrdersEntity {
     
     @Column(name = "manager_memo")
     private String managerMemo;
-
+    
+    @CreationTimestamp
+    @Column(name = "created_dt")
+    private String createdDt;
+    
     @OneToMany(mappedBy = "clientsOrders", cascade = CascadeType.ALL)
     private List<ClientsOrderProductsEntity> products;
 

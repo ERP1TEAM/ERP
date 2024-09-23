@@ -7,7 +7,7 @@ import com.quickkoala.dto.sales.ClientsOrderProductsDTO;
 import com.quickkoala.dto.sales.ClientsOrdersDTO;
 
 public interface SalesOrderService {
-    void saveOrder(List<ClientsOrdersDTO> orders);
+    void saveOrder(List<ClientsOrdersDTO> orders, String token);
     List<ClientsOrdersDTO> parseExcelFile(File file);
     List<ClientsOrderProductsDTO> getOrderProductsByOrderId(String orderId);
     //List<ClientsOrdersDTO> findAll();

@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.quickkoala.dto.sales.SalesNoticeDTO;
-import com.quickkoala.entity.sales.SalesNoticeEntity;
-import com.quickkoala.service.sales.SalesNoticeServiceImpl;
+import com.quickkoala.dto.supplier.SupplierNoticeDTO;
+import com.quickkoala.entity.supplier.SupplierNoticeEntity;
+import com.quickkoala.service.supplier.SupplierNoticeServiceImpl;
 import com.quickkoala.token.config.JwtTokenProvider;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,7 +23,7 @@ import jakarta.servlet.http.HttpServletRequest;
 public class SupplierNoticeController {
 	
 	@Autowired
-    private SalesNoticeServiceImpl noticeService;
+    private SupplierNoticeServiceImpl noticeService;
 	
 	@Autowired
     private JwtTokenProvider jwtTokenProvider;
@@ -38,7 +38,7 @@ public class SupplierNoticeController {
     	    // 토큰에서 code 추출
     	    String code = jwtTokenProvider.getClaim(token, "code");
 			// 공지사항 목록을 가져와서 모델에 추가
-			Page<SalesNoticeDTO> notices = noticeService.getNoticesByCompanyCode(code, page, size);
+			Page<SupplierNoticeDTO> notices = noticeService.getNoticesByCompanyCode(code, page, size);
 			model.addAttribute("notices", notices);
 			return "supplier/supplierHome";
     }
@@ -46,7 +46,7 @@ public class SupplierNoticeController {
     // 공지사항 작성 페이지
     @GetMapping("/noticeWrite")
     public String newNotice(Model model) {
-        model.addAttribute("notice", new SalesNoticeDTO());
+        model.addAttribute("notice", new SupplierNoticeDTO());
         return "supplier/noticeWrite";
     }
     
@@ -54,7 +54,7 @@ public class SupplierNoticeController {
     @GetMapping("/noticeView/{id}")
     public String viewNotice(@PathVariable Long id, Model model) {
     	// 공지사항을 조회할 때 조회수를 증가시키는 로직 실행
-        SalesNoticeEntity notice = noticeService.getNoticeById(id);
+        SupplierNoticeEntity notice = noticeService.getNoticeById(id);
 
         // 모델에 조회된 공지사항을 추가
         model.addAttribute("notice", notice);
@@ -63,7 +63,7 @@ public class SupplierNoticeController {
     
 	// 공지사항 저장
     @PostMapping("/save")
-    public String saveNotice(@ModelAttribute SalesNoticeDTO noticeDTO) {
+    public String saveNotice(@ModelAttribute SupplierNoticeDTO noticeDTO) {
         noticeService.saveNotice(noticeDTO);
         return "redirect:/supplier/home";
     }

@@ -39,14 +39,16 @@ public class SalesOrderRestController {
 
     //주문등록 (액셀 등록)
     @PostMapping("/uploadFile")
-    public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file ,HttpServletRequest request) {
         try {
             File convFile = new File(System.getProperty("java.io.tmpdir") + "/" + file.getOriginalFilename());
             file.transferTo(convFile);
             
             // 파일 파싱 및 저장 로직
             List<ClientsOrdersDTO> orders = orderService.parseExcelFile(convFile);
-            orderService.saveOrder(orders);
+            
+            String token = jwtTokenProvider.resolveToken(request);
+            orderService.saveOrder(orders,token);
 
             return ResponseEntity.ok("주문 등록 성공");
         } catch (Exception e) {

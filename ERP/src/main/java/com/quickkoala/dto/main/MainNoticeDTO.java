@@ -1,15 +1,15 @@
-package com.quickkoala.dto.supplier;
+package com.quickkoala.dto.main;
 
 import java.time.LocalDateTime;
 
-import com.quickkoala.entity.supplier.SupplierNoticeEntity;
+import com.quickkoala.entity.main.MainNoticeEntity;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class SupplierNoticeDTO {
+public class MainNoticeDTO {
     private Long id;
     private int no;          // 임의로 부여된 NO
     private String title;
@@ -20,11 +20,11 @@ public class SupplierNoticeDTO {
     private int views;
     
     // 기본 생성자 (기존 코드에서 사용될 수 있도록 제공)
-    public SupplierNoticeDTO() {
+    public MainNoticeDTO() {
     }
 
     // NoticeEntity를 받는 생성자
-    public SupplierNoticeDTO(SupplierNoticeEntity noticeEntity) {
+    public MainNoticeDTO(MainNoticeEntity noticeEntity) {
         this.id = noticeEntity.getId();
         this.title = noticeEntity.getTitle();
         this.content = noticeEntity.getContent();
