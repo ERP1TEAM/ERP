@@ -229,8 +229,9 @@ function open_modal(product){
 	document.getElementById("sup").innerText=product.supplierName;
 	document.getElementById("qty").innerText=product.qty;
 	document.getElementById("avqty").innerText=product.availableQty;
+	document.getElementById("avqty").innerText=product.availableQty;
 	//document.getElementById("memo").innerText="아직";
-	document.getElementById("reqPdt").value=product.productCode;
+	document.getElementById("reqPrice").value=product.price;
 	myModal.style="display:block;";
 	modal_opened=true;
 }
@@ -241,10 +242,18 @@ function close_modal(){
 }
 
 document.querySelector("#reqOk").addEventListener("click",function(){
-	console.log("서비스 준비중입니다 !!!!!!!!!!!!");
-	/*
+	var req_qty = document.querySelector("#reqNum").value;
+	var req_pdt_code = document.querySelector("#pdt").value;
+	var req_pdt_name = document.querySelector("#reqPdt").value;
+	var req_sup_name = document.querySelector("#sup").value;
+	var req_price = document.querySelector("#reqPrice").value;
 	formData = new FormData();
-	formData.set("total_price", totalPrice);
+	formData.set("product_code", req_pdt_code);
+	formData.set("supplier", req_sup_name);
+	formData.set("product", req_pdt_name);
+	formData.set("quantity", req_qty);
+	formData.set("price", req_price);
+	formData.set("total_price", req_qty*req_price);
 	fetch("../receive/purchaseAdd",{
 				method: "POST",
 			body: formData
@@ -259,9 +268,8 @@ document.querySelector("#reqOk").addEventListener("click",function(){
 				}
 			})
 			.catch(error => {
-				console.log(error);
+				alert("오류로 인하여 발주등록에 실패하였습니다.");
 			})
-			*/
 });
 document.querySelector("#reqNo").addEventListener("click",function(){
 	close_modal();
