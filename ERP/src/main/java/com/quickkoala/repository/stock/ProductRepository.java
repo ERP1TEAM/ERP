@@ -16,5 +16,5 @@ public interface ProductRepository extends JpaRepository<ProductEntity,String>{
 	@Query("SELECT p.price FROM ProductEntity p WHERE p.code IN :codes")
 	List<Integer> findPricesByCodes(@Param("codes") List<String> codes);
 
-	boolean existsByCode(String code);
+	boolean existsByCode(String code );
 }
