@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="https://www.thymeleaf.org">
-<head th:insert="~{layout/stockHeader :: topheader}"></head>
+        <nav th:replace="~{/main/header :: header}"></nav>
+        
+        <div th:replace="~{/main/dropdown :: dropdown}"></div>
 <body>
     <div id="wrapper">
 	<div th:insert="~{layout/stockHeader::top}"></div>
