@@ -46,10 +46,10 @@ public class ProductEntity {
     @Column(name = "created_dt", nullable = false)
     private LocalDateTime createdDt;
 
-    @Column(name = "created_manager", length = 100, nullable = false)
+    @Column(name = "created_manager", length = 255, nullable = false)
     private String createdManager;
 
-    @Column(name = "manager", length = 100, nullable = false)
+    @Column(name = "manager", length = 255, nullable = false)
     private String manager;
 
     @Column(name = "updated_dt", nullable = false)

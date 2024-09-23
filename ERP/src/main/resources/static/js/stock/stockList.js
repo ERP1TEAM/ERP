@@ -56,6 +56,7 @@ function stocklistmain(pno, code = '', word = ''){
                     <td>${stocklist.unavailableQty}</td>
                     <td>${stocklist.safetyQty}</td>
                     <td><input type="button" value="상세보기" class="dailyinventorybtn"></td>
+                    <td><input type="button" value="설정" class="safetyqtysetting"></td>
                  </tr>`;
 			stocklisttbody.innerHTML +=stocklistth;
 		}); 
@@ -118,4 +119,6 @@ stocklistSearchCode = document.getElementById("stocklistSearchtype").value;
 stocklistSearchWord = document.getElementById("stocklistSearch").value;
 stocklistPaging(1, stocklistSearchCode, stocklistSearchWord); // 검색 후 첫 페이지부터 시작	
 })
+
+
 });

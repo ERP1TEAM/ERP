@@ -15,7 +15,6 @@
 <link href="../../assets/js/morris/morris-0.4.3.min.css"
 	rel="stylesheet" />
 <link href="../../assets/css/custom-styles.css" rel="stylesheet" />
-<link href="../../css/receive/purchaseDetail.css" rel="stylesheet" />
 <link href='http://fonts.googleapis.com/css?family=Open+Sans'
 	rel='stylesheet' type='text/css' />
 <link rel="stylesheet"
@@ -26,21 +25,28 @@
 </head>
 <body>
 	<div id="wrapper">
-		<div th:insert="~{/layout/stockHeader::top}"></div>
-		<div th:insert="~{/sidebar::sidebar}"></div>
+		<nav th:replace="~{/main/header :: header}"></nav>
+        
+        <div th:replace="~{/main/dropdown :: dropdown}"></div>
+		<!--/. NAV TOP  -->
+		<nav class="navbar-default navbar-side" role="navigation"
+			th:replace="~{sidebar.html :: sidebar}"></nav>
 		<div id="page-wrapper">
-			<div th:insert="~{layout/stockHeader :: header}"></div>
-
-			<div id="page-inner">
-
-        <div class="row">
-            <div class="col-md-12">
-                <div class="card">
-                <div class="card-action">
-                품목관리
+         <div class="header"> 
+            <h1 class="page-header">
+                품목 관리
+                </h1>
+                <ol class="breadcrumb">
+					  <li><a href="#" style="color: #1A4870;">Home</a></li>
+					  <!--
+					  <li><a href="#">페이지 tap1</a></li>
+					  <li class="active">페이지 tap2</li>
+					  -->
+					</ol> 
                 </div>
+			<div id="page-inner">
                 <form id="inventoryManagement_form">
-                <div class="search stockallleft">
+                <div class="search">
                 <select class="product_input1" id="inventorymanagementSearchtype">
 												<option value="1">품목코드</option>
 												<option value="2">품목명</option>
@@ -65,10 +71,9 @@
 		                                <th class="center" style="width: 6%;">카테고리 코드</th>
 		                                <th class="center" style="width: 6%;">대메뉴명(대메뉴코드)</th>
 		                                <th class="center" style="width: 6%;">소메뉴명(소메뉴코드)</th>
-		                                <th class="center" style="width: 6%;">안전재고</th>
 		                                <th class="center" style="width: 4%;">단가</th>
 		                                <th class="center" style="width: 4%;">사용유/무</th>
-		                                <th class="center" style="width: 4%;">관리</th>
+		                                <th class="center" style="width: 1%;">관리</th>
                                     </tr>
                                 </thead>
                                 <tbody id="inventorymanagementtbody">
@@ -80,18 +85,22 @@
                         </div> 
                     </div>
 	   			</div>
-	   		</div>
-	   	</div>
-	   </div>
 	   
+<footer><p>Copyright 2024 ⓒ quickkoala.com by <i class="fa fa-love"></i><a href="http://quickkoala.com">Quick Koala All right reserved.</a>
+</p></footer>
 	   
-	   
-	   
-	   <footer th:insert="~{layout/stockfooter :: footer}"></footer>
-        </div>
-    </div>
-    
-<div th:insert="~{layout/stockfooter :: src}"></div>
-<script th:src="@{/js/stock/inventoryManagement.js}"></script>
+            </div>
+            </div>
+    <script src="../../assets/js/jquery-1.10.2.js"></script>
+    <script src="../../assets/js/bootstrap.min.js"></script>
+	<script src="../../assets/materialize/js/materialize.min.js"></script>
+    <script src="../../assets/js/jquery.metisMenu.js"></script>
+    <script src="../../assets/js/morris/raphael-2.1.0.min.js"></script>
+    <script src="../../ass ets/js/morris/morris.js"></script>
+	<script src="../../assets/js/easypiechart.js"></script>
+	<script src="../../assets/js/easypiechart-data.js"></script>
+	<script src="../../assets/js/Lightweight-Chart/jquery.chart.js"></script>
+    <script src="../../assets/js/custom-scripts.js"></script>
+    <script th:src="@{/js/stock/inventoryManagement.js}"></script>
 </body>
 </html>

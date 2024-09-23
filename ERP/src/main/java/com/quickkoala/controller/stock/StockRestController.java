@@ -31,6 +31,7 @@ import com.quickkoala.service.client.SupplierService;
 import com.quickkoala.service.stock.CategoryService;
 import com.quickkoala.service.stock.LocationService;
 import com.quickkoala.service.stock.ProductService;
+import com.quickkoala.service.stock.StockService;
 import com.quickkoala.service.stock.ViewProductStockSupplierService;
 
 @RestController
@@ -49,6 +50,23 @@ public class StockRestController {
 	
 	@Autowired
 	private ProductService productService;
+	
+	@Autowired
+	private StockService stockService;
+	
+	@PutMapping("/safety-qty/{productCode}")
+    public ResponseEntity<String> updateSafetyQty(
+            @PathVariable String productCode, 
+            @RequestParam int safetyQty) {
+        boolean isUpdated = stockService.updateSafetyqty(productCode, safetyQty);
+        
+        if (isUpdated) {
+            return ResponseEntity.ok("안전 재고 수량이 업데이트되었습니다.");
+        } else {
+            return ResponseEntity.notFound().build(); // 제품 코드가 존재하지 않을 경우
+        }
+    }
+	
 	
 	   
 	 @PostMapping("/stock/inventories")
@@ -109,13 +127,14 @@ public class StockRestController {
 	}
 	
 	@GetMapping("/stock/inventorymanagement/{pno}")
-	public Page<ViewProductStockSupplierEntity> inventorymanagementLsit(@PathVariable Integer pno, @RequestParam String code,
+	public Map<String, Object> inventorymanagementLsit(@PathVariable Integer pno, @RequestParam String code,
 			@RequestParam String word) {
-		Page<ViewProductStockSupplierEntity> result = viewProductStockService.getPaginatedData(pno, SIZE);
+		Map<String, Object> result = new HashMap<>();
+		Page<ViewProductStockSupplierEntity> inventoryData = viewProductStockService.getPaginatedData(pno, SIZE);
 		if (code.equals("") || word.equals("")) {
-			result = viewProductStockService.getPaginatedData(pno, SIZE);
+			inventoryData = viewProductStockService.getPaginatedData(pno, SIZE);
 		} else {
-			result = viewProductStockService.getinventoryPaginatedData(pno, SIZE, code, word);
+			inventoryData = viewProductStockService.getinventoryPaginatedData(pno, SIZE, code, word);
 		}
 		
 		List<CategoryDto> categories = categoryService.getAllOrdersByCode();

@@ -37,14 +37,17 @@ function inventorymanagementmain(pno, code = '', word = ''){
 	})
 	.then(response=>response.json())
 	.then(data=>{
-		console.log(data);
 		let inventorymanagementtbody=document.querySelector('#inventorymanagementtbody');
     	inventorymanagementtbody.innerHTML='';
 		
-		const items = data.content;
-		inventorymanagementTotalPages = data.totalPages;
+		const items = data.inventoryData.content;
+		const categories = data.categories; 
+		
+		inventorymanagementTotalPages = data.inventoryData.totalPages;
 		
     	items.forEach(function(inventorymanagement){
+		
+		let categoryname = categories.find(category => category.code == inventorymanagement.classificationCode); 
 		
         let inventorymanagementth = `<tr class="odd gradeX">
                     <td>${inventorymanagement.productCode}</td>
@@ -53,16 +56,15 @@ function inventorymanagementmain(pno, code = '', word = ''){
                     <td>${inventorymanagement.supplierName}</td>
                     <td>${inventorymanagement.locationCode}</td>
                     <td>${inventorymanagement.classificationCode}</td>
-                    <td>${inventorymanagement.대메뉴명}(${inventorymanagement.대메뉴코드})</td>
-                    <td>${inventorymanagement.소메뉴명}(${inventorymanagement.소메뉴코드})</td>
-                    <td>${inventorymanagement.safetyQty}</td>
+                    <td>${categoryname.mainName}(${categoryname.mainCode})</td>
+					<td>${categoryname.subName}(${categoryname.subCode})</td>
                     <td>${inventorymanagement.price}</td>
                     <td>${inventorymanagement.useFlag}</td>
                     <td><input type="button" value="수정" class="inventorymanagementmodifybtn" value={}></td>
                  </tr>`;
 			inventorymanagementtbody.innerHTML +=inventorymanagementth;
 		}); 
-		const inventorymanagementPaging = document.getElementById("inventorymanagementPaging");
+		const inventorymanagementPaging = document.getElementById("inventoryManagementPaging");
 		inventorymanagementPaging.innerHTML = '';
 		
 		 // 페이지 그룹의 시작과 끝 계산

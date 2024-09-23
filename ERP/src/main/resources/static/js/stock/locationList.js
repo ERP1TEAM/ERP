@@ -45,13 +45,6 @@ function locationlistmain(pno, code = '', word = ''){
 		
     	items.forEach(function(locationlist){
 		
-		let locationlistmemo;
-		if(locationlist.memo){
-			locationlistmemo = locationlist.memo;
-		}else{
-			locationlistmemo='';
-		}
-		
 		let locationlistuseFlag;
                 if (locationlist.useFlag == 'Y') {
                     locationlistuseFlag = '사용';
@@ -67,7 +60,6 @@ function locationlistmain(pno, code = '', word = ''){
                     <td>${locationlist.rowCode}</td>
                     <td>${locationlist.levelCode}</td>
                     <td>${locationlistuseFlag}</td>
-                    <td>${locationlistmemo}</td>
                     <td><input type="button" value="수정" class="locationlistmodifybtn"></td>
                  </tr>`;
 			locationlisttbody.innerHTML +=locationlistth;
