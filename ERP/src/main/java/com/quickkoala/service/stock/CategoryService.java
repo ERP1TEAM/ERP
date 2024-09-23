@@ -1,6 +1,7 @@
 package com.quickkoala.service.stock;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.data.domain.Page;
 
@@ -16,6 +17,8 @@ public interface CategoryService {
 	CategoryDto getCategoryByCode(String code);
 	
 	boolean updateCategory(String Code, CategoryDto categoryDto);
+	
+	Map<String, Object> deleteCategory(List<String> categoryCodes);
 	
 	Page<CategoryEntity> getPaginatedData(int pno, int size);
 	

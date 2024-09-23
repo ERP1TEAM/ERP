@@ -1,7 +1,9 @@
 package com.quickkoala.service.stock;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -108,6 +110,25 @@ public class CategoryServiceImpl implements CategoryService{
 		return false;
 	}
 	
+	@Override
+	public Map<String, Object> deleteCategory(List<String> categoryCodes) {
+		Map<String, Object> categoryDelresult = new HashMap<>();
+
+		for(String code: categoryCodes) {
+			try {
+			if(categoryRepository.existsById(code)) {
+				categoryRepository.deleteById(code);
+				categoryDelresult.put(code, "삭제되었습니다");
+			}else {
+				categoryDelresult.put(code, "삭제에 실패했습니다.");
+			}
+        }catch(Exception e) {
+        	categoryDelresult.put(code,"Error");
+        }
+		}
+		
+		return categoryDelresult;
+	}
 	
 	@Override
 	public Page<CategoryEntity> getPaginatedData(int pno, int size) {

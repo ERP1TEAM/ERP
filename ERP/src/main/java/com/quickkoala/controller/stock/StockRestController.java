@@ -1,5 +1,6 @@
 package com.quickkoala.controller.stock;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,7 +26,6 @@ import com.quickkoala.dto.stock.ProductDto;
 import com.quickkoala.dto.stock.WarehouseDto;
 import com.quickkoala.entity.client.SupplierEntity;
 import com.quickkoala.entity.stock.CategoryEntity;
-import com.quickkoala.entity.stock.LocationEntity;
 import com.quickkoala.entity.stock.ProductEntity;
 import com.quickkoala.entity.stock.ViewProductStockEntity;
 import com.quickkoala.service.client.SupplierService;
@@ -163,4 +164,14 @@ public class StockRestController {
     		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("해당 카테고리 코드를 찾을 수 없습니다.");
     	}
 	}
+    
+    @DeleteMapping("/stock/category/{categoryCodes}")
+    public ResponseEntity<Map<String, Object>> deleteCategory(@PathVariable String categoryCodes) {
+    	List<String> categoryCodeList = Arrays.asList(categoryCodes.split(","));
+        Map<String, Object> categoryresponse = categoryService.deleteCategory(categoryCodeList);
+        
+        categoryresponse.put("ok", true);
+        
+        return ResponseEntity.ok(categoryresponse);
+    }
 }

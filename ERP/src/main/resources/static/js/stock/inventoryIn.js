@@ -110,7 +110,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const maincategorySelect = document.getElementById('inventorymaincategoryoption');
         maincategorySelect.innerHTML = '';
-
+		
+		const duplidelmainname = new Set();
+		
         let maincategoryOption;
 		for (let i = 0; i < data.categories.length; i++) {
             if (data.categories[i].idx == 1) {
@@ -125,8 +127,9 @@ document.addEventListener('DOMContentLoaded', function() {
             maincategorySelect.appendChild(option);
         }
         
-        data.categories.forEach(maincategory => {
-            if (maincategory != maincategoryOption) {
+       data.categories.forEach(maincategory => {
+            if (!duplidelmainname.has(maincategory.mainName)) {
+                duplidelmainname.add(maincategory.mainName);
                 let option = document.createElement('option');
                 option.value = maincategory.mainCode;
                 option.textContent = maincategory.mainName;
