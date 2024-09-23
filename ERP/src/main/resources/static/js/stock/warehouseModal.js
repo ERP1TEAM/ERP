@@ -317,8 +317,6 @@ document.getElementById('warehouseModifybtn').addEventListener('click', function
             name: warehouseName,
             memo: warehouseMemo
         };
-        console.log(warehouseName);
-        
         fetch(`/main/stock/${warehouseCode}`, {
             method: 'PUT',
             headers: {

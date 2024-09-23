@@ -1,6 +1,6 @@
 package com.quickkoala.controller.receive;
 
-import java.util.ArrayList; 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.poi.ss.usermodel.Row;
@@ -23,6 +23,7 @@ import com.quickkoala.dto.receive.ReceivingDto;
 import com.quickkoala.entity.client.SupplierEntity;
 import com.quickkoala.entity.receive.ReceiveDetailEntity;
 import com.quickkoala.entity.receive.ReceiveReturnEntity;
+import com.quickkoala.entity.receive.ViewLocationProductEntity;
 import com.quickkoala.entity.receive.ViewPurchaseDetailEntity;
 import com.quickkoala.entity.receive.ViewPurchaseEntity;
 import com.quickkoala.entity.receive.ViewReceiveEntity;
@@ -33,6 +34,7 @@ import com.quickkoala.service.client.SupplierService;
 import com.quickkoala.service.receive.ReceiveDetailService;
 import com.quickkoala.service.receive.ReceiveReturnService;
 import com.quickkoala.service.receive.ReceiveTempService;
+import com.quickkoala.service.receive.ViewLocationProductService;
 import com.quickkoala.service.receive.ViewPurchaseDetailService;
 import com.quickkoala.service.receive.ViewPurchaseService;
 import com.quickkoala.service.receive.ViewReceiveReturnService;
@@ -40,6 +42,7 @@ import com.quickkoala.service.receive.ViewReceiveService;
 import com.quickkoala.service.receive.ViewReceiveSummaryService;
 import com.quickkoala.service.receive.ViewReceiveTempService;
 import com.quickkoala.service.stock.LotService;
+import com.quickkoala.service.stock.ProductService;
 import com.quickkoala.service.supplier.PurchaseService;
 import com.quickkoala.utils.ExcelUpload;
 
@@ -48,7 +51,6 @@ import com.quickkoala.utils.ExcelUpload;
 public class ReceiveRestController {
 
 	private static final int SIZE = 5;
-	
 
 	@Autowired
 	private PurchaseService purchaseService;
@@ -70,7 +72,7 @@ public class ReceiveRestController {
 
 	@Autowired
 	private ViewPurchaseDetailService viewPurchaseDetailService;
-	
+
 	@Autowired
 	private ViewPurchaseService viewPurchaseService;
 
@@ -82,9 +84,15 @@ public class ReceiveRestController {
 
 	@Autowired
 	private ViewReceiveSummaryService viewReceiveSummaryService;
+
+	@Autowired
+	private ViewLocationProductService viewLocationProductService;
 	
-	//@Autowired
-	//private SupplierService supplierService;
+	@Autowired
+	private ProductService productService;
+
+	// @Autowired
+	// private SupplierService supplierService;
 
 	// 발주요청
 	@PostMapping("receive/purchaseAdd")
@@ -92,14 +100,14 @@ public class ReceiveRestController {
 		purchaseService.addOrders(orders);
 		return "success";
 	}
-	
+
 	// 발주요청 페이지 상품목록 모달 데이터
 	@GetMapping("receive/productData")
-	public List<ViewPurchaseEntity> productData(@RequestParam String code, @RequestParam String word){
+	public List<ViewPurchaseEntity> productData(@RequestParam String code, @RequestParam String word) {
 		List<ViewPurchaseEntity> result = null;
-		if(code.equals("") || word.equals("")) {
-			result = viewPurchaseService.getAllData(); 
-		}else {
+		if (code.equals("") || word.equals("")) {
+			result = viewPurchaseService.getAllData();
+		} else {
 			result = viewPurchaseService.getSearchData(code, word);
 		}
 		return result;
@@ -144,7 +152,7 @@ public class ReceiveRestController {
 	@GetMapping("receive/receivingModal")
 	public ReceiveModalDto receivingModal(@RequestParam("ornum") String ornum, @RequestParam("code") String code,
 			@RequestParam("name") String name, @RequestParam("qty") Integer qty, @RequestParam("wqty") Integer wqty,
-			@RequestParam("deli") String deli) {
+			@RequestParam("deli") String deli, @RequestParam("productCode") String productCode) {
 		ReceiveModalDto dto = new ReceiveModalDto();
 		dto.setOrnum(ornum);
 		dto.setCode(code);
@@ -152,20 +160,40 @@ public class ReceiveRestController {
 		dto.setName(name);
 		dto.setQty(qty);
 		dto.setWqty(wqty);
+		dto.setProductCode(productCode);
+		List<String> locationCode = new ArrayList<>();
+		if (viewLocationProductService.getCount(productCode) == 0) {
+			List<ViewLocationProductEntity> loca = viewLocationProductService.getData();
+			for (ViewLocationProductEntity ent : loca) {
+				if (ent.getProductCode() == null) {
+					locationCode.add(ent.getLocationCode());
+				}
+
+			}
+			dto.setLocation(locationCode);
+		}else {
+			locationCode.add(viewLocationProductService.getLocationCode(productCode));
+			dto.setLocation(locationCode);
+		}
 		return dto;
 	}
 
 	// 입고확정
 	@PostMapping("receive/receiving")
 	public String receiving(@ModelAttribute ReceivingDto dto) {
-		
 		ReceiveDetailEntity result = new ReceiveDetailEntity();
 		ReceiveReturnEntity result2 = new ReceiveReturnEntity();
-
+		
+		// 입고수량이 있을때
 		if (dto.getReQty() != 0) {
 			result = receiveDetailService.addData(dto.getCode(), dto.getReQty());
 			lotService.addLot(dto);
+			if(!dto.getLocation().equals("N")) {
+				int result3 = productService.modifyLocation(dto.getProductCode(), dto.getLocation());
+				System.out.println(result3);
+			}
 		}
+		// 반품수량이 있을때
 		if (dto.getCaQty() != 0) {
 			result2 = receiveReturnService.addData(dto);
 		}
@@ -217,34 +245,28 @@ public class ReceiveRestController {
 		return result;
 	}
 
-	//** 사용안하는 코드 **//
+	// ** 사용안하는 코드 **//
 	/*
-	// 제조사 자동완성
-	@GetMapping("receive/autocomplete")
-	public List<SupplierEntity> autocomplete(@RequestParam String term) {
-		return supplierService.searchByName(term);
-	}
-
-	// 엑셀 불러오기
-	@PostMapping("receive/upload-excel")
-	public List<PurchaseDto> uploadExcel(@RequestParam("excel") MultipartFile file) {
-		List<PurchaseDto> data = new ArrayList<>();
-		ExcelUpload eu = new ExcelUpload();
-
-		for (Row row : eu.uploadExcel(file)) {
-			if (row.getRowNum() == 0) {
-				continue;
-			}
-			PurchaseDto dto = new PurchaseDto();
-			dto.setProduct_code(String.valueOf((int) row.getCell(0).getNumericCellValue()));
-			dto.setSupplier(row.getCell(1).getStringCellValue());
-			dto.setProduct(row.getCell(2).getStringCellValue());
-			dto.setQuantity((int) row.getCell(3).getNumericCellValue());
-			dto.setPrice((int) row.getCell(4).getNumericCellValue());
-			dto.setTotal_price((int) row.getCell(5).getNumericCellValue());
-			data.add(dto);
-		}
-		return data;
-	}
-	*/
+	 * // 제조사 자동완성
+	 * 
+	 * @GetMapping("receive/autocomplete") public List<SupplierEntity>
+	 * autocomplete(@RequestParam String term) { return
+	 * supplierService.searchByName(term); }
+	 * 
+	 * // 엑셀 불러오기
+	 * 
+	 * @PostMapping("receive/upload-excel") public List<PurchaseDto>
+	 * uploadExcel(@RequestParam("excel") MultipartFile file) { List<PurchaseDto>
+	 * data = new ArrayList<>(); ExcelUpload eu = new ExcelUpload();
+	 * 
+	 * for (Row row : eu.uploadExcel(file)) { if (row.getRowNum() == 0) { continue;
+	 * } PurchaseDto dto = new PurchaseDto();
+	 * dto.setProduct_code(String.valueOf((int)
+	 * row.getCell(0).getNumericCellValue()));
+	 * dto.setSupplier(row.getCell(1).getStringCellValue());
+	 * dto.setProduct(row.getCell(2).getStringCellValue()); dto.setQuantity((int)
+	 * row.getCell(3).getNumericCellValue()); dto.setPrice((int)
+	 * row.getCell(4).getNumericCellValue()); dto.setTotal_price((int)
+	 * row.getCell(5).getNumericCellValue()); data.add(dto); } return data; }
+	 */
 }

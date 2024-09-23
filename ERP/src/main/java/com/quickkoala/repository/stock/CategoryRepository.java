@@ -16,6 +16,8 @@ public interface CategoryRepository extends JpaRepository<CategoryEntity, String
 	
 	boolean existsByCode (String code);
 	
+	CategoryEntity findByCode(String code);
+	
 	//코드,대소메뉴코드이름
 	Page<CategoryEntity> findAllByOrderByCodeDesc(Pageable pageable);
 

@@ -1,10 +1,30 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="https://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="https://www.thymeleaf.org">
 <head>
-<th:block th:replace="~{layout/stockHeader :: topheader}"></th:block>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Quick Koala :: 품목등록</title>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+	rel="stylesheet">
+<link rel="stylesheet"
+	href="../../assets/materialize/css/materialize.min.css"
+	media="screen,projection" />
+<link href="../../assets/css/bootstrap.css" rel="stylesheet" />
+<link href="../../assets/css/font-awesome.css" rel="stylesheet" />
+<link href="../../assets/js/morris/morris-0.4.3.min.css"
+	rel="stylesheet" />
+<link href="../../assets/css/custom-styles.css" rel="stylesheet" />
+<link href="../../css/receive/purchaseDetail.css" rel="stylesheet" />
+<link href='http://fonts.googleapis.com/css?family=Open+Sans'
+	rel='stylesheet' type='text/css' />
+<link rel="stylesheet"
+	href="../../assets/js/Lightweight-Chart/cssCharts.css">
+<link href="../../css/paging.css" rel="stylesheet">
+<link href="../../css/searching.css" rel="stylesheet">
 <link th:href="@{/css/stock/stock.css}" rel="stylesheet">
 </head>
-<body class="bg-light">
+<body class="bg-light" >
     <div id="wrapper">
         <nav th:replace="~{/main/header :: header}"></nav>
 	<div th:insert="~{/sidebar::sidebar}"></div>
@@ -14,27 +34,7 @@
 	  <main class="maincss" >
 
 <div class="product_insert">
-    <ul>
-        <li>창고명</li>
-        <li>
-            <select class="product_input1" id="inventoryWarehouseoption">
-                <option value=""></option>
-            </select>
-            <input type="button" value="+" title="+" class="product_btn2" id="warehousebtn">
-        </li>
-    </ul>
     
-    <div th:insert="~{stock/warehouseModal :: warehouselist}"></div>
-    
-    
-    <ul>
-        <li>로케이션 코드</li>
-        <li>
-            <select class="product_input1" id="inventoryLocationoption">
-                <option value=""></option>
-            </select>
-        </li>
-    </ul>
     <ul>
         <li>제조사 코드</li>
         <li>
@@ -46,25 +46,25 @@
     <ul>
         <li>제조사명</li>
         <li>
-        <input type="text" class="product_input1 black_font" readonly="readonly" id="inventorySuppliernameoption">
+        <input type="text" class="product_input2 black_font" readonly="readonly" id="inventorySuppliernameoption">
         </li>
     </ul>
      <ul>
         <li>상품코드</li>
         <li>
-            <input type="text" class="product_input1" id="inventorycode" readonly="readonly"> 
+            <input type="text" class="product_input2 black_font" id="inventorycode" readonly="readonly"> <span class="help_text">※상품코드는 자동으로 생성됩니다.</span>
         </li>
     </ul>
     <ul>
         <li>상품명</li>
         <li>
-            <input type="text" class="product_input2" maxlength="100" id="inventoryname"> <span class="help_text">※ 상품명은 최대 100자까지만 적용할 수 있습니다.</span>
+            <input type="text" class="product_input2" maxlength="200" id="inventoryname"> <span class="help_text">※ 상품명은 최대 200자까지만 적용할 수 있습니다.</span>
         </li>
     </ul>
     <ul>
         <li>단가</li>
         <li>
-            <input type="text" class="product_input3" maxlength="7" id="inventoryprice"> <span class="help_text">※ , 없이 숫자만 입력하세요 최대 7자리</span>
+            <input type="text" class="product_input2" id="inventoryprice"> <span class="help_text">※ , 없이 숫자만 입력하세요</span>
         </li>
     </ul>
     <ul>
@@ -96,7 +96,7 @@
     <ul>
         <li>메모</li>
         <li>
-        <input type="text" class="product_input3" id="inventorymemo">
+        <input type="text" class="product_input2" id="inventorymemo">
         </li>
     </ul>
 </div>

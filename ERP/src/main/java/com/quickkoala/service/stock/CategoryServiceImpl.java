@@ -1,7 +1,9 @@
 package com.quickkoala.service.stock;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -13,6 +15,7 @@ import com.quickkoala.dto.stock.CategoryDto;
 import com.quickkoala.dto.stock.LocationDto;
 import com.quickkoala.entity.stock.CategoryEntity;
 import com.quickkoala.entity.stock.LocationEntity;
+import com.quickkoala.entity.stock.WarehouseEntity;
 import com.quickkoala.entity.stock.ProductEntity.UseFlag;
 import com.quickkoala.repository.stock.CategoryRepository;
 
@@ -77,6 +80,54 @@ public class CategoryServiceImpl implements CategoryService{
 			listCategoryDto.add(categoryDto);
 		}
 		return listCategoryDto;
+	}
+	
+	@Override
+	public CategoryDto getCategoryByCode(String code) {
+		CategoryEntity categoryEntity= categoryRepository.findByCode(code);
+		if(categoryEntity != null) {
+		return convertToCategoryDto(categoryEntity);
+		}
+		return null;
+	}
+	
+	@Override
+	public boolean updateCategory(String Code, CategoryDto categoryDto) {
+		CategoryEntity categoryEntity= categoryRepository.findById(Code).orElse(null);
+		
+		if(categoryEntity != null) {
+			categoryEntity.setMainName(categoryDto.getMainName());
+			categoryEntity.setSubName(categoryDto.getSubName());
+			try {
+			    categoryEntity.setUseFlag(UseFlag.valueOf(categoryDto.getUseFlag()));
+			} catch (IllegalArgumentException e) {
+			    throw new RuntimeException("유효하지 않은 useFlag값입니다.");
+			}
+			categoryEntity.setMemo(categoryDto.getMemo());
+			categoryRepository.save(categoryEntity);
+			return true;
+		}
+		return false;
+	}
+	
+	@Override
+	public Map<String, Object> deleteCategory(List<String> categoryCodes) {
+		Map<String, Object> categoryDelresult = new HashMap<>();
+
+		for(String code: categoryCodes) {
+			try {
+			if(categoryRepository.existsById(code)) {
+				categoryRepository.deleteById(code);
+				categoryDelresult.put(code, "삭제되었습니다");
+			}else {
+				categoryDelresult.put(code, "삭제에 실패했습니다.");
+			}
+        }catch(Exception e) {
+        	categoryDelresult.put(code,"Error");
+        }
+		}
+		
+		return categoryDelresult;
 	}
 	
 	@Override

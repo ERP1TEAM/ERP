@@ -54,7 +54,6 @@
 </div>
 </div>
 
-
 <div id="categoryinmodal" class="modal modalwidth">
 <div>
         <span class="close categoryclosemodal">&times;</span>
@@ -67,31 +66,31 @@
     <ul>
         <li>카테고리 코드</li>
         <li>
-        <input type="text" class="product_input1" id="categoryCode" readonly="readonly">
+        <input type="text" class="product_input3" id="categoryCode" readonly="readonly">
         </li>
     </ul>
         <ul>
         <li>대메뉴 코드</li>
         <li>
-        <input type="text" class="product_input1" id="categorymainCode" maxlength="3">
+        <input type="text" class="product_input3" id="categorymainCode" maxlength="3"> <span class="help_text">*한번 설정하면 바꿀 수 없습니다.</span>
         </li>
     </ul>
     <ul>
         <li>대메뉴 이름</li>
         <li>
-        <input type="text" class="product_input1" id="categorymainName">
+        <input type="text" class="product_input3" id="categorymainName">
         </li>
     </ul>
     <ul>
         <li>소메뉴 코드</li>
         <li>
-        <input type="text" class="product_input1" id="categorysubCode" maxlength="3">
+        <input type="text" class="product_input3" id="categorysubCode" maxlength="3"> <span class="help_text">*한번 설정하면 바꿀 수 없습니다.</span>
         </li>
     </ul>
     <ul>
         <li>소메뉴 이름</li>
         <li>
-        <input type="text" class="product_input1" id="categorysubName">
+        <input type="text" class="product_input3" id="categorysubName">
         </li>
     </ul>
     <ul>
@@ -104,7 +103,7 @@
     <ul>
         <li>메모</li>
         <li>
-        <input type="text" class="product_input1" id="categorymemo">
+        <input type="text" class="product_input3" id="categorymemo">
         </li>
     </ul>
 <div class="subpage_view4" style="text-align:center; margin-bottom: 100px;">
@@ -114,5 +113,69 @@
 </div>
 </div>
 </div>
+
+
+
+
+<div id="categorymodifymodal" class="modal modalwidth">
+<div>
+        <span class="close categoryclosemodal">&times;</span>
+    </div>
+ <div class="stockmodal-scroll">
+<div class="product_insert row modalmarginleft"><br>
+                    <div class="card-action">
+			          <h2>카테고리 수정</h2><br>
+                    </div>
+    <ul>
+        <li>카테고리 코드</li>
+        <li>
+        <input type="text" class="product_input3" id="categoryModifyCode" readonly="readonly">
+        </li>
+    </ul>
+        <ul>
+        <li>대메뉴 코드</li>
+        <li>
+        <input type="text" class="product_input3" id="categoryModifymainCode" maxlength="3" readonly="readonly">
+        </li>
+    </ul>
+    <ul>
+        <li>대메뉴 이름</li>
+        <li>
+        <input type="text" class="product_input3" id="categoryModifymainName">
+        </li>
+    </ul>
+    <ul>
+        <li>소메뉴 코드</li>
+        <li>
+        <input type="text" class="product_input3" id="categoryModifysubCode" maxlength="3" readonly="readonly">
+        </li>
+    </ul>
+    <ul>
+        <li>소메뉴 이름</li>
+        <li>
+        <input type="text" class="product_input3" id="categoryModifysubName">
+        </li>
+    </ul>
+    <ul>
+        <li>사용 유/무</li>
+        <li>
+            <label><input type="radio" name="categoryModifyuseflag" class="rdo" value ="Y" checked> 사용</label>
+            <label><input type="radio" name="categoryModifyuseflag" class="rdo" value="N" > 미사용</label>
+        </li>
+    </ul>
+    <ul>
+        <li>메모</li>
+        <li>
+        <input type="text" class="product_input3" id="categoryModifymemo">
+        </li>
+    </ul>
+<div class="subpage_view4" style="text-align:center; margin-bottom: 100px;">
+    <input type="button" value="수정"  class="p_button p_button_color2" style="margin-right: 5px;" id="categorymodify">
+    <input type="button" value="취소"  class="p_button p_button_color1" id="categorymodifyback" >
+</div>
+</div>
+</div>
+</div>
+
 
 </div>

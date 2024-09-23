@@ -69,6 +69,7 @@ document.addEventListener("DOMContentLoaded", function() {
 				        <td style="text-align:center;">${rdt}</td>
 				        <td style="text-align:center;">${item.manager}</td>
 				        <td style="text-align:center;"><button type="button" class="small-tap receiving" 
+				        			data-productCode="${item.productCode}"
 				        			data-deli="${item.deliveryCode}"
 									data-on="${item.orderNumber}"
 									data-code="${item.code}"
@@ -155,7 +156,8 @@ document.addEventListener("DOMContentLoaded", function() {
 			const qty = btn.getAttribute("data-qty");
 			const wqty = btn.getAttribute("data-wqty");
 			const deli = btn.getAttribute("data-deli");
-			receivingModal(orNum, code, name, qty, wqty, deli);
+			const productCode = btn.getAttribute("data-productCode");
+			receivingModal(orNum, code, name, qty, wqty, deli, productCode);
 		}
 	});
 
@@ -167,8 +169,8 @@ document.addEventListener("DOMContentLoaded", function() {
 	});
 
 	//입고확정 모달 출력
-	function receivingModal(orNum, code, name, qty, wqty, deli) {
-		fetch(`./receivingModal?ornum=${encodeURIComponent(orNum)}&code=${encodeURIComponent(code)}&name=${encodeURIComponent(name)}&qty=${encodeURIComponent(qty)}&wqty=${encodeURIComponent(wqty)}&deli=${encodeURIComponent(deli)}`, {
+	function receivingModal(orNum, code, name, qty, wqty, deli, productCode) {
+		fetch(`./receivingModal?ornum=${encodeURIComponent(orNum)}&code=${encodeURIComponent(code)}&name=${encodeURIComponent(name)}&qty=${encodeURIComponent(qty)}&wqty=${encodeURIComponent(wqty)}&deli=${encodeURIComponent(deli)}&productCode=${encodeURIComponent(productCode)}`, {
 			method: 'GET'
 		})
 			.then(response => response.json())
@@ -184,11 +186,30 @@ document.addEventListener("DOMContentLoaded", function() {
 			        <input type="hidden" id="ornum" value="${data.ornum}">
 			        <input type="hidden" id="code" value="${data.code}">
 			        <input type="hidden" id="deli" value="${data.deli}">
+			        <input type="hidden" id="productCode" value="${data.productCode}">
 			        <td>${data.name}</td>
-			        <td><input type="text" id="qty" value="${data.qty}" readonly class="no-style"></td>
-			        <td><input type="text" id="wqty" value="${data.wqty}" readonly class="no-style"></td>
-			        <td><input type="text" id="re-qty" name="re_qty"></td>
-			        <td><input type="text" id="ca-qty" name="ca_qty" readonly class="no-style"></td>
+			        <td>
+			        	<select id="location" name="location" class="condition-select" style="display:block;">
+			        `;
+			        if(data.location.length > 1){
+				        data.location.forEach(function(item){
+					        th += `
+					                <option value="${item}">${item}</option>
+					              `;						
+						})						
+					}else{
+						th += `
+					                <option value="N">${data.location[0]}</option>
+					              `;
+					}
+			              
+			        th += `
+			            </select>
+			        </td>
+			        <td><input type="text" id="qty" value="${data.qty}" readonly class="no-style" style="text-align:right;"></td>
+			        <td><input type="text" id="wqty" value="${data.wqty}" readonly class="no-style" style="text-align:right;"></td>
+			        <td><input type="text" id="re-qty" name="re_qty" style="text-align:right;"></td>
+			        <td><input type="text" id="ca-qty" name="ca_qty" readonly class="no-style" style="text-align:right;"></td>
 			        <td>
 			            <select id="condition" name="condition" class="condition-select" style="display:block;">
 			                <option value="">반품없음</option>
@@ -246,6 +267,8 @@ document.addEventListener("DOMContentLoaded", function() {
 		let con = document.getElementById("condition").value;
 		let memo = document.getElementById("memo").value;
 		let deli = document.getElementById("deli").value;
+		let location = document.getElementById("location").value;
+		let productCode = document.getElementById("productCode").value;
 
 		if (!reQty && reQty !== 0) {
 			alert("입고수량을 입력하셔야 합니다.");
@@ -267,6 +290,8 @@ document.addEventListener("DOMContentLoaded", function() {
 		formData.append("con", con);
 		formData.append("memo", memo);
 		formData.append("manager", "홍길동");
+		formData.append("location", location);
+		formData.append("productCode", productCode);
 
 		fetch("./receiving", {
 			method: "POST",

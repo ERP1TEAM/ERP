@@ -92,7 +92,7 @@ public class WarehouseRestController {
 	}
 		
 	/*
-		//창고 리스트
+		//창고 리스트 + 페이징
 		@GetMapping("/stock/warehouses/{pno}")
 		public Page<WarehouseEntity> warehouseList(@PathVariable Integer pno, @RequestParam String code,
 				@RequestParam String word) {
@@ -122,7 +122,6 @@ public class WarehouseRestController {
 	        LocationDto savelocationDto = locationService.convertToLocationDto(savelocation);
 	        return ResponseEntity.ok(savelocationDto);
 	    } catch (IllegalArgumentException e) {
-	        // 중복된 로케이션 코드일 경우 예외 발생 시 409 상태 코드 반환
 	        return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
 	    }
 	}
