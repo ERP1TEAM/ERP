@@ -9,58 +9,6 @@ document.addEventListener('DOMContentLoaded', function() {
     })
     .then(response => response.json())
     .then(data => {
-		
-        const warehouseSelect = document.getElementById('inventoryWarehouseoption');
-        warehouseSelect.innerHTML = '';
-
-		let warehouseoption;
-		for (let i = 0; i < data.warehouses.length; i++) {
-            if (data.warehouses[i].idx == 1) {
-                warehouseoption = data.warehouses[i];
-                break;
-            }
-        }
-        
-        if (warehouseoption) {
-            let option = document.createElement('option');
-            option.value = warehouseoption.code;
-            option.textContent = option.name;
-            warehouseSelect.appendChild(option);
-        }
-        data.warehouses.forEach(warehouse => {
-            if (warehouse != warehouseoption) {
-                let option = document.createElement('option');
-                option.value = warehouse.code;
-                option.textContent = warehouse.name;
-                warehouseSelect.appendChild(option);
-            }
-        });
-
-        const locationSelect = document.getElementById('inventoryLocationoption');
-        locationSelect.innerHTML = '';
-
-		let locationoption;
-		for (let i = 0; i < data.locations.length; i++) {
-            if (data.locations[i].idx == 1) {
-                locationoption = data.locations[i];
-                break;
-            }
-        }
-         if (locationoption) {
-            let option = document.createElement('option');
-            option.value = locationoption.code;
-            option.textContent = option.code;
-            locationSelect.appendChild(option);
-        }
-        
-        data.locations.forEach(location => {
-            if (location != locationoption) {
-                let option = document.createElement('option');
-                option.value = location.code;
-                option.textContent = location.code;
-                locationSelect.appendChild(option);
-            }
-        });
         
         const supplierSelect = document.getElementById('inventorySuppliercodeoption');
         const supplierNameInput = document.getElementById('inventorySuppliernameoption');
@@ -110,7 +58,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const maincategorySelect = document.getElementById('inventorymaincategoryoption');
         maincategorySelect.innerHTML = '';
-
+		
+		const duplidelmainname = new Set();
+		
         let maincategoryOption;
 		for (let i = 0; i < data.categories.length; i++) {
             if (data.categories[i].idx == 1) {
@@ -125,8 +75,9 @@ document.addEventListener('DOMContentLoaded', function() {
             maincategorySelect.appendChild(option);
         }
         
-        data.categories.forEach(maincategory => {
-            if (maincategory != maincategoryOption) {
+       data.categories.forEach(maincategory => {
+            if (!duplidelmainname.has(maincategory.mainName)) {
+                duplidelmainname.add(maincategory.mainName);
                 let option = document.createElement('option');
                 option.value = maincategory.mainCode;
                 option.textContent = maincategory.mainName;
@@ -181,14 +132,15 @@ document.addEventListener('DOMContentLoaded', function() {
             code: productcode,
             supplierCode: supplierCode,
             classificationCode: classificationCode,
-            locationCode: locationCode,
+            storageLocation: locationCode,
             useFlag: useFlag,
             name: productname,
             price: productprice,
             memo: memo
         };
+        const manager = "김중앙";
 
-        fetch('/main/stock/inventories', {
+        fetch(`/main/stock/inventories?manager=${encodeURIComponent(manager)}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -201,19 +153,63 @@ document.addEventListener('DOMContentLoaded', function() {
             }else if(response.status == 409){
 				return response.text();
 				}else{
-				alert('상품 등록에 실패했습니다.');
+				throw new Error('상품 등록에 실패했습니다.');
 			}
         })
         .then(data => {
             alert("상품이 등록 되었습니다.");
-        })
+    		document.getElementById('inventoryname').value = '';
+    		document.getElementById('inventoryprice').value = '';
+    		document.getElementById('inventorymemo').value = '';
+    		 
+    		 fetch('/main/stock/inventoryrandomcode')
+      			 .then(response => {
+            	 if (response.ok) {
+               		 return response.text();
+            	} else {
+              	  throw new Error('새로운 상품코드를 받는 데 실패했습니다.');
+         	    }
+       		    })
+        		.then(newcode=> {
+            		document.getElementById('inventorycode').value = newcode;
+        		})
+        		.catch(error => {
+            		alert("새로운 상품코드를 가져오는 중 오류 발생");
+        		});
+        	})
         .catch(error => {
-            alert('등록 중 오류 발생: ' + error.message);
+            alert("오류발생");
         });
     });
 
-    document.getElementById('inventorycancle').addEventListener('click', function () {
-        document.getElementById('inventoryname').value = '';
-        document.getElementById('inventoryprice').value = '';
-    });
+//난수번호
+const productcode = document.getElementById("inventorycode");
+fetch('/main/stock/inventoryrandomcode')
+.then(response=>{
+	if(response.ok){
+	return response.text();
+	}else if(response.status == 409){
+		 return response.text().then(errorMessage => {
+               	alert(errorMessage);
+         });
+	}else{
+		throw new Error("서버 오류"); 
+	}
+	})
+.then(data=>{
+	if(data){
+	productcode.value=data;
+	}
+})
+.catch(error=>{
+	alert("오류가 발생했습니다.");
+});
+
+
+	
+document.getElementById('inventorycancle').addEventListener('click', function () {
+    document.getElementById('inventoryname').value = '';
+    document.getElementById('inventoryprice').value = '';
+    document.getElementById('inventorymemo').value = '';
+});
 });

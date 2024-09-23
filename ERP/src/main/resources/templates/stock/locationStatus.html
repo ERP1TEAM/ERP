@@ -1,7 +1,27 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="https://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="https://www.thymeleaf.org">
 <head>
-<th:block th:replace="~{layout/stockHeader :: topheader}"></th:block>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Quick Koala :: 로케이션 현황</title>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+	rel="stylesheet">
+<link rel="stylesheet"
+	href="../../assets/materialize/css/materialize.min.css"
+	media="screen,projection" />
+<link href="../../assets/css/bootstrap.css" rel="stylesheet" />
+<link href="../../assets/css/font-awesome.css" rel="stylesheet" />
+<link href="../../assets/js/morris/morris-0.4.3.min.css"
+	rel="stylesheet" />
+<link href="../../assets/css/custom-styles.css" rel="stylesheet" />
+<link href="../../css/receive/purchaseDetail.css" rel="stylesheet" />
+<link href='http://fonts.googleapis.com/css?family=Open+Sans'
+	rel='stylesheet' type='text/css' />
+<link rel="stylesheet"
+	href="../../assets/js/Lightweight-Chart/cssCharts.css">
+<link href="../../css/paging.css" rel="stylesheet">
+<link href="../../css/searching.css" rel="stylesheet">
 <link th:href="@{/css/stock/stock.css}" rel="stylesheet">
 </head>
 <body>
@@ -23,13 +43,7 @@
         <button class="rackbutton r5_button" onclick="r_button(this)">R5</button>
         <button class="rackbutton r6_button" onclick="r_button(this)">R6</button>
     </div>
-    <div class="location_stocklist_box_frame">
-        <select id="warehouse_select" onchange="change_warehouse()">
-            <option value="W1">경기도 남양주 창고</option>
-        </select>
-        <div class="location_frame2">
-        </div>
-    </div>
+
     <div class="location_frame3" id="showbutton">
         <div class="location_1a">
             <button class="locationbutton" onclick="l_button(this)">1A</button>
