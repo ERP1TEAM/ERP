@@ -59,13 +59,13 @@ document.addEventListener("DOMContentLoaded", function() {
 					let th = `
 				    <tr class="odd gradeX">
 				        <td>${item.receiveCode}</td>
-				        <td>${item.orderNumber}</td>
+				        <td style="text-align:center;">${item.orderNumber}</td>
 				        <td>${item.supplierName}</td>
-				        <td>${item.productCode}</td>
+				        <td style="text-align:center;">${item.productCode}</td>
 				        <td>${item.productName}</td>
-				        <td>${item.receiveQuantity}</td>
-				        <td>${rdt}</td>
-				        <td>${item.manager}</td>
+				        <td style="text-align:right;">${item.receiveQuantity}</td>
+				        <td style="text-align:center;">${rdt}</td>
+				        <td style="text-align:center;">${item.manager}</td>
 				    </tr>`;
 					tbody.innerHTML += th;
 				})

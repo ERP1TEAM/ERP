@@ -28,6 +28,20 @@ document.addEventListener("DOMContentLoaded", function() {
     window.pgPrev = function() {
         tableData(startPage - 1, searchCode, searchWord);
     }
+    //날짜를 yyyy-MM-dd HH-mm-ss형식으로 변환
+	function formatDate(isoString) {
+
+		const date = new Date(isoString);
+
+		const year = date.getFullYear();
+		const month = String(date.getMonth() + 1).padStart(2, '0');
+		const day = String(date.getDate()).padStart(2, '0');
+		const hours = String(date.getHours()).padStart(2, '0');
+		const minutes = String(date.getMinutes()).padStart(2, '0');
+		const seconds = String(date.getSeconds()).padStart(2, '0');
+
+		return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+	}
 
 	//테이블 출력
 	const tableData = (pno, code = '', word = '') => {
@@ -42,18 +56,19 @@ document.addEventListener("DOMContentLoaded", function() {
 				let tbody = document.querySelector('#tbody');
 				tbody.innerHTML = '';
 				items.forEach(function(item) {
+					const rdt = formatDate(item.date);
 					let th = `
 				    <tr class="odd gradeX">
 				        <td>${item.code}</td>
-				        <td>${item.orderNumber}</td>
+				        <td style="text-align:center;">${item.orderNumber}</td>
 				        <td>${item.supplierName}</td>
-				        <td>${item.productCode}</td>
+				        <td style="text-align:center;">${item.productCode}</td>
 				        <td>${item.productName}</td>
-				        <td>${item.quantity}</td>
-				        <td>${item.wtQuantity}</td>
-				        <td>${item.date}</td>
-				        <td>${item.manager}</td>
-				        <td><button type="button" class="small-tap receiving" 
+				        <td style="text-align:right;">${item.quantity}</td>
+				        <td style="text-align:right;">${item.wtQuantity}</td>
+				        <td style="text-align:center;">${rdt}</td>
+				        <td style="text-align:center;">${item.manager}</td>
+				        <td style="text-align:center;"><button type="button" class="small-tap receiving" 
 				        			data-deli="${item.deliveryCode}"
 									data-on="${item.orderNumber}"
 									data-code="${item.code}"

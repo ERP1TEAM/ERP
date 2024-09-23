@@ -78,13 +78,13 @@ document.addEventListener("DOMContentLoaded", function() {
 				        <td>${item.orderNumber}</td>
 				        <td>${item.supplierName}</td>
 				        <td>${item.productName}</td>
-				        <td>${item.quantity}</td>
-				        <td>${item.price.toLocaleString()}</td>
-				        <td>${item.totalPrice.toLocaleString()}</td>
-				        <td>${rdt}</td>
-				        <td>${item.expectedDate}</td>
-				        <td>${item.manager}</td>
-				        <td>${item.status}</td>
+				        <td style="text-align:right;">${item.quantity}</td>
+				        <td style="text-align:right;">${item.price.toLocaleString()}</td>
+				        <td style="text-align:right;">${item.totalPrice.toLocaleString()}</td>
+				        <td style="text-align:center;">${rdt}</td>
+				        <td style="text-align:center;">${item.expectedDate}</td>
+				        <td style="text-align:center;">${item.manager}</td>
+				        <td style="text-align:center;">${item.status}</td>
 				    </tr>`;
 					tbody.innerHTML += th;
 				})

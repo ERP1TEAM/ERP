@@ -59,15 +59,15 @@ document.addEventListener("DOMContentLoaded", function() {
 					let th = `
 				    <tr class="odd gradeX">
 				        <td>${item.orderNumber}</td>
-				        <td>${item.productCode}</td>
+				        <td style="text-align:center;">${item.productCode}</td>
 				        <td>${item.productName}</td>
-				        <td>${item.quantity}</td>
-				        <td>${item.price.toLocaleString()}</td>
-				        <td>${item.totalPrice.toLocaleString()}</td>
-				        <td>${rdt}</td>
-				        <td>${item.totalWtQuantity}</td>
+				        <td style="text-align:right;">${item.quantity}</td>
+				        <td style="text-align:right;">${item.price.toLocaleString()}</td>
+				        <td style="text-align:right;">${item.totalPrice.toLocaleString()}</td>
+				        <td style="text-align:center;">${rdt}</td>
+				        <td style="text-align:right;">${item.totalWtQuantity}</td>
 				        <td><input type="text" id="${item.orderNumber}"></td>
-				        <td><input class="cd-paging-right-btn purchase_request" type="button"
+				        <td style="text-align:center;"><input class="cd-paging-right-btn purchase_request" type="button"
 								value="납품등록" data-idx="${item.orderNumber}"
 								data-wt="${item.wtQuantity}"></td>
 				    </tr>`;

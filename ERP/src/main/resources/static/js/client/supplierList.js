@@ -85,8 +85,8 @@ document.addEventListener("DOMContentLoaded", function() {
                         <td>${item.email}</td>
                         <td>${formattedTel}</td>
                         <td>${item.address}</td>
-                        <td>${rdt}</td>
-                        <td class="container">
+                        <td style="text-align:center;">${rdt}</td>
+                        <td class="container" style="text-align:center;">
 		                    <button onclick="toggleActions(this)">관리</button>
 		                    <div class="action-buttons">
 		                        <button>수정</button>

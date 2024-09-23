@@ -60,10 +60,10 @@ document.addEventListener("DOMContentLoaded", function() {
 				    <tr class="odd gradeX">
 				        <td>${item.deliveryCode}</td>
 				        <td>${item.orderNumber}</td>
-				        <td>${item.productCode}</td>
+				        <td style="text-align:center;">${item.productCode}</td>
 				        <td>${item.productName}</td>
-				        <td>${item.quantity}</td>
-				        <td>${rdt}</td>
+				        <td style="text-align:right;">${item.quantity}</td>
+				        <td style="text-align:center;">${rdt}</td>
 				    </tr>`;
 					tbody.innerHTML += th;
 				})
