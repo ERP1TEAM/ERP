@@ -17,19 +17,19 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById("stocklistSearch").value = stocklistSearchWord;
 
 	 // 페이징 함수를 전역으로 설정
-    window.inventorylistPaging = function(p = stocklistP, code = stocklistSearchCode, word = stocklistSearchWord) {
-        inventorylistmain(p, code, word);
+    window.stocklistPaging = function(p = stocklistP, code = stocklistSearchCode, word = stocklistSearchWord) {
+        stocklistmain(p, code, word);
     }
 
-    window.inventorylistPgNext = function() {
-        inventorylistmain(stocklistEndPage + 1, stocklistSearchCode, stocklistSearchWord);
+    window.stocklistPgNext = function() {
+        stocklistmain(stocklistEndPage + 1, stocklistSearchCode, stocklistSearchWord);
     }
 
-    window.inventorylistPgPrev = function() {
-        inventorylistmain(stocklistStartPage - 1, stocklistSearchCode, stocklistSearchWord);
+    window.stocklistPgPrev = function() {
+        stocklistmain(stocklistStartPage - 1, stocklistSearchCode, stocklistSearchWord);
     }
 
-function inventorylistmain(pno, code = '', word = ''){
+function stocklistmain(pno, code = '', word = ''){
 	fetch(`/main/stock/viewproductstocks/${pno}?code=${code}&word=${word}`,{
 		method:'GET',
 		headers:{
@@ -38,27 +38,26 @@ function inventorylistmain(pno, code = '', word = ''){
 	})
 	.then(response=>response.json())
 	.then(data=>{
-		console.log(data);
-		let inventorylisttbody=document.querySelector('#inventorylisttbody');
-    	inventorylisttbody.innerHTML='';
+		let stocklisttbody=document.querySelector('#stocklisttbody');
+    	stocklisttbody.innerHTML='';
 		
 		const items = data.content;
 		stocklistTotalpages = data.totalPages;
 		
-    	items.forEach(function(inventorylist){
+    	items.forEach(function(stocklist){
 		
-        let inventorylistth = `<tr class="odd gradeX">
-                    <td>${inventorylist.productCode}</td>
-                    <td>${inventorylist.productName}</td>
-                    <td>${inventorylist.supplierCode}</td>
-                    <td>${inventorylist.supplierName}</td>
-                    <td>${inventorylist.totalQty}</td>
-                    <td>${inventorylist.availableQty}</td>
-                    <td>${inventorylist.unavailableQty}</td>
-                    <td>${inventorylist.safetyQty}</td>
+        let stocklistth = `<tr class="odd gradeX">
+                    <td>${stocklist.productCode}</td>
+                    <td>${stocklist.productName}</td>
+                    <td>${stocklist.supplierCode}</td>
+                    <td>${stocklist.supplierName}</td>
+                    <td>${stocklist.totalQty}</td>
+                    <td>${stocklist.availableQty}</td>
+                    <td>${stocklist.unavailableQty}</td>
+                    <td>${stocklist.safetyQty}</td>
                     <td><input type="button" value="상세보기" class="dailyinventorybtn"></td>
                  </tr>`;
-			inventorylisttbody.innerHTML +=inventorylistth;
+			stocklisttbody.innerHTML +=stocklistth;
 		}); 
 		const inventorylistPaging = document.getElementById("inventorylistPaging");
 		inventorylistPaging.innerHTML = '';
@@ -111,7 +110,7 @@ function inventorylistmain(pno, code = '', word = ''){
 			console.log(error);
 		});
 }
-inventorylistmain(stocklistP, stocklistSearchCode, stocklistSearchWord);
+stocklistmain(stocklistP, stocklistSearchCode, stocklistSearchWord);
 
 //검색
 document.getElementById("inventorylist_form").addEventListener("submit", function(event) {
