@@ -61,14 +61,15 @@
             <input type="text" class="product_input2" maxlength="200" id="inventoryname"> <span class="help_text">※ 품목명은 최대 200자까지만 적용할 수 있습니다.</span>
         </li>
     </ul>
+    
     <ul>
         <li>제조사 코드</li>
         <li>
             <select class="product_input1" id="inventorySuppliercodeoption">
                 <option value=""></option>
-            </select>
+            </select><input type="button" value="+" class="product_btn2" id="inventoryInsupplierbtn">
         </li>
-    </ul>
+    </ul>    
     <ul>
         <li>제조사명</li>
         <li>
@@ -113,6 +114,7 @@
     <input type="button" value="취소"  class="p_button p_button_color1" id="inventorycancle">
 </div>
 
+    <div th:insert="~{stock/inventorySupplierModal :: inventorySupplierlistModal}"></div>
 
 	   </main>
 	   
@@ -134,5 +136,6 @@
     <script src="../../assets/js/custom-scripts.js"></script>
     <script th:src="@{/js/stock/inventoryIn.js}"></script>
     <script th:src="@{/js/stock/categoryModal.js}"></script>
+    <script th:src="@{/js/stock/inventorySupplierModal.js}"></script>
 </body>
 </html>

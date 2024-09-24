@@ -259,13 +259,10 @@
     height: 30px;
     background-color: rgb(31, 40, 55);
     border:0;
-    width : 130px;
+    width:40px;
     color:white;
-    font-size:15px;
-    cursor : pointer;
-    left : 0;
-    bottom : -5px; 
-    position : relative;
+    font-size:14px;
+    cursor: pointer;
 }
 .product_label {
     width: auto;

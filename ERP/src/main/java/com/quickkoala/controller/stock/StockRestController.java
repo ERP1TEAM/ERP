@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.quickkoala.dto.client.SupplierDto;
 import com.quickkoala.dto.stock.CategoryDto;
 import com.quickkoala.dto.stock.LocationDto;
 import com.quickkoala.dto.stock.ProductDto;
@@ -53,6 +54,24 @@ public class StockRestController {
 	
 	@Autowired
 	private StockService stockService;
+	
+	@GetMapping("/stock/inventorysupplierlist/{pno}")
+	public Map<String, Object> inventorysupplierlist(@PathVariable Integer pno, @RequestParam String code,
+			@RequestParam String word) {
+		Map<String, Object> result = new HashMap<>();
+		
+		 Page<SupplierEntity> supplierlistdata;
+		    if (code == null || code.isEmpty() || word == null || word.isEmpty()) {
+		        supplierlistdata = supplierService.getPaginatedData(pno, SIZE);
+		    } else {
+		        supplierlistdata = supplierService.getPaginatedData(pno, SIZE, code, word);
+		    }
+
+		    result.put("supplierlistdata", supplierlistdata);
+		    return result;
+		
+	}
+		
 	
 	 @PutMapping("/stock/updateSafetyQty/{productCode}")
 	    public ResponseEntity<Map<String, String>> updateSafetyQty(

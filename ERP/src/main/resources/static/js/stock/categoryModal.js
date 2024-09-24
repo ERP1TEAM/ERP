@@ -25,7 +25,6 @@ window.categoryPaging = function(p = categoryP, code = categorySearchCode, word 
 }
 
 window.categoryPgNext = function() {
-      //categorymainmodal(categoryEndPage + 1,categorySearchCode, categorySearchWord);
       currentPage=categoryEndPage + 1;
       categorymainmodal(currentPage,categorySearchCode, categorySearchWord);
 }
