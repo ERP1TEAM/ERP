@@ -27,7 +27,7 @@
 		<nav class="navbar navbar-default top-navbar" role="navigation"
 			th:replace="~{supplier/header-s.html :: header}"></nav>
 		<ul id="dropdown1" class="dropdown-content"
-			th:replace="~{supplier/dropdown1-s.html :: dropdown}"></ul>
+			th:replace="~{supplier/dropdown.html :: dropdown}"></ul>
 		<!--/. NAV TOP  -->
 		<nav class="navbar-default navbar-side" role="navigation"
 			th:replace="~{supplier/sidebar-s.html :: sidebar}"></nav>
@@ -45,6 +45,7 @@
 							<div class="card-action">반품내역</div>
 							<form id="search_form">
 								<div class="search">
+									<input type="date" id="start_date" style="width:120px;"> ~ <input type="date" id="end_date" style="width:120px;">
 									<select id="search_code">
 										<option value="납품번호">납품번호</option>
 										<option value="발주번호">발주번호</option>
@@ -52,6 +53,7 @@
 									</select> <input type="text" placeholder="검색어를 입력하세요"
 										style="width: 200px; border: 1px;" id="search_word">
 									<button type="submit" id="search_btn">검색</button>
+									<button type="button" id="reset_btn">초기화</button>
 								</div>
 							</form>
 							<div class="card-content">

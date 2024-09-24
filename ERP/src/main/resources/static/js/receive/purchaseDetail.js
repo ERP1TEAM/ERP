@@ -213,4 +213,6 @@ document.addEventListener("DOMContentLoaded", function() {
 		paging(1, searchCode, searchWord); // 검색 후 첫 페이지부터 시작		
 		setActiveStyle(document.getElementById("all"));		
 	});
+	
+	
 });

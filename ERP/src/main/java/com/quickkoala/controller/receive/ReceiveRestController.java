@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.quickkoala.dto.receive.DetailDto;
+import com.quickkoala.dto.receive.SearchDto;
 import com.quickkoala.dto.receive.PurchaseDto;
 import com.quickkoala.dto.receive.PurchaseListDto;
 import com.quickkoala.dto.receive.ReceiveModalDto;
@@ -56,9 +56,6 @@ import jakarta.servlet.http.HttpServletRequest;
 public class ReceiveRestController {
 
 	private static final int SIZE = 5;
-	
-	@Autowired
-	private JwtTokenProvider jwtTokenProvider;
 	
 	@Autowired
 	private PurchaseService purchaseService;
@@ -145,13 +142,15 @@ public class ReceiveRestController {
 
 	// 가입고 페이지 데이터
 	@GetMapping("receive/tempReceiveData/{pno}")
-	public Page<ViewReceiveTempEntity> tempReceiveData(@PathVariable Integer pno, @RequestParam String code,
-			@RequestParam String word) {
+	public Page<ViewReceiveTempEntity> tempReceiveData(@PathVariable Integer pno, @ModelAttribute SearchDto dto) {
+		String sDate = dto.getSDate();
+		String word = dto.getWord(); 
+		
 		Page<ViewReceiveTempEntity> result = null;
-		if (code.equals("") || word.equals("")) {
+		if (word.equals("") && sDate.equals("")) {
 			result = viewReceiveTempService.getPaginatedData(pno, SIZE);
 		} else {
-			result = viewReceiveTempService.getPaginatedData(pno, SIZE, code, word);
+			result = viewReceiveTempService.getPaginatedData(pno, SIZE, dto);
 		}
 		return result;
 	}
@@ -229,7 +228,7 @@ public class ReceiveRestController {
 
 	// 입고내역 데이터 + 페이징
 	@GetMapping("receive/detailData/{pno}")
-	public Page<ViewReceiveEntity> detailData(@PathVariable Integer pno, @ModelAttribute DetailDto dto) {
+	public Page<ViewReceiveEntity> detailData(@PathVariable Integer pno, @ModelAttribute SearchDto dto) {
 		String sDate = dto.getSDate();
 		String word = dto.getWord(); 
 				
@@ -244,13 +243,15 @@ public class ReceiveRestController {
 	
 	// 입고반품 데이터 + 페이징
 	@GetMapping("receive/returnData/{pno}")
-	public Page<ViewReceiveReturnEntity> returnData(@PathVariable Integer pno, @RequestParam String code,
-			@RequestParam String word) {
+	public Page<ViewReceiveReturnEntity> returnData(@PathVariable Integer pno, @ModelAttribute SearchDto dto) {
+		String sDate = dto.getSDate();
+		String word = dto.getWord(); 
+		
 		Page<ViewReceiveReturnEntity> result = null;
-		if (code.equals("") || word.equals("")) {
+		if (word.equals("") && sDate.equals("")) {
 			result = viewReceiveReturnService.getPaginatedData(pno, SIZE);
 		} else {
-			result = viewReceiveReturnService.getPaginatedData(pno, SIZE, code, word);
+			result = viewReceiveReturnService.getPaginatedData(pno, SIZE, dto);
 		}
 		return result;
 	}

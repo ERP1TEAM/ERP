@@ -156,5 +156,17 @@ document.addEventListener("DOMContentLoaded", function() {
 			paging(1, searchCode, searchWord, startDate, endDate); // 검색 후 첫 페이지부터 시작						
 		}
 	});
+	
+	document.getElementById("reset_btn").addEventListener("click", function() {
+		searchCode = '납품번호';
+		searchWord = '';
+		startDate = '';
+		endDate = new Date().toISOString().split('T')[0];
+		document.getElementById("search_code").value = searchCode;
+		document.getElementById("search_word").value = searchWord;
+		document.getElementById("start_date").value = startDate;
+		document.getElementById("end_date").value = endDate;
+		paging(1, '', '', '', '');
+	})
 
 });

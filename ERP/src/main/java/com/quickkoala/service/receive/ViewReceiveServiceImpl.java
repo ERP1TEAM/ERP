@@ -10,7 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.quickkoala.dto.receive.DetailDto;
+import com.quickkoala.dto.receive.SearchDto;
 import com.quickkoala.entity.receive.ViewReceiveEntity;
 import com.quickkoala.repository.receive.ViewReceiveRepository;
 
@@ -51,7 +51,7 @@ public class ViewReceiveServiceImpl implements ViewReceiveService {
 	}
 	
 	@Override
-	public Page<ViewReceiveEntity> getPaginatedData(int pno, int size, DetailDto dto) {
+	public Page<ViewReceiveEntity> getPaginatedData(int pno, int size, SearchDto dto) {
 		Page<ViewReceiveEntity> result = null;
 		Pageable pageable = PageRequest.of(pno-1, size);
 		String sDateString = dto.getSDate();

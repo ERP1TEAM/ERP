@@ -12,22 +12,27 @@ document.addEventListener("DOMContentLoaded", function() {
 	let p = parseInt(getQueryParam("p")) || 1;
 	let searchCode = getQueryParam("code") || '가입고코드';  // 검색 코드
     let searchWord = getQueryParam("word") || '';  // 검색어
+    let startDate = getQueryParam("sDate") || '';
+	let endDate = getQueryParam("eDate") || new Date().toISOString().split('T')[0];
     
     document.getElementById("search_code").value = searchCode;
     document.getElementById("search_word").value = searchWord;
+    document.getElementById("start_date").value = startDate;
+	document.getElementById("end_date").value = endDate;
 	
 	//paging 함수를 전역으로 설정
-	window.paging = function(p, code = searchCode, word = searchWord) {
-        tableData(p, code, word);
-    }
+	window.paging = function(p, code = searchCode, word = searchWord, sDate = startDate, eDate = endDate) {
+		tableData(p, code, word, sDate, eDate);
+	}
 
-    window.pgNext = function() {
-        tableData(endPage + 1, searchCode, searchWord);
-    }
+	window.pgNext = function() {
+		tableData(endPage + 1, searchCode, searchWord, startDate, endDate);
+	}
 
-    window.pgPrev = function() {
-        tableData(startPage - 1, searchCode, searchWord);
-    }
+	window.pgPrev = function() {
+		tableData(startPage - 1, searchCode, searchWord, startDate, endDate);
+	}
+	
     //날짜를 yyyy-MM-dd HH-mm-ss형식으로 변환
 	function formatDate(isoString) {
 
@@ -44,8 +49,14 @@ document.addEventListener("DOMContentLoaded", function() {
 	}
 
 	//테이블 출력
-	const tableData = (pno, code = '', word = '') => {
-		fetch(`./tempReceiveData/${pno}?code=${code}&word=${word}`, {
+	const tableData = (pno, code = '', word = '', sDate = '', eDate = '') => {
+		const params = new URLSearchParams({
+			code: code,
+			word: word,
+			sDate: sDate,
+			eDate: eDate
+		}).toString();
+		fetch(`./tempReceiveData/${pno}?${params}`, {
 			method: 'GET'
 		})
 			.then(response => response.json())
@@ -121,10 +132,14 @@ document.addEventListener("DOMContentLoaded", function() {
 				// 페이징 HTML을 페이지에 삽입
 				paging.innerHTML = paginationHTML;
 				
-				if(word === ""){
-	                history.replaceState({}, '', location.pathname + `?p=${pno}`);			
-				}else{
+				if (word === "" && sDate === "") {
+					history.replaceState({}, '', location.pathname + `?p=${pno}`);
+				} else if (sDate === "") {
 					history.replaceState({}, '', location.pathname + `?p=${pno}&code=${code}&word=${word}`);
+				} else if (word === "") {
+					history.replaceState({}, '', location.pathname + `?p=${pno}&sDate=${sDate}&eDate=${eDate}`);
+				} else {
+					history.replaceState({}, '', location.pathname + `?p=${pno}&sDate=${sDate}&eDate=${eDate}&code=${code}&word=${word}`);
 				}
 			})
 			.catch(function(error) {
@@ -132,19 +147,37 @@ document.addEventListener("DOMContentLoaded", function() {
 			});
 	}
 
-	tableData(p, searchCode, searchWord);
+	tableData(p, searchCode, searchWord, startDate, endDate);
 	
 	//검색
-    document.getElementById("search_form").addEventListener("submit", function(event) {
-        event.preventDefault(); // 기본 폼 제출 방지
-        searchCode = document.getElementById("search_code").value;
-        searchWord = document.getElementById("search_word").value;
-        if(!searchCode && searchWord){
-			alert("검색분류를 선택해주세요");
-		}else{
-		    paging(1, searchCode, searchWord); // 검색 후 첫 페이지부터 시작			
+	document.getElementById("search_form").addEventListener("submit", function(event) {
+		event.preventDefault(); // 기본 폼 제출 방지
+		startDate = document.getElementById("start_date").value;
+		endDate = document.getElementById("end_date").value;
+		searchCode = document.getElementById("search_code").value;
+		searchWord = document.getElementById("search_word").value;
+		if (startDate !== "" && endDate === "") {
+			endDate = new Date().toISOString().split('T')[0];
+			document.getElementById("end_date").value = endDate;
+			paging(1, searchCode, searchWord, startDate, endDate);
+		} else if (startDate > endDate) {
+			alert("기간이 잘못 설정되었습니다.");
+		} else {
+			paging(1, searchCode, searchWord, startDate, endDate); // 검색 후 첫 페이지부터 시작						
 		}
-    });
+	});
+
+	document.getElementById("reset_btn").addEventListener("click", function() {
+		searchCode = '납품번호';
+		searchWord = '';
+		startDate = '';
+		endDate = new Date().toISOString().split('T')[0];
+		document.getElementById("search_code").value = searchCode;
+		document.getElementById("search_word").value = searchWord;
+		document.getElementById("start_date").value = startDate;
+		document.getElementById("end_date").value = endDate;
+		paging(1, '', '', '', '');
+	})
 	
 	//입고버튼 클릭
 	document.querySelector('#tbody').addEventListener('click', function(event) {
