@@ -54,18 +54,24 @@ public class StockRestController {
 	@Autowired
 	private StockService stockService;
 	
-	@PutMapping("/safety-qty/{productCode}")
-    public ResponseEntity<String> updateSafetyQty(
-            @PathVariable String productCode, 
-            @RequestParam int safetyQty) {
-        boolean isUpdated = stockService.updateSafetyqty(productCode, safetyQty);
-        
-        if (isUpdated) {
-            return ResponseEntity.ok("안전 재고 수량이 업데이트되었습니다.");
-        } else {
-            return ResponseEntity.notFound().build(); // 제품 코드가 존재하지 않을 경우
-        }
-    }
+	 @PutMapping("/stock/updateSafetyQty/{productCode}")
+	    public ResponseEntity<Map<String, String>> updateSafetyQty(
+	            @PathVariable String productCode, 
+	            @RequestBody Map<String, Integer> body) {
+		 	
+		 	Integer safetyQty = body.get("safetyQty");
+		 	 if (safetyQty == null) {
+		         return ResponseEntity.badRequest().body(Map.of("error", "안전 재고 수량이 필요합니다."));
+		     }
+		 
+	        boolean isUpdated = stockService.updateSafetyQty(productCode, safetyQty);
+	        
+	        if (isUpdated) {
+	        	return ResponseEntity.ok(Map.of("success", "안전 재고 수량이 성공적으로 업데이트되었습니다."));
+	        } else {
+	        	return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", "해당 제품의 재고를 찾을 수 없습니다."));
+	        }
+	    }
 	
 	
 	   
