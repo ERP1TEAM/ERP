@@ -15,18 +15,36 @@
 </head>
 
 <style>
-/* 모달의 오른쪽 상단에 X 버튼 배치 */
+.modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    background-color: white;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    border-radius: 8px;
+}
+
 .modal-close-x {
     position: absolute;
     top: 10px;
-    right: 15px;
-    font-size: 24px;
+    right: 10px;
     cursor: pointer;
-    color: #333;
+    font-size: 24px;
 }
 
-.modal-close-x:hover {
-    color: #d9534f; /* 호버 시 X 버튼 색 변경 (빨간색) */
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    display: none;
 }
 /* 검색 필드와 검색 버튼을 우측 상단에 배치하고 60%의 공간만 사용 */
 .search-container {
@@ -79,7 +97,6 @@
     border: 1px solid #ccc;
     color: #333;
 }
-
 .pagination a:hover {
     background-color: #ddd;
 }
@@ -99,15 +116,18 @@
             </div>
 
             <!-- 검색 영역: 날짜 선택, 검색 옵션, 검색 필드 -->
-            <div class="search-container">
-                <input type="date" id="searchDate" class="form-control" placeholder="날짜 선택">
-                <select id="searchOption" class="form-control">
-                    <option value="orderId">주문번호</option>
-                    <option value="name">주문자명</option>
-                </select>
-                <input type="text" id="searchInput" class="form-control" placeholder="검색어를 입력하세요">
-                <button type="button" class="btn btn-primary" onclick="filterOrders()">검색</button>
-            </div>
+			<div class="search-container">
+			    <input type="date" id="startDate" class="form-control" placeholder="시작 날짜">
+			    <span style="margin-left: 10px;">~</span>
+			    <input type="date" id="endDate" class="form-control" placeholder="종료 날짜">
+			    <select id="searchOption" class="form-control">
+			        <option value="orderId">주문번호</option>
+			        <option value="name">주문자명</option>
+			    </select>
+			    <input type="text" id="searchInput" class="form-control" placeholder="검색어를 입력하세요">
+			    <button type="button" class="btn btn-primary" onclick="filterOrders()">검색</button>
+			</div>
+
 
             <!-- 주문 목록 테이블 -->
             <div id="page-inner" style="min-height: 0px;">
@@ -127,6 +147,7 @@
 										        <th class="center">배송지</th>
 										        <th class="center">주문날짜</th>
 										        <th class="center">관리자메모</th>
+										        <th class="center">상태</th>
 										        <th class="center">주문상품</th>
 										    </tr>
 										</thead>
@@ -138,8 +159,9 @@
 										        <td class="center" th:text="${order.tel}"></td>
 										        <td class="center" th:text="${order.email}"></td>
 										        <td th:text="${'['+ order.post +'] ' + ' ' + order.address + ' ' + order.addressDetail}"></td>
-										        <td class="center" th:text="${order.orderDate}"></td>
+										        <td class="center" th:text="${#temporals.format(order.orderDate, 'yyyy-MM-dd')}"></td>
 										        <td th:text="${order.managerMemo}"></td>
+										        <td>처리중</td>
 										        <td class="center">
 										            <button type="button" class="btn btn-primary" style="background-color: #474B54; border: none;" onclick="showOrderDetails(this)">상세보기</button>
 										        </td>
@@ -148,12 +170,20 @@
 
                                     </table>
 
-                                    <!-- 페이징 처리 -->
-                                    <ul class="pagination">
-                                        <li><a href="#">1</a></li>
-                                        <li><a href="#">2</a></li>
-                                        <li><a href="#">3</a></li>
-                                    </ul>
+										<!-- 페이징 UI -->
+										
+										    <ul class="pagination">
+										        <li class="page-item">
+										            <a href="#" class="page-link">&lt;</a>
+										        </li>
+										        <li class="page-item">
+										            <a href="#" class="page-link"></a>
+										        </li>
+										        <li class="page-item">
+										            <a href="#" class="page-link">&gt;</a>
+										        </li>
+										    </ul>
+										
                                 </div>
                             </div>
                         </div>
@@ -173,18 +203,16 @@
 	
 	
 	
-    <script th:src="@{/assets/js/jquery-1.10.2.js}"></script>
-    <script th:src="@{/assets/js/bootstrap.min.js}"></script>
-    <script th:src="@{/assets/materialize/js/materialize.min.js}"></script>
-    <script th:src="@{/assets/js/jquery.metisMenu.js}"></script>
-    <script th:src="@{/assets/js/morris/raphael-2.1.0.min.js}"></script>
-    <script th:src="@{/assets/js/morris/morris.js}"></script>
-    <script th:src="@{/assets/js/easypiechart.js}"></script>
-    <script th:src="@{/assets/js/easypiechart-data.js}"></script>
-    <script th:src="@{/assets/js/Lightweight-Chart/jquery.chart.js}"></script>
-    <script th:src="@{/assets/js/custom-scripts.js}"></script>
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+	<script th:src="@{/assets/js/jquery-1.10.2.js}"></script>
+	<script th:src="@{/assets/js/bootstrap.min.js}"></script>
+	<script th:src="@{/assets/materialize/js/materialize.min.js}"></script>
+	<script th:src="@{/assets/js/jquery.metisMenu.js}"></script>
+	<script th:src="@{/assets/js/morris/raphael-2.1.0.min.js}"></script>
+	<script th:src="@{/assets/js/morris/morris.js}"></script>
+	<script th:src="@{/assets/js/easypiechart.js}"></script>
+	<script th:src="@{/assets/js/easypiechart-data.js}"></script>
+	<script th:src="@{/assets/js/Lightweight-Chart/jquery.chart.js}"></script>
+	<script th:src="@{/assets/js/custom-scripts.js}"></script>
     
 	<script th:src="@{/js/orderlist.js}"> </script>
     

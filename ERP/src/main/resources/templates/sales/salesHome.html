@@ -154,7 +154,7 @@
 	<script>
 	// 공지사항 목록 필터링 및 페이징 처리 함수
 	function filterNotices(page = 0) {
-	    const size = 10;  // 한 페이지에 표시할 공지사항 수
+	    const size = 5;  // 한 페이지에 표시할 공지사항 수
 
 	    fetch(`/sales/filterNotices?page=${page}&size=${size}`)
 	        .then(response => response.json())
@@ -186,6 +186,7 @@
 	function updatePagination() {
 	    const pagination = document.querySelector('.pagination');
 	    pagination.innerHTML = '';
+	    
 
 	    // < 버튼
 	    if (currentPage > 0) {
@@ -194,7 +195,9 @@
 
 	    // 페이지 번호들
 	    for (let i = 0; i < totalPages; i++) {
-	        pagination.innerHTML += `<li><a href="#" onclick="filterNotices(${i})">${i + 1}</a></li>`;
+	        // 현재 페이지에는 active 클래스를 추가
+	        const activeClass = (i === currentPage) ? 'active' : '';
+	        pagination.innerHTML += `<li class="${activeClass}"><a href="#" onclick="filterNotices(${i})">${i + 1}</a></li>`;
 	    }
 
 	    // > 버튼

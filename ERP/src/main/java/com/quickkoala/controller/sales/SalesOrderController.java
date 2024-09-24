@@ -39,7 +39,7 @@ public class SalesOrderController {
 	    
 	    // 해당 code와 일치하는 주문 정보 조회
 	    List<ClientsOrdersEntity> orders = orderService.findByCode(code);
-	    
+
 	    // 조회된 주문 정보를 모델에 추가
 	    model.addAttribute("orders", orders);
 	    

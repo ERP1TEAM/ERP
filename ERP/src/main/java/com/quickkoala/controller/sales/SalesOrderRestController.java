@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,9 +26,11 @@ import org.springframework.web.multipart.MultipartFile;
 import com.quickkoala.dto.sales.ClientsOrderProductsDTO;
 import com.quickkoala.dto.sales.ClientsOrdersDTO;
 import com.quickkoala.dto.sales.SearchProductCodeDTO;
+import com.quickkoala.entity.client.SupplierEntity;
 import com.quickkoala.entity.sales.ClientsOrdersEntity;
 import com.quickkoala.entity.stock.ProductEntity;
 import com.quickkoala.repository.stock.ProductRepository;
+import com.quickkoala.service.client.SupplierServiceImpl;
 import com.quickkoala.service.sales.SalesOrderServiceImpl;
 import com.quickkoala.token.config.JwtTokenProvider;
 
@@ -45,6 +48,9 @@ public class SalesOrderRestController {
 	
 	@Autowired
 	private ProductRepository productRepository;
+	
+	@Autowired
+	private SupplierServiceImpl supplierService;
 
     //주문등록 (액셀 등록)
 	@PostMapping("/uploadFile")
@@ -70,17 +76,20 @@ public class SalesOrderRestController {
 	}
 	
     //직접 주문등록
-    @PostMapping("/saveOrder")
-    public ResponseEntity<String> saveOrder(@RequestBody List<ClientsOrdersDTO> orders, HttpServletRequest request) {
-        try {
-            String token = jwtTokenProvider.resolveToken(request);
-            orderService.saveOrder(orders, token);
-            return ResponseEntity.ok("주문등록 성공");
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to save order");
-        }
-    }
+	@PostMapping("/saveOrder")
+	public ResponseEntity<?> saveOrder(@RequestBody List<ClientsOrdersDTO> orders, HttpServletRequest request) {
+	    try {
+	        // 주문 정보 저장 로직
+	        String token = jwtTokenProvider.resolveToken(request);
+	        orderService.saveOrder(orders, token);
+	        return ResponseEntity.ok(Collections.singletonMap("message", "주문이 성공적으로 등록되었습니다."));
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+	                             .body(Collections.singletonMap("message", "Failed to save order"));
+	    }
+	}
+
 
     
     //주문완료 (주문 상품 출력)
@@ -95,7 +104,8 @@ public class SalesOrderRestController {
             HttpServletRequest request, // request 객체 추가
             @RequestParam("searchType") String searchType,
             @RequestParam("searchText") String searchText,
-            @RequestParam(value = "searchDate", required = false) String searchDateStr,
+            @RequestParam(value = "startDate", required = false) String startDateStr,
+            @RequestParam(value = "endDate", required = false) String endDateStr,
             @RequestParam("page") int page,
             @RequestParam("size") int size) {
 
@@ -103,14 +113,20 @@ public class SalesOrderRestController {
         String token = jwtTokenProvider.resolveToken(request);
         String code = jwtTokenProvider.getClaim(token, "code");
 
-        LocalDate searchDate = null;
-        if (searchDateStr != null && !searchDateStr.isEmpty()) {
-            searchDate = LocalDate.parse(searchDateStr, DateTimeFormatter.ISO_DATE);
+        LocalDate startDate = null;
+        LocalDate endDate = null;
+
+        // 시작 날짜와 종료 날짜를 파싱하여 LocalDate로 변환
+        if (startDateStr != null && !startDateStr.isEmpty()) {
+            startDate = LocalDate.parse(startDateStr, DateTimeFormatter.ISO_DATE);
+        }
+        if (endDateStr != null && !endDateStr.isEmpty()) {
+            endDate = LocalDate.parse(endDateStr, DateTimeFormatter.ISO_DATE);
         }
 
         // Service를 통해 검색 및 페이징 처리 (companyCode 추가)
         Page<ClientsOrdersEntity> ordersPage = orderService.searchOrders(
-                code, searchType, searchText, searchDate, page, size);
+                code, searchType, searchText, startDate, endDate, page, size);
 
         // 결과를 DTO로 변환하여 필요한 데이터만 반환
         Map<String, Object> response = new HashMap<>();
@@ -121,6 +137,7 @@ public class SalesOrderRestController {
 
         return response;
     }
+
     
     // 상품코드에 맞는 상품명 조회
     @GetMapping("/getProductByCode")
@@ -134,4 +151,10 @@ public class SalesOrderRestController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
+    
+//    @GetMapping("receive/autocomplete") 
+//    public List<SupplierEntity> autocomplete(@RequestParam String term) {
+//    	return supplierService.searchByName(term); 
+//	  }
+    
 }

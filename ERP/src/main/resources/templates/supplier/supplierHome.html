@@ -177,7 +177,9 @@
 
 	    // 페이지 번호들
 	    for (let i = 0; i < totalPages; i++) {
-	        pagination.innerHTML += `<li><a href="#" onclick="filterNotices(${i})">${i + 1}</a></li>`;
+	        // 현재 페이지에는 active 클래스를 추가
+	        const activeClass = (i === currentPage) ? 'active' : '';
+	        pagination.innerHTML += `<li class="${activeClass}"><a href="#" onclick="filterNotices(${i})">${i + 1}</a></li>`;
 	    }
 
 	    // > 버튼
