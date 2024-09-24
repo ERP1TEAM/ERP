@@ -37,14 +37,15 @@
             <h1 class="page-header">
                품목 등록
                     </h1> 
-						<ol class="breadcrumb">
-					  <li><a href="#" style="color: #1A4870;">Home</a></li>
-					  <!--
-					  <li><a href="#">페이지 tap1</a></li>
-					  <li class="active">페이지 tap2</li>
-					  -->
-					</ol> 
 		</div>
+		<div id="page-inner">
+		<div class="row">
+				<div class="col-md-12">
+                	<div class="card">
+                	<div class="card-action">
+                	품목 등록
+                	</div>
+			
 	  <main class="maincss" >
 
 <div class="product_insert">
@@ -52,13 +53,13 @@
      <ul>
         <li>품목코드</li>
         <li>
-            <input type="text" class="product_input2 black_font" id="inventorycode" readonly="readonly"> <span class="help_text">※품목코드는 자동으로 생성됩니다.</span>
+            <input type="text" class="product_input3  black_font" id="inventorycode" readonly="readonly"> <span class="help_text">※품목코드는 자동으로 생성됩니다.</span>
         </li>
     </ul>
     <ul>
         <li>품목명</li>
         <li>
-            <input type="text" class="product_input2" maxlength="200" id="inventoryname"> <span class="help_text">※ 품목명은 최대 200자까지만 적용할 수 있습니다.</span>
+            <input type="text" class="product_input3" maxlength="200" id="inventoryname"> <span class="help_text">※ 품목명은 최대 200자까지만 적용할 수 있습니다.</span>
         </li>
     </ul>
     
@@ -73,7 +74,7 @@
     <ul>
         <li>제조사명</li>
         <li>
-        <input type="text" class="product_input2 black_font" readonly="readonly" id="inventorySuppliernameoption">
+        <input type="text" class="product_input3 black_font" readonly="readonly" id="inventorySuppliernameoption">
         </li>
     </ul>
     <ul>
@@ -98,7 +99,7 @@
     <ul>
         <li>단가</li>
         <li>
-            <input type="text" class="product_input2" id="inventoryprice"> <span class="help_text">※ , 없이 숫자만 입력하세요</span>
+            <input type="text" class="product_input3" id="inventoryprice"> <span class="help_text">※ , 없이 숫자만 입력하세요</span>
         </li>
     </ul>
     <ul>
@@ -109,7 +110,7 @@
         </li>
     </ul>
 </div>
-<div class="subpage_view4" style="text-align:center; margin-bottom: 100px;">
+<div class="subpage_view4" style="text-align:center; margin-bottom: 100px; padding-bottom:20px;">
     <input type="button" value="등록"  class="p_button p_button_color2" style="margin-right: 5px;" id="inventorysave">
     <input type="button" value="취소"  class="p_button p_button_color1" id="inventorycancle">
 </div>
@@ -117,7 +118,7 @@
     <div th:insert="~{stock/inventorySupplierModal :: inventorySupplierlistModal}"></div>
 
 	   </main>
-	   
+	   </div></div></div></div>
 	   
 	   
 <footer><p>Copyright 2024 ⓒ quickkoala.com by <i class="fa fa-love"></i><a href="http://quickkoala.com">Quick Koala All right reserved.</a>

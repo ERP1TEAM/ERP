@@ -25,11 +25,18 @@
 </head>
 <body>
 	<div id="wrapper">
-		<div th:insert="~{/layout/stockHeader::top}"></div>
-		<div th:insert="~{/sidebar::sidebar}"></div>
+		<nav th:replace="~{/main/header :: header}"></nav>
+        
+        <div th:replace="~{/main/dropdown :: dropdown}"></div>
+		<!--/. NAV TOP  -->
+		<nav class="navbar-default navbar-side" role="navigation"
+			th:replace="~{sidebar.html :: sidebar}"></nav>
 		<div id="page-wrapper">
-			<div th:insert="~{layout/stockHeader :: header}"></div>
-
+			 <div class="header"> 
+				<h1 class="page-header">
+                재고 관리
+                </h1>
+                </div>
 			<div id="page-inner">
 
         <div class="row">
@@ -48,7 +55,7 @@
 										</select> <input type="text" placeholder="검색어 입력" id="stocklistSearch" class="stocksearchwidth"> 
 											<button type="submit" id="stocklistSearchbtn" class="stocksearchbtn">검색</button>
                 </div>
-				</form>
+				</form >
                     <div class="card-content">
                         <div class="table-responsive">
                             <table class="table table-striped table-bordered table-hover" id="dataTables-example">

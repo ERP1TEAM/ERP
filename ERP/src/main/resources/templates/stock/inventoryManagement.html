@@ -31,22 +31,24 @@
 		<!--/. NAV TOP  -->
 		<nav class="navbar-default navbar-side" role="navigation"
 			th:replace="~{sidebar.html :: sidebar}"></nav>
+		
 		<div id="page-wrapper">
          <div class="header"> 
             <h1 class="page-header">
-                품목 관리
+                재고 관리
                 </h1>
-                <ol class="breadcrumb">
-					  <li><a href="#" style="color: #1A4870;">Home</a></li>
-					  <!--
-					  <li><a href="#">페이지 tap1</a></li>
-					  <li class="active">페이지 tap2</li>
-					  -->
-					</ol> 
-                </div>
+              </div>
 			<div id="page-inner">
+			
+				<div class="row">
+				<div class="col-md-12">
+                	<div class="card">
+                	<div class="card-action">
+                	품목 관리
+                	</div>
+			
                 <form id="inventoryManagement_form">
-                <div class="search">
+                <div class="search stockallleft">
                 <select class="product_input1" id="inventorymanagementSearchtype">
 												<option value="1">품목코드</option>
 												<option value="2">품목명</option>
@@ -85,7 +87,9 @@
                         </div> 
                     </div>
 	   			</div>
-	   
+	   		</div>
+	   </div>
+	   </div>
 <footer><p>Copyright 2024 ⓒ quickkoala.com by <i class="fa fa-love"></i><a href="http://quickkoala.com">Quick Koala All right reserved.</a>
 </p></footer>
 	   

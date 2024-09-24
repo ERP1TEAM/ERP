@@ -25,12 +25,19 @@
 </head>
 <body>
 	<div id="wrapper">
-		<div th:insert="~{/layout/stockHeader::top}"></div>
-		<div th:insert="~{/sidebar::sidebar}"></div>
-		<!-- nav  -->
+		<nav th:replace="~{/main/header :: header}"></nav>
+        
+        <div th:replace="~{/main/dropdown :: dropdown}"></div>
+		<!--/. NAV TOP  -->
+		<nav class="navbar-default navbar-side" role="navigation"
+			th:replace="~{sidebar.html :: sidebar}"></nav>
+		
 		<div id="page-wrapper">
-			<div th:insert="~{layout/stockHeader :: header}"></div>
-
+			 <div class="header"> 
+            <h1 class="page-header">
+                창고 관리
+                </h1>
+              </div>
 			<div id="page-inner">
 
 				<div class="row">
@@ -38,6 +45,9 @@
 						<input type="button" value="로케이션 등록" class="product_btn3"
 							id="locationbtn">
 						<div class="card">
+						<div class="card-action">
+                			로케이션 관리
+                			</div>
 							<div class="card-content">
 								<div class="table-responsive">
 								<form id="search_form">
