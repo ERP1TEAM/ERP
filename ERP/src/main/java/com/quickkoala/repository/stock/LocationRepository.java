@@ -15,6 +15,8 @@ public interface LocationRepository extends JpaRepository<LocationEntity, String
 
 	boolean existsByCode (String code);
 	
+	List<LocationEntity> findAllByOrderByCodeAsc();
+	
 	List<LocationEntity> findAllByOrderByCodeDesc();
 	
 	Page<LocationEntity> findAllByOrderByCodeDesc(Pageable pageable);

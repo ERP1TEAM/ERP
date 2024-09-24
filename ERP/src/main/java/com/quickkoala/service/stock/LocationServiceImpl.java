@@ -67,6 +67,20 @@ public class LocationServiceImpl implements LocationService {
 	}
 	
 	@Override
+	public List<LocationDto> getAllLocations() {
+		
+		List<LocationEntity> locationEntities = locationRepository.findAllByOrderByCodeAsc();
+		List<LocationDto> locationDtos = new ArrayList<>();
+		
+		for (LocationEntity entity : locationEntities) {
+		    LocationDto dto = convertToLocationDto(entity);
+		    locationDtos.add(dto);
+		}
+		
+		return locationDtos;
+	}
+	
+	@Override
 	public LocationEntity saveLocation(LocationDto locationDto) {
 		LocationEntity locationEntity =convertToLocationEntity(locationDto);
 		

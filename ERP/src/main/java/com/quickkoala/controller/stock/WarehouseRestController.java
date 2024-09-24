@@ -150,5 +150,10 @@ public class WarehouseRestController {
         return ResponseEntity.ok(locationdelresponse);
     }
     
+    @GetMapping("/stock/locationstatus")
+    public List<LocationDto> getlocationstatusdata(){
+    	return locationService.getAllLocations();
+    }
+    
     
 }

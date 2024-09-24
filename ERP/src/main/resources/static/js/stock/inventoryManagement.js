@@ -41,24 +41,29 @@ function inventorymanagementmain(pno, code = '', word = ''){
     	inventorymanagementtbody.innerHTML='';
 		
 		const items = data.inventoryData.content;
-		const categories = data.categories; 
+    console.log("Items:", items);  // 받은 items 배열 출력
+    const categories = data.categories; 
+    console.log("Categories:", categories);
 		
 		inventorymanagementTotalPages = data.inventoryData.totalPages;
 		
     	items.forEach(function(inventorymanagement){
 		let categoryname = categories.find(category => category.code == inventorymanagement.classificationCode); 
+		let locationCode = inventorymanagement.locationCode || 'N/A';
+		let price = inventorymanagement.price || 0;
+		let useFlag = inventorymanagement.useFlag || 'N/A';
 		
         let inventorymanagementth = `<tr class="odd gradeX">
                     <td>${inventorymanagement.productCode}</td>
                     <td>${inventorymanagement.productName}</td>
                     <td>${inventorymanagement.supplierCode}</td>
                     <td>${inventorymanagement.supplierName}</td>
-                    <td>${inventorymanagement.locationCode}</td>
+                    <td>${locationCode}</td>
                     <td>${inventorymanagement.classificationCode}</td>
                     <td>${categoryname.mainName}(${categoryname.mainCode})</td>
 					<td>${categoryname.subName}(${categoryname.subCode})</td>
-                    <td>${inventorymanagement.price}</td>
-                    <td>${inventorymanagement.useFlag}</td>
+                    <td>${price}</td>
+                    <td>${useFlag}</td>
                     <td><input type="button" value="수정" class="inventorymanagementmodifybtn" value={}></td>
                  </tr>`;
 			inventorymanagementtbody.innerHTML +=inventorymanagementth;

@@ -131,7 +131,7 @@ document.addEventListener('DOMContentLoaded', function() {
             supplierCode: supplierCode,
             classificationCode: classificationCode,
             useFlag: useFlag,
-            price: productprice
+            price: productprice ||0
         };
         const manager = "김중앙";
 		
@@ -156,10 +156,12 @@ document.addEventListener('DOMContentLoaded', function() {
             alert("상품이 등록 되었습니다.");
     		document.getElementById('inventoryname').value = '';
     		document.getElementById('inventoryprice').value = '';
+    		 
     		 fetch('/main/stock/inventoryrandomcode')
       			 .then(response => {
             	 if (response.ok) {
                		 return response.text();
+               		 window.location.reload();
             	} else {
               	  throw new Error('새로운 상품코드를 받는 데 실패했습니다.');
          	    }
