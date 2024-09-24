@@ -66,7 +66,7 @@ function categorymainmodal(pno, code = '', word = '') {
                 }
 			
             
-            let categoryth = `<tr class="odd gradeX">
+            let categoryth = `<tr class="odd gradeX" data-mainName="${category.mainName}" data-subName="${category.subName}">
                         <th><input type="checkbox" class="checkbox" value="${category.code}"></th>
                         <td>${category.code}</td>
                         <td>${category.mainCode}</td>
@@ -128,6 +128,12 @@ function categorymainmodal(pno, code = '', word = '') {
         document.getElementById('categoryoverlay').style.display = 'block';
         document.getElementById('categorylistmodal').style.display = 'block';
         document.body.style.overflow = 'hidden';
+    
+    	document.querySelectorAll("#categorytbody tr").forEach(row => {
+   		row.style.cursor = 'pointer';
+   		
+   		
+		});
     })
     .catch(function(error) {
         alert('카테고리 모달을 불러오는 데 오류가 발생했습니다.');

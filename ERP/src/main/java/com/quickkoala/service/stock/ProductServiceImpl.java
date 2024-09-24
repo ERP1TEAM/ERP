@@ -30,7 +30,9 @@ public class ProductServiceImpl implements ProductService{
 		
 		if (productEntity.getStorageLocation() != null) {
 	        maptoProductDto.setStorageLocation(productEntity.getStorageLocation());
-	    }
+	    }else {
+            maptoProductDto.setStorageLocation(null);
+        }
 		
 		maptoProductDto.setSupplierCode(productEntity.getSupplierCode());
 		maptoProductDto.setMemo(productEntity.getMemo());
@@ -47,6 +49,8 @@ public class ProductServiceImpl implements ProductService{
         
         if (productDto.getStorageLocation() != null) {
             maptoProductEntity.setStorageLocation(productDto.getStorageLocation());
+        } else {
+            maptoProductEntity.setStorageLocation(null);
         }
         
         maptoProductEntity.setSupplierCode(productDto.getSupplierCode());
@@ -67,21 +71,23 @@ public class ProductServiceImpl implements ProductService{
 	}
 	@Override
 	public ProductEntity saveProduct(ProductDto productDto, String manager) {
-		ProductEntity productEntity =convertToEntity(productDto);
-		
-		if(productRepository.existsByCode(productEntity .getCode())) {
-			throw new IllegalArgumentException("이미 존재하는 상품 코드입니다");
-		}
-		
-		LocalDateTime now = LocalDateTime.now();
-		
-		if (productEntity.getCreatedDt() == null) {
-            productEntity.setCreatedDt(now);
-            productEntity.setCreatedManager(manager);
-            productEntity.setUpdatedDt(now);
-            productEntity.setManager(manager);
-		}
-		return productRepository.save(productEntity);
+	    ProductEntity productEntity = convertToEntity(productDto);
+	    
+	    if (productRepository.existsByCode(productEntity.getCode())) {
+	        throw new IllegalArgumentException("이미 존재하는 상품 코드입니다");
+	    }
+	    
+	    LocalDateTime now = LocalDateTime.now();
+	    
+	    if (productEntity.getCreatedDt() == null) {
+	        productEntity.setCreatedDt(now);
+	        productEntity.setCreatedManager(manager);
+	        productEntity.setUpdatedDt(now);
+	        productEntity.setManager(manager);
+	    }
+	    
+	    // 상품을 저장하고 결과를 반환
+	    return productRepository.save(productEntity); 
 	}
 	
 	//상품코드 중복체크

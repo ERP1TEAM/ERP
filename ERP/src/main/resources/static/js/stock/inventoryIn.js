@@ -115,31 +115,27 @@ document.addEventListener('DOMContentLoaded', function() {
         console.error('Error fetching options:', error);
     });
     
-    //상품 등록
     document.getElementById('inventorysave').addEventListener('click', function () {
         const productcode = document.getElementById('inventorycode').value;
+        const productname = document.getElementById('inventoryname').value;
         const supplierCode = document.getElementById('inventorySuppliercodeoption').value;
         const mainCategory = document.getElementById('inventorymaincategoryoption').value;
         const subCategory = document.getElementById('inventorysubcategoryoption').value;
 		const classificationCode = mainCategory+subCategory;
-        const locationCode = document.getElementById('inventoryLocationoption').value;
         const useFlag = document.querySelector('input[name="inventoryuseflag"]:checked').value;
-        const productname = document.getElementById('inventoryname').value;
         const productprice = document.getElementById('inventoryprice').value;
-        const memo = document.getElementById('inventorymemo').value;
         
         const inventoryData = {
             code: productcode,
+            name: productname,
             supplierCode: supplierCode,
             classificationCode: classificationCode,
-            storageLocation: locationCode,
             useFlag: useFlag,
-            name: productname,
-            price: productprice,
-            memo: memo
+            price: productprice
         };
         const manager = "김중앙";
-
+		
+		console.log(inventoryData);
         fetch(`/main/stock/inventories?manager=${encodeURIComponent(manager)}`, {
             method: 'POST',
             headers: {
@@ -160,8 +156,6 @@ document.addEventListener('DOMContentLoaded', function() {
             alert("상품이 등록 되었습니다.");
     		document.getElementById('inventoryname').value = '';
     		document.getElementById('inventoryprice').value = '';
-    		document.getElementById('inventorymemo').value = '';
-    		 
     		 fetch('/main/stock/inventoryrandomcode')
       			 .then(response => {
             	 if (response.ok) {

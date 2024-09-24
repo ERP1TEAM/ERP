@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', function() {
-
     var inventorySupplierlistTotalPages = 1;
     var inventorySupplierlistStartPage = 0;
     var inventorySupplierlistEndPage = 0;
@@ -12,26 +11,33 @@ document.addEventListener('DOMContentLoaded', function() {
     let inventorySupplierlistP = parseInt(getInventorySupplierlistQueryParam("p")) || 1;
     let inventorySupplierlistSearchCode = getInventorySupplierlistQueryParam("code") || '1';  // 검색 코드
     let inventorySupplierlistSearchWord = getInventorySupplierlistQueryParam("word") || '';  // 검색어
-    let currentPage = inventorySupplierlistP;
+    
+    let inventorysuplliercurrentPage = inventorySupplierlistP;
+    
     document.getElementById("inventorySupplierSearchtype").value = inventorySupplierlistSearchCode;
     document.getElementById("inventorySupplierSearch").value = inventorySupplierlistSearchWord;
-
     window.inventorySupplierlistPaging = function(p = inventorySupplierlistP, code = inventorySupplierlistSearchCode, word = inventorySupplierlistSearchWord) {
-        currentPage = p;
+        inventorysuplliercurrentPage =p;
         inventorySupplierlistMainModal(p, code, word);
     }
 
     window.inventorySupplierlistPgNext = function() {
-        currentPage = inventorySupplierlistEndPage + 1;
-        inventorySupplierlistMainModal(currentPage, inventorySupplierlistSearchCode, inventorySupplierlistSearchWord);
+        inventorySupplierlistMainModal(inventorySupplierlistEndPage + 1, inventorySupplierlistSearchCode, inventorySupplierlistSearchWord);
     }
 
     window.inventorySupplierlistPgPrev = function() {
-        currentPage = inventorySupplierlistStartPage - 1;
-        inventorySupplierlistMainModal(currentPage, inventorySupplierlistSearchCode, inventorySupplierlistSearchWord);
+        inventorySupplierlistMainModal(inventorySupplierlistStartPage - 1, inventorySupplierlistSearchCode, inventorySupplierlistSearchWord);
     }
 
+	function convertInventorySupplierSearchCode(code) {
+        if (code == '1') return '발주처코드';
+        if (code == '2') return '발주처명';
+        return code;
+    }
+    
     function inventorySupplierlistMainModal(pno, code = '', word = '') {
+        code = convertInventorySupplierSearchCode(code);
+        
         fetch(`/main/stock/inventorysupplierlist/${pno}?code=${code}&word=${word}`, {
             method: 'GET',
             headers: {
@@ -43,38 +49,37 @@ document.addEventListener('DOMContentLoaded', function() {
             let inventorySuppliertbody = document.querySelector('#inventorySuppliertbody');
             inventorySuppliertbody.innerHTML = '';
 	
-			console.log(inventorySuppliertbody);
-			
-            const items = data.supplierlistdata.content || [];
-            inventorySupplierlistTotalPages = data.totalPages;
+            const items = data.supplierlistdata.content;
+            inventorySupplierlistTotalPages = data.supplierlistdata.totalPages;
 
             items.forEach(function(inventorySupplierlist) {
 
-                let inventorySupplierlistRow = `<tr class="odd gradeX">
+                let inventorySupplierlistRow = 
+                `<tr class="odd gradeX"  data-code="${inventorySupplierlist.code}" data-name="${inventorySupplierlist.name}">
                     <td>${inventorySupplierlist.code}</td>
                     <td>${inventorySupplierlist.name}</td>
                 </tr>`;
                 inventorySuppliertbody.innerHTML += inventorySupplierlistRow;
             });
+            
+            document.querySelectorAll("#inventorySuppliertbody tr").forEach(row => {
+   			 row.style.cursor = 'pointer';
+			});
 
             const inventorySupplierlistPaging = document.getElementById("inventorySupplierlistPaging");
             inventorySupplierlistPaging.innerHTML = '';
 
-            // 페이지 그룹의 시작과 끝 계산
             inventorySupplierlistStartPage = Math.floor((pno - 1) / inventorySupplierlistPageSize) * inventorySupplierlistPageSize + 1;
             inventorySupplierlistEndPage = Math.min(inventorySupplierlistStartPage + inventorySupplierlistPageSize - 1, inventorySupplierlistTotalPages);
 
-            // 페이징 HTML 생성
             let paginationHTML = `<ul class="pagination">`;
 
-            // 'Previous' 링크 추가
             if (inventorySupplierlistStartPage > inventorySupplierlistPageSize) {
                 paginationHTML += `
                 <li class="page-item"><a class="page-link" aria-label="Previous" onclick="inventorySupplierlistPgPrev()">
                 <span aria-hidden="true">&laquo;</span>
                 </a></li>`;
             }
-            // 페이지 번호 링크 추가
             for (let i = inventorySupplierlistStartPage; i <= inventorySupplierlistEndPage; i++) {
                 const className = pno === i ? 'page-item current-page' : 'page-item';
                 paginationHTML += `
@@ -82,20 +87,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 `;
             }
 
-            // 'Next' 링크 추가
             if (inventorySupplierlistEndPage < inventorySupplierlistTotalPages) {
                 paginationHTML += `
                     <li class="page-item"><a class="page-link" aria-label="Next" onclick="inventorySupplierlistPgNext()">
                         <span aria-hidden="true">&raquo;</span>
-                    </a></li>
-                `;
+                    </a></li>`;
             }
 
             paginationHTML += `</ul>`;
-			
-			console.log(paginationHTML);
-			console.log("Start Page: ", inventorySupplierlistStartPage);
-console.log("End Page: ", inventorySupplierlistEndPage);
 			
             // 페이징 HTML을 페이지에 삽입
             inventorySupplierlistPaging.innerHTML = paginationHTML;
@@ -109,24 +108,44 @@ console.log("End Page: ", inventorySupplierlistEndPage);
 
             document.getElementById('inventorySupplierlistoverlay').style.display = 'block';
             document.getElementById('inventorySupplierlistmodal').style.display = 'block';
-            document.body.style.overflow = 'hidden'; // 스크롤 비활성화
+            document.body.style.overflow = 'hidden';
+            
+           document.querySelector('#inventorySuppliertbody').addEventListener('click', function(event) {
+   	 		const clickedRow = event.target.closest('tr');
+
+    		if (clickedRow && clickedRow.hasAttribute('data-code') && clickedRow.hasAttribute('data-name')) {
+      		  const selectedCode = clickedRow.getAttribute('data-code');
+       		  const selectedName = clickedRow.getAttribute('data-name');
+
+        document.getElementById("inventorySuppliercodeoption").value = selectedCode;
+        document.getElementById("inventorySuppliernameoption").value = selectedName;
+
+        document.getElementById("inventorySupplierlistoverlay").style.display = "none";
+        document.getElementById("inventorySupplierlistmodal").style.display = "none";
+        document.body.style.overflow = 'auto';
+   				}
+            });
         })
         .catch(function(error) {
             alert('공급업체 모달을 불러오는 데 오류가 발생했습니다.');
-            console.log(error);
         });
     }
 
     // 검색
     document.getElementById("inventorySupplierlist_form").addEventListener("submit", function(event) {
-        event.preventDefault(); // 기본 폼 제출 방지
+        event.preventDefault();
         inventorySupplierlistSearchCode = document.getElementById("inventorySupplierSearchtype").value;
         inventorySupplierlistSearchWord = document.getElementById("inventorySupplierSearch").value;
-        inventorySupplierlistPaging(1, inventorySupplierlistSearchCode, inventorySupplierlistSearchWord); // 검색 후 첫 페이지부터 시작
+        inventorySupplierlistPaging(1, inventorySupplierlistSearchCode, inventorySupplierlistSearchWord);
+    });
+    document.getElementById("inventorySupplierSearchbtn").addEventListener("click", function() {
+        inventorySupplierlistSearchCode = document.getElementById("inventorySupplierSearchtype").value;
+        inventorySupplierlistSearchWord = document.getElementById("inventorySupplierSearch").value;
+        inventorySupplierlistPaging(1, inventorySupplierlistSearchCode, inventorySupplierlistSearchWord);
     });
 
  document.getElementById('inventoryInsupplierbtn').addEventListener('click', function() {
- inventorySupplierlistMainModal(inventorySupplierlistP, inventorySupplierlistSearchCode, inventorySupplierlistSearchWord);
+ inventorySupplierlistMainModal(inventorysuplliercurrentPage, inventorySupplierlistSearchCode, inventorySupplierlistSearchWord);
 });
     document.querySelectorAll(".inventorySupplierlistclosemodal").forEach(function(button) {
         button.addEventListener("click", function() {

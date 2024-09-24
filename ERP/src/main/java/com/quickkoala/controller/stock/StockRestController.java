@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.quickkoala.dto.client.SupplierDto;
 import com.quickkoala.dto.stock.CategoryDto;
 import com.quickkoala.dto.stock.LocationDto;
 import com.quickkoala.dto.stock.ProductDto;
@@ -66,7 +65,11 @@ public class StockRestController {
 		    } else {
 		        supplierlistdata = supplierService.getPaginatedData(pno, SIZE, code, word);
 		    }
-
+		    
+		    if (supplierlistdata == null || supplierlistdata.isEmpty()) {
+		        supplierlistdata = Page.empty();
+		    }
+		    
 		    result.put("supplierlistdata", supplierlistdata);
 		    return result;
 		
@@ -182,7 +185,7 @@ public class StockRestController {
 			@RequestParam String word) {
 		
     	Page<CategoryEntity> result = categoryService.getPaginatedData(pno, SIZE);
-    	if (code.equals("") || word.equals("")) {
+    	if (code == null || code.isEmpty() || word == null || word.isEmpty()) {
 			result = categoryService.getPaginatedData(pno, SIZE);
 		} else {
 			result = categoryService.getPaginatedData(pno, SIZE, code, word);

@@ -46,7 +46,6 @@ function inventorymanagementmain(pno, code = '', word = ''){
 		inventorymanagementTotalPages = data.inventoryData.totalPages;
 		
     	items.forEach(function(inventorymanagement){
-		
 		let categoryname = categories.find(category => category.code == inventorymanagement.classificationCode); 
 		
         let inventorymanagementth = `<tr class="odd gradeX">
@@ -124,4 +123,5 @@ inventorymanagementSearchCode = document.getElementById("inventorymanagementSear
 inventorymanagementSearchWord = document.getElementById("inventorymanagementSearch").value;
 inventorymanagementPaging(1, inventorymanagementSearchCode, inventorymanagementSearchWord); // 검색 후 첫 페이지부터 시작	
 })
+
 });
