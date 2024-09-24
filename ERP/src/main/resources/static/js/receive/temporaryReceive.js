@@ -225,6 +225,7 @@ document.addEventListener("DOMContentLoaded", function() {
 			        	<select id="location" name="location" class="condition-select" style="display:block;">
 			        `;
 				if (data.location.length > 1) {
+					th += `<option value="">입고선반</option>`;
 					data.location.forEach(function(item) {
 						th += `
 					                <option value="${item}">${item}</option>
@@ -244,10 +245,11 @@ document.addEventListener("DOMContentLoaded", function() {
 			        <td><input type="text" id="re-qty" name="re_qty" style="text-align:right;"></td>
 			        <td><input type="text" id="ca-qty" name="ca_qty" readonly class="no-style" style="text-align:right;"></td>
 			        <td>
-			            <select id="condition" name="condition" class="condition-select" style="display:block;">
+			            <select id="condition" name="condition" class="condition-select" style="display:block;" disabled>
 			                <option value="">반품없음</option>
-			                <option value="불량">불량</option>
-			                <option value="상함">상함</option>
+			                <option value="단순 변심">단순 변심</option>
+			                <option value="상품 불량">상품 불량</option>
+			                <option value="오배송">오배송</option>
 			                <option value="기타">기타</option>
 			            </select>
 			        </td>
@@ -321,7 +323,10 @@ document.addEventListener("DOMContentLoaded", function() {
 			alert("반품 사유를 선택해주세요");
 			return;
 		} else if (con == "기타" && !memo) {
-			alert("반품 사유를 메모에 작성해주세요");
+			alert("기타 사유를 작성해주세요");
+			return;
+		} else if (!location) {
+			alert("입고 선반을 선택해주세요");
 			return;
 		}
 		const formData = new FormData();

@@ -154,7 +154,7 @@ document.addEventListener("DOMContentLoaded", function() {
 		overlay.style.display = 'none';
 		body.classList.remove('no-scroll');
 	});
-
+	
 	// 모달 외부 클릭 시 닫기
 	window.addEventListener('click', (event) => {
 		if (event.target === modal) {
