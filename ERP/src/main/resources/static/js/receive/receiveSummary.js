@@ -44,7 +44,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 items.forEach(function(item) {
                     let th = `
                     <tr class="odd gradeX">
-                        <td>${item.orderNumber}</td>
+                        <td style="text-align:center;">${item.orderNumber}</td>
                         <td>${item.productName}</td>
                         <td style="text-align:right;">${item.purchaseQuantity}</td>
                         <td style="text-align:right;">${item.totalWtQuantity}</td>
