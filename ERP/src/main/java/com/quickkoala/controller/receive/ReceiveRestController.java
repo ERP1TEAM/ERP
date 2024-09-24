@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.quickkoala.dto.receive.DetailDto;
 import com.quickkoala.dto.receive.PurchaseDto;
 import com.quickkoala.dto.receive.PurchaseListDto;
 import com.quickkoala.dto.receive.ReceiveModalDto;
@@ -228,17 +229,19 @@ public class ReceiveRestController {
 
 	// 입고내역 데이터 + 페이징
 	@GetMapping("receive/detailData/{pno}")
-	public Page<ViewReceiveEntity> detailData(@PathVariable Integer pno, @RequestParam String code,
-			@RequestParam String word) {
+	public Page<ViewReceiveEntity> detailData(@PathVariable Integer pno, @ModelAttribute DetailDto dto) {
+		String sDate = dto.getSDate();
+		String word = dto.getWord(); 
+				
 		Page<ViewReceiveEntity> result = null;
-		if (code.equals("") || word.equals("")) {
+		if (word.equals("") && sDate.equals("")) {
 			result = viewReceiveService.getPaginatedData(pno, SIZE);
 		} else {
-			result = viewReceiveService.getPaginatedData(pno, SIZE, code, word);
+			result = viewReceiveService.getPaginatedData(pno, SIZE, dto);
 		}
 		return result;
 	}
-
+	
 	// 입고반품 데이터 + 페이징
 	@GetMapping("receive/returnData/{pno}")
 	public Page<ViewReceiveReturnEntity> returnData(@PathVariable Integer pno, @RequestParam String code,

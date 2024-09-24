@@ -1,5 +1,7 @@
 package com.quickkoala.entity.receive;
 
+import java.time.LocalDateTime;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -34,7 +36,7 @@ public class ViewReceiveEntity {
 	private Integer receiveQuantity;
 
 	@Column(name = "receive_date")
-	private java.util.Date receiveDate;
+	private LocalDateTime receiveDate;
 
 	@Column(name = "manager")
 	private String manager;
