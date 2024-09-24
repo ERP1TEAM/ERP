@@ -35,7 +35,7 @@ public interface ClientsOrdersRepository extends JpaRepository<ClientsOrdersEnti
     Page<ClientsOrdersEntity> findByCodeAndOrderIdContainingAndOrderDate(
         @Param("code") String code, 
         @Param("orderId") String orderId, 
-        @Param("orderDate") LocalDate orderDate, 
+        @Param("orderDate") LocalDateTime orderDate, 
         Pageable pageable
     );
 
@@ -44,7 +44,7 @@ public interface ClientsOrdersRepository extends JpaRepository<ClientsOrdersEnti
     Page<ClientsOrdersEntity> findByCodeAndNameContainingAndOrderDate(
         @Param("code") String code,
         @Param("name") String name,
-        @Param("orderDate") LocalDate orderDate,
+        @Param("orderDate") LocalDateTime orderDate,
         Pageable pageable
     );
 
@@ -52,7 +52,7 @@ public interface ClientsOrdersRepository extends JpaRepository<ClientsOrdersEnti
     @Query("SELECT o FROM ClientsOrdersEntity o WHERE o.code = :code AND o.orderDate = :orderDate")
     Page<ClientsOrdersEntity> findByCodeAndOrderDate(
         @Param("code") String code, 
-        @Param("orderDate") LocalDate orderDate, 
+        @Param("orderDate") LocalDateTime orderDate, 
         Pageable pageable
     );
 
@@ -63,8 +63,41 @@ public interface ClientsOrdersRepository extends JpaRepository<ClientsOrdersEnti
     Page<ClientsOrdersEntity> searchOrders(
         @Param("code") String code,
         @Param("searchText") String searchText,
-        @Param("searchDate") LocalDate searchDate,
+        @Param("searchDate") LocalDateTime searchDate,
         Pageable pageable);
 
+ // 날짜 범위로 검색 (주문번호와 함께)
+    @Query("SELECT o FROM ClientsOrdersEntity o WHERE o.code = :code " +
+           "AND o.orderId LIKE %:orderId% " +
+           "AND o.orderDate BETWEEN :startDate AND :endDate")
+    Page<ClientsOrdersEntity> findByCodeAndOrderIdContainingAndOrderDateBetween(
+            @Param("code") String code,
+            @Param("orderId") String orderId,
+            @Param("startDate") LocalDateTime startDate,
+            @Param("endDate") LocalDateTime endDate,
+            Pageable pageable);
+
+    // 날짜 범위로 검색 (주문자명과 함께)
+    @Query("SELECT o FROM ClientsOrdersEntity o WHERE o.code = :code " +
+           "AND o.name LIKE %:name% " +
+           "AND o.orderDate BETWEEN :startDate AND :endDate")
+    Page<ClientsOrdersEntity> findByCodeAndNameContainingAndOrderDateBetween(
+            @Param("code") String code,
+            @Param("name") String name,
+            @Param("startDate") LocalDateTime startDate,
+            @Param("endDate") LocalDateTime endDate,
+            Pageable pageable);
+
+    // 날짜 범위로만 검색
+    @Query("SELECT o FROM ClientsOrdersEntity o WHERE o.code = :code " +
+           "AND o.orderDate BETWEEN :startDate AND :endDate")
+    Page<ClientsOrdersEntity> findByCodeAndOrderDateBetween(
+            @Param("code") String code,
+            @Param("startDate") LocalDateTime startDate,
+            @Param("endDate") LocalDateTime endDate,
+            Pageable pageable);
+
+    
+    
     List<ClientsOrdersEntity> findByCode(String code);
 }

@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -246,20 +247,29 @@ public class SalesOrderServiceImpl implements SalesOrderService {
     }
     
  // 검색 메서드 수정
-    public Page<ClientsOrdersEntity> searchOrders(String managerCompanyCode, String searchType, String searchText, LocalDate searchDate, int page, int size) {
+    public Page<ClientsOrdersEntity> searchOrders(String managerCompanyCode, String searchType, String searchText, LocalDate startDate, LocalDate endDate, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
 
-        if (searchDate != null) {
-            // 날짜로 검색할 때
+        if (startDate != null && endDate != null) {
+            LocalDateTime startOfDay = startDate.atStartOfDay();
+            LocalDateTime endOfDay = endDate.atTime(LocalTime.MAX);
+            // 날짜 범위로 검색할 때
             if (searchType.equals("orderId")) {
-                // 주문번호와 날짜로 검색 (회사 코드 필터 추가)
-                return clientsOrdersRepository.findByCodeAndOrderIdContainingAndOrderDate(managerCompanyCode, searchText, searchDate, pageable);
+                return clientsOrdersRepository.findByCodeAndOrderIdContainingAndOrderDateBetween(managerCompanyCode, searchText, startOfDay, endOfDay, pageable);
             } else if (searchType.equals("name")) {
-                // 주문자명과 날짜로 검색 (회사 코드 필터 추가)
-                return clientsOrdersRepository.findByCodeAndNameContainingAndOrderDate(managerCompanyCode, searchText, searchDate, pageable);
+                return clientsOrdersRepository.findByCodeAndNameContainingAndOrderDateBetween(managerCompanyCode, searchText, startOfDay, endOfDay, pageable);
             } else {
-                // 날짜로만 검색 (회사 코드 필터 추가)
-                return clientsOrdersRepository.findByCodeAndOrderDate(managerCompanyCode, searchDate, pageable);
+                return clientsOrdersRepository.findByCodeAndOrderDateBetween(managerCompanyCode, startOfDay, endOfDay, pageable);
+            }
+        } else if (startDate != null) {
+            // 시작 날짜만 존재할 때 (종료 날짜 없이 검색)
+            LocalDateTime startOfDay = startDate.atStartOfDay();
+            if (searchType.equals("orderId")) {
+                return clientsOrdersRepository.findByCodeAndOrderIdContainingAndOrderDate(managerCompanyCode, searchText, startOfDay, pageable);
+            } else if (searchType.equals("name")) {
+                return clientsOrdersRepository.findByCodeAndNameContainingAndOrderDate(managerCompanyCode, searchText, startOfDay, pageable);
+            } else {
+                return clientsOrdersRepository.findByCodeAndOrderDate(managerCompanyCode, startOfDay, pageable);
             }
         } else if (searchType.equals("orderId")) {
             // 주문번호로만 검색 (회사 코드 필터 추가)
@@ -272,6 +282,8 @@ public class SalesOrderServiceImpl implements SalesOrderService {
         // 기본값: 회사 코드 필터 적용하여 전체 조회
         return clientsOrdersRepository.findByCode(managerCompanyCode, pageable);
     }
+
+
 
     // 회사 코드에 따른 모든 주문 조회
     public List<ClientsOrdersEntity> findByCode(String managerCompanyCode) {
