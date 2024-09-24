@@ -1,10 +1,8 @@
 package com.quickkoala.repository.order;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import org.apache.el.stream.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -23,7 +21,7 @@ public interface OrderRepository extends JpaRepository<OrderEntity,String> {
 	@Query("SELECT o.number FROM OrderEntity o WHERE o.number LIKE CONCAT(:date, '%') ORDER BY o.number DESC")
 	String findMaxOrderNumber(@Param("date") String date);
 	
-	Long countByDt(LocalDate date);
+	Long countByDt(LocalDateTime date);
 	
 	@Modifying
 	@Transactional

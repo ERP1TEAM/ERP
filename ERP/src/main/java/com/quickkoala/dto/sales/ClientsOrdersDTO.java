@@ -22,4 +22,6 @@ public class ClientsOrdersDTO {
     private LocalDateTime orderDate;
     private LocalDateTime createdDt;
     private List<ClientsOrderProductsDTO> products;
+    
+    private List<ClientsOrdersDTO> orders;
 }

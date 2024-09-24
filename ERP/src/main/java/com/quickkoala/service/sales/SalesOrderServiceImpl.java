@@ -53,12 +53,12 @@ public class SalesOrderServiceImpl implements SalesOrderService {
     @Transactional
     @Override
     public void saveOrder(List<ClientsOrdersDTO> orders, String token) {
+    	LocalDateTime now=LocalDateTime.now();
         for (ClientsOrdersDTO orderDTO : orders) {
             ClientsOrdersEntity order = findExistingOrder(orderDTO);
             
             //
             String orderId = null;
-            LocalDateTime now = null;
 
             // 주문 정보가 이미 저장되어 있지 않다면 새로 생성
             if (order == null) {
@@ -78,8 +78,7 @@ public class SalesOrderServiceImpl implements SalesOrderService {
                 // 주문 날짜 설정
                 order.setOrderDate(orderDTO.getOrderDate());
                 //입력 날짜
-                now = LocalDateTime.now();
-                order.setCreatedDt(LocalDateTime.now());
+                order.setCreatedDt(now);
 
                 //주문고유식별자
                 // 고유한 주문 ID 생성 (order_id 설정)
@@ -118,16 +117,17 @@ public class SalesOrderServiceImpl implements SalesOrderService {
           //salesOrder 저장
             OrderEntity salesOrder = new OrderEntity();
             salesOrder.setDt(now);
-            salesOrder.setManager(null);
+            salesOrder.setManager(jwtTokenProvider.getName(token));
             salesOrder.setMemo(null);
             salesOrder.setStatus(OrderStatus.미승인);
-            salesOrder.setSalesCode(orderDTO.getManagerCompanyCode());
-            salesOrder.setOrderId(orderId);
+            salesOrder.setSalesCode(jwtTokenProvider.getCode(token));
+            salesOrder.setOrderId(generateOrderId(orderDTO.getOrderDate()));
             salesOrder.setOrderTotal(orderTotal);
-            salesOrder.setNumber(generateOrderNumber(now.toLocalDate()));
+            salesOrder.setNumber(generateOrderNumber(LocalDateTime.now()));
             orderRepository.save(salesOrder);
         }
     }
+    
 
     @Override
     public List<ClientsOrdersDTO> parseExcelFile(File file) {
@@ -208,7 +208,7 @@ public class SalesOrderServiceImpl implements SalesOrderService {
     }
     
     // 주문 날짜를 기반으로 고유한 customOrderId를 생성
-    private String generateOrderNumber(LocalDate date) {
+    private String generateOrderNumber(LocalDateTime date) {
         // 해당 날짜에 존재하는 주문의 개수를 가져옴
         Long orderCountForDate = orderRepository.countByDt(date);
 
