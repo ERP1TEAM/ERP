@@ -55,3 +55,27 @@
 .no-scroll {
   overflow: hidden;
 }
+
+.product-btn {
+	height: 40px;
+	background-color: #ffffff;
+	border: 1px solid #ccc;
+	border-radius: 8px;
+	padding: 0 15px;
+	font-size: 16px;
+	color: #333;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.product-btn:hover {
+	background-color: #e3f2fd;
+	border-color: #bbb;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.product-btn:active {
+	background-color: #e3f2fd;
+	box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.2);
+}

@@ -31,11 +31,11 @@ document.addEventListener("DOMContentLoaded", function() {
     
     window.toggleActions = function(button) {
             const actionButtons = button.nextElementSibling;
-            const isVisible = actionButtons.style.display === 'block';
+            const isVisible = actionButtons.style.display === 'flex';
             document.querySelectorAll('.action-buttons').forEach(function(btn) {
                 btn.style.display = 'none';
             });
-            actionButtons.style.display = isVisible ? 'none' : 'block';
+            actionButtons.style.display = isVisible ? 'none' : 'flex';
         }
     
     function formatDate(isoString) {
@@ -88,7 +88,7 @@ document.addEventListener("DOMContentLoaded", function() {
                         <td style="text-align:center;">${rdt}</td>
                         <td class="container" style="text-align:center;">
 		                    <button onclick="toggleActions(this)">관리</button>
-		                    <div class="action-buttons">
+		                    <div class="action-buttons" style="margin-left:-37px;">
 		                        <button>수정</button>
 		                        <button>삭제</button>
 		                    </div>

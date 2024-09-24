@@ -37,7 +37,6 @@ public class LocationServiceImpl implements LocationService {
 		maptoLocationDto.setRowCode(locationEntity.getRowCode());
 		maptoLocationDto.setLevelCode(locationEntity.getLevelCode());
 		maptoLocationDto.setUseFlag(locationEntity.getUseFlag().name());
-		maptoLocationDto.setMemo(locationEntity.getMemo());
 		
 		return maptoLocationDto;
 	}
@@ -64,7 +63,6 @@ public class LocationServiceImpl implements LocationService {
 			throw new IllegalArgumentException("useFlag 값이 null입니다.");
 		}
 		
-		maptoLocationEntity.setMemo(locationDto.getMemo());
 		return maptoLocationEntity;
 	}
 	

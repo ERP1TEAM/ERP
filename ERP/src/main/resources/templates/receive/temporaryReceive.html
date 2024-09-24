@@ -26,12 +26,12 @@
 
 <body>
 	<div id="wrapper">
-        <nav th:replace="~{/main/header :: header}"></nav>
+        <nav th:replace="~{main/header :: header}"></nav>
         
-        <div th:replace="~{/main/dropdown :: dropdown}"></div>
+        <div th:replace="~{main/dropdown :: dropdown}"></div>
 		<!--/. NAV TOP  -->
 		<nav class="navbar-default navbar-side" role="navigation"
-			th:replace="~{sidebar.html :: sidebar}"></nav>
+			th:replace="~{main/sidebar :: sidebar}"></nav>
 		<!-- nav  -->
 		<div id="page-wrapper">
 			<div class="header">
@@ -44,7 +44,7 @@
 				<div class="row">
 					<div class="col-md-12">
 						<div class="card">
-							<div class="card-action">가입고</div>
+							<div class="card-action" style="font-size:18px;">가입고</div>
 							<form id="search_form">
 								<div class="search">
 									<input type="date" id="start_date" style="width:120px;"> ~ <input type="date" id="end_date" style="width:120px;">
@@ -94,7 +94,7 @@
 						</div>
 					</div>
 				</div>
-				<div th:insert="~{receive/receiveModal.html :: receive-modal}"></div>
+				<div th:insert="~{receive/receiveModal :: receive-modal}"></div>
 				<footer>
 					<p>
 						Copyright 2024 ⓒ quickkoala.com by <i class="fa fa-love"></i><a

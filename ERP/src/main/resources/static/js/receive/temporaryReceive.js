@@ -200,6 +200,17 @@ document.addEventListener("DOMContentLoaded", function() {
 		document.getElementById('overlay').style.display = 'none';   // 오버레이 숨기기
 		document.body.style.overflow = 'auto';  // 배경 스크롤 다시 활성화
 	});
+	
+	const modal = document.getElementById('overlay');
+	
+	// 모달 외부 클릭 시 닫기
+	window.addEventListener('click', (event) => {
+		if (event.target === modal) {
+			document.getElementById('warehouselistmodal').style.display = 'none';
+			document.getElementById('overlay').style.display = 'none';   // 오버레이 숨기기
+			document.body.style.overflow = 'auto';  // 배경 스크롤 다시 활성화
+		}
+	});
 
 	//입고확정 모달 출력
 	function receivingModal(orNum, code, name, qty, wqty, deli, productCode) {

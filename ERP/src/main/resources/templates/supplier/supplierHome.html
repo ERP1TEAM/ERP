@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>공지사항 목록</title> 
+    <title>Quick Koala :: 발주처</title> 
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/assets/materialize/css/materialize.min.css}" media="screen,projection" />
     <link rel="stylesheet" th:href="@{/assets/css/bootstrap.css}" />
@@ -63,11 +63,11 @@
 
 <body>
     <div id="wrapper">
-        <nav th:replace="~{/supplier/header-s :: header}"></nav>
+        <nav th:replace="~{supplier/header-s :: header}"></nav>
         
-        <div th:replace="~{/supplier/dropdown :: dropdown}"></div>
+        <div th:replace="~{supplier/dropdown :: dropdown}"></div>
 
-	  	<div th:insert="~{/supplier/sidebar-s :: sidebar}" id="sidebar"></div>
+	  	<div th:insert="~{supplier/sidebar-s :: sidebar}" id="sidebar"></div>
 
         <div id="page-wrapper" style="background-color: #F7FFF0;">
             <div class="header"> 

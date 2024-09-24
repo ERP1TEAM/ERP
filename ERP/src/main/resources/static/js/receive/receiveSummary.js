@@ -122,4 +122,11 @@ document.addEventListener("DOMContentLoaded", function() {
 		}
     });
     
+    document.getElementById("reset_btn").addEventListener("click", function() {
+		searchCode = '발주번호';
+		searchWord = '';
+		document.getElementById("search_code").value = searchCode;
+		document.getElementById("search_word").value = searchWord;
+		paging(1, '', '');
+	})
 });

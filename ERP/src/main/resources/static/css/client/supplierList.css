@@ -1,16 +1,35 @@
 .action-buttons {
 	display: none; /* 기본적으로 숨김 */
 	position: absolute;
-	background: #f9f9f9;
-	border: 1px solid #ddd;
+	background: none;
+	border: 0px;
 	padding: 5px;
-	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 	z-index: 10;
 }
 
-.action-buttons button {
-	display: block;
-	margin: 5px 0;
+.action-buttons button{
+	height: 40px;
+	width: 50px;
+	background-color: #ffffff;
+	border: 1px solid #ccc;
+	border-radius: 8px;
+	font-size: 16px;
+	color: #333;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.container button {
+	height: 40px;
+	background-color: #ffffff;
+	border: 1px solid #ccc;
+	border-radius: 8px;
+	font-size: 16px;
+	color: #333;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .container {
