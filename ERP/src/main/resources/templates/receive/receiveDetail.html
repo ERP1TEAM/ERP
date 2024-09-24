@@ -46,6 +46,7 @@
 							<div class="card-action">입고내역</div>
 							<form id="search_form">
 								<div class="search">
+									<input type="date" id="start_date" style="width:120px;"> ~ <input type="date" id="end_date" style="width:120px;">
 									<select id="search_code">
 										<option value="입고번호">입고번호</option>
 										<option value="발주번호">발주번호</option>
@@ -54,6 +55,7 @@
 									</select> <input type="text" placeholder="검색어를 입력하세요"
 										style="width: 200px; border: 1px;" id="search_word">
 									<button type="submit" id="search_btn">검색</button>
+									<button type="button" id="reset_btn">초기화</button>
 								</div>
 							</form>
 							<div class="card-content">

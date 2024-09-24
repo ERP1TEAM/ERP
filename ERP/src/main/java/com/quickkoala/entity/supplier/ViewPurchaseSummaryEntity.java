@@ -1,5 +1,7 @@
 package com.quickkoala.entity.supplier;
 
+import java.time.LocalDateTime;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -22,6 +24,6 @@ public class ViewPurchaseSummaryEntity {
     private int quantity;
     private int price;
     private int totalPrice;
-    private java.util.Date date;
+    private LocalDateTime date;
     private int totalWtQuantity;
 }
