@@ -78,10 +78,38 @@ function renderLocationDetails(locations, selectedRack) {
                 activeSmallBox.classList.remove('active');
             }
 
-            // 클릭한 smallbox에 active 추가
             this.classList.add('active');
         });
 
         rowContainer.appendChild(smallBox);  // row_container에 추가
+    });
+}
+
+function fetchInventoryData(locationCode) {
+    fetch(`/main/stock/locationstatuslist/{locationCode}`)  // API 엔드포인트에 로케이션 코드 전달
+        .then(response => response.json())
+        .then(inventoryData => {
+            console.log(inventoryData);  // 데이터를 받아오면 콘솔에 출력
+
+            renderInventoryTable(inventoryData);
+        })
+        .catch(error => {
+            console.error('Error fetching inventory data:', error);
+        });
+}
+
+function renderInventoryTable(inventoryData) {
+    const tableBody = document.querySelector('#showinventory tbody');
+    tableBody.innerHTML = '';
+
+    inventoryData.forEach(item => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${item.lotNumber}</td>
+            <td>${item.supplierName}</td>
+            <td>${item.productName}</td>
+            <td>${item.lotQuantity}(${item.safetyQty})</td>
+        `;
+        tableBody.appendChild(row);
     });
 }

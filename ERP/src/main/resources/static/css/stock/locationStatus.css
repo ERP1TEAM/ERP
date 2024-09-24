@@ -70,8 +70,8 @@
 }
 
 .location_table {
-    margin-left: 80px;  /* 테이블과 큰 상자 및 작은 상자 사이에 간격 추가 */
-    width: 45%;         /* 테이블 너비 */
+    margin-left: 80px;
+    width: 45%;
     border-collapse: collapse;
     margin-top: 25px;
 }
