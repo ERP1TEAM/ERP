@@ -20,8 +20,8 @@ public class CalendarMemoServiceImpl implements CalendarMemoService {
     }
 
     @Override
-    public List<CalendarMemoEntity> getAllMemos() {
-        return memoRepository.findAll();
+    public List<CalendarMemoEntity> getMemosByCode(String code) {
+        return memoRepository.findByCode(code);
     }
     
 }

@@ -6,5 +6,5 @@ import com.quickkoala.entity.calender.CalendarMemoEntity;
 
 public interface CalendarMemoService {
 	CalendarMemoEntity saveMemo(CalendarMemoEntity memo);
-	List<CalendarMemoEntity> getAllMemos();
+	List<CalendarMemoEntity> getMemosByCode(String code);
 }

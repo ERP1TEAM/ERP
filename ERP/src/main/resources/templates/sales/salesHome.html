@@ -13,9 +13,6 @@
     <link rel="stylesheet" th:href="@{/assets/js/Lightweight-Chart/cssCharts.css}" />
     <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
 
-    <!-- FullCalendar CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.7/main.min.css" />
-
     <style>
         /* 우측 하단 고정 버튼 스타일 */
         .floating-btn {
@@ -283,31 +280,46 @@
 	}
 
 	// FullCalendar 초기화 시 서버에서 메모 불러오기
-	document.addEventListener('DOMContentLoaded', function() {
-	    var calendarEl = document.getElementById('calendar');
-	    var calendar = new FullCalendar.Calendar(calendarEl, {
-	        initialView: 'dayGridMonth',
-	        events: [], // 서버에서 가져온 메모 데이터를 여기에 추가할 수 있음
-	        selectable: true,
-	        select: function(info) {
-	            var title = prompt('메모를 입력하세요:');
-	            if (title) {
-	                calendar.addEvent({
-	                    title: title,
-	                    start: info.startStr,
-	                    end: info.endStr,
-	                    allDay: true
-	                });
-	                // 메모를 서버에 저장
-	                saveMemoToServer(title, info.startStr, info.endStr);
-	            }
-	        }
-	    });
+document.addEventListener('DOMContentLoaded', function() {
+    var calendarEl = document.getElementById('calendar');
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        events: [], 
+        selectable: true,
+        select: function(info) {
+            var title = prompt('메모를 입력하세요:');
+            if (title) {
+                calendar.addEvent({
+                    title: title,
+                    start: info.startStr,
+                    end: info.endStr,
+                    allDay: true
+                });
+                // 메모를 서버에 저장
+                saveMemoToServer(title, info.startStr, info.endStr);
+            }
+        },
+        eventContent: function(arg) {
+            let fullTitle = arg.event.title;
+            let truncatedTitle = fullTitle.length > 20 ? fullTitle.substring(0, 20) + '...' : fullTitle;
 
-	    // 페이지 로드 시 기존 메모 불러오기
-	    loadMemosFromServer(calendar);
-	    calendar.render();
-	});
+            let eventElement = document.createElement('div');
+            eventElement.innerHTML = truncatedTitle;
+
+            // 툴팁 추가
+            eventElement.setAttribute('title', fullTitle);
+            return { domNodes: [eventElement] };
+        },
+        eventClick: function(info) {
+            alert('메모: ' + info.event.title);  // 클릭 시 메모 전체 내용을 알림으로 표시
+        }
+    });
+
+    // 페이지 로드 시 기존 메모 불러오기
+    loadMemosFromServer(calendar);
+    calendar.render();
+});
+
 
 	</script>
 
