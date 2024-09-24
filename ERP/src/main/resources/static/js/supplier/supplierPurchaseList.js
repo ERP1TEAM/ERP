@@ -161,7 +161,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	});
 
 	document.getElementById("reset_btn").addEventListener("click", function() {
-		searchCode = '납품번호';
+		searchCode = '발주번호';
 		searchWord = '';
 		startDate = '';
 		endDate = new Date().toISOString().split('T')[0];
