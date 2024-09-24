@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>주문등록</title> 
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-	<link rel="stylesheet" th:href="@{/assets/materialize/css/materialize.min.css}" media="screen,projection" />
-	<link rel="stylesheet" th:href="@{/assets/css/bootstrap.css}" />
-	<link rel="stylesheet" th:href="@{/assets/css/font-awesome.css}" />
-	<link rel="stylesheet" th:href="@{/assets/js/morris/morris-0.4.3.min.css}" />
-	<link rel="stylesheet" th:href="@{/assets/css/custom-styles.css}" />
-	<link rel="stylesheet" th:href="@{/assets/js/Lightweight-Chart/cssCharts.css}" />
+    <link rel="stylesheet" th:href="@{/assets/materialize/css/materialize.min.css}" media="screen,projection" />
+    <link rel="stylesheet" th:href="@{/assets/css/bootstrap.css}" />
+    <link rel="stylesheet" th:href="@{/assets/css/font-awesome.css}" />
+    <link rel="stylesheet" th:href="@{/assets/js/morris/morris-0.4.3.min.css}" />
+    <link rel="stylesheet" th:href="@{/assets/css/custom-styles.css}" />
+    <link rel="stylesheet" th:href="@{/assets/js/Lightweight-Chart/cssCharts.css}" />
     <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
     <style>
         table {
@@ -75,37 +75,41 @@
                                     <button id="uploadButton" class="btn btn-primary" style="border: none; background-color:#474B54;" onclick="uploadFile()" disabled>주문 등록</button>
                                     <p id="uploadStatus"></p>
                                     
-                                    <table style="font-size: 12px;'">
+                                    <!-- 테이블 -->
+                                    <table id="orderTable" style="font-size: 12px;">
                                         <tbody>
-                                            <!-- 첫 번째 행 -->
-                                            <tr>
-                                                <th>수취인</th>
-                                                <td><input type="text" id="recipientName" placeholder="수취인"></td>
-                                                <th>연락처</th>
-                                                <td><input type="text" id="recipientPhone" placeholder="수취인 연락처"></td>
-                                                <th>이메일</th>
-                                                <td><input type="email" id="recipientEmail" placeholder="수취인 이메일"></td>
-                                                <th>주소 <button type="button" class="btn btn-primary" style="border: none; height:30px; background-color:#F2F2F2; font-size: 12px; color: black;" onclick="findPostcode()">주소 찾기</button></th>
-                                                <td>
-                                                    <input type="text" id="recipientPostcode" class="readonly" placeholder="우편번호" readonly>
-                                                </td>
-                                                <td><input type="text" id="recipientAddress" class="readonly" placeholder="도로명 주소" readonly></td>
-                                                <td><input type="text" id="recipientDetailAddress" placeholder="상세주소"></td>
-                                            </tr>
-                                            <tr>
-                                                <th>상품코드</th>
-                                                <td><input type="text" id="productCode" placeholder="상품코드" oninput="fetchProductName()"></td>
-                                                <th>상품명</th>
-                                                <td><input type="text" id="productName" class="readonly" placeholder="상품명" readonly></td>
-                                                <th>주문갯수</th>
-                                                <td><input type="number" id="productQuantity" placeholder="주문 갯수"></td>
-                                                <td colspan="3"><input type="text" id="adminMemo" placeholder="수취인 메모" style="width: 100%;"></td>
-                                                <td colspan="3"><input type="text" id="adminMemo" placeholder="관리자 메모" style="width: 100%;"></td>
-                                            </tr>
+										<tr>
+										    <th>수취인</th>
+										    <td><input type="text" id="recipientName-0" placeholder="수취인"></td>
+										    <th>연락처</th>
+										    <td><input type="text" id="recipientPhone-0" placeholder="수취인 연락처" maxlength="11"></td>
+										    <th>이메일</th>
+										    <td><input type="email" id="recipientEmail-0" placeholder="수취인 이메일"></td>
+										    <th>주소 &nbsp;&nbsp;
+										        <button type="button" class="btn btn-primary" style="border: none; height:30px; background-color:#dddddd; font-size: 12px; color: black;" onclick="findPostcode('recipientPostcode-0', 'recipientAddress-0')">주소 찾기</button>
+										    </th>
+										    <td style="width:120px;">
+										        <input type="text" id="recipientPostcode-0" class="readonly" placeholder="우편번호" readonly>
+										    </td>
+										    <td><input type="text" id="recipientAddress-0" class="readonly" placeholder="도로명 주소" readonly></td>
+										    <td><input type="text" id="recipientDetailAddress-0" placeholder="상세주소"></td>
+										</tr>
+										<tr>
+										    <th>상품코드</th>
+										    <td><input type="text" class="productCode" id="productCode-0" placeholder="상품코드" oninput="fetchProductName('productCode-0', 'productName-0')"></td>
+										    <th>상품명</th>
+										    <td><input type="text" class="productName readonly" id="productName-0" placeholder="상품코드를 입력하세요" readonly></td>
+										    <th>주문갯수</th>
+										    <td><input type="number" id="productQuantity-0" placeholder="주문 갯수"></td>
+										    <td colspan="3"><input type="text" id="clientMemo-0" placeholder="수취인 메모" style="width: 100%;"></td>
+										    <td colspan="3"><input type="text" id="adminMemo-0" placeholder="관리자 메모" style="width: 100%;"></td>
+										</tr>
                                         </tbody>
                                     </table>
                                     <br>
-                                    <button id="submitOrder" class="btn btn-primary" style="border: none; background-color:#474B54;">주문 등록</button>
+                                    <button id="addRowButton" class="btn btn-success" onclick="addRow()">행 추가</button>
+                                    <br><br>
+                                    <button id="submitOrder" class="btn btn-primary" style="border: none; background-color:#474B54;" onclick="submitOrder()">직접 주문 등록</button>
                                 </div> 
                             </div>
                         </div>
@@ -122,29 +126,164 @@
     <!-- Daum 주소찾기 API -->
     <script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
     <script>
-        function findPostcode() {
-            new daum.Postcode({
-                oncomplete: function(data) {
-                    document.getElementById('recipientPostcode').value = data.zonecode;
-                    document.getElementById('recipientAddress').value = data.roadAddress;
-                }
-            }).open();
-        }
-
-        // 주문상품코드를 입력하면 주문상품명을 자동으로 출력
-        function fetchProductName() {
-            const productCode = document.getElementById('productCode').value;
-            const productNameField = document.getElementById('productName');
-
-            // 서버로부터 상품명 조회 (예시로 하드코딩된 데이터를 사용)
-            if (productCode === 'P12345') {
-                productNameField.value = '상품명1';
-            } else if (productCode === 'P54321') {
-                productNameField.value = '상품명2';
-            } else {
-                productNameField.value = ''; // 코드가 없을 경우 빈칸 처리
+    function findPostcode(postcodeId, addressId) {
+        new daum.Postcode({
+            oncomplete: function(data) {
+                // 전달된 id를 사용하여 해당 필드에 값을 설정
+                document.getElementById(postcodeId).value = data.zonecode;
+                document.getElementById(addressId).value = data.roadAddress;
             }
+        }).open();
+    }
+
+
+
+        // 테이블에 행 추가
+		let rowCount = 1;
+		function addRow() {
+		    const table = document.getElementById("orderTable").getElementsByTagName('tbody')[0];
+		
+		    // 새로운 행 추가
+		    const newRow1 = table.insertRow();
+		    const newRow2 = table.insertRow();
+
+		    // 각 행의 고유한 rowCount를 부여
+		    const currentRow = rowCount++;
+		    const productCodeId = `productCode-${currentRow}`;
+		    const productNameId = `productName-${currentRow}`;
+		    const recipientPostcodeId = `recipientPostcode-${currentRow}`;
+		    const recipientAddressId = `recipientAddress-${currentRow}`;
+		
+		    // 첫 번째 행
+		    newRow1.innerHTML = `
+		        <th>수취인</th>
+		        <td><input type="text" id="recipientName-${currentRow}" placeholder="수취인"></td>
+		        <th>연락처</th>
+		        <td><input type="text" id="recipientPhone-${currentRow}" placeholder="수취인 연락처" maxlength="11"></td>
+		        <th>이메일</th>
+		        <td><input type="email" id="recipientEmail-${currentRow}" placeholder="수취인 이메일"></td>
+		        <th>주소 &nbsp;&nbsp; <button type="button" class="btn btn-primary" style="border: none; height:30px; background-color:#dddddd; font-size: 12px; color: black;" onclick="findPostcode('${recipientPostcodeId}', '${recipientAddressId}')">주소 찾기</button></th>
+		        <td style="width:120px;"><input type="text" id="${recipientPostcodeId}" class="readonly" placeholder="우편번호" readonly></td>
+		        <td><input type="text" id="${recipientAddressId}" class="readonly" placeholder="도로명 주소" readonly></td>
+		        <td><input type="text" id="recipientDetailAddress-${currentRow}" placeholder="상세주소"></td>
+		    `;
+		
+		    // 두 번째 행
+		    newRow2.innerHTML = `
+		        <th>상품코드</th>
+		        <td><input type="text" class="productCode" id="${productCodeId}" placeholder="상품코드" oninput="fetchProductName('${productCodeId}', '${productNameId}')"></td>
+		        <th>상품명</th>
+		        <td><input type="text" class="productName readonly" id="${productNameId}" placeholder="상품명" readonly></td>
+		        <th>주문갯수</th>
+		        <td><input type="number" placeholder="주문 갯수"></td>
+		        <td colspan="3"><input type="text" placeholder="수취인 메모" style="width: 100%;"></td>
+		        <td colspan="3"><input type="text" placeholder="관리자 메모" style="width: 100%;"></td>
+		    `;
+		}	
+		
+		// 주문상품코드를 입력하면 주문상품명을 자동으로 출력
+		async function fetchProductName(productCodeId, productNameId) {
+		    const productCode = document.getElementById(productCodeId).value;
+		    const productNameField = document.getElementById(productNameId);
+		
+		    // 8자리일 때만 서버에서 상품명을 조회
+		    if (productCode.trim().length === 8) {
+		        try {
+		            // 서버에서 상품 정보를 가져오는 API 호출
+		            const response = await fetch(`/sales/getProductByCode?code=${productCode}`);
+		
+		            if (response.ok) {
+		                const product = await response.json();
+		                productNameField.value = product.name; // 해당 행의 상품명 필드에 값 설정
+		            } else {
+		                productNameField.value = ''; // 상품명을 지움
+		                alert('해당 상품코드를 찾을 수 없습니다.');
+		            }
+		        } catch (error) {
+		            console.error('상품 정보를 가져오는 중 오류 발생:', error);
+		            alert('상품 정보를 가져오는 중 오류가 발생했습니다.');
+		        }
+		    } else {
+		        productNameField.value = '상품코드는 8자리입니다'; // 상품코드가 8자리가 아닌 경우
+		    }
+		}
+
+        
+// 직접 주문 등록 버튼 클릭 시 데이터 전송
+async function submitOrder() {
+    // 수집할 데이터들
+    const orderData = [];
+    const rows = document.querySelectorAll('#orderTable tbody tr');
+
+    // 각 테이블 행의 데이터를 수집
+    for (let i = 0; i < rows.length; i += 2) {
+        const rowIndex = Math.floor(i / 2);  // 행 인덱스를 2로 나눔으로써 고유 ID 값 생성
+
+        const recipientNameField = document.getElementById(`recipientName-${rowIndex}`);
+        const recipientPhoneField = document.getElementById(`recipientPhone-${rowIndex}`);
+        const recipientEmailField = document.getElementById(`recipientEmail-${rowIndex}`);
+        const recipientPostcodeField = document.getElementById(`recipientPostcode-${rowIndex}`);
+        const recipientAddressField = document.getElementById(`recipientAddress-${rowIndex}`);
+        const recipientDetailAddressField = document.getElementById(`recipientDetailAddress-${rowIndex}`);
+        const productCodeField = document.getElementById(`productCode-${rowIndex}`);
+        const productNameField = document.getElementById(`productName-${rowIndex}`);
+        const productQuantityField = document.getElementById(`productQuantity-${rowIndex}`);
+        const clientMemoField = document.getElementById(`clientMemo-${rowIndex}`);
+        const adminMemoField = document.getElementById(`adminMemo-${rowIndex}`);
+
+        // 필드가 null인 경우 처리
+        if (!recipientNameField || !recipientPhoneField || !recipientEmailField || 
+            !recipientPostcodeField || !recipientAddressField || !recipientDetailAddressField || 
+            !productCodeField || !productNameField || !productQuantityField || 
+            !clientMemoField || !adminMemoField) {
+            alert("모든 필드에 값을 입력해주세요");
+            return;
         }
+
+        const orderItem = {
+            name: recipientNameField.value,
+            tel: recipientPhoneField.value,
+            email: recipientEmailField.value,
+            post: recipientPostcodeField.value,
+            address: recipientAddressField.value,
+            addressDetail: recipientDetailAddressField.value,
+            products: [{
+                productCode: productCodeField.value,
+                productName: productNameField.value,
+                qty: productQuantityField.value,
+            }],
+            clientMemo: clientMemoField.value,
+            managerMemo: adminMemoField.value,
+        };
+
+        orderData.push(orderItem);
+    }
+
+    // 서버로 POST 요청
+    try {
+        const response = await fetch('/sales/saveOrder', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(orderData), // 배열 자체로 전송
+        });
+
+        const result = await response.json(); // 응답 메시지 가져오기
+
+        if (response.ok) {
+            alert('주문이 성공적으로 등록되었습니다: ' + result.message); // 성공 메시지 표시
+        } else {
+            alert('주문 등록 중 오류가 발생했습니다: ' + result.message); // 실패 메시지 표시
+        }
+    } catch (error) {
+        console.error('주문 등록 오류:', error);
+        alert('서버와의 통신 중 오류가 발생했습니다.');
+    }
+}
+
+
+
     </script>
 
     <script th:src="@{/js/order.js}"></script>

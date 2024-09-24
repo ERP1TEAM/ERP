@@ -1,11 +1,13 @@
 package com.quickkoala.controller.sales;
 
 import java.io.File;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -14,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,7 +24,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.quickkoala.dto.sales.ClientsOrderProductsDTO;
 import com.quickkoala.dto.sales.ClientsOrdersDTO;
+import com.quickkoala.dto.sales.SearchProductCodeDTO;
 import com.quickkoala.entity.sales.ClientsOrdersEntity;
+import com.quickkoala.entity.stock.ProductEntity;
+import com.quickkoala.repository.stock.ProductRepository;
 import com.quickkoala.service.sales.SalesOrderServiceImpl;
 import com.quickkoala.token.config.JwtTokenProvider;
 
@@ -36,26 +42,46 @@ public class SalesOrderRestController {
     
 	@Autowired
 	private JwtTokenProvider jwtTokenProvider;
+	
+	@Autowired
+	private ProductRepository productRepository;
 
     //주문등록 (액셀 등록)
-    @PostMapping("/uploadFile")
-    public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file ,HttpServletRequest request) {
-        try {
-            File convFile = new File(System.getProperty("java.io.tmpdir") + "/" + file.getOriginalFilename());
-            file.transferTo(convFile);
-            
-            // 파일 파싱 및 저장 로직
-            List<ClientsOrdersDTO> orders = orderService.parseExcelFile(convFile);
-            
-            String token = jwtTokenProvider.resolveToken(request);
-            orderService.saveOrder(orders,token);
+	@PostMapping("/uploadFile")
+	public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file, HttpServletRequest request) {
+	    try {
+	        // 파일 변환 및 저장 위치 설정
+	        File convFile = new File(System.getProperty("java.io.tmpdir") + "/" + file.getOriginalFilename());
+	        file.transferTo(convFile);
+	        
+	        // 파일 파싱 및 주문 저장
+	        List<ClientsOrdersDTO> orders = orderService.parseExcelFile(convFile);
+	        String token = jwtTokenProvider.resolveToken(request);
+	        orderService.saveOrder(orders, token);
 
-            return ResponseEntity.ok("주문 등록 성공");
+	        return ResponseEntity.ok("주문 등록 성공");
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("파일 처리 중 오류가 발생했습니다.");
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("주문 등록 실패");
+	    }
+	}
+	
+    //직접 주문등록
+    @PostMapping("/saveOrder")
+    public ResponseEntity<String> saveOrder(@RequestBody List<ClientsOrdersDTO> orders, HttpServletRequest request) {
+        try {
+            String token = jwtTokenProvider.resolveToken(request);
+            orderService.saveOrder(orders, token);
+            return ResponseEntity.ok("주문등록 성공");
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("주문 등록 실패");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to save order");
         }
     }
+
     
     //주문완료 (주문 상품 출력)
     @GetMapping("/{orderId}/products")
@@ -95,5 +121,17 @@ public class SalesOrderRestController {
 
         return response;
     }
+    
+    // 상품코드에 맞는 상품명 조회
+    @GetMapping("/getProductByCode")
+    public ResponseEntity<SearchProductCodeDTO> getProductByCode(@RequestParam String code) {
+        Optional<ProductEntity> product = productRepository.findByCode(code);
 
+        if (product.isPresent()) {
+            SearchProductCodeDTO productDTO = new SearchProductCodeDTO(product.get().getCode(), product.get().getName());
+            return ResponseEntity.ok(productDTO);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+    }
 }

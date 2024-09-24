@@ -27,6 +27,7 @@ import com.quickkoala.entity.client.SupplierEntity;
 import com.quickkoala.entity.stock.CategoryEntity;
 import com.quickkoala.entity.stock.ProductEntity;
 import com.quickkoala.entity.stock.ViewProductStockSupplierEntity;
+import com.quickkoala.repository.stock.ProductRepository;
 import com.quickkoala.service.client.SupplierService;
 import com.quickkoala.service.stock.CategoryService;
 import com.quickkoala.service.stock.LocationService;
