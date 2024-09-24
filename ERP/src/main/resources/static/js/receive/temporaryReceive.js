@@ -3,23 +3,23 @@ document.addEventListener("DOMContentLoaded", function() {
 	var startPage = 0;
 	var endPage = 0;
 	const pageSize = 2; // 페이지 번호 그룹 크기 설정
-	
+
 	const getQueryParam = (param) => {
 		const urlParams = new URLSearchParams(window.location.search);
 		return urlParams.get(param);
 	}
-	
+
 	let p = parseInt(getQueryParam("p")) || 1;
 	let searchCode = getQueryParam("code") || '가입고코드';  // 검색 코드
-    let searchWord = getQueryParam("word") || '';  // 검색어
-    let startDate = getQueryParam("sDate") || '';
+	let searchWord = getQueryParam("word") || '';  // 검색어
+	let startDate = getQueryParam("sDate") || '';
 	let endDate = getQueryParam("eDate") || new Date().toISOString().split('T')[0];
-    
-    document.getElementById("search_code").value = searchCode;
-    document.getElementById("search_word").value = searchWord;
-    document.getElementById("start_date").value = startDate;
+
+	document.getElementById("search_code").value = searchCode;
+	document.getElementById("search_word").value = searchWord;
+	document.getElementById("start_date").value = startDate;
 	document.getElementById("end_date").value = endDate;
-	
+
 	//paging 함수를 전역으로 설정
 	window.paging = function(p, code = searchCode, word = searchWord, sDate = startDate, eDate = endDate) {
 		tableData(p, code, word, sDate, eDate);
@@ -32,8 +32,8 @@ document.addEventListener("DOMContentLoaded", function() {
 	window.pgPrev = function() {
 		tableData(startPage - 1, searchCode, searchWord, startDate, endDate);
 	}
-	
-    //날짜를 yyyy-MM-dd HH-mm-ss형식으로 변환
+
+	//날짜를 yyyy-MM-dd HH-mm-ss형식으로 변환
 	function formatDate(isoString) {
 
 		const date = new Date(isoString);
@@ -63,7 +63,7 @@ document.addEventListener("DOMContentLoaded", function() {
 			.then(data => {
 				const items = data.content;
 				totalPages = data.totalPages;
-				
+
 				let tbody = document.querySelector('#tbody');
 				tbody.innerHTML = '';
 				items.forEach(function(item) {
@@ -100,9 +100,9 @@ document.addEventListener("DOMContentLoaded", function() {
 
 				// 페이징 HTML 생성
 				let paginationHTML = `<ul class="pagination">`;
-				
+
 				// 'Precious' 링크 추가
-				if(startPage > pageSize){
+				if (startPage > pageSize) {
 					paginationHTML += `
 					        <li class="page-item"><a class="page-link" aria-label="Previous" onclick="pgPrev()">
 					            <span aria-hidden="true">&laquo;</span>
@@ -119,19 +119,19 @@ document.addEventListener("DOMContentLoaded", function() {
 				}
 
 				// 'Next' 링크 추가
-				if(endPage < totalPages){
+				if (endPage < totalPages) {
 					paginationHTML += `
 					        <li class="page-item"><a class="page-link" aria-label="Next" onclick="pgNext()">
 					            <span aria-hidden="true">&raquo;</span>
 					        </a></li>
 					`;
 				}
-				
+
 				paginationHTML += `</ul>`;
 
 				// 페이징 HTML을 페이지에 삽입
 				paging.innerHTML = paginationHTML;
-				
+
 				if (word === "" && sDate === "") {
 					history.replaceState({}, '', location.pathname + `?p=${pno}`);
 				} else if (sDate === "") {
@@ -148,7 +148,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	}
 
 	tableData(p, searchCode, searchWord, startDate, endDate);
-	
+
 	//검색
 	document.getElementById("search_form").addEventListener("submit", function(event) {
 		event.preventDefault(); // 기본 폼 제출 방지
@@ -178,7 +178,7 @@ document.addEventListener("DOMContentLoaded", function() {
 		document.getElementById("end_date").value = endDate;
 		paging(1, '', '', '', '');
 	})
-	
+
 	//입고버튼 클릭
 	document.querySelector('#tbody').addEventListener('click', function(event) {
 		if (event.target && event.target.classList.contains('receiving')) {
@@ -224,19 +224,19 @@ document.addEventListener("DOMContentLoaded", function() {
 			        <td>
 			        	<select id="location" name="location" class="condition-select" style="display:block;">
 			        `;
-			        if(data.location.length > 1){
-				        data.location.forEach(function(item){
-					        th += `
-					                <option value="${item}">${item}</option>
-					              `;						
-						})						
-					}else{
+				if (data.location.length > 1) {
+					data.location.forEach(function(item) {
 						th += `
+					                <option value="${item}">${item}</option>
+					              `;
+					})
+				} else {
+					th += `
 					                <option value="N">${data.location[0]}</option>
 					              `;
-					}
-			              
-			        th += `
+				}
+
+				th += `
 			            </select>
 			        </td>
 			        <td><input type="text" id="qty" value="${data.qty}" readonly class="no-style" style="text-align:right;"></td>
@@ -251,7 +251,7 @@ document.addEventListener("DOMContentLoaded", function() {
 			                <option value="기타">기타</option>
 			            </select>
 			        </td>
-			        <td><input type="text" id="memo" class="no-style"></td>
+			        <td id="memos"></td>
 			    </tr>`;
 				tbody2.innerHTML += th;
 				document.getElementById('warehouselistmodal').style.display = 'block';
@@ -266,9 +266,9 @@ document.addEventListener("DOMContentLoaded", function() {
 	document.querySelector('#tbody2').addEventListener('change', function(event) {
 		if (event.target && event.target.matches('select.condition-select')) {
 			if (event.target.value === "기타") {
-				document.getElementById("memo").innerHTML = `<input type="text">`;
+				document.getElementById("memos").innerHTML = `<input type="text" id="memo" class="no-style">`;
 			} else {
-				document.getElementById("memo").innerHTML = "";
+				document.getElementById("memos").innerHTML = "";
 			}
 		}
 	});
@@ -280,11 +280,15 @@ document.addEventListener("DOMContentLoaded", function() {
 			if (reQty > wqty) {
 				event.target.value = wqty;
 				document.querySelector("#ca-qty").value = 0;
+				document.getElementById("condition").value = "";
+				document.getElementById("condition").disabled = true;
+				document.getElementById("memos").innerHTML = "";
 			} else {
 				caQty = wqty - reQty;
 				if (isNaN(caQty)) {
 					caQty = 0;
 				}
+				document.getElementById("condition").disabled = false;
 				document.querySelector("#ca-qty").value = caQty;
 			}
 		}
@@ -298,7 +302,8 @@ document.addEventListener("DOMContentLoaded", function() {
 		let reQty = parseInt(document.getElementById("re-qty").value);
 		let caQty = parseInt(document.getElementById("ca-qty").value);
 		let con = document.getElementById("condition").value;
-		let memo = document.getElementById("memo").value;
+		let memoElement = document.getElementById("memo");
+		let memo = memoElement ? memoElement.value : '';
 		let deli = document.getElementById("deli").value;
 		let location = document.getElementById("location").value;
 		let productCode = document.getElementById("productCode").value;
@@ -311,6 +316,12 @@ document.addEventListener("DOMContentLoaded", function() {
 			return;
 		} else if (wqty < reQty) {
 			alert("대기수량을 확인해주세요");
+			return;
+		} else if (caQty > 0 && !con) {
+			alert("반품 사유를 선택해주세요");
+			return;
+		} else if (con == "기타" && !memo) {
+			alert("반품 사유를 메모에 작성해주세요");
 			return;
 		}
 		const formData = new FormData();

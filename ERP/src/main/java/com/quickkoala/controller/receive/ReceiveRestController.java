@@ -121,20 +121,22 @@ public class ReceiveRestController {
 	// 발주내역 페이지 데이터
 	@GetMapping("receive/purchaseData/{pno}/{status}")
 	public Page<ViewPurchaseDetailEntity> purchaseData(@PathVariable Integer pno, @PathVariable String status,
-			@RequestParam String code, @RequestParam String word) {
+			@ModelAttribute SearchDto dto) {
+		String sDate = dto.getSDate();
+		String word = dto.getWord();
 
 		Page<ViewPurchaseDetailEntity> result = null;
 		if (status.equals("all")) {
-			if (code.equals("") || word.equals("")) {
+			if (word.equals("") && sDate.equals("")) {
 				result = viewPurchaseDetailService.getPaginatedData(pno, SIZE);
 			} else {
-				result = viewPurchaseDetailService.getPaginatedData(pno, SIZE, code, word);
+				result = viewPurchaseDetailService.getPaginatedData(pno, SIZE, dto);
 			}
 		} else {
-			if (code.equals("") || word.equals("")) {
+			if (word.equals("") && sDate.equals("")) {
 				result = viewPurchaseDetailService.getPaginatedDataByStatus(status, pno, SIZE);
 			} else {
-				result = viewPurchaseDetailService.getPaginatedData(pno, SIZE, code, word);
+				result = viewPurchaseDetailService.getPaginatedData(pno, SIZE, dto);
 			}
 		}
 		return result;

@@ -47,6 +47,7 @@
 							<div class="card-action">발주내역</div>
 							<form id="search_form">
 								<div class="search">
+									<input type="date" id="start_date" style="width:120px;"> ~ <input type="date" id="end_date" style="width:120px;">
 									<select id="search_code">
 										<option value="발주번호">발주번호</option>
 										<option value="제조사">제조사</option>
@@ -54,13 +55,16 @@
 									</select> <input type="text" placeholder="검색어를 입력하세요"
 										style="width: 200px; border: 1px;" id="search_word">
 									<button type="submit" id="search_btn">검색</button>
+									<button type="button" id="reset_btn">초기화</button>
 								</div>
 							</form>
+							<div style="margin-left:20px;">
 							<div class="small-tap" id="all">전체</div>
 							<div class="small-tap" id="wait">입고대기</div>
 							<div class="small-tap" id="finish">입고완료</div>
+							</div>
 							<br> <br>
-							<div class="card-content">
+							<div class="card-content" style="margin-top:-22px;">
 								<div class="table-responsive">
 									<table class="table table-striped table-bordered table-hover"
 										id="dataTables-example">

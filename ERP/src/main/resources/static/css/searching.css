@@ -1,6 +1,7 @@
   .search {
     display: flex;
     gap: 10px; /* Space between select and input */
+    margin-left : 20px;
   }
 
   .search select, .search input {

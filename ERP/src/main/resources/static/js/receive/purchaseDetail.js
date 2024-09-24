@@ -18,30 +18,37 @@ document.addEventListener("DOMContentLoaded", function() {
 	}
 
 	// 쿼리 파라미터 가져오기
-	const queryParams = getQueryParams(["p", "s", "code", "word"]);
+	const queryParams = getQueryParams(["p", "s", "code", "word", "sDate", "eDate"]);
 
 	// 파라미터 값 갖고오기 및 기본값 설정
 	let pa1 = queryParams["p"] || 1;
 	let pa2 = queryParams["s"] || "all";
 	let searchCode = queryParams["code"] || '발주번호';
 	let searchWord = queryParams["word"] || '';
+	let startDate =  queryParams["sDate"] || '';
+	let endDate =  queryParams["eDate"] || new Date().toISOString().split('T')[0];
 	
 	// 검색 코드와 단어를 폼 필드에 설정
     document.getElementById("search_code").value = searchCode;
     document.getElementById("search_word").value = searchWord;
+    document.getElementById("start_date").value = startDate;
+	document.getElementById("end_date").value = endDate;
 
 	//paging 함수를 전역으로 설정
-	window.paging = function(p, code = searchCode, word = searchWord) {
-		params = getQueryParams(["p", "s", "code", "word"]);
-		tableData(p, params["s"], code, word);
+	window.paging = function(p,s, code = searchCode, word = searchWord, sDate = startDate, eDate = endDate) {
+		params = getQueryParams(["p", "s", "code", "word", "sDate", "eDate"]);
+		if(s !== "all"){
+			s = params["s"];
+		}
+		tableData(p, s, code, word, sDate, eDate);
 	}
 	window.pgNext = function() {
-		params = getQueryParams(["p", "s", "code", "word"]);
-		tableData(endPage + 1, params["s"], searchCode, searchWord);
+		params = getQueryParams(["p", "s", "code", "word", "sDate", "eDate"]);
+		tableData(endPage + 1, params["s"], searchCode, searchWord, startDate, endDate);
 	}
 	window.pgPrev = function() {
-		params = getQueryParams(["p", "s", "code", "word"]);
-		tableData(startPage - 1, params["s"], searchCode, searchWord);
+		params = getQueryParams(["p", "s", "code", "word", "sDate", "eDate"]);
+		tableData(startPage - 1, params["s"], searchCode, searchWord, startDate, endDate);
 	}
 	//날짜를 yyyy-MM-dd HH-mm-ss형식으로 변환
 	function formatDate(isoString) {
@@ -59,8 +66,14 @@ document.addEventListener("DOMContentLoaded", function() {
 	}
 
 	//테이블 출력
-	const tableData = (pno, sta, code = '', word = '') => {
-		fetch(`./purchaseData/${pno}/${sta}?code=${code}&word=${word}`, {
+	const tableData = (pno, sta, code = '', word = '', sDate = '', eDate = '') => {
+		const params = new URLSearchParams({
+			code: code,
+			word: word,
+			sDate: sDate,
+			eDate: eDate
+		}).toString();
+		fetch(`./purchaseData/${pno}/${sta}?${params}`, {
 			method: 'GET'
 		})
 			.then(response => response.json())
@@ -130,12 +143,16 @@ document.addEventListener("DOMContentLoaded", function() {
 				// 페이징 HTML을 페이지에 삽입
 				paging.innerHTML = paginationHTML;
 
-				// URL 업데이트 (검색 조건도 포함)
-				if (word === "") {
-					history.replaceState({}, '', location.pathname + `?p=${pno}` + `&s=${sta}`);
+				if (word === "" && sDate === "") {
+					history.replaceState({}, '', location.pathname + `?p=${pno}`+ `&s=${sta}`);
+				} else if (sDate === "") {
+					history.replaceState({}, '', location.pathname + `?p=${pno}`+ `&s=${sta}&code=${code}&word=${word}`);
+				} else if (word === "") {
+					history.replaceState({}, '', location.pathname + `?p=${pno}`+ `&s=${sta}&sDate=${sDate}&eDate=${eDate}`);
 				} else {
-					history.replaceState({}, '', location.pathname + `?p=${pno}` + `&s=${sta}&code=${code}&word=${word}`);
+					history.replaceState({}, '', location.pathname + `?p=${pno}`+ `&s=${sta}&sDate=${sDate}&eDate=${eDate}&code=${code}&word=${word}`);
 				}
+
 			})
 			.catch(function(error) {
 				alert(error);
@@ -144,7 +161,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 	//페이지 로드시 실행
 	const start = () => {
-		tableData(pa1, pa2, searchCode, searchWord);
+		tableData(pa1, pa2, searchCode, searchWord, startDate, endDate);
 	}
 	start();
 
@@ -179,7 +196,14 @@ document.addEventListener("DOMContentLoaded", function() {
 
 	// 데이터 로딩 함수
 	function loadData(status) {
-		document.getElementById("search_word").value = "";
+		searchCode = '발주번호';
+		searchWord = '';
+		startDate = '';
+		endDate = new Date().toISOString().split('T')[0];
+		document.getElementById("search_code").value = searchCode;
+		document.getElementById("search_word").value = searchWord;
+		document.getElementById("start_date").value = startDate;
+		document.getElementById("end_date").value = endDate;
 		tableData(1, status);
 	}
 
@@ -208,11 +232,36 @@ document.addEventListener("DOMContentLoaded", function() {
 	//검색
 	document.getElementById("search_form").addEventListener("submit", function(event) {
 		event.preventDefault(); // 기본 폼 제출 방지
-		searchCode = document.getElementById("search_code").value || '발주번호';
+		startDate = document.getElementById("start_date").value;
+		endDate = document.getElementById("end_date").value;
+		searchCode = document.getElementById("search_code").value;
 		searchWord = document.getElementById("search_word").value;
-		paging(1, searchCode, searchWord); // 검색 후 첫 페이지부터 시작		
-		setActiveStyle(document.getElementById("all"));		
+		pa2 = "all";
+		setActiveStyle(document.getElementById("all"));
+		if (startDate !== "" && endDate === "") {
+			endDate = new Date().toISOString().split('T')[0];
+			document.getElementById("end_date").value = endDate;
+			paging(1,"all", searchCode, searchWord, startDate, endDate);
+		} else if (startDate > endDate) {
+			alert("기간이 잘못 설정되었습니다.");
+		} else {
+			paging(1,"all", searchCode, searchWord, startDate, endDate); // 검색 후 첫 페이지부터 시작						
+		}
 	});
+
+	document.getElementById("reset_btn").addEventListener("click", function() {
+		searchCode = '발주번호';
+		searchWord = '';
+		startDate = '';
+		endDate = new Date().toISOString().split('T')[0];
+		document.getElementById("search_code").value = searchCode;
+		document.getElementById("search_word").value = searchWord;
+		document.getElementById("start_date").value = startDate;
+		document.getElementById("end_date").value = endDate;
+		pa2 = "all";
+		setActiveStyle(document.getElementById("all"));
+		paging(1,"all", '', '', '', '');
+	})
 	
 	
 });
