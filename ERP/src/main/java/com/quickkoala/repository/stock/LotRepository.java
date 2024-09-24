@@ -18,7 +18,7 @@ public interface LotRepository extends JpaRepository<LotEntity, String>{
 	
 	@Query("SELECT MAX(SUBSTRING(l.lotNumber, LENGTH(l.lotNumber) - 2)) FROM LotEntity l WHERE l.productCode = :productCode AND DATE(l.receiveDate) = :receiveDate")
     Optional<Integer> findMaxSerialNumberByProductCodeAndDate(@Param("productCode") String productCode, @Param("receiveDate") LocalDate receiveDate);
-	
-	List<LotEntity> findAllByProductCodeAndSupplierCodeOrderByLotNumberDesc(String productCode, String supplierCode);
-	List<LotEntity> findAllByProductCodeOrderByLotNumberDesc(String productCode);
+
+	List<LotEntity> findAllByProductCodeAndSupplierCodeOrderByLotNumberAsc(String productCode, String supplierCode);
+	List<LotEntity> findAllByProductCodeOrderByLotNumberAsc(String productCode);
 }

@@ -11,7 +11,7 @@ import com.quickkoala.entity.release.ViewReleaseProductsEntity;
 public interface ViewReleaseOngoingService{
 	
 	public Page<ViewReleaseOngoingEntity> getAll(int pg, int size,String select, String param);
-	public  List<ViewReleaseProductsEntity> getProducts(String relNumber);
+	
 	
 	
 }

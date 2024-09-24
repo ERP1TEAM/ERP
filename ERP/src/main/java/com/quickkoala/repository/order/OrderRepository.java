@@ -23,7 +23,7 @@ public interface OrderRepository extends JpaRepository<OrderEntity,String> {
 	@Query("SELECT o.number FROM OrderEntity o WHERE o.number LIKE CONCAT(:date, '%') ORDER BY o.number DESC")
 	String findMaxOrderNumber(@Param("date") String date);
 	
-	Long countByDt(LocalDate date);
+	Long countByDt(LocalDateTime date);
 	
 	@Modifying
 	@Transactional

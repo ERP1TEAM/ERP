@@ -18,7 +18,11 @@ import com.quickkoala.service.release.ReleaseReturnProductsService;
 import com.quickkoala.service.release.ViewReleaseCancelService;
 import com.quickkoala.service.release.ViewReleaseCompleteService;
 import com.quickkoala.service.release.ViewReleaseOngoingService;
+import com.quickkoala.service.release.ViewReleaseProductsService;
 import com.quickkoala.service.release.ViewReleaseReturnProductsService;
+import com.quickkoala.utils.GetToken;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("main")
@@ -38,6 +42,9 @@ public class ReleaseRestController {
 	
 	@Autowired
 	private ViewReleaseCompleteService viewReleaseCompleteService;
+	
+	@Autowired
+	private ViewReleaseProductsService viewReleaseProductsService;
 	
 	@Autowired
 	private ViewReleaseReturnProductsService viewReleaseRefundPrdouctsService;
@@ -65,23 +72,23 @@ public class ReleaseRestController {
 	}
 	
 	@PostMapping("release/detail")
-	public List<ViewReleaseProductsEntity> detail(@RequestParam String id) {
-		return viewReleaseOngoingService.getProducts(id);
+	public List<ViewReleaseProductsEntity> detail(@RequestParam("rNum") String rNum) {
+		return viewReleaseProductsService.getProducts(rNum);
 	}
 	
 	@PostMapping("release/cancel.do")
-	public String cancel(@RequestParam String id) {
-		return orderReleaseService.saveStatus(id,"출고취소");
+	public String cancel(@RequestParam String id, HttpServletRequest request) {
+		return orderReleaseService.saveStatus(id,"출고취소",GetToken.getManagerName(request));
 	}
 	
 	@PostMapping("release/complete.do")
-	public String complete(@RequestParam String id) {
-		return orderReleaseService.saveStatus(id,"출고완료");
+	public String complete(@RequestParam String id, HttpServletRequest request) {
+		return orderReleaseService.saveStatus(id,"출고완료",GetToken.getManagerName(request));
 	}
 	
 	@PostMapping("release/postpone.do")
-	public String postpone(@RequestParam String id) {
-		return orderReleaseService.saveStatus(id,"출고지연");
+	public String postpone(@RequestParam String id, HttpServletRequest request) {
+		return orderReleaseService.saveStatus(id,"출고지연",GetToken.getManagerName(request));
 	}
 	
 	@PostMapping("release/return/discard")

@@ -32,5 +32,10 @@ public interface OrderReleaseRepository extends JpaRepository<OrderReleaseEntity
 	@Query("update OrderReleaseEntity set status =:status where number = :id")
 	public int updateStatus(@Param("id") String id,  @Param("status") OrderReleaseEntity.ReleaseStatus status);
 	
+	@Transactional
+	@Modifying
+	@Query("delete from OrderReleaseEntity where number = :id")
+	public int deleteByNumber(@Param("id") String id);
+	
 	
 }

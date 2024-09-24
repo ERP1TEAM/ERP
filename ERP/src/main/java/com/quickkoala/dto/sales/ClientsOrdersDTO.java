@@ -1,6 +1,7 @@
 package com.quickkoala.dto.sales;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import lombok.Getter;
@@ -19,7 +20,7 @@ public class ClientsOrdersDTO {
     private String manager;           
     private String managerCompanyCode; 
     private String managerMemo;
-    private LocalDate orderDate;
-    private LocalDate createdDt;
+    private LocalDateTime orderDate;
+    private LocalDateTime createdDt;
     private List<ClientsOrderProductsDTO> products;
 }

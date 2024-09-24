@@ -104,7 +104,7 @@ function expand_post(thisElement,onum){
 		fetch("./detail",{
 				method : "POST",
 				headers : {"content-type":"application/x-www-form-urlencoded"},
-				body : "orderNum="+encodeURIComponent(onum)
+				body : "rNum="+encodeURIComponent(onum)
 			})
 			.then(function(response){
 				return response.json();

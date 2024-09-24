@@ -1,6 +1,5 @@
 package com.quickkoala.entity.sales;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -28,10 +27,11 @@ public class ClientsOrdersEntity {
     private String addressDetail;
     
     @Column(name = "order_date")
-    private LocalDate orderDate;   // 주문 날짜 추가
+    private LocalDateTime orderDate;   // 주문 날짜 추가
     
-    @Column(name="create_dt")
-    private LocalDateTime createDt;
+    @Column(name="created_dt")
+    private LocalDateTime createdDt;
+    //private LocalDateTime createdDt;
     
     @Column(name = "client_memo")
     private String clientMemo; // 주문자 메모 필드

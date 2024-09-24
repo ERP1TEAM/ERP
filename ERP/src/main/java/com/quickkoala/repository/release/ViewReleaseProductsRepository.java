@@ -16,6 +16,7 @@ import com.quickkoala.entity.release.ViewReleaseProductsEntity;
 @Repository
 public interface ViewReleaseProductsRepository extends JpaRepository<ViewReleaseProductsEntity,Integer> {
 	
+	List<ViewReleaseProductsEntity> findByRelNumber(String rnum);
 	List<ViewReleaseProductsEntity> findByRelNumberOrderByLotNumberDesc(String rnum);
 	Page<ViewReleaseProductsEntity> findAll(Pageable pageable);
 	Page<ViewReleaseProductsEntity> findByRelNumberContainingOrderByRelNumberDesc(String param, Pageable pageable);

@@ -38,7 +38,7 @@ public class OrderEntity {
 	@Column(name = "approved_dt", nullable = true, columnDefinition="DATETIME DEFAULT CURRENT_TIMESTAMP")
 	private LocalDateTime approvedDt;
 	
-	@Column(name = "manager", length = 20, nullable = false)
+	@Column(name = "manager", length = 20, nullable = true)
 	private String manager;
 	
 	@Column(name = "memo", nullable = true)

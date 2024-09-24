@@ -49,19 +49,21 @@ public class SalesOrderServiceImpl implements SalesOrderService {
     
     @Autowired
     private ProductRepository productRepository;
-
+    int n=0;
     @Transactional
     @Override
     public void saveOrder(List<ClientsOrdersDTO> orders, String token) {
+    	System.out.println("optional");
         for (ClientsOrdersDTO orderDTO : orders) {
             ClientsOrdersEntity order = findExistingOrder(orderDTO);
-            
+            System.out.println(n++);
             //
             String orderId = null;
             LocalDateTime now = null;
 
             // 주문 정보가 이미 저장되어 있지 않다면 새로 생성
             if (order == null) {
+            	System.out.println(n++);
                 order = new ClientsOrdersEntity();
                 //주문자정보
                 order.setName(orderDTO.getName());
@@ -79,21 +81,23 @@ public class SalesOrderServiceImpl implements SalesOrderService {
                 order.setOrderDate(orderDTO.getOrderDate());
                 //입력 날짜
                 now = LocalDateTime.now();
-                order.setCreateDt(LocalDateTime.now());
+                order.setCreatedDt(LocalDateTime.now());
 
                 //주문고유식별자
                 // 고유한 주문 ID 생성 (order_id 설정)
                 orderId = generateOrderId(orderDTO.getOrderDate());
                 order.setOrderId(orderId); // order_id 필드에 설정
                 
+                
                 // 새 주문을 저장하고 order_id 가져오기
                 clientsOrdersRepository.save(order);
             }
-            
+            System.out.println(n++);
             List<String> productCodes = new ArrayList<String>();
             
             // 상품 정보 저장
             for (ClientsOrderProductsDTO productDTO : orderDTO.getProducts()) {
+            	System.out.println(n++);
                 ClientsOrderProductsEntity product = new ClientsOrderProductsEntity();
                 product.setClientsOrders(order);  // 이미 저장된 order_id와 연동
                 product.setProductCode(productDTO.getProductCode());
@@ -107,12 +111,13 @@ public class SalesOrderServiceImpl implements SalesOrderService {
             //주문총액계산
             List<Integer> productPrices = productRepository.findPricesByCodes(productCodes);
             if(orderDTO.getProducts().size()!=productPrices.size()) {
-            	System.out.println("전산 오류");
+            	System.out.println("전산 오류"+orderDTO.getProducts().size()+"||"+productPrices.size());
             }
-            
+            System.out.println(n++);
             int orderTotal = 0;
             for(Integer price : productPrices) {
             	orderTotal+=price;
+            	System.out.println(n++);
             }
             
           //salesOrder 저장
@@ -121,11 +126,13 @@ public class SalesOrderServiceImpl implements SalesOrderService {
             salesOrder.setManager(null);
             salesOrder.setMemo(null);
             salesOrder.setStatus(OrderStatus.미승인);
+            System.out.println(orderDTO.getManagerCompanyCode());
             salesOrder.setSalesCode(orderDTO.getManagerCompanyCode());
             salesOrder.setOrderId(orderId);
             salesOrder.setOrderTotal(orderTotal);
-            salesOrder.setNumber(generateOrderNumber(now.toLocalDate()));
+            salesOrder.setNumber(generateOrderNumber(now));
             orderRepository.save(salesOrder);
+            System.out.println(n++);
         }
     }
 
@@ -156,12 +163,12 @@ public class SalesOrderServiceImpl implements SalesOrderService {
                 // 주문 날짜 처리
                 if (row.getCell(8).getCellType() == CellType.NUMERIC) {
                     // 엑셀에서 날짜 타입으로 읽는 경우 (NUMERIC)
-                    LocalDate orderDate = row.getCell(8).getLocalDateTimeCellValue().toLocalDate();
+                    LocalDateTime orderDate = row.getCell(8).getLocalDateTimeCellValue();
                     orderDTO.setOrderDate(orderDate);
                 } else {
                     // 엑셀에서 문자열 형식으로 읽는 경우
                     String dateStr = row.getCell(8).getStringCellValue();
-                    LocalDate orderDate = LocalDate.parse(dateStr, formatter);
+                    LocalDateTime orderDate = LocalDateTime.parse(dateStr, formatter);
                     orderDTO.setOrderDate(orderDate);
                 }
                 
@@ -196,7 +203,7 @@ public class SalesOrderServiceImpl implements SalesOrderService {
     }
     
     // 주문 날짜를 기반으로 고유한 customOrderId를 생성
-    private String generateOrderId(LocalDate orderDate) {
+    private String generateOrderId(LocalDateTime orderDate) {
         // 해당 날짜에 존재하는 주문의 개수를 가져옴
         Long orderCountForDate = clientsOrdersRepository.countByOrderDate(orderDate);
 
@@ -208,7 +215,7 @@ public class SalesOrderServiceImpl implements SalesOrderService {
     }
     
     // 주문 날짜를 기반으로 고유한 customOrderId를 생성
-    private String generateOrderNumber(LocalDate date) {
+    private String generateOrderNumber(LocalDateTime date) {
         // 해당 날짜에 존재하는 주문의 개수를 가져옴
         Long orderCountForDate = orderRepository.countByDt(date);
 
@@ -246,7 +253,7 @@ public class SalesOrderServiceImpl implements SalesOrderService {
     }
     
  // 검색 메서드 수정
-    public Page<ClientsOrdersEntity> searchOrders(String managerCompanyCode, String searchType, String searchText, LocalDate searchDate, int page, int size) {
+    public Page<ClientsOrdersEntity> searchOrders(String managerCompanyCode, String searchType, String searchText, LocalDateTime searchDate, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
 
         if (searchDate != null) {

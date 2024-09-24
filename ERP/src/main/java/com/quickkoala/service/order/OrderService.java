@@ -10,7 +10,7 @@ import jakarta.transaction.Transactional;
 public interface OrderService {
 	
 	@Transactional
-	String updateStatus(String id,String status);
+	String updateStatus(String id,String status,String manager);
 	
 	
 	

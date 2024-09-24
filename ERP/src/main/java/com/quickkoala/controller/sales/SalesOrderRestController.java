@@ -1,7 +1,7 @@
 package com.quickkoala.controller.sales;
 
 import java.io.File;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
@@ -77,9 +77,9 @@ public class SalesOrderRestController {
         String token = jwtTokenProvider.resolveToken(request);
         String code = jwtTokenProvider.getClaim(token, "code");
 
-        LocalDate searchDate = null;
+        LocalDateTime searchDate = null;
         if (searchDateStr != null && !searchDateStr.isEmpty()) {
-            searchDate = LocalDate.parse(searchDateStr, DateTimeFormatter.ISO_DATE);
+            searchDate = LocalDateTime.parse(searchDateStr, DateTimeFormatter.ISO_DATE);
         }
 
         // Service를 통해 검색 및 페이징 처리 (companyCode 추가)

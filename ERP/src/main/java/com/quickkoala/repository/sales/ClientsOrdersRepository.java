@@ -1,6 +1,6 @@
 package com.quickkoala.repository.sales;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,10 +15,10 @@ import com.quickkoala.entity.sales.ClientsOrdersEntity;
 public interface ClientsOrdersRepository extends JpaRepository<ClientsOrdersEntity, String> {
 
     // 이름, 연락처, 주문 날짜로 주문 검색
-    Optional<ClientsOrdersEntity> findByNameAndTelAndOrderDate(String name, String tel, LocalDate orderDate);
+    Optional<ClientsOrdersEntity> findByNameAndTelAndOrderDate(String name, String tel, LocalDateTime orderDateTime);
 
     // 주문 날짜를 기준으로 해당 날짜에 존재하는 주문의 수를 세는 메서드
-    Long countByOrderDate(LocalDate orderDate);
+    Long countByOrderDate(LocalDateTime orderDate);
 
     // 주문번호로 검색 (회사 코드 포함)
     Page<ClientsOrdersEntity> findByCodeAndOrderIdContaining(String code, String orderId, Pageable pageable);
@@ -34,7 +34,7 @@ public interface ClientsOrdersRepository extends JpaRepository<ClientsOrdersEnti
     Page<ClientsOrdersEntity> findByCodeAndOrderIdContainingAndOrderDate(
         @Param("code") String code, 
         @Param("orderId") String orderId, 
-        @Param("orderDate") LocalDate orderDate, 
+        @Param("orderDate") LocalDateTime orderDate, 
         Pageable pageable
     );
 
@@ -43,7 +43,7 @@ public interface ClientsOrdersRepository extends JpaRepository<ClientsOrdersEnti
     Page<ClientsOrdersEntity> findByCodeAndNameContainingAndOrderDate(
         @Param("code") String code,
         @Param("name") String name,
-        @Param("orderDate") LocalDate orderDate,
+        @Param("orderDate") LocalDateTime orderDate,
         Pageable pageable
     );
 
@@ -51,7 +51,7 @@ public interface ClientsOrdersRepository extends JpaRepository<ClientsOrdersEnti
     @Query("SELECT o FROM ClientsOrdersEntity o WHERE o.code = :code AND o.orderDate = :orderDate")
     Page<ClientsOrdersEntity> findByCodeAndOrderDate(
         @Param("code") String code, 
-        @Param("orderDate") LocalDate orderDate, 
+        @Param("orderDate") LocalDateTime orderDate, 
         Pageable pageable
     );
 
@@ -62,7 +62,7 @@ public interface ClientsOrdersRepository extends JpaRepository<ClientsOrdersEnti
     Page<ClientsOrdersEntity> searchOrders(
         @Param("code") String code,
         @Param("searchText") String searchText,
-        @Param("searchDate") LocalDate searchDate,
+        @Param("searchDate") LocalDateTime searchDate,
         Pageable pageable);
 
     List<ClientsOrdersEntity> findByCode(String code);
