@@ -99,7 +99,7 @@
                                             <tr th:each="notice : ${notices}">
                                                 <td class="center" th:text="${notice.no}"></td>
                                                 <td><a th:href="@{/supplier/noticeView/{id}(id=${notice.id})}" th:text="${notice.title}"></a></td>
-                                                <td class="center" th:text="${notice.manager}"></td>
+                                                <td th:text="${notice.manager}"></td>
                                                 <td class="center" th:text="${notice.views}"></td>
                                                 <td class="center" th:text="${#temporals.format(notice.createdAt, 'yyyy-MM-dd')}"></td>
                                             </tr>

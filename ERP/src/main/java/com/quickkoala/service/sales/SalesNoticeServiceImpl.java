@@ -30,6 +30,7 @@ public class SalesNoticeServiceImpl implements SalesNoticeService {
         return noticeRepository.findAll(pageable);
     }
     
+    //자사의 공지사항만 출력
     public Page<SalesNoticeDTO> getNoticesByCompanyCode(String companyCode, int page, int size) {
         Page<SalesNoticeEntity> notices = noticeRepository.getNoticesByManagerCompanyCode(companyCode, PageRequest.of(page, size));
         
@@ -80,5 +81,11 @@ public class SalesNoticeServiceImpl implements SalesNoticeService {
         entity.setCreatedAt(noticeDTO.getCreatedAt());
         entity.setViews(noticeDTO.getViews());
         return entity;
+    }
+    
+    
+    //해당 공지사항 삭제
+    public void deleteNoticeById(Long id) {
+        noticeRepository.deleteById(id);
     }
 }

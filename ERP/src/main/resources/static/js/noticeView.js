@@ -37,3 +37,31 @@ document.addEventListener('DOMContentLoaded', async function() {
         }
     }
 });
+
+// URL에서 공지사항 ID 추출하는 함수
+function getNoticeIdFromUrl() {
+    const pathParts = window.location.pathname.split('/'); // URL 경로를 '/'로 나누어 배열로 만듦
+    return pathParts[pathParts.length - 1]; // 배열의 마지막 부분이 공지사항 ID일 경우
+}
+
+document.getElementById('deleteButton').addEventListener('click', function() {
+    const noticeId = getNoticeIdFromUrl(); // URL에서 공지사항 ID 추출
+
+    if (confirm("정말로 이 공지사항을 삭제하시겠습니까?")) {
+        fetch(`../delete/${noticeId}`, {
+            method: 'DELETE'
+        })
+        .then(response => {
+            if (response.ok) {
+                alert('공지사항이 성공적으로 삭제되었습니다.');
+                window.location.href = '../home'; // 목록 페이지로 이동
+            } else {
+                alert('공지사항 삭제에 실패하였습니다.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('공지사항 삭제 중 오류가 발생했습니다.');
+        });
+    }
+});

@@ -81,4 +81,9 @@ public class SupplierNoticeServiceImpl implements SupplierNoticeService {
         entity.setViews(noticeDTO.getViews());
         return entity;
     }
+    
+    //해당 공지사항 삭제
+    public void deleteNoticeById(Long id) {
+        noticeRepository.deleteById(id);
+    }
 }
