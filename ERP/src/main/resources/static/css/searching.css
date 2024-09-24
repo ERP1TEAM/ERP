@@ -1,35 +1,55 @@
-  .search {
-    display: flex;
-    gap: 10px; /* Space between select and input */
-    margin-left : 20px;
-  }
+.search {
+	display: flex;
+	gap: 10px; /* Space between select and input */
+	margin-left: 20px;
+}
 
-  .search select, .search input {
-    padding: 10px;
-    border: 1px solid #000;
-    border-radius: 5px;
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
-    font-size: 14px;
-    transition: border-color 0.3s ease;
-  }
+.search select, .search input {
+	padding: 10px;
+	border: 1px solid #000;
+	border-radius: 5px;
+	box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+	font-size: 14px;
+	transition: border-color 0.3s ease;
+}
 
-  .search select {
-  	display: block;
-    width: 120px;
-    height: 40px;
-    background-color: #f9f9f9;
-  }
+.search select {
+	display: block;
+	width: 120px;
+	height: 40px;
+	background-color: #f9f9f9;
+}
 
-  .search input {
-    width: 200px;
-    height: 20px;
-  }
+.search input {
+	width: 200px;
+	height: 20px;
+}
 
-  .search select:focus, .search input:focus {
-    border-color: #000; 
-    outline: none;
-  }
-  
-  .search button {
-  	height: 40px;
-  }
+.search select:focus, .search input:focus {
+	border-color: #000;
+	outline: none;
+}
+
+.search button {
+	height: 40px;
+	background-color: #ffffff;
+	border: 1px solid #ccc;
+	border-radius: 8px;
+	padding: 0 15px;
+	font-size: 16px;
+	color: #333;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.search button:hover {
+	background-color: #f0f0f0;
+	border-color: #bbb;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.search button:active {
+	background-color: #e0e0e0;
+	box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.2);
+}

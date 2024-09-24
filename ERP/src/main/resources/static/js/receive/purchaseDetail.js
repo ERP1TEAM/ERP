@@ -88,7 +88,7 @@ document.addEventListener("DOMContentLoaded", function() {
 					const rdt = formatDate(item.orderDate);
 					let th = `
 				    <tr class="odd gradeX">
-				        <td>${item.orderNumber}</td>
+				        <td style="text-align:center;">${item.orderNumber}</td>
 				        <td>${item.supplierName}</td>
 				        <td>${item.productName}</td>
 				        <td style="text-align:right;">${item.quantity}</td>

@@ -44,7 +44,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 items.forEach(function(item) {
                     let th = `
                     <tr class="odd gradeX">
-                        <td>${item.orderNumber}</td>
+                        <td style="text-align:center;">${item.orderNumber}</td>
                         <td>${item.productName}</td>
                         <td style="text-align:right;">${item.purchaseQuantity}</td>
                         <td style="text-align:right;">${item.totalWtQuantity}</td>
@@ -122,4 +122,11 @@ document.addEventListener("DOMContentLoaded", function() {
 		}
     });
     
+    document.getElementById("reset_btn").addEventListener("click", function() {
+		searchCode = '발주번호';
+		searchWord = '';
+		document.getElementById("search_code").value = searchCode;
+		document.getElementById("search_word").value = searchWord;
+		paging(1, '', '');
+	})
 });

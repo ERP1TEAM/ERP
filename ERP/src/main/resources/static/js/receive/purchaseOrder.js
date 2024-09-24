@@ -77,6 +77,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 	//상품목록(모달)
 	const modal = document.getElementById('myModal');
+	const closeModal = document.getElementById('overlay');
 	const openModalBtn = document.getElementById('open-modal-btn');
 	const closeModalBtn = document.getElementById('close-modal-btn');
 
@@ -157,7 +158,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	
 	// 모달 외부 클릭 시 닫기
 	window.addEventListener('click', (event) => {
-		if (event.target === modal) {
+		if (event.target === closeModal || event.target === modal) {
 			modal.style.display = 'none';
 			overlay.style.display = 'none';
 			body.classList.remove('no-scroll');

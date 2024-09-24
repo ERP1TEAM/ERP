@@ -25,12 +25,12 @@
 
 <body>
 	<div id="wrapper">
-        <nav th:replace="~{/main/header :: header}"></nav>
+        <nav th:replace="~{main/header :: header}"></nav>
         
-        <div th:replace="~{/main/dropdown :: dropdown}"></div>pdown1.html :: dropdown1}"></ul>
+        <div th:replace="~{main/dropdown :: dropdown}"></div>
 		<!--/. NAV TOP  -->
 		<nav class="navbar-default navbar-side" role="navigation"
-			th:replace="~{sidebar.html :: sidebar}"></nav>
+			th:replace="~{main/sidebar :: sidebar}"></nav>
 		<!-- nav  -->
 		<div id="page-wrapper">
 			<div class="header">
@@ -42,7 +42,7 @@
 				<div class="row">
 					<div class="col-md-12">
 						<div class="card">
-							<div class="card-action">
+							<div class="card-action" style="font-size:18px;">
 								입고현황
 							</div>
 							<form id="search_form">
@@ -53,6 +53,7 @@
 									</select> <input type="text" placeholder="검색어를 입력하세요"
 										style="width: 200px; border: 1px;" id="search_word">
 									<button type="submit" id="search_btn">검색</button>
+									<button type="button" id="reset_btn">초기화</button>
 								</div>
 							</form>
 							<div class="card-content">
