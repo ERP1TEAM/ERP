@@ -112,7 +112,7 @@
         new daum.Postcode({
             oncomplete: function(data) {
                 // 전달된 id를 사용하여 해당 필드에 값을 설정
-                document.getElementById("client_address").value = data.roadAddress;
+                document.getElementById("address").value = data.jibunAddress;
             }
         }).open();
     }

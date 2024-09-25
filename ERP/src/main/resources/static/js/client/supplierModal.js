@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-	const salesFrm = document.getElementById("sales_frm");
+	const supplierFrm = document.getElementById("supplier_frm");
 
 	//로케이션 모달 열기	
 	document.getElementById("locationbtn").addEventListener("click", function() {
@@ -21,13 +21,13 @@ document.addEventListener('DOMContentLoaded', function() {
 		document.body.style.overflow = 'auto';
 	});
 
-	salesFrm.addEventListener("submit", function(event) {
+	supplierFrm.addEventListener("submit", function(event) {
 		event.preventDefault(); // 기본 submit 동작 방지
 	});
 
 	document.querySelector("#add_btn").addEventListener("click", function(event) {
 		event.preventDefault();
-		const formData = new FormData(sales_frm);
+		const formData = new FormData(supplier_frm);
 
 		const name = formData.get("name");
 		const tel = formData.get("tel");
@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		const detailAddress = formData.get("detail_address");
 
 		if (!name) {
-			alert("거래처명을 입력하세요");
+			alert("발주처명을 입력하세요");
 			return;
 		}
 		if (!tel) {
@@ -68,22 +68,22 @@ document.addEventListener('DOMContentLoaded', function() {
 			formData.set("address", address);
 		}
 
-		fetch("./addSales", {
+		fetch("./addSupplier", {
 			method: "post",
 			body: formData
 		})
 			.then(response => response.text())
 			.then(data => {
 				if (data === "ok") {
-					alert("거래처가 등록되었습니다.");
+					alert("발주처가 등록되었습니다.");
 					window.location.reload();
 				} else {
-					alert("거래처 등록중 오류가 발생하였습니다.");
+					alert("발주처 등록중 오류가 발생하였습니다.");
 				}
 			})
 			.catch(error => {
 				console.log(error);
-				alert("거래처 등록중 오류가 발생하였습니다.");
+				alert("발주처 등록중 오류가 발생하였습니다.");
 			})
 
 	})

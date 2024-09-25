@@ -164,6 +164,7 @@ document.getElementById("locationcancle").addEventListener("click", function() {
 document.getElementById("locationoverlay").addEventListener("click", function() {
     document.getElementById("locationoverlay").style.display = "none";
     document.getElementById("locationinmodal").style.display = "none";
+ 	document.body.style.overflow = 'auto';
 });
 
 });
