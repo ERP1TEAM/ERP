@@ -45,7 +45,6 @@
                 	<div class="card-action">
                 	품목 등록
                 	</div>
-			
 	  <main class="maincss" >
 
 <div class="product_insert">
@@ -66,9 +65,8 @@
     <ul>
         <li>제조사 코드</li>
         <li>
-            <select class="product_input1" id="inventorySuppliercodeoption">
-                <option value=""></option>
-            </select><input type="button" value="+" class="product_btn2" id="inventoryInsupplierbtn">
+            <input type="text" class="product_input3 black_font" id="inventorySuppliercodeoption" readonly="readonly">
+            <input type="button" value="+" class="product_btn2" id="inventoryInsupplierbtn"><span class="help_text">※ +버튼을 눌러 선택해주세요.</span>
         </li>
     </ul>    
     <ul>
@@ -80,9 +78,9 @@
     <ul>
         <li>대메뉴</li>
         <li>
-            <select class="product_input1" id="inventorymaincategoryoption">
-                <option value=""></option>
-            </select><input type="button" value="+" title="+" class="product_btn2 categorybtn"> <span class="help_text">※ 해당 카테고리가 없을 경우 신규 등록하시길 바랍니다.</span>
+            <input type="text" id="inventorymaincategory" class="product_input3 black_font" readonly="readonly">
+            <input type="hidden" id="inventorycategorycode">
+            <input type="button" value="+" title="+" class="product_btn2 categorybtn">
         </li>
     </ul>
     
@@ -91,9 +89,8 @@
     <ul>
         <li>소메뉴</li>
         <li>
-            <select class="product_input1" id="inventorysubcategoryoption">
-                <option value=""></option>
-            </select><input type="button" value="+" title="+" class="product_btn2 categorybtn">
+            <input type="text" id="inventorysubcategory" class= "product_input3 black_font" readonly="readonly">
+            <input type="button" value="+" title="+" class="product_btn2 categorybtn">
         </li>
     </ul>
     <ul>

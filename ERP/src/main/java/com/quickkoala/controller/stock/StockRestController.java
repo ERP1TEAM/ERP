@@ -111,21 +111,6 @@ public class StockRestController {
 	        return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
 	    }
 	 }
-	 
-	 //옵션
-	 @GetMapping("/stock/inventoryselectoptions")
-	 public ResponseEntity<Map<String, Object>> getAllOptions() {
-        List<LocationDto> locationOption = locationService.getAllOrdersByCode();
-        List<CategoryDto> categoryOption = categoryService.getAllOrdersByCode();
-        List<SupplierEntity> supplierOption = supplierService.getAllData();
-        
-        Map<String, Object> response = new HashMap<>();
-        response.put("locations", locationOption);
-        response.put("categories", categoryOption);
-        response.put("suppliers", supplierOption);
-
-	    return ResponseEntity.ok(response);
-	    }
 	
 	 //난수 생성 + 중복 체크
 	 @GetMapping("/stock/inventoryrandomcode")

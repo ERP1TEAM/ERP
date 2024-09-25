@@ -1,7 +1,5 @@
 document.addEventListener('DOMContentLoaded',function(){
 
-
-//카테고리 페이징
 var categoryTotalPages = 1;
 var categoryStartPage = 0;
 var categoryEndPage = 0;
@@ -18,7 +16,6 @@ let currentPage = categoryP;
 document.getElementById("categorySearchtype").value = categorySearchCode;
 document.getElementById("categorySearch").value = categorySearchWord;
 
-// 페이징 함수를 전역으로 설정
 window.categoryPaging = function(p = categoryP, code = categorySearchCode, word = categorySearchWord) {
       currentPage=p;
       categorymainmodal(p, code, word);
@@ -66,7 +63,8 @@ function categorymainmodal(pno, code = '', word = '') {
                 }
 			
             
-            let categoryth = `<tr class="odd gradeX" data-mainName="${category.mainName}" data-subName="${category.subName}">
+            let categoryth = `<tr class="odd gradeX" 
+            data-mainName="${category.mainName}" data-subName="${category.subName}" data-code="${category.code}">
                         <th><input type="checkbox" class="checkbox" value="${category.code}"></th>
                         <td>${category.code}</td>
                         <td>${category.mainCode}</td>
@@ -140,7 +138,29 @@ function categorymainmodal(pno, code = '', word = '') {
         console.log(error);
     });
 }
+ document.querySelector('#categorytbody').addEventListener('click', function(event) {
+        const clickedRow = event.target.closest('tr');
 
+         if (clickedRow && clickedRow.hasAttribute('data-code')) {
+        const selectedCode = clickedRow.getAttribute('data-code');
+        const selectedMainName = clickedRow.getAttribute('data-mainName');
+        const selectedSubName = clickedRow.getAttribute('data-subName');
+
+		 setCategoryCode(selectedCode, selectedMainName, selectedSubName);
+            document.getElementById("inventorymaincategory").value = selectedMainName;
+            document.getElementById("inventorysubcategory").value = selectedSubName;
+
+            document.getElementById('categorylistmodal').style.display = "none";
+            document.getElementById("categoryoverlay").style.display = "none";
+            document.body.style.overflow = 'auto';
+        }
+    });
+function setCategoryCode(code, mainName, subName) {
+    document.getElementById('inventorymaincategory').value = mainName;
+    document.getElementById('inventorysubcategory').value = subName;
+
+    document.getElementById('inventorycategorycode').value = code;
+}
 //검색
 document.getElementById("category_form").addEventListener("submit", function(event) {
 event.preventDefault(); // 기본 폼 제출 방지
@@ -148,7 +168,11 @@ categorySearchCode = document.getElementById("categorySearchtype").value;
 categorySearchWord = document.getElementById("categorySearch").value;
 categoryPaging(1, categorySearchCode, categorySearchWord); // 검색 후 첫 페이지부터 시작				
     });
-
+document.getElementById("categorySearchbtn").addEventListener("click", function() {
+        inventorySupplierlistSearchCode = document.getElementById("categorySearchtype").value;
+        inventorySupplierlistSearchWord = document.getElementById("categorySearch").value;
+        inventorySupplierlistPaging(1, inventorySupplierlistSearchCode, inventorySupplierlistSearchWord);
+    });
 
 //카테고리 코드 자동 생성
 const categorymainCode = document.getElementById('categorymainCode');

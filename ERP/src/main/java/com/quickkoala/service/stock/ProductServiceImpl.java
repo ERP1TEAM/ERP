@@ -8,7 +8,9 @@ import org.springframework.stereotype.Service;
 import com.quickkoala.dto.stock.ProductDto;
 import com.quickkoala.entity.stock.ProductEntity;
 import com.quickkoala.entity.stock.ProductEntity.UseFlag;
+import com.quickkoala.entity.stock.StockEntity;
 import com.quickkoala.repository.stock.ProductRepository;
+import com.quickkoala.repository.stock.StockRepository;
 
 import jakarta.transaction.Transactional;
 
@@ -17,6 +19,8 @@ public class ProductServiceImpl implements ProductService{
 
 	@Autowired
 	private ProductRepository productRepository;
+	@Autowired
+	private StockRepository stockRepository;
 	
 	
 	//Entity -> DTO 변환
@@ -85,9 +89,19 @@ public class ProductServiceImpl implements ProductService{
 	        productEntity.setUpdatedDt(now);
 	        productEntity.setManager(manager);
 	    }
+	    ProductEntity savedProduct = productRepository.save(productEntity);
 	    
-	    // 상품을 저장하고 결과를 반환
-	    return productRepository.save(productEntity); 
+	    StockEntity stock = new StockEntity();
+        stock.setProductCode(savedProduct.getCode());
+        stock.setTotalQty(0);
+        stock.setAvailableQty(0);
+        stock.setUnavailableQty(0);
+        stock.setSafetyQty(0);
+        stock.setManager(manager);
+        stockRepository.save(stock);
+        
+        return savedProduct;
+        
 	}
 	
 	//상품코드 중복체크

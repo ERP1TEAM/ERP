@@ -101,17 +101,3 @@
     overflow: hidden;
     text-overflow: ellipsis;
 }
-
-.product-name-column {
-    width: 200px;  /* 상품명 열의 너비 */
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-.quantity-column {
-    width: 100px;  /* 수량(안전재고) 열의 너비 */
-    text-align: right;  /* 수량을 오른쪽 정렬 */
-}
-.safetyQty-column{
-	width:180px;
-}

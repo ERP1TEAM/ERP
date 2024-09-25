@@ -41,9 +41,7 @@ function inventorymanagementmain(pno, code = '', word = ''){
     	inventorymanagementtbody.innerHTML='';
 		
 		const items = data.inventoryData.content;
-    console.log("Items:", items);  // 받은 items 배열 출력
     const categories = data.categories; 
-    console.log("Categories:", categories);
 		
 		inventorymanagementTotalPages = data.inventoryData.totalPages;
 		
