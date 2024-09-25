@@ -33,6 +33,9 @@ import com.quickkoala.service.stock.LocationService;
 import com.quickkoala.service.stock.ProductService;
 import com.quickkoala.service.stock.StockService;
 import com.quickkoala.service.stock.ViewProductStockSupplierService;
+import com.quickkoala.token.config.JwtTokenProvider;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("main")
@@ -42,6 +45,8 @@ public class StockRestController {
 
 	//***** 재고 *****//
 	
+	@Autowired
+	private JwtTokenProvider jwtTokenProvider;
 	@Autowired
 	private LocationService locationService;
 	
@@ -98,19 +103,27 @@ public class StockRestController {
 	
 	   
 	 @PostMapping("/stock/inventories")
-	 public ResponseEntity<ProductDto> saveProduct(@RequestBody ProductDto productDto,@RequestParam String manager) {
-		 if (manager == null || manager.isEmpty()) {
-		        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null); // 매니저가 없을 때 400 에러 반환
-		 }
-		 System.out.println(manager);
-		 try {
-	        ProductEntity saveproduct = productService.saveProduct(productDto, manager);
-	        ProductDto saveproductDto = productService.convertToProductDto(saveproduct);
-	        return ResponseEntity.ok(saveproductDto);
-	    } catch (IllegalArgumentException e) {
-	        return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
+	 public ResponseEntity<ProductDto> saveProduct(@RequestBody ProductDto productDto, HttpServletRequest request) {
+	        // JWT 토큰에서 매니저 정보 추출
+	        String token = jwtTokenProvider.resolveToken(request);
+	        if (token == null) {
+	            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null); // JWT 토큰이 없으면 401 반환
+	        }
+
+	        String manager = jwtTokenProvider.getName(token); // 토큰에서 매니저 이름 추출
+
+	        if (manager == null || manager.isEmpty()) {
+	            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null); // 매니저 정보가 없으면 400 에러 반환
+	        }
+
+	        try {
+	            ProductEntity saveproduct = productService.saveProduct(productDto, manager);
+	            ProductDto saveproductDto = productService.convertToProductDto(saveproduct);
+	            return ResponseEntity.ok(saveproductDto);
+	        } catch (IllegalArgumentException e) {
+	            return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
+	        }
 	    }
-	 }
 	
 	 //난수 생성 + 중복 체크
 	 @GetMapping("/stock/inventoryrandomcode")
