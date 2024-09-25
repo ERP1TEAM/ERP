@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -252,12 +253,12 @@ public class SalesOrderServiceImpl implements SalesOrderService {
     
  // 검색 메서드 수정
     public Page<ClientsOrdersEntity> searchOrders(String managerCompanyCode, String searchType, String searchText, LocalDate startDate, LocalDate endDate, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
+        // 페이지 요청 시 orderDate 기준으로 오름차순 정렬을 추가
+        Pageable pageable = PageRequest.of(page, size, Sort.by("orderDate").descending());
 
         if (startDate != null && endDate != null) {
             LocalDateTime startOfDay = startDate.atStartOfDay();
             LocalDateTime endOfDay = endDate.atTime(LocalTime.MAX);
-            // 날짜 범위로 검색할 때
             if (searchType.equals("orderId")) {
                 return clientsOrdersRepository.findByCodeAndOrderIdContainingAndOrderDateBetween(managerCompanyCode, searchText, startOfDay, endOfDay, pageable);
             } else if (searchType.equals("name")) {
@@ -266,7 +267,6 @@ public class SalesOrderServiceImpl implements SalesOrderService {
                 return clientsOrdersRepository.findByCodeAndOrderDateBetween(managerCompanyCode, startOfDay, endOfDay, pageable);
             }
         } else if (startDate != null) {
-            // 시작 날짜만 존재할 때 (종료 날짜 없이 검색)
             LocalDateTime startOfDay = startDate.atStartOfDay();
             if (searchType.equals("orderId")) {
                 return clientsOrdersRepository.findByCodeAndOrderIdContainingAndOrderDate(managerCompanyCode, searchText, startOfDay, pageable);
@@ -276,14 +276,10 @@ public class SalesOrderServiceImpl implements SalesOrderService {
                 return clientsOrdersRepository.findByCodeAndOrderDate(managerCompanyCode, startOfDay, pageable);
             }
         } else if (searchType.equals("orderId")) {
-            // 주문번호로만 검색 (회사 코드 필터 추가)
             return clientsOrdersRepository.findByCodeAndOrderIdContaining(managerCompanyCode, searchText, pageable);
         } else if (searchType.equals("name")) {
-            // 주문자명으로만 검색 (회사 코드 필터 추가)
             return clientsOrdersRepository.findByCodeAndNameContaining(managerCompanyCode, searchText, pageable);
         }
-
-        // 기본값: 회사 코드 필터 적용하여 전체 조회
         return clientsOrdersRepository.findByCode(managerCompanyCode, pageable);
     }
 

@@ -43,7 +43,7 @@ async function fetchCompanyCode() {
 
 // 공지사항 목록 필터링 및 페이징 처리 함수
 function filterNotices(page = 0) {
-    const size = 1;  // 한 페이지에 표시할 공지사항 수
+    const size = 10;  // 한 페이지에 표시할 공지사항 수
 
     fetch(`./filterNotices?page=${page}&size=${size}`)
         .then(response => response.json())
