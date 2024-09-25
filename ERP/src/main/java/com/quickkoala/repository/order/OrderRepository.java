@@ -25,6 +25,8 @@ public interface OrderRepository extends JpaRepository<OrderEntity,String> {
 	
 	Long countByDt(LocalDateTime date);
 	
+	List<OrderEntity> findByOrderId(String orderId);
+	
 	@Modifying
 	@Transactional
 	@Query("UPDATE OrderEntity o SET o.status = :status WHERE o.number = :number")
