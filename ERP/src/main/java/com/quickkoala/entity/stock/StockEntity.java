@@ -18,7 +18,7 @@ public class StockEntity {
 	@Column(name="product_code", length=8, nullable=false)
 	private String productCode;
 	
-	@Column(name="total_qty", nullable=false)
+	@Column(name = "total_qty", nullable=false)
 	private int totalQty;
 	
 	@Column(name="available_qty", nullable=false)
