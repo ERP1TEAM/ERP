@@ -32,4 +32,5 @@ public interface SupplierRepository extends JpaRepository<SupplierEntity, String
 	
 	@Query("SELECT MAX(s.code) FROM SupplierEntity s")
     String findMaxCode();
+	
 }

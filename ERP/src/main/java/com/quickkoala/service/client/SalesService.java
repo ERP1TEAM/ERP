@@ -15,4 +15,8 @@ public interface SalesService {
 	Optional<SalesEntity> findByCode(String code);
 	
 	SalesEntity addSales(SalesEntity salesEntity);
+	
+	SalesEntity getOne(String code);
+	
+	SalesEntity modifySales(SalesEntity salesEntity, String code);
 }

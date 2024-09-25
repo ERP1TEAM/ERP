@@ -1,5 +1,6 @@
 package com.quickkoala.repository.client;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,4 +32,6 @@ public interface SalesRepository extends JpaRepository<SalesEntity, String>{
     
     @Query("SELECT MAX(s.code) FROM SalesEntity s")
     String findMaxCode();
+    
+    SalesEntity findBycode(String code);
 }

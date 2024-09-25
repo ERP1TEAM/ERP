@@ -86,9 +86,107 @@ document.addEventListener("DOMContentLoaded", function() {
                         <td style="text-align:center;">${formattedTel}</td>
                         <td>${item.address}</td>
                         <td style="text-align:center;">${rdt}</td>
+                        <td style="text-align:center;"><button class="modify-btn" data-code="${item.code}">수정</button></td>
                     </tr>`;
                     tbody.innerHTML += th;
                 })
+                
+                document.querySelectorAll(".modify-btn").forEach(function(button) {
+					button.addEventListener("click", function() {
+						document.getElementById("locationoverlay").style.display = "block";
+						document.getElementById("locationinmodal").style.display = "block";
+						document.body.style.overflow = "hidden";
+						const code = this.getAttribute("data-code");
+						fetch(`./supplierOne/${code}`, {
+							method: "GET",
+						})
+							.then(response => response.json())
+							.then(data => {
+								console.log(data.name);
+								document.getElementById("name").value = data.name;
+								document.getElementById("email").value = data.email;
+								document.getElementById("tel").value = data.tel;
+								document.getElementById("h2").innerText = "발주처 수정";
+								document.getElementById("btn_div").innerHTML = `<input type="button" value="수정" class="p_button p_button_color2"
+										id="mod_btn">`
+								const address = data.address.split('(')[0].trim(); // 괄호 이전의 주소
+								const match = data.address.match(/\(([^)]+)\)/); // 괄호 안의 상세주소
+
+								let detailAddress = ''; // 기본값 설정
+								if (match) {
+									detailAddress = match[1]; // 첫 번째 그룹을 가져옴
+								}
+								document.getElementById("address").value = address;
+								document.getElementById("detail_address").value = detailAddress;
+
+								//수정버튼 클릭시
+								document.querySelector("#mod_btn").addEventListener("click", function(event) {
+									event.preventDefault();
+									const formData = new FormData(supplier_frm);
+
+									const name = formData.get("name");
+									const tel = formData.get("tel");
+									const email = formData.get("email");
+									const address = formData.get("address");
+									const detailAddress = formData.get("detail_address");
+
+									if (!name) {
+										alert("발주처명을 입력하세요");
+										return;
+									}
+									if (!tel) {
+										alert("연락처를 입력하세요");
+										return;
+									}
+									if (isNaN(tel)) {
+										alert("연락처는 숫자만 가능합니다.");
+										return;
+									}
+									if (!email) {
+										alert("이메일을 입력하세요");
+										return;
+									}
+									// 이메일 형식 검사
+									const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+									if (!emailPattern.test(email)) {
+										alert("올바른 이메일 형식을 입력하세요");
+										return;
+									}
+									if (!address) {
+										alert("주소를 입력하세요");
+										return;
+									}
+									// detailAddress가 있을 경우에만 추가
+									if (detailAddress) {
+										formData.set("address", `${address} (${detailAddress})`);
+									} else {
+										formData.set("address", address);
+									}
+									formData.set("code",code);
+									formData.set("create_date", null);
+									fetch(`./modifySupplier/${code}`, {
+										method: "PATCH",
+										body: formData
+									})
+										.then(response => response.text())
+										.then(data => {
+											if (data === "ok") {
+												alert("발주처가 수정되었습니다.");
+												window.location.reload();
+											} else {
+												console.log(data);
+												alert("발주처 수정중 오류가 발생하였습니다.");
+											}
+										})
+										.catch(error => {
+											console.log(error);
+											alert("발주처 수정중 오류가 발생하였습니다.");
+										})
+								})
+
+							})
+					});
+				})
 
 				/*<td class="container" style="text-align:center;">
 		                    <button onclick="toggleActions(this)">관리</button>

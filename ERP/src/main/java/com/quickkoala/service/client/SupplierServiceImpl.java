@@ -78,4 +78,21 @@ public class SupplierServiceImpl implements SupplierService {
         
         return String.format("SP%04d", newNumericValue);
     }
+	
+	@Override
+	public SupplierEntity getOne(String code) {
+		Optional<SupplierEntity> entity = supplierRepository.findByCode(code);
+		SupplierEntity data = null;
+		if(entity.isPresent()) {
+			data = entity.get(); 
+		}
+		return data;
+	}
+	
+	@Override
+	public SupplierEntity modifySupplier(SupplierEntity supplierEntity, String code) {
+		supplierEntity.setCode(code);
+		supplierEntity.setCreatedDate(this.getOne(code).getCreatedDate());
+		return supplierRepository.save(supplierEntity);
+	}
 }

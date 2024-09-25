@@ -63,4 +63,16 @@ public class SalesServiceImpl implements SalesService {
         // 새 코드 생성
         return String.format("SL%04d", newNumericValue); // SL0002 형식으로 반환
     }
+	
+	@Override
+	public SalesEntity getOne(String code) {
+		return salesRepository.findBycode(code);
+	}
+	
+	@Override
+	public SalesEntity modifySales(SalesEntity salesEntity, String code) {
+		salesEntity.setCode(code);
+		salesEntity.setCreateDate(salesRepository.findBycode(code).getCreateDate());
+		return salesRepository.save(salesEntity);
+	}
 }

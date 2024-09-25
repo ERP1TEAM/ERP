@@ -23,4 +23,8 @@ public interface SupplierService {
 	
 	SupplierEntity addSupplier(SupplierEntity supplierEntity);
 	
+	SupplierEntity getOne(String code);
+	
+	SupplierEntity modifySupplier(SupplierEntity supplierEntity, String code);
+	
 }

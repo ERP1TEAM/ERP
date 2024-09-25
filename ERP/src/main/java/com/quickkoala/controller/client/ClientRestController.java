@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -67,6 +68,41 @@ public class ClientRestController {
 	public String addSupplier(@ModelAttribute SupplierEntity data) {
 		String result = "ok";
 		SupplierEntity supplierEntity = supplierService.addSupplier(data);
+		if(supplierEntity == null) {
+			result = "no";
+		}
+		return result;
+	}
+	
+	// 거래처 수정 데이터
+	@GetMapping("client/salesOne/{code}")
+	public SalesEntity salesOne(@PathVariable String code) {
+		return salesService.getOne(code);
+	}
+	
+	// 거래처 수정 확정
+	@PatchMapping("client/modifySales/{code}")
+	public String modifySales(@PathVariable String code, @ModelAttribute SalesEntity data) {
+		String result = "ok";
+		SalesEntity salesEntity = salesService.modifySales(data, code);
+		if(salesEntity == null) {
+			result = "no";
+		}
+		return result;
+	}
+	
+	// 발주처 수정 데이터
+	@GetMapping("client/supplierOne/{code}")
+	public SupplierEntity supplierOne(@PathVariable String code) {
+		System.out.println(code);
+		return supplierService.getOne(code);
+	}
+	
+	// 거래처 수정 확정
+	@PatchMapping("client/modifySupplier/{code}")
+	public String modifysupplier(@PathVariable String code, @ModelAttribute SupplierEntity data) {
+		String result = "ok";
+		SupplierEntity supplierEntity = supplierService.modifySupplier(data, code);
 		if(supplierEntity == null) {
 			result = "no";
 		}

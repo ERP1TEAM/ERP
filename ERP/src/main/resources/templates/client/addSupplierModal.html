@@ -9,23 +9,23 @@
 			<div class="product_insert row modalmarginleft">
 				<br>
 				<div class="card-action">
-					<h2>발주처 등록</h2>
+					<h2 id="h2">발주처 등록</h2>
 					<br>
 				</div>
 				<ul>
 					<li>발주처명</li>
-					<li><input type="text" class="product_input3" name="name">
+					<li><input type="text" class="product_input3" id="name" name="name">
 					</li>
 				</ul>
 
 				<ul>
 					<li>발주처 연락처</li>
 					<li><input type="text" class="product_input3" maxlength=11
-						name="tel"> ※ - 없이 숫자만 입력하세요</li>
+						id="tel" name="tel"> ※ - 없이 숫자만 입력하세요</li>
 				</ul>
 				<ul>
 					<li>발주처 이메일</li>
-					<li><input type="email" class="product_input3" name="email"></li>
+					<li><input type="email" class="product_input3" id="email" name="email"></li>
 				</ul>
 				<button class="p_button" onclick="findPostcode('recipientPostcode-0', 'recipientAddress-0')">주소 찾기</button>
 				<br>
@@ -35,9 +35,9 @@
 				</ul>
 				<ul>
 					<li>상세주소</li>
-					<li><input type="text" class="product_input4" name="detail_address"></li>
+					<li><input type="text" class="product_input4" id="detail_address" name="detail_address"></li>
 				</ul>
-				<div class="subpage_view4"
+				<div class="subpage_view4" id="btn_div"
 					style="text-align: center; margin-bottom: 100px;">
 					<input type="button" value="등록" class="p_button p_button_color2"
 						id="add_btn">
