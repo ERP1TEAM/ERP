@@ -57,7 +57,7 @@ public class SalesOrderServiceImpl implements SalesOrderService {
     public List<String> saveOrder(List<ClientsOrdersDTO> orders, String token) {
         LocalDateTime now = LocalDateTime.now();
         List<String> duplicateOrders = new ArrayList<>();  // 중복된 주문을 저장할 리스트
-        
+        String orderId = null;
         for (ClientsOrdersDTO orderDTO : orders) {
 
             // 유효성 검사
@@ -77,7 +77,7 @@ public class SalesOrderServiceImpl implements SalesOrderService {
                 duplicateOrders.add(orderDTO.getName() + " - " + orderDTO.getTel());  // 중복된 주문 정보 저장
                 continue;
             }
-
+            orderId=generateOrderId(orderDTO.getOrderDate());
             // 주문 정보 생성 및 저장
             order = new ClientsOrdersEntity();
             order.setName(orderDTO.getName());
@@ -92,7 +92,7 @@ public class SalesOrderServiceImpl implements SalesOrderService {
             order.setManagerMemo(orderDTO.getManagerMemo());
             order.setOrderDate(orderDTO.getOrderDate());
             order.setCreatedDt(now);
-            order.setOrderId(generateOrderId(orderDTO.getOrderDate()));
+            order.setOrderId(orderId);
             
             clientsOrdersRepository.save(order);
 
@@ -112,11 +112,32 @@ public class SalesOrderServiceImpl implements SalesOrderService {
                 }
             }
 
+            
+            OrderEntity salesOrder = null;
+            int orderTotal = 0;
+            // OrderEntity 초기화 (기존 주문이 있는지 확인 후 생성)
+            List<OrderEntity> temp = orderRepository.findByOrderId(orderId);
+            if (!temp.isEmpty()) {
+                salesOrder = temp.get(0);
+                orderTotal = salesOrder.getOrderTotal();
+            } else {
+                // salesOrder가 없으면 새로 생성
+                salesOrder = new OrderEntity();
+                salesOrder.setDt(now);
+                salesOrder.setManager(jwtTokenProvider.getName(token));
+                salesOrder.setMemo(null);
+                salesOrder.setStatus(OrderStatus.미승인);
+                salesOrder.setSalesCode(jwtTokenProvider.getCode(token));
+                salesOrder.setOrderId(orderId);  // 새로 생성한 orderId 사용
+                salesOrder.setNumber(generateOrderNumber(now));
+            }
             // 주문 총액 계산
             List<Integer> productPrices = productRepository.findPricesByCodes(productCodes);
-            int orderTotal = productPrices.stream().mapToInt(Integer::intValue).sum();
-            OrderEntity salesOrder = new OrderEntity();
-            salesOrder.setOrderId(order.getOrderId());
+            for (Integer price : productPrices) {
+                orderTotal += price;
+            }
+
+            // 주문 총액 업데이트 및 저장
             salesOrder.setOrderTotal(orderTotal);
             orderRepository.save(salesOrder);
         }
