@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -58,9 +59,9 @@ public class SalesOrderServiceImpl implements SalesOrderService {
         for (ClientsOrdersDTO orderDTO : orders) {
             ClientsOrdersEntity order = findExistingOrder(orderDTO);
             
-            //
             String orderId = null;
-
+            OrderEntity salesOrder=null;
+            int orderTotal = 0;
             // 주문 정보가 이미 저장되어 있지 않다면 새로 생성
             if (order == null) {
                 order = new ClientsOrdersEntity();
@@ -88,6 +89,25 @@ public class SalesOrderServiceImpl implements SalesOrderService {
                 
                 // 새 주문을 저장하고 order_id 가져오기
                 clientsOrdersRepository.save(order);
+                
+                //salesOrder 저장
+                salesOrder = new OrderEntity();
+                salesOrder.setDt(now);
+                salesOrder.setManager(jwtTokenProvider.getName(token));
+                salesOrder.setMemo(null);
+                salesOrder.setStatus(OrderStatus.미승인);
+                salesOrder.setSalesCode(jwtTokenProvider.getCode(token));
+                salesOrder.setOrderId(generateOrderId(orderDTO.getOrderDate()));
+                salesOrder.setOrderTotal(1);
+                salesOrder.setNumber(generateOrderNumber(LocalDateTime.now()));
+                
+            }else {
+            	List<OrderEntity> temp = orderRepository.findByOrderId(orderId);
+            	if(temp.size()!=0) {
+            		salesOrder = temp.get(0);
+            		orderTotal= salesOrder.getOrderTotal();
+            	}
+            	
             }
             
             List<String> productCodes = new ArrayList<String>();
@@ -100,32 +120,17 @@ public class SalesOrderServiceImpl implements SalesOrderService {
                 product.setProductName(productDTO.getProductName());
                 product.setQty(productDTO.getQty());
                 clientsOrderProductsRepository.save(product);
-                
                 productCodes.add(productDTO.getProductCode());
             }
             
             //주문총액계산
             List<Integer> productPrices = productRepository.findPricesByCodes(productCodes);
-            if(orderDTO.getProducts().size()!=productPrices.size()) {
-            	System.out.println("전산 오류");
-            }
-            
-            int orderTotal = 0;
             for(Integer price : productPrices) {
             	orderTotal+=price;
             }
-            
-          //salesOrder 저장
-            OrderEntity salesOrder = new OrderEntity();
-            salesOrder.setDt(now);
-            salesOrder.setManager(jwtTokenProvider.getName(token));
-            salesOrder.setMemo(null);
-            salesOrder.setStatus(OrderStatus.미승인);
-            salesOrder.setSalesCode(jwtTokenProvider.getCode(token));
-            salesOrder.setOrderId(generateOrderId(orderDTO.getOrderDate()));
             salesOrder.setOrderTotal(orderTotal);
-            salesOrder.setNumber(generateOrderNumber(LocalDateTime.now()));
             orderRepository.save(salesOrder);
+            
         }
     }
     
@@ -200,21 +205,24 @@ public class SalesOrderServiceImpl implements SalesOrderService {
     private String generateOrderId(LocalDateTime orderDate) {
         // 해당 날짜에 존재하는 주문의 개수를 가져옴
         Long orderCountForDate = clientsOrdersRepository.countByOrderDate(orderDate);
-
+        
         // YYYYMMDD 형식의 날짜 문자열 생성
         String dateStr = orderDate.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
-
+        
         // 고유 식별자 생성 (날짜 + 001 형식으로)
         return dateStr + "-" + String.format("%03d", orderCountForDate + 1);
     }
     
     private String generateOrderNumber(LocalDateTime date) {
-        List<String> temp = orderRepository.findMaxOrderNumber(date.format(DateTimeFormatter.ofPattern("yyyyMMdd")));
-        System.out.println("max-"+temp.get(0));
-        String maxNumber=temp.get(0);
-        String dateStr = date.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
-        String result = maxNumber.split("-")[0]+"-"+String.format("%03d",Integer.valueOf(maxNumber.split("-")[1])+1);
-        System.out.println(result);
+    	String orderDay=date.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+        List<String> temp = orderRepository.findMaxOrderNumber(orderDay);
+        String result=null;
+        if(temp.size()==0) {
+        	result=orderDay+"-001";
+        }else {
+        	String maxNumber=temp.get(0);
+            result = maxNumber.split("-")[0]+"-"+String.format("%03d",Integer.valueOf(maxNumber.split("-")[1])+1);
+        }
         return result;
     }
     
@@ -245,12 +253,12 @@ public class SalesOrderServiceImpl implements SalesOrderService {
     
  // 검색 메서드 수정
     public Page<ClientsOrdersEntity> searchOrders(String managerCompanyCode, String searchType, String searchText, LocalDate startDate, LocalDate endDate, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
+        // 페이지 요청 시 orderDate 기준으로 오름차순 정렬을 추가
+        Pageable pageable = PageRequest.of(page, size, Sort.by("orderDate").descending());
 
         if (startDate != null && endDate != null) {
             LocalDateTime startOfDay = startDate.atStartOfDay();
             LocalDateTime endOfDay = endDate.atTime(LocalTime.MAX);
-            // 날짜 범위로 검색할 때
             if (searchType.equals("orderId")) {
                 return clientsOrdersRepository.findByCodeAndOrderIdContainingAndOrderDateBetween(managerCompanyCode, searchText, startOfDay, endOfDay, pageable);
             } else if (searchType.equals("name")) {
@@ -259,7 +267,6 @@ public class SalesOrderServiceImpl implements SalesOrderService {
                 return clientsOrdersRepository.findByCodeAndOrderDateBetween(managerCompanyCode, startOfDay, endOfDay, pageable);
             }
         } else if (startDate != null) {
-            // 시작 날짜만 존재할 때 (종료 날짜 없이 검색)
             LocalDateTime startOfDay = startDate.atStartOfDay();
             if (searchType.equals("orderId")) {
                 return clientsOrdersRepository.findByCodeAndOrderIdContainingAndOrderDate(managerCompanyCode, searchText, startOfDay, pageable);
@@ -269,14 +276,10 @@ public class SalesOrderServiceImpl implements SalesOrderService {
                 return clientsOrdersRepository.findByCodeAndOrderDate(managerCompanyCode, startOfDay, pageable);
             }
         } else if (searchType.equals("orderId")) {
-            // 주문번호로만 검색 (회사 코드 필터 추가)
             return clientsOrdersRepository.findByCodeAndOrderIdContaining(managerCompanyCode, searchText, pageable);
         } else if (searchType.equals("name")) {
-            // 주문자명으로만 검색 (회사 코드 필터 추가)
             return clientsOrdersRepository.findByCodeAndNameContaining(managerCompanyCode, searchText, pageable);
         }
-
-        // 기본값: 회사 코드 필터 적용하여 전체 조회
         return clientsOrdersRepository.findByCode(managerCompanyCode, pageable);
     }
 

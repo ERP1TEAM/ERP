@@ -86,7 +86,7 @@ public class SalesOrderRestController {
 	    } catch (Exception e) {
 	        e.printStackTrace();
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-	                             .body(Collections.singletonMap("message", "Failed to save order"));
+	                             .body(Collections.singletonMap("message", "주문 등록 실패"));
 	    }
 	}
 

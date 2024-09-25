@@ -27,3 +27,11 @@
 	height:43px !important;
 	width : 45px;
 }
+.product_btn1 {
+	margin-top:10px;
+	margin-left: 10px;
+    height: 35px; /* 버튼 높이 설정 */
+    width: 90px;
+    cursor: pointer;
+    padding: 0 5px; /* 버튼 내부 좌우 여백 설정 */
+}
