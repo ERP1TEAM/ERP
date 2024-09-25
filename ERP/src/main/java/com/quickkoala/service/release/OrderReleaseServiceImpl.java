@@ -29,6 +29,7 @@ import com.quickkoala.repository.release.ReleaseProductsRepository;
 import com.quickkoala.repository.sales.ClientsOrderProductsRepository;
 import com.quickkoala.repository.stock.LotRepository;
 import com.quickkoala.repository.stock.ProductRepository;
+import com.quickkoala.utils.GetToken;
 
 import jakarta.transaction.Transactional;
 
@@ -57,35 +58,43 @@ public class OrderReleaseServiceImpl implements OrderReleaseService{
 	private ProductRepository  productRepository;
 	
 	@Override
-	public String saveStatus(String id, String status) {
-		int result = orderReleaseRepository.updateStatus(id,OrderReleaseEntity.ReleaseStatus.valueOf(status));
+	public String saveStatus(String id, String status,String manager) {
+		int result = 0;
 		Optional<OrderReleaseEntity> optional =  orderReleaseRepository.findById(id);
 		LocalDateTime date = LocalDateTime.now();
 		if(optional.isPresent()) {
 			if(status=="출고취소") {
+				orderReleaseRepository.deleteByNumber(id);
 				ReleaseCancelEntity releaseCancelEntity = new ReleaseCancelEntity();
 				releaseCancelEntity.setDt(date);
-				releaseCancelEntity.setManager("김하주");
+				releaseCancelEntity.setManager(manager);
 				releaseCancelEntity.setMemo(null);
 				releaseCancelEntity.setReason(ReleaseCancelReason.기타);
 				releaseCancelEntity.setRelNumber(optional.get().getNumber());
 				releaseCancelEntity.setWho(ReleaseCancelWho.기타);
-				releaseCancelRepository.save(releaseCancelEntity);
-				
+				ReleaseCancelEntity saved = releaseCancelRepository.save(releaseCancelEntity);
+				if(saved!=null) {
+					result=1;
+				}
 			}else if(status=="출고완료") {
+				orderReleaseRepository.deleteByNumber(id);
 				ReleaseCompleteEntity releaseCompleteEntity = new ReleaseCompleteEntity();
 				releaseCompleteEntity.setDt(date);
 				releaseCompleteEntity.setManager("김하주");
 				releaseCompleteEntity.setMemo(null);
 				releaseCompleteEntity.setRelNumber(optional.get().getNumber());
-				releaseCompleteRepository.save(releaseCompleteEntity);
-			}else {
+				ReleaseCompleteEntity saved = releaseCompleteRepository.save(releaseCompleteEntity);
+				if(saved!=null) {
+					result=1;
+				}
+			}else if(status=="출고지연"){
+				result = orderReleaseRepository.updateStatus(id,OrderReleaseEntity.ReleaseStatus.valueOf(status));
 			}
 			
 		}
 		return (result>0)?"OK":"NO";
 	}
-	int n=0;
+	
 	
 	@Override
 	@Transactional
@@ -101,7 +110,7 @@ public class OrderReleaseServiceImpl implements OrderReleaseService{
 			 releaseProduct = new ReleaseProductsEntity();
 			 releaseProduct.setLotNumber(null);
 			 releaseProduct.setDt(orderReleaseEntity.getDt());
-			 releaseProduct.setManager("김하주");
+			 releaseProduct.setManager(orderReleaseEntity.getManager());
 			 releaseProduct.setMemo(null);
 			 releaseProduct.setQty(released.getQty());
 			 releaseProduct.setRelNumber(orderReleaseEntity.getNumber());
@@ -118,7 +127,6 @@ public class OrderReleaseServiceImpl implements OrderReleaseService{
 				 asignok=false;
 				 break;
 			 }
-			 
 			 releasedList.addAll(asignResult);
 		 }
 		
@@ -133,8 +141,7 @@ public class OrderReleaseServiceImpl implements OrderReleaseService{
 	
 	@Override
 	public String asignRelNumber() {
-		String today = LocalDate.now().toString();
-		System.out.println(today);
+		String today = LocalDate.now().toString().replace("-", "");
 		List<OrderReleaseEntity> li = orderReleaseRepository.findByNumberLikeOrderByNumberDesc("L"+today+"-%");
 		String number =(li.size()==0)?"001":""+String.format("%03d",Integer.valueOf(li.get(0).getNumber().split("-")[1])+1);
 		return "L"+today+"-"+number;
@@ -142,7 +149,7 @@ public class OrderReleaseServiceImpl implements OrderReleaseService{
 	
 	@Override
 	public List<ReleaseProductsEntity> asignLotNumber(String pcode, String scode, Integer qty, ReleaseProductsEntity entity) {
-		List<LotEntity> list = lotRepository.findAllByProductCodeOrderByLotNumberDesc(pcode);
+		List<LotEntity> list = lotRepository.findAllByProductCodeOrderByLotNumberAsc(pcode);
 	    List<ReleaseProductsEntity> rpe = new ArrayList<>();
 	    Iterator<LotEntity> it = list.iterator();
 	    return asignLotRecursively(entity, qty, it, rpe)?rpe:null;
