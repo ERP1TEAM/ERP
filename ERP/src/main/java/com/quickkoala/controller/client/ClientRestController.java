@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,6 +18,8 @@ import com.quickkoala.service.client.SupplierService;
 @RequestMapping("main")
 public class ClientRestController {
 	
+	private static final int SIZE = 10;
+	
 	@Autowired
 	private SupplierService supplierService;
 	
@@ -26,12 +29,11 @@ public class ClientRestController {
 	// 발주처 리스트
 	@GetMapping("client/supplierList/{pno}")
 	public Page<SupplierEntity> supplierList(@PathVariable Integer pno, @RequestParam String code, @RequestParam String word){
-		int size = 5;
 		Page<SupplierEntity> result = null;
 		if(code.equals("") || word.equals("")) {
-			result = supplierService.getPaginatedData(pno, size);
+			result = supplierService.getPaginatedData(pno, SIZE);
 		}else {
-			result = supplierService.getPaginatedData(pno, size, code, word);
+			result = supplierService.getPaginatedData(pno, SIZE, code, word);
 		}
 		return result;
 	}
@@ -39,13 +41,20 @@ public class ClientRestController {
 	// 거래처 리스트
 	@GetMapping("client/salesList/{pno}")
 	public Page<SalesEntity> salesList(@PathVariable Integer pno, @RequestParam String code, @RequestParam String word){
-		int size = 5;
 		Page<SalesEntity> result = null;
 		if(code.equals("") || word.equals("")) {
-			result = salesService.getPaginatedData(pno, size);
+			result = salesService.getPaginatedData(pno, SIZE);
 		}else {
-			result = salesService.getPaginatedData(pno, size, code, word);
+			result = salesService.getPaginatedData(pno, SIZE, code, word);
 		}
+		return result;
+	}
+	
+	// 거래처 등록
+	@PostMapping("client/addSales")
+	public String addSales() {
+		String result = "ok";
+		
 		return result;
 	}
 }

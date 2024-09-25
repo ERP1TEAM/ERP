@@ -140,7 +140,11 @@ function categorymainmodal(pno, code = '', word = '') {
 }
  document.querySelector('#categorytbody').addEventListener('click', function(event) {
         const clickedRow = event.target.closest('tr');
-
+		
+		  if (event.target.tagName.toLowerCase() === 'input' && event.target.type === 'checkbox') {
+        return;
+    }
+		
          if (clickedRow && clickedRow.hasAttribute('data-code')) {
         const selectedCode = clickedRow.getAttribute('data-code');
         const selectedMainName = clickedRow.getAttribute('data-mainName');
@@ -169,9 +173,9 @@ categorySearchWord = document.getElementById("categorySearch").value;
 categoryPaging(1, categorySearchCode, categorySearchWord); // 검색 후 첫 페이지부터 시작				
     });
 document.getElementById("categorySearchbtn").addEventListener("click", function() {
-        inventorySupplierlistSearchCode = document.getElementById("categorySearchtype").value;
-        inventorySupplierlistSearchWord = document.getElementById("categorySearch").value;
-        inventorySupplierlistPaging(1, inventorySupplierlistSearchCode, inventorySupplierlistSearchWord);
+        categorySearchCode = document.getElementById("categorySearchtype").value;
+        categorySearchWord = document.getElementById("categorySearch").value;
+        categoryPaging(1, categorySearchCode, categorySearchWord);
     });
 
 //카테고리 코드 자동 생성

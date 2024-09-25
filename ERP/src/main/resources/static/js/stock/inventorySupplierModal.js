@@ -13,7 +13,6 @@ document.addEventListener('DOMContentLoaded', function() {
     let inventorySupplierlistSearchWord = getInventorySupplierlistQueryParam("word") || '';  // 검색어
     
     let inventorysuplliercurrentPage = inventorySupplierlistP;
-    
     document.getElementById("inventorySupplierSearchtype").value = inventorySupplierlistSearchCode;
     document.getElementById("inventorySupplierSearch").value = inventorySupplierlistSearchWord;
     window.inventorySupplierlistPaging = function(p = inventorySupplierlistP, code = inventorySupplierlistSearchCode, word = inventorySupplierlistSearchWord) {
@@ -154,7 +153,6 @@ document.addEventListener('DOMContentLoaded', function() {
             document.body.style.overflow = "auto";
         });
     });
-
     window.addEventListener('click', function(event) {
         const inventorySupplierlistmodal = document.getElementById('inventorySupplierlistmodal');
         const inventorySupplierlistoverlay = document.getElementById('inventorySupplierlistoverlay');

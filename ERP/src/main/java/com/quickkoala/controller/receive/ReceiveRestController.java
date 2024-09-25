@@ -55,7 +55,7 @@ import jakarta.servlet.http.HttpServletRequest;
 @RequestMapping("main")
 public class ReceiveRestController {
 
-	private static final int SIZE = 5;
+	private static final int SIZE = 10;
 	
 	@Autowired
 	private PurchaseService purchaseService;

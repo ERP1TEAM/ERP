@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('showinventory').style.display = 'none';
     fetch('/main/stock/locationstatus')
         .then(response => response.json())
         .then(data => {
@@ -52,7 +53,7 @@ function renderLocationDetails(locations, selectedRack) {
 
     // levelCode와 rowCode 기준으로 정렬
     filteredLocations.sort((a, b) => {
-        if (a.levelCode === b.levelCode) {
+        if (a.levelCode == b.levelCode) {
             return a.rowCode.localeCompare(b.rowCode);  // 알파벳 순으로 정렬
         }
         return a.levelCode - b.levelCode;  // 숫자 기준으로 정렬
@@ -77,15 +78,17 @@ function renderLocationDetails(locations, selectedRack) {
         smallBox.textContent = rowLevel;
 
          smallBox.addEventListener('click', function() {
-              fetchInventoryData(location.code);
             const activeSmallBox = document.querySelector('.location_small_box.active');
             if (activeSmallBox) {
                 activeSmallBox.classList.remove('active');
             }
             this.classList.add('active');
+
+            document.getElementById('showinventory').style.display = 'table';
+            fetchInventoryData(location.code); 
         });
 
-        rowContainer.appendChild(smallBox);  // row_container에 추가
+        rowContainer.appendChild(smallBox);
     });
 }
 
@@ -136,7 +139,6 @@ function renderInventoryTable(inventoryData) {
             <td class="supplier-name-column">${item.supplierName}</td>
             <td class="product-name-column">${item.productName}</td>
             <td class="quantity-column">${item.lotQuantity}</td>
-            <td class="safetyQty-column">${item.safetyQty}</td>
         `;
         tableBody.appendChild(row);
     });

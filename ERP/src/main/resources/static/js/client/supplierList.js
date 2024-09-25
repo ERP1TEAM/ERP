@@ -80,23 +80,23 @@ document.addEventListener("DOMContentLoaded", function() {
 					const formattedTel = formatTel(item.tel);
                     let th = `
                     <tr class="odd gradeX">
-                        <td>${item.code}</td>
+                        <td style="text-align:center;">${item.code}</td>
                         <td>${item.name}</td>
                         <td>${item.email}</td>
-                        <td>${formattedTel}</td>
+                        <td style="text-align:center;">${formattedTel}</td>
                         <td>${item.address}</td>
                         <td style="text-align:center;">${rdt}</td>
-                        <td class="container" style="text-align:center;">
+                    </tr>`;
+                    tbody.innerHTML += th;
+                })
+
+				/*<td class="container" style="text-align:center;">
 		                    <button onclick="toggleActions(this)">관리</button>
 		                    <div class="action-buttons" style="margin-left:-37px;">
 		                        <button>수정</button>
 		                        <button>삭제</button>
 		                    </div>
-		                </td>
-                    </tr>`;
-                    tbody.innerHTML += th;
-                })
-
+		                </td> */
                 const paging = document.getElementById("paging");
                 paging.innerHTML = '';
 
