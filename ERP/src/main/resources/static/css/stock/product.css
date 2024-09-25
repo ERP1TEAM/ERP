@@ -220,11 +220,12 @@
 }
 
 .product_input4 {
-    width: 500px;
+    width: 350px !important;
     height: 30px;
     border: 1px solid rgb(81, 61, 61);
     text-indent: 5px;
     margin-right: 10px;
+    margin-bottom: 0 !important;
 }
 .product_btn {
     height: 30px;
@@ -234,6 +235,7 @@
     color:white;
     cursor: pointer;
 }
+
 .product_btn2 {
     height: 30px;
     background-color: rgb(31, 40, 55);
