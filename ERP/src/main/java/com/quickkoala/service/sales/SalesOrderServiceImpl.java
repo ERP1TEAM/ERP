@@ -208,18 +208,15 @@ public class SalesOrderServiceImpl implements SalesOrderService {
         return dateStr + "-" + String.format("%03d", orderCountForDate + 1);
     }
     
-    // 주문 날짜를 기반으로 고유한 customOrderId를 생성
     private String generateOrderNumber(LocalDateTime date) {
-        // 해당 날짜에 존재하는 주문의 개수를 가져옴
-        Long orderCountForDate = orderRepository.countByDt(date);
-
-        // YYYYMMDD 형식의 날짜 문자열 생성
+        List<String> temp = orderRepository.findMaxOrderNumber(date.format(DateTimeFormatter.ofPattern("yyyyMMdd")));
+        System.out.println("max-"+temp.get(0));
+        String maxNumber=temp.get(0);
         String dateStr = date.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
-
-        // 고유 식별자 생성 (날짜 + 001 형식으로)
-        return dateStr + "-" + String.format("%03d", orderCountForDate + 1);
+        String result = maxNumber.split("-")[0]+"-"+String.format("%03d",Integer.valueOf(maxNumber.split("-")[1])+1);
+        System.out.println(result);
+        return result;
     }
-    
     
     //동일한 주문확인
     private ClientsOrdersEntity findExistingOrder(ClientsOrdersDTO orderDTO) {

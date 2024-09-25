@@ -19,7 +19,7 @@ import jakarta.transaction.Transactional;
 public interface OrderRepository extends JpaRepository<OrderEntity,String> {
 	
 	@Query("SELECT o.number FROM OrderEntity o WHERE o.number LIKE CONCAT(:date, '%') ORDER BY o.number DESC")
-	String findMaxOrderNumber(@Param("date") String date);
+	List<String> findMaxOrderNumber(@Param("date") String date);
 	
 	Long countByDt(LocalDateTime date);
 	
@@ -32,7 +32,6 @@ public interface OrderRepository extends JpaRepository<OrderEntity,String> {
 	@Transactional
 	@Query("UPDATE OrderEntity o SET o.status = :status WHERE o.number = :ids")
 	int updateStatusMultipleIds(@Param("status") OrderStatus status,@Param("ids") List<String> ids);
-
-
 	
+
 }
