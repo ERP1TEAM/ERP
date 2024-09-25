@@ -1,23 +1,14 @@
 package com.quickkoala.service.order;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.quickkoala.entity.order.OrderCancelEntity;
 import com.quickkoala.entity.order.OrderEntity;
 import com.quickkoala.entity.order.OrderEntity.OrderStatus;
 import com.quickkoala.entity.release.OrderReleaseEntity;
-import com.quickkoala.entity.release.ReleaseCancelEntity;
-import com.quickkoala.entity.release.ReleaseProductsEntity;
-import com.quickkoala.entity.release.ReleaseCancelEntity.ReleaseCancelReason;
-import com.quickkoala.entity.release.ReleaseCancelEntity.ReleaseCancelWho;
-import com.quickkoala.entity.sales.ClientsOrderProductsEntity;
 import com.quickkoala.repository.order.OrderCancelRepository;
 import com.quickkoala.repository.order.OrderRepository;
-import com.quickkoala.repository.release.ReleaseCancelRepository;
 import com.quickkoala.repository.release.ReleaseProductsRepository;
 import com.quickkoala.repository.sales.ClientsOrderProductsRepository;
 import com.quickkoala.service.release.OrderReleaseService;
@@ -45,26 +36,29 @@ public class OrderServiceImpl implements OrderService{
 	
 	@Override
 	@Transactional
-	public String updateStatus(String orderNumber,String status) {
+	public String updateStatus(String orderNumber,String status,String manager) {
 		 Optional<OrderEntity> optional = orderRepository.findById(orderNumber);
 		 String result = "NO";
 		if(status=="취소") {
 			OrderCancelEntity entity = new OrderCancelEntity();
 			 if(optional.isPresent()) {
 				 entity.setDt(LocalDateTime.now());
-				 entity.setManager("김하주");
+				 entity.setManager(manager);
 				 entity.setMemo(null);
 				 entity.setOrderId(optional.get().getOrderId());
 				 entity.setOrderNumber(optional.get().getNumber());
-				 orderCancelRepository.save(entity);
+				 OrderCancelEntity saved= orderCancelRepository.save(entity);
+				 if(saved!=null) {
+					 result="OK";
+				 }
+				 orderRepository.delete(optional.get());
 			 }
-			 result = (orderRepository.updateStatus(OrderEntity.OrderStatus.valueOf(status),orderNumber)>0)?"OK":"NO";
 		}else if(status=="승인") {
 			 if(optional.isPresent()) {
 				 OrderEntity order = optional.get();
 				 OrderReleaseEntity entity = new OrderReleaseEntity();
 				 entity.setOrderId(order.getOrderId());
-				 entity.setManager("김하주");
+				 entity.setManager(manager);
 				 entity.setDt(LocalDateTime.now());
 				 entity.setMemo(null);
 				 entity.setOrderNumber(order.getNumber());

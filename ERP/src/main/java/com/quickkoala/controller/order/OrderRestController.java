@@ -1,4 +1,7 @@
 package com.quickkoala.controller.order;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -9,6 +12,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.quickkoala.dto.sales.ClientsOrderProductsDTO;
+import com.quickkoala.dto.sales.ClientsOrdersDTO;
 import com.quickkoala.entity.order.ViewOrderCancelEntity;
 import com.quickkoala.entity.order.ViewOrderOngoingEntity;
 import com.quickkoala.entity.order.ViewOrderProductsEntity;
@@ -17,6 +23,11 @@ import com.quickkoala.service.order.OrderService;
 import com.quickkoala.service.order.ViewOrderCancelService;
 import com.quickkoala.service.order.ViewOrderOngoingService;
 import com.quickkoala.service.order.ViewOrderProductsService;
+import com.quickkoala.service.sales.SalesOrderServiceImpl;
+import com.quickkoala.token.config.JwtTokenProvider;
+import com.quickkoala.utils.GetToken;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 
 @RestController
@@ -35,7 +46,7 @@ public class OrderRestController {
 	@Autowired
 	private ViewOrderCancelService viewOrderCancelService;
 	
-	private final int SIZE=2;
+	private final int SIZE=10;
 	
 	@GetMapping("order/page")
 	public Page<ViewOrderOngoingEntity> paging(@RequestParam int pg, @RequestParam(required = false) String select,  @RequestParam(required = false) String param){
@@ -58,18 +69,18 @@ public class OrderRestController {
 	}
 	
 	@PutMapping("order/approveok.do")
-	public String approve(@RequestParam String id){
-		return this.orderService.updateStatus(id,"승인");
+	public String approve(@RequestParam String id,HttpServletRequest request){
+		return this.orderService.updateStatus(id,"승인",GetToken.getManagerName(request));
 	}
 	
 	@PutMapping("order/cancelapprovedok.do")
-	public String cancelapproved(@RequestParam String id){
-		return this.orderService.updateStatus(id,"미승인");
+	public String cancelapproved(@RequestParam String id,HttpServletRequest request){
+		return this.orderService.updateStatus(id,"미승인",GetToken.getManagerName(request));
 	}
 	
 	@PutMapping("order/cancelok.do")
-	public String cancel(@RequestParam String id){
-		return this.orderService.updateStatus(id,"취소");
+	public String cancel(@RequestParam String id,HttpServletRequest request){
+		return this.orderService.updateStatus(id,"취소",GetToken.getManagerName(request));
 	}
 	
 	@PostMapping("order/requestReceptionok.do")
