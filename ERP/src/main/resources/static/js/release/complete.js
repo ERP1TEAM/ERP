@@ -120,7 +120,7 @@ function expand_post(thisElement,onum){
 	
 }
 window.returnProduct = function(rCode,lCode,qty,reason) {
-    fetch("./addReturnProduct",{
+    fetch("./return/add",{
 				method : "POST",
 				headers : {"content-type":"application/x-www-form-urlencoded"},
 				body : "rCode="+encodeURIComponent(rCode)+"&lCode="+encodeURIComponent(lCode)
