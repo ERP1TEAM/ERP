@@ -1,0 +1,68 @@
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #e0e8f5;
+            font-family: Arial, sans-serif;
+        }
+        .login-container {
+            width: 500px;
+            height: 380px;
+            text-align: center;
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+            opacity: 0; /* 초기에는 투명하게 설정 */
+            transform: scale(0.95); /* 약간 작게 보이도록 설정 */
+            transition: opacity 0.5s ease-in-out, transform 0.3s ease-in-out;
+        }
+        .login-container.fade-in {
+            opacity: 1; /* 완전히 불투명하게 설정 */
+            transform: scale(1); /* 원래 크기로 복원 */
+        }
+        .login-container.fade-out {
+            opacity: 0;
+        }
+        .login-container input {
+            width: 81%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .login-container button.primary {
+            width: 85%;
+            padding: 10px;
+            margin: 10px;
+            background-color: #474B54;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .login-container button.primary:hover {
+            background-color: #1F2837;
+        }
+        .admin-register {
+            margin-top: 10px;
+            font-size: 12px;
+        }
+        .admin-register button {
+            width: 100px;
+            padding: 5px;
+            background-color: #474B54;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: normal;
+        }
+        .admin-register button:hover {
+            background-color: #1F2837;
+        }

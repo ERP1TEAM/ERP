@@ -11,97 +11,9 @@
 	<link rel="stylesheet" th:href="@{/assets/js/morris/morris-0.4.3.min.css}" />
 	<link rel="stylesheet" th:href="@{/assets/css/custom-styles.css}" />
 	<link rel="stylesheet" th:href="@{/assets/js/Lightweight-Chart/cssCharts.css}" />
+	<link rel="stylesheet" th:href="@{/css/sales/orderlist.css}" />
     <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
 </head>
-
-<style>
-.modal {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 80%;
-    background-color: white;
-    padding: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    z-index: 1000;
-    border-radius: 8px;
-}
-
-.modal-close-x {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    cursor: pointer;
-    font-size: 24px;
-}
-
-.modal-backdrop {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 999;
-    display: none;
-}
-/* 검색 필드와 검색 버튼을 우측 상단에 배치하고 60%의 공간만 사용 */
-.search-container {
-    display: flex;
-    justify-content: flex-end;
-    margin-bottom: 20px;
-    align-items: center;
-    width: 80%;
-    float: right;
-}
-
-.search-container select{
-	margin-left: 30px;
-	margin-bottom: 10px;
-} 
-.search-container input{
-	margin-left: 10px;
-} 
-.search-container button {
-    margin-left: 10px;
-    margin-bottom: 15px;
-    margin-right: 50px;
-}
-
-.search-container input[type="date"] {
-    width: 160px;
-}
-
-.search-container input[type="text"] {
-    width: 200px;
-}
-
-.search-container select {
-    width: 120px;
-}
-
-.pagination {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
-}
-
-.pagination li {
-    display: inline-block;
-    margin: 0 5px;
-}
-
-.pagination a {
-    padding: 8px 16px;
-    border: 1px solid #ccc;
-    color: #333;
-}
-.pagination a:hover {
-    background-color: #ddd;
-}
-</style>
-
 <body>
     <div id="wrapper">
         <nav th:replace="~{/sales/header :: header}"></nav>
@@ -202,6 +114,7 @@
 	<div th:insert="~{/sales/orderlistModal :: orderlistModal}"></div>
 	
 	
+	<script th:src="@{/js/sales/orderlist.js}"> </script>
 	
 	<script th:src="@{/assets/js/jquery-1.10.2.js}"></script>
 	<script th:src="@{/assets/js/bootstrap.min.js}"></script>
@@ -214,7 +127,6 @@
 	<script th:src="@{/assets/js/Lightweight-Chart/jquery.chart.js}"></script>
 	<script th:src="@{/assets/js/custom-scripts.js}"></script>
     
-	<script th:src="@{/js/orderlist.js}"> </script>
     
 </body>
 

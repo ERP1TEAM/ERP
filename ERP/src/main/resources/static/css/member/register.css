@@ -1,0 +1,85 @@
+        body {
+            background-color: #e0e8f5 !important;
+        }
+        .div-container {
+            width: 800px;
+            height: auto;
+            max-width: 100%;
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+            margin: 0 auto;
+            margin-top: 50px;
+            opacity: 0; /* 초기에는 투명하게 설정 */
+            transform: scale(0.95); /* 약간 작게 보이도록 설정 */
+            transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+        }
+        .div-container.fade-in {
+            opacity: 1; /* 완전히 불투명하게 설정 */
+            transform: scale(1); /* 원래 크기로 복원 */
+        }
+        .btn-back {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background-color: #474B54;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        .btn-back:hover {
+            background-color: #1F2837;
+        }
+        .form-control {
+            margin-bottom: 15px;
+        }
+        .btn-primary {
+            background-color: #1F2837;
+            border: none;
+        }
+        .btn-primary:hover {
+            background-color: #474B54;
+        }
+        .input-group {
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+        .company-info, .error-message, .id-message {
+            margin-left: 10px;
+            white-space: nowrap;
+        }
+        .company-info {
+            color: blue;
+        }
+        .error-message, .id-message {
+            color: red;
+        }
+        .input-group > .form-control {
+            flex: 1; /* 입력란이 가용 공간을 모두 차지하도록 설정 */
+        }
+        .input-group > .company-info, 
+        .input-group > .error-message,
+        .input-group > .id-message {
+            flex: none; /* 텍스트가 입력란의 크기에 영향을 미치지 않도록 설정 */
+            font-size: small;
+        }
+		.message-inside {
+		    position: absolute;
+		    right: 10px;
+		    top: 50%;
+		    transform: translateY(-50%);
+		    font-size: small;
+		    color: red;
+		    pointer-events: none; /* 메시지가 입력을 방해하지 않도록 설정 */
+		}
