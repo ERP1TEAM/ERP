@@ -27,11 +27,11 @@ import com.quickkoala.entity.client.SupplierEntity;
 import com.quickkoala.entity.stock.CategoryEntity;
 import com.quickkoala.entity.stock.ProductEntity;
 import com.quickkoala.entity.stock.ViewProductStockSupplierEntity;
-import com.quickkoala.repository.stock.ProductRepository;
 import com.quickkoala.service.client.SupplierService;
 import com.quickkoala.service.stock.CategoryService;
 import com.quickkoala.service.stock.LocationService;
 import com.quickkoala.service.stock.ProductService;
+import com.quickkoala.service.stock.StockService;
 import com.quickkoala.service.stock.ViewProductStockSupplierService;
 
 @RestController
@@ -40,7 +40,7 @@ import com.quickkoala.service.stock.ViewProductStockSupplierService;
 public class StockRestController {
 	private final int SIZE = 5;
 
-	//***** 재고 등록 부분 *****//
+	//***** 재고 *****//
 	
 	@Autowired
 	private LocationService locationService;
@@ -50,6 +50,51 @@ public class StockRestController {
 	
 	@Autowired
 	private ProductService productService;
+	
+	@Autowired
+	private StockService stockService;
+	
+	@GetMapping("/stock/inventorysupplierlist/{pno}")
+	public Map<String, Object> inventorysupplierlist(@PathVariable Integer pno, @RequestParam String code,
+			@RequestParam String word) {
+		Map<String, Object> result = new HashMap<>();
+		
+		 Page<SupplierEntity> supplierlistdata;
+		    if (code == null || code.isEmpty() || word == null || word.isEmpty()) {
+		        supplierlistdata = supplierService.getPaginatedData(pno, SIZE);
+		    } else {
+		        supplierlistdata = supplierService.getPaginatedData(pno, SIZE, code, word);
+		    }
+		    
+		    if (supplierlistdata == null || supplierlistdata.isEmpty()) {
+		        supplierlistdata = Page.empty();
+		    }
+		    
+		    result.put("supplierlistdata", supplierlistdata);
+		    return result;
+		
+	}
+		
+	
+	 @PutMapping("/stock/updateSafetyQty/{productCode}")
+	    public ResponseEntity<Map<String, String>> updateSafetyQty(
+	            @PathVariable String productCode, 
+	            @RequestBody Map<String, Integer> body) {
+		 	
+		 	Integer safetyQty = body.get("safetyQty");
+		 	 if (safetyQty == null) {
+		         return ResponseEntity.badRequest().body(Map.of("error", "안전 재고 수량이 필요합니다."));
+		     }
+		 
+	        boolean isUpdated = stockService.updateSafetyQty(productCode, safetyQty);
+	        
+	        if (isUpdated) {
+	        	return ResponseEntity.ok(Map.of("success", "안전 재고 수량이 성공적으로 업데이트되었습니다."));
+	        } else {
+	        	return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", "해당 제품의 재고를 찾을 수 없습니다."));
+	        }
+	    }
+	
 	
 	   
 	 @PostMapping("/stock/inventories")
@@ -66,21 +111,6 @@ public class StockRestController {
 	        return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
 	    }
 	 }
-	 
-	 //옵션
-	 @GetMapping("/stock/inventoryselectoptions")
-	 public ResponseEntity<Map<String, Object>> getAllOptions() {
-        List<LocationDto> locationOption = locationService.getAllOrdersByCode();
-        List<CategoryDto> categoryOption = categoryService.getAllOrdersByCode();
-        List<SupplierEntity> supplierOption = supplierService.getAllData();
-        
-        Map<String, Object> response = new HashMap<>();
-        response.put("locations", locationOption);
-        response.put("categories", categoryOption);
-        response.put("suppliers", supplierOption);
-
-	    return ResponseEntity.ok(response);
-	    }
 	
 	 //난수 생성 + 중복 체크
 	 @GetMapping("/stock/inventoryrandomcode")
@@ -93,8 +123,6 @@ public class StockRestController {
 		 }
 	 }
 	 
-	 
-	//*****재고 리스트 부분*****//
 	@Autowired
 	private ViewProductStockSupplierService viewProductStockService;
 	
@@ -111,6 +139,27 @@ public class StockRestController {
 		
 	}
 	
+	@GetMapping("/stock/inventorymanagement/{pno}")
+	public Map<String, Object> inventorymanagementLsit(@PathVariable Integer pno, @RequestParam String code,
+			@RequestParam String word) {
+		Map<String, Object> result = new HashMap<>();
+		Page<ViewProductStockSupplierEntity> inventoryData = viewProductStockService.getPaginatedData(pno, SIZE);
+		if (code.equals("") || word.equals("")) {
+			inventoryData = viewProductStockService.getPaginatedData(pno, SIZE);
+		} else {
+			inventoryData = viewProductStockService.getinventoryPaginatedData(pno, SIZE, code, word);
+		}
+		
+		List<CategoryDto> categories = categoryService.getAllOrdersByCode();
+		result.put("inventoryData", inventoryData);
+	    result.put("categories", categories);
+		
+		return result;
+		
+	}
+	
+	
+	
 	//******카테고리 모달 부분*****//
 	@Autowired
 	private CategoryService categoryService;
@@ -121,7 +170,7 @@ public class StockRestController {
 			@RequestParam String word) {
 		
     	Page<CategoryEntity> result = categoryService.getPaginatedData(pno, SIZE);
-    	if (code.equals("") || word.equals("")) {
+    	if (code == null || code.isEmpty() || word == null || word.isEmpty()) {
 			result = categoryService.getPaginatedData(pno, SIZE);
 		} else {
 			result = categoryService.getPaginatedData(pno, SIZE, code, word);

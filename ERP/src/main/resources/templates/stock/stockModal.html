@@ -1,0 +1,39 @@
+<div th:fragment="stockmodal">
+    <div id="stockoverlay" class="modal-overlay" style="display: none;"></div>
+    <div id="safetyqtymodifymodal" class="modal modalwidth" style="display: none;">
+        <div>
+            <span class="close" id="stockclosemodal">&times;</span>
+        </div>
+        <div class="stockmodal-scroll">
+            <div class="product_insert row modalmarginleft"><br>
+                <div class="card-action">
+                    <h2>안전재고 개수 수정</h2><br>
+                </div>
+                <ul>
+                    <li>상품 코드</li>
+                    <li><input type="text" class="product_input3" readonly="readonly" id="stockmodifyproductcode"></li>
+                </ul>
+                <ul>
+                    <li>상품명</li>
+                    <li><input type="text" class="product_input3" readonly="readonly" id="stockmodifyproductname"></li>
+                </ul>
+                <ul>
+                    <li>제조사 코드</li>
+                    <li><input type="text" class="product_input3" readonly="readonly" id="stockmodifysuppliercode"></li>
+                </ul>
+                <ul>
+                    <li>제조사명</li>
+                    <li><input type="text" class="product_input3" readonly="readonly" id="stockmodifysuppliername"></li>
+                </ul>
+                <ul>
+                    <li>안전재고개수</li>
+                    <li><input type="text" id="stockmodalSafetyQty" class="product_input3 black_font"></li>
+                </ul>
+                <div class="subpage_view4" style="text-align:center; margin-bottom: 100px;">
+                    <input type="button" value="수정" class="p_button p_button_color2" id="safetyqtymodify">
+                    <input type="button" value="취소" class="p_button p_button_color1" id="safetyqtycancle">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

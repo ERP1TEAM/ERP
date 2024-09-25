@@ -17,19 +17,19 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById("stocklistSearch").value = stocklistSearchWord;
 
 	 // 페이징 함수를 전역으로 설정
-    window.inventorylistPaging = function(p = stocklistP, code = stocklistSearchCode, word = stocklistSearchWord) {
-        inventorylistmain(p, code, word);
+    window.stocklistPaging = function(p = stocklistP, code = stocklistSearchCode, word = stocklistSearchWord) {
+        stocklistmain(p, code, word);
     }
 
-    window.inventorylistPgNext = function() {
-        inventorylistmain(stocklistEndPage + 1, stocklistSearchCode, stocklistSearchWord);
+    window.stocklistPgNext = function() {
+        stocklistmain(stocklistEndPage + 1, stocklistSearchCode, stocklistSearchWord);
     }
 
-    window.inventorylistPgPrev = function() {
-        inventorylistmain(stocklistStartPage - 1, stocklistSearchCode, stocklistSearchWord);
+    window.stocklistPgPrev = function() {
+        stocklistmain(stocklistStartPage - 1, stocklistSearchCode, stocklistSearchWord);
     }
 
-function inventorylistmain(pno, code = '', word = ''){
+function stocklistmain(pno, code = '', word = ''){
 	fetch(`/main/stock/viewproductstocks/${pno}?code=${code}&word=${word}`,{
 		method:'GET',
 		headers:{
@@ -38,30 +38,30 @@ function inventorylistmain(pno, code = '', word = ''){
 	})
 	.then(response=>response.json())
 	.then(data=>{
-		console.log(data);
-		let inventorylisttbody=document.querySelector('#inventorylisttbody');
-    	inventorylisttbody.innerHTML='';
+		let stocklisttbody=document.querySelector('#stocklisttbody');
+    	stocklisttbody.innerHTML='';
 		
 		const items = data.content;
 		stocklistTotalpages = data.totalPages;
 		
-    	items.forEach(function(inventorylist){
+    	items.forEach(function(stocklist){
 		
-        let inventorylistth = `<tr class="odd gradeX">
-                    <td>${inventorylist.productCode}</td>
-                    <td>${inventorylist.productName}</td>
-                    <td>${inventorylist.supplierCode}</td>
-                    <td>${inventorylist.supplierName}</td>
-                    <td>${inventorylist.totalQty}</td>
-                    <td>${inventorylist.availableQty}</td>
-                    <td>${inventorylist.unavailableQty}</td>
-                    <td>${inventorylist.safetyQty}</td>
+        let stocklistth = `<tr class="odd gradeX">
+                    <td>${stocklist.productCode}</td>
+                    <td>${stocklist.productName}</td>
+                    <td>${stocklist.supplierCode}</td>
+                    <td>${stocklist.supplierName}</td>
+                    <td>${stocklist.totalQty}</td>
+                    <td>${stocklist.availableQty}</td>
+                    <td>${stocklist.unavailableQty}</td>
+                    <td>${stocklist.safetyQty}</td>
                     <td><input type="button" value="상세보기" class="dailyinventorybtn"></td>
+                    <td><input type="button" value="설정" class="safetyqtysetting"></td>
                  </tr>`;
-			inventorylisttbody.innerHTML +=inventorylistth;
+			stocklisttbody.innerHTML +=stocklistth;
 		}); 
-		const inventorylistPaging = document.getElementById("inventorylistPaging");
-		inventorylistPaging.innerHTML = '';
+		const stocklistPaging = document.getElementById("stocklistPaging");
+		stocklistPaging.innerHTML = '';
 		
 		 // 페이지 그룹의 시작과 끝 계산
          stocklistStartPage = Math.floor((pno - 1) / stocklistPageSize) * stocklistPageSize+ 1;
@@ -70,10 +70,9 @@ function inventorylistmain(pno, code = '', word = ''){
          // 페이징 HTML 생성
          let paginationHTML = `<ul class="pagination">`;
 
-         // 'Precious' 링크 추가
          if ( stocklistStartPage >  stocklistPageSize) {
         	 paginationHTML += `
-        	 <li class="page-item"><a class="page-link" aria-label="Previous" onclick=" inventorylistPgPrev()">
+        	 <li class="page-item"><a class="page-link" aria-label="Previous" onclick="stocklistPgPrev()">
         	 <span aria-hidden="true">&laquo;</span>
         	 </a></li>`;
              }
@@ -81,14 +80,14 @@ function inventorylistmain(pno, code = '', word = ''){
                 for (let i =  stocklistStartPage; i <=  stocklistEndPage; i++) {
                     const className = pno == i ? 'page-item current-page' : 'page-item';
                     paginationHTML += `
-                        <li class="${className}"><a class="page-link" onclick=" inventorylistPaging(${i})">${i}</a></li>
+                        <li class="${className}"><a class="page-link" onclick="stocklistPaging(${i})">${i}</a></li>
                     `;
                 }
 
                 // 'Next' 링크 추가
                 if ( stocklistEndPage <  stocklistTotalpages) {
                     paginationHTML += `
-                        <li class="page-item"><a class="page-link" aria-label="Next" onclick=" inventorylistPgNext()">
+                        <li class="page-item"><a class="page-link" aria-label="Next" onclick="stocklistPgNext()">
                             <span aria-hidden="true">&raquo;</span>
                         </a></li>
                     `;
@@ -97,7 +96,7 @@ function inventorylistmain(pno, code = '', word = ''){
                 paginationHTML += `</ul>`;
 
                 // 페이징 HTML을 페이지에 삽입
-                inventorylistPaging.innerHTML = paginationHTML;
+                stocklistPaging.innerHTML = paginationHTML;
 				
                 // URL 업데이트 (검색 조건도 포함)
                 if(word == ""){
@@ -111,13 +110,15 @@ function inventorylistmain(pno, code = '', word = ''){
 			console.log(error);
 		});
 }
-inventorylistmain(stocklistP, stocklistSearchCode, stocklistSearchWord);
+stocklistmain(stocklistP, stocklistSearchCode, stocklistSearchWord);
 
 //검색
-document.getElementById("inventorylist_form").addEventListener("submit", function(event) {
+document.getElementById("stocklist_form").addEventListener("submit", function(event) {
 event.preventDefault(); // 기본 폼 제출 방지
-stocklistSearchCode = document.getElementById("inventorylistSearchtype").value;
-stocklistSearchWord = document.getElementById("inventorylistSearch").value;
-inventorylistPaging(1, stocklistSearchCode, stocklistSearchWord); // 검색 후 첫 페이지부터 시작	
+stocklistSearchCode = document.getElementById("stocklistSearchtype").value;
+stocklistSearchWord = document.getElementById("stocklistSearch").value;
+stocklistPaging(1, stocklistSearchCode, stocklistSearchWord); // 검색 후 첫 페이지부터 시작	
 })
+
+
 });

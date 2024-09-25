@@ -20,4 +20,6 @@ public interface LocationService {
 	Page<LocationEntity> getPaginatedData(int pno, int size);
 	
 	Page<LocationEntity> getPaginatedData(int pno, int size, String code, String word);
+	
+	List<LocationDto> getAllLocations();
 }

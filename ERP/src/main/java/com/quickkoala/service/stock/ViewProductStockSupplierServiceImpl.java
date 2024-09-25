@@ -71,4 +71,24 @@ public class ViewProductStockSupplierServiceImpl implements ViewProductStockSupp
 		}
 		return result;
 	}
+	
+	@Override
+	public Page<ViewProductStockSupplierEntity> getinventoryPaginatedData(int pno, int size, String code, String word) {
+		Page<ViewProductStockSupplierEntity> result = null;
+		Pageable pageable = PageRequest.of(pno-1, size);
+		if(code.equals("1")) {
+			result = viewproductstockRepository.findByProductCodeContainingOrderByProductCodeDesc(word, pageable);
+		}else if(code.equals("2")) {
+			result = viewproductstockRepository.findByProductNameContainingOrderByProductCodeDesc(word, pageable);
+		}else if(code.equals("3")) {
+			result = viewproductstockRepository.findBySupplierCodeContainingOrderByProductCodeDesc(word, pageable);
+		}else if(code.equals("4")) {
+			result = viewproductstockRepository.findBySupplierNameContainingOrderByProductCodeDesc(word, pageable);
+		}else if(code.equals("5")) {
+			result = viewproductstockRepository.findByLocationCodeContainingOrderByProductCodeDesc(word, pageable);
+		}else if(code.equals("6")) {
+			result = viewproductstockRepository.findByClassificationCodeContainingOrderByProductCodeDesc(word, pageable);
+		}
+		return result;
+	}
 }

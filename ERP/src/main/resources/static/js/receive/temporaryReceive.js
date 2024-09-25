@@ -290,7 +290,7 @@ document.addEventListener("DOMContentLoaded", function() {
 			let wqty = parseInt(document.querySelector("#wqty").value);
 			let reQty = parseInt(event.target.value);
 			let caQty = parseInt(document.querySelector("#ca-qty").value);
-			if (reQty > wqty) {
+			if (reQty >= wqty) {
 				event.target.value = wqty;
 				document.querySelector("#ca-qty").value = 0;
 				document.getElementById("condition").value = "";
@@ -338,6 +338,8 @@ document.addEventListener("DOMContentLoaded", function() {
 			return;
 		} else if (!location) {
 			alert("입고 선반을 선택해주세요");
+			return;
+		} else if (!confirm(`입고수량:${reQty}, 반품수량:${caQty}\n입고(반품)을 확정하시겠습니까?`)){
 			return;
 		}
 		const formData = new FormData();

@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	var locationtotalPages = 1;
     var locationstartPage = 0;
     var locationendPage = 0;
-    const locationpageSize = 5; // 페이지 번호 그룹 크기 설정
+    const locationpageSize = 3; // 페이지 번호 그룹 크기 설정
 
     const getLocationQueryParam = (param) => {
         const urlParams = new URLSearchParams(window.location.search);
@@ -45,13 +45,6 @@ function locationlistmain(pno, code = '', word = ''){
 		
     	items.forEach(function(locationlist){
 		
-		let locationlistmemo;
-		if(locationlist.memo){
-			locationlistmemo = locationlist.memo;
-		}else{
-			locationlistmemo='';
-		}
-		
 		let locationlistuseFlag;
                 if (locationlist.useFlag == 'Y') {
                     locationlistuseFlag = '사용';
@@ -67,7 +60,6 @@ function locationlistmain(pno, code = '', word = ''){
                     <td>${locationlist.rowCode}</td>
                     <td>${locationlist.levelCode}</td>
                     <td>${locationlistuseFlag}</td>
-                    <td>${locationlistmemo}</td>
                     <td><input type="button" value="수정" class="locationlistmodifybtn"></td>
                  </tr>`;
 			locationlisttbody.innerHTML +=locationlistth;

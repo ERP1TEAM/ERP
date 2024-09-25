@@ -20,10 +20,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.quickkoala.dto.stock.LocationDto;
+import com.quickkoala.dto.stock.ViewLotViewProductStockSupplierDto;
 import com.quickkoala.dto.stock.WarehouseDto;
 import com.quickkoala.entity.stock.LocationEntity;
 import com.quickkoala.entity.stock.WarehouseEntity;
 import com.quickkoala.service.stock.LocationService;
+import com.quickkoala.service.stock.ViewLotViewProductStockSupplierService;
 import com.quickkoala.service.stock.WarehouseService;
 
 @RestController
@@ -114,6 +116,9 @@ public class WarehouseRestController {
 	@Autowired
 	private LocationService locationService;
 	
+	@Autowired
+	private ViewLotViewProductStockSupplierService viewlotViewpssService;
+	
 	// 로케이션 등록
 	@PostMapping("/stock/locations")
 	public ResponseEntity<LocationDto> saveLocation(@RequestBody LocationDto locationDto) {
@@ -150,5 +155,19 @@ public class WarehouseRestController {
         return ResponseEntity.ok(locationdelresponse);
     }
     
+    @GetMapping("/stock/locationstatus")
+    public List<LocationDto> getlocationstatusdata(){
+    	return locationService.getAllLocations();
+    }
     
+    @GetMapping("/stock/locationstatuslist/{locationCode}")
+    public ResponseEntity<List<ViewLotViewProductStockSupplierDto>> getProductsByLocation(@PathVariable String locationCode) {
+    	List<ViewLotViewProductStockSupplierDto> products = viewlotViewpssService.getAllProductsByLocation(locationCode);
+
+        if (products.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+
+        return ResponseEntity.ok(products);
+    }
 }

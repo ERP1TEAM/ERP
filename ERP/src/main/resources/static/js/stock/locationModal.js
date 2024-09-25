@@ -70,7 +70,6 @@ document.getElementById('locationregister').addEventListener('click', function()
     const warehouseSelectval = document.getElementById('warehouseSelect').value;
     const rowcodeval = document.getElementById('rowcode').value;
     const levelcodeval = document.getElementById('levelcode').value;
-    const locationmemoval = document.getElementById('locationmemo').value;
     const useflagval = document.querySelector('input[name="locationuseflag"]:checked').value;
     
     const autolocationcodeval = `${warehouseSelectval}-${rackcodeval}-${levelcodeval}${rowcodeval}`;
@@ -86,7 +85,6 @@ document.getElementById('locationregister').addEventListener('click', function()
           rackCode: rackcodeval,
           rowCode: rowcodeval,
           levelCode: levelcodeval,
-          memo: locationmemoval,
           useFlag: useflagval
     };
         
@@ -110,12 +108,6 @@ document.getElementById('locationregister').addEventListener('click', function()
 	})
     .then(data => {
 		if(!data) {return false;}
-		let datamemo;
-		if(data.memo){
-			datamemo= data.memo;
-		}else{
-			datamemo='';
-		}
 		
 		let datauseFlag;
                 if (data.useFlag == 'Y') {
@@ -133,7 +125,6 @@ document.getElementById('locationregister').addEventListener('click', function()
                 <td>${data.rowCode}</td>
                 <td>${data.levelCode}</td>
                 <td>${datauseFlag}</td>
-                <td>${datamemo}</td>
                 <td><input type="button" value="수정" class="locationlistmodifybtn"></td>
             `;
             locationlisttbody.appendChild(locationlisttr);
