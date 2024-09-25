@@ -200,7 +200,7 @@
 	}
 	// 공지사항 목록 필터링 및 페이징 처리 함수
 	function filterNotices(page = 0) {
-	    const size = 10;  // 한 페이지에 표시할 공지사항 수
+	    const size = 1;  // 한 페이지에 표시할 공지사항 수
 
 	    fetch(`/supplier/filterNotices?page=${page}&size=${size}`)
 	        .then(response => response.json())
@@ -212,8 +212,8 @@
 	                const row = `
 	                    <tr>
 	                        <td class="center">${notice.no}</td>
-	                        <td><a href="/supplier/noticeView/${notice.id}">${notice.title}</a></td>
-	                        <td class="center">${notice.manager}</td>
+	                        <td><a href="/sales/noticeView/${notice.id}">${notice.title}</a></td>
+	                        <td>${notice.manager}</td>
 	                        <td class="center">${notice.views}</td>
 	                        <td class="center">${new Date(notice.createdAt).toLocaleDateString()}</td>
 	                    </tr>`;
@@ -232,22 +232,26 @@
 	function updatePagination() {
 	    const pagination = document.querySelector('.pagination');
 	    pagination.innerHTML = '';
+	    const pagesPerGroup = 5; // 그룹당 5개의 페이지 버튼
+	    const currentGroup = Math.floor(currentPage / pagesPerGroup); // 현재 페이지 그룹
 
-	    // < 버튼
-	    if (currentPage > 0) {
-	        pagination.innerHTML += `<li><a href="#" onclick="filterNotices(${currentPage - 1})">&lt;</a></li>`;
+	    const startPage = currentGroup * pagesPerGroup; // 현재 그룹의 시작 페이지
+	    const endPage = Math.min(startPage + pagesPerGroup, totalPages); // 현재 그룹의 마지막 페이지
+
+	    // < 버튼 (이전 그룹으로 이동)
+	    if (currentGroup > 0) {
+	        pagination.innerHTML += `<li><a href="#" onclick="filterNotices(${startPage - 1})">&lt;</a></li>`;
 	    }
 
-	    // 페이지 번호들
-	    for (let i = 0; i < totalPages; i++) {
-	        // 현재 페이지에는 active 클래스를 추가
+	    // 현재 그룹의 페이지 번호들
+	    for (let i = startPage; i < endPage; i++) {
 	        const activeClass = (i === currentPage) ? 'active' : '';
 	        pagination.innerHTML += `<li class="${activeClass}"><a href="#" onclick="filterNotices(${i})">${i + 1}</a></li>`;
 	    }
 
-	    // > 버튼
-	    if (currentPage < totalPages - 1) {
-	        pagination.innerHTML += `<li><a href="#" onclick="filterNotices(${currentPage + 1})">&gt;</a></li>`;
+	    // > 버튼 (다음 그룹으로 이동)
+	    if (endPage < totalPages) {
+	        pagination.innerHTML += `<li><a href="#" onclick="filterNotices(${endPage})">&gt;</a></li>`;
 	    }
 	}
 
@@ -258,7 +262,9 @@
 	    filterNotices();  // 첫 페이지 로드
 	});
 	
-	//메모저장
+	var calendar;  // 전역 변수로 선언
+
+	// 메모 저장 함수 (서버에 저장 후 캘린더에 추가)
 	function saveMemoToServer(title, start, end) {
 	    const companyCode = document.getElementById("companyCode").value; 
 	    const manager = document.getElementById("manager").value; 
@@ -278,93 +284,37 @@
 	    })
 	    .then(response => response.json())
 	    .then(data => {
-	        // addEvent 대신 eventSource로 이벤트 추가
-	        const newEvent = {
-	            id: data.id,  // 서버에서 반환된 ID 추가
-	            title: title,
-	            start: start,
-	            end: end,
-	            allDay: true,
-	            extendedProps: {
-	                manager: manager
-	            }
-	        };
-	        
-	        // 이벤트가 하나만 추가될 때
-	        calendar.addEvent(newEvent);
-	        
-	        // 여러 이벤트를 한번에 추가할 때
-	        // calendar.addEventSource([newEvent]);
-
+	        // calendar가 초기화된 후에만 addEvent 호출
+	        if (calendar) {
+	            calendar.addEvent({
+	                id: data.id, // 서버에서 반환된 ID
+	                title: data.title,
+	                start: data.startDate,
+	                end: data.endDate,
+	                allDay: true,
+	                extendedProps: { 
+	                    manager: data.manager // 서버에서 받은 데이터로 추가
+	                }
+	            });
+	        } else {
+	            console.error('Calendar is not initialized.');
+	        }
+	        console.log('메모 등록 완료')
 	    })
 	    .catch(error => console.error('Error saving memo:', error));
 	}
 
-
-	
-	// 서버에서 메모 불러오기 함수
-	function loadMemosFromServer(calendar) {
-	    fetch('/api/memos/all')
-	        .then(response => response.json())
-	        .then(data => {
-	            data.forEach(memo => {
-	                calendar.addEvent({
-	                    id: memo.id,  // 서버에서 받은 메모의 ID 추가
-	                    title: memo.title,
-	                    start: memo.startDate,
-	                    end: memo.endDate,
-	                    allDay: true,
-	                    extendedProps: {  // manager를 extendedProps로 추가
-	                        manager: memo.manager
-	                    }
-	                });
-	            });
-	        })
-	        .catch(error => console.error('Error fetching memos:', error));
-	}
-
-
-	// 메모 삭제 함수 (서버에 삭제 요청)
-	function deleteMemoFromServer(eventId) {
-	    fetch(`/api/memos/delete/${eventId}`, {
-	        method: 'DELETE',
-	        headers: {
-	            'Content-Type': 'application/json',
-	        },
-	    })
-	    .then(response => {
-	        if (response.ok) {
-	            console.log('메모가 삭제되었습니다.');
-	        } else {
-	            console.error('메모 삭제 실패');
-	        }
-	    })
-	    .catch(error => console.error('메모 삭제 중 오류 발생:', error));
-	}
-
-	var calendar;  // 전역 변수로 선언
-
-	// FullCalendar 초기화 시 calendar 변수에 저장
+	// FullCalendar 초기화
 	document.addEventListener('DOMContentLoaded', function() {
 	    var calendarEl = document.getElementById('calendar');
-	    calendar = new FullCalendar.Calendar(calendarEl, {  // calendar 변수에 할당
+	    calendar = new FullCalendar.Calendar(calendarEl, {
 	        initialView: 'dayGridMonth',
 	        events: [], 
 	        selectable: true,
 	        select: function(info) {
 	            var title = prompt('메모를 입력하세요:');
 	            if (title) {
-	                calendar.addEvent({
-	                    title: title,
-	                    start: info.startStr,
-	                    end: info.endStr,
-	                    allDay: true,
-	                    extendedProps: { 
-	                        manager: document.getElementById('manager').value  // manager 추가
-	                    }
-	                });
-	                // 메모를 서버에 저장
-	                saveMemoToServer(title, info.startStr, info.endStr);
+	                saveMemoToServer(title, info.startStr, info.endStr);  // 메모 저장 후 이벤트 추가
 	            }
 	        },
 	        eventContent: function(arg) {
@@ -390,10 +340,48 @@
 	        }
 	    });
 
-	    // 페이지 로드 시 기존 메모 불러오기
-	    loadMemosFromServer(calendar);
-	    calendar.render();
+	    calendar.render();  // 캘린더 렌더링
+	    loadMemosFromServer();  // 페이지 로드 시 기존 메모 불러오기
 	});
+
+	// 서버에서 메모 불러오기 함수
+	function loadMemosFromServer() {
+	    fetch('/api/memos/all')
+	        .then(response => response.json())
+	        .then(data => {
+	            data.forEach(memo => {
+	                calendar.addEvent({
+	                    id: memo.id,  // 서버에서 받은 메모의 ID 추가
+	                    title: memo.title,
+	                    start: memo.startDate,
+	                    end: memo.endDate,
+	                    allDay: true,
+	                    extendedProps: {  // manager를 extendedProps로 추가
+	                        manager: memo.manager
+	                    }
+	                });
+	            });
+	        })
+	        .catch(error => console.error('Error fetching memos:', error));
+	}
+
+	// 메모 삭제 함수 (서버에 삭제 요청)
+	function deleteMemoFromServer(eventId) {
+	    fetch(`/api/memos/delete/${eventId}`, {
+	        method: 'DELETE',
+	        headers: {
+	            'Content-Type': 'application/json',
+	        },
+	    })
+	    .then(response => {
+	        if (response.ok) {
+	            console.log('메모가 삭제되었습니다.');
+	        } else {
+	            console.error('메모 삭제 실패');
+	        }
+	    })
+	    .catch(error => console.error('메모 삭제 중 오류 발생:', error));
+	}
 
 	</script>
 
