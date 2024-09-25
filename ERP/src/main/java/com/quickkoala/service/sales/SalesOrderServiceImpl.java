@@ -97,7 +97,7 @@ public class SalesOrderServiceImpl implements SalesOrderService {
                 salesOrder.setMemo(null);
                 salesOrder.setStatus(OrderStatus.미승인);
                 salesOrder.setSalesCode(jwtTokenProvider.getCode(token));
-                salesOrder.setOrderId(generateOrderId(orderDTO.getOrderDate()));
+                salesOrder.setOrderId(orderId);
                 salesOrder.setOrderTotal(1);
                 salesOrder.setNumber(generateOrderNumber(LocalDateTime.now()));
                 
