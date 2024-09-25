@@ -11,7 +11,7 @@ import com.quickkoala.entity.stock.ViewLotViewProductStockSupplierEntity;
 import com.quickkoala.repository.stock.ViewLotViewProductStockSupplierRepository;
 
 @Service
-public class ViewLotViewProductStockSupplierImpl implements ViewLotViewProductStockSupplierService{
+public class ViewLotViewProductStockSupplierServiceImpl implements ViewLotViewProductStockSupplierService{
 
 	@Autowired
 	private ViewLotViewProductStockSupplierRepository viewlotViewpssrepository;
@@ -19,6 +19,7 @@ public class ViewLotViewProductStockSupplierImpl implements ViewLotViewProductSt
 	
 	public ViewLotViewProductStockSupplierDto convertToDto(ViewLotViewProductStockSupplierEntity entity) {
         ViewLotViewProductStockSupplierDto dto = new ViewLotViewProductStockSupplierDto();
+        dto.setLotNumber(entity.getLotNumber());
         dto.setProductCode(entity.getProductCode());
         dto.setProductName(entity.getProductName());
         dto.setSupplierCode(entity.getSupplierCode());
@@ -31,8 +32,7 @@ public class ViewLotViewProductStockSupplierImpl implements ViewLotViewProductSt
     
 	@Override
 public List<ViewLotViewProductStockSupplierDto> getAllProductsByLocation(String locationCode) {
-		List<ViewLotViewProductStockSupplierEntity> entities = viewlotViewpssrepository.findByLocationCode(locationCode);
-		
+		List<ViewLotViewProductStockSupplierEntity> entities = viewlotViewpssrepository.findByTrimmedLocationCode(locationCode);
 		List<ViewLotViewProductStockSupplierDto> dtoList = new ArrayList<>();
 		
 		for (ViewLotViewProductStockSupplierEntity entity : entities) {

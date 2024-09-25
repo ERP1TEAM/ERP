@@ -162,7 +162,7 @@ public class WarehouseRestController {
     
     @GetMapping("/stock/locationstatuslist/{locationCode}")
     public ResponseEntity<List<ViewLotViewProductStockSupplierDto>> getProductsByLocation(@PathVariable String locationCode) {
-        List<ViewLotViewProductStockSupplierDto> products = viewlotViewpssService.getAllProductsByLocation(locationCode);
+    	List<ViewLotViewProductStockSupplierDto> products = viewlotViewpssService.getAllProductsByLocation(locationCode);
 
         if (products.isEmpty()) {
             return ResponseEntity.noContent().build();
