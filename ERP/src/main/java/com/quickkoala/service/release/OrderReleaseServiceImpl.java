@@ -131,8 +131,8 @@ public class OrderReleaseServiceImpl implements OrderReleaseService{
 		 }
 		
 		 if(asignok) {
-			 orderReleaseRepository.save(orderReleaseEntity);
 			 releaseProductsRepository.saveAll(releasedList);
+			 orderReleaseRepository.save(orderReleaseEntity);
 			 return "OK";
 		 }else {
 			 return "STOCKERROR";
