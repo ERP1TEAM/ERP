@@ -89,6 +89,8 @@ public class ProductServiceImpl implements ProductService{
 	        productEntity.setUpdatedDt(now);
 	        productEntity.setManager(manager);
 	    }
+	    
+	    
 	    ProductEntity savedProduct = productRepository.save(productEntity);
 	    
 	    StockEntity stock = new StockEntity();

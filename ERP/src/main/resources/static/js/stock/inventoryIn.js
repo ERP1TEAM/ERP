@@ -6,7 +6,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const supplierCode = document.getElementById('inventorySuppliercodeoption').value;
         const classificationCode = document.getElementById('inventorycategorycode').value;
         const useFlag = document.querySelector('input[name="inventoryuseflag"]:checked').value;
-        const productprice = document.getElementById('inventoryprice').value || 0;
+        const productprice = document.getElementById('inventoryprice').value;
+        const storageLocation = document.getElementById('inventoryStorageLocation').value;
         
         const inventoryData = {
             code: productcode,
@@ -14,11 +15,11 @@ document.addEventListener('DOMContentLoaded', function() {
             supplierCode: supplierCode,
             classificationCode: classificationCode,
             useFlag: useFlag,
-            price: productprice ||0
+            price: productprice,
+            storageLocation : storageLocation
         };
         const manager = "김중앙";
 		
-		console.log(inventoryData);
         fetch(`/main/stock/inventories?manager=${encodeURIComponent(manager)}`, {
             method: 'POST',
             headers: {
