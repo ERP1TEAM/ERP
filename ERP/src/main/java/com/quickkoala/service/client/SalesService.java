@@ -13,4 +13,6 @@ public interface SalesService {
 	Page<SalesEntity> getPaginatedData(int pno, int size, String code, String word);
 	
 	Optional<SalesEntity> findByCode(String code);
+	
+	SalesEntity addSales(SalesEntity salesEntity);
 }

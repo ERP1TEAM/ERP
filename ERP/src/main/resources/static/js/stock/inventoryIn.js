@@ -18,9 +18,8 @@ document.addEventListener('DOMContentLoaded', function() {
             price: productprice,
             storageLocation : storageLocation
         };
-        const manager = "김중앙";
 		
-        fetch(`/main/stock/inventories?manager=${encodeURIComponent(manager)}`, {
+        fetch(`/main/stock/inventories`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

@@ -21,6 +21,7 @@
 <link href="/css/client/supplierList.css" rel="stylesheet"/>
 <link href="../../css/paging.css" rel="stylesheet" />
 <link href="../../css/searching.css" rel="stylesheet" />
+<link href="../../css/stock/stock.css" rel="stylesheet" />
 </head>
 
 <body>
@@ -71,6 +72,9 @@
 												
 											</tbody>
 										</table>
+										<div class="search" style="float:right;">
+										<button id="locationbtn">거래처 등록</button>
+										</div>
 										<nav class="no-bg" aria-label="Page navigation" id="paging">
 
 									</nav>
@@ -79,7 +83,7 @@
 						</div>
 					</div>
 				</div>
-
+				<div th:replace="~{client/addSupplierModal :: suppliermodal}"></div>
 				<footer>
 					<p>
 						Copyright 2024 ⓒ quickkoala.com by <i class="fa fa-love"></i><a
@@ -99,7 +103,19 @@
 	<script src="../../assets/js/easypiechart-data.js"></script>
 	<script src="../../assets/js/Lightweight-Chart/jquery.chart.js"></script>
 	<script src="../../assets/js/custom-scripts.js"></script>
-	<script src="../../js/client/supplierList.js"></script>	
+	<script src="../../js/client/supplierList.js"></script>
+	<script th:src="@{../../js/client/supplierModal.js}"></script>
+	<script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>\<script>
+	// 주소 찾기
+    function findPostcode(postcodeId, addressId) {
+        new daum.Postcode({
+            oncomplete: function(data) {
+                // 전달된 id를 사용하여 해당 필드에 값을 설정
+                document.getElementById("address").value = data.jibunAddress;
+            }
+        }).open();
+    }
+	</script>
 </body>
 
 </html>

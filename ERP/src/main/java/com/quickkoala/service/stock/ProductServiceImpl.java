@@ -73,10 +73,13 @@ public class ProductServiceImpl implements ProductService{
 		
         return maptoProductEntity;
 	}
+	
+	@Transactional
 	@Override
 	public ProductEntity saveProduct(ProductDto productDto, String manager) {
-	    ProductEntity productEntity = convertToEntity(productDto);
 	    
+	    try {
+	    	ProductEntity productEntity = convertToEntity(productDto);
 	    if (productRepository.existsByCode(productEntity.getCode())) {
 	        throw new IllegalArgumentException("이미 존재하는 상품 코드입니다");
 	    }
@@ -103,6 +106,10 @@ public class ProductServiceImpl implements ProductService{
         stockRepository.save(stock);
         
         return savedProduct;
+	    }catch(Exception e) {
+	    	System.out.println("상품 저장 중 예외 발생"+e.getMessage());
+	    	throw e;
+	    }
         
 	}
 	

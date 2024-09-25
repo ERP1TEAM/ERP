@@ -1,5 +1,6 @@
 package com.quickkoala.service.client;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -57,4 +58,24 @@ public class SupplierServiceImpl implements SupplierService {
 	public Optional<SupplierEntity> findByCode(String code) {
 		return supplierRepository.findByCode(code);
 	}
+	
+	@Override
+	public SupplierEntity addSupplier(SupplierEntity supplierEntity) {
+		String currentMaxCode = supplierRepository.findMaxCode();
+        String newCode = generateNewCode(currentMaxCode);
+        supplierEntity.setCode(newCode);
+        supplierEntity.setCreatedDate(LocalDateTime.now());
+        return supplierRepository.save(supplierEntity);
+	}
+	
+	private String generateNewCode(String currentMaxCode) {
+        if (currentMaxCode == null) {
+            return "SP0001";
+        }
+        
+        String numericPart = currentMaxCode.substring(2);
+        int newNumericValue = Integer.parseInt(numericPart) + 1;
+        
+        return String.format("SP%04d", newNumericValue);
+    }
 }
