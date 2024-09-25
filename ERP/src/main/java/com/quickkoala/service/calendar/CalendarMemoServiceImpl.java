@@ -24,5 +24,14 @@ public class CalendarMemoServiceImpl implements CalendarMemoService {
         return memoRepository.findByCode(code);
     }
     
+    @Override
+    public boolean deleteMemo(Long id) {
+        if (memoRepository.existsById(id)) {
+            memoRepository.deleteById(id);
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
 

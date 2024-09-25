@@ -23,4 +23,6 @@ public class CalendarMemoEntity {
     private LocalDate endDate;
     
     private String code;
+    
+    private String manager;
 }

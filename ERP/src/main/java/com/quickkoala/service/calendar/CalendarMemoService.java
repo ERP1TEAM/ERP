@@ -7,4 +7,5 @@ import com.quickkoala.entity.calender.CalendarMemoEntity;
 public interface CalendarMemoService {
 	CalendarMemoEntity saveMemo(CalendarMemoEntity memo);
 	List<CalendarMemoEntity> getMemosByCode(String code);
+    boolean deleteMemo(Long id);
 }
