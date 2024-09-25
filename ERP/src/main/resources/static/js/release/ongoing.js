@@ -41,12 +41,6 @@ document.querySelector("#ready").addEventListener("click",function(){
 document.querySelector("#pone").addEventListener("click",function(){
 	paging(0,"4","출고지연");
 });
-document.querySelector("#compl").addEventListener("click",function(){
-	paging(0,"4","출고완료");
-});
-document.querySelector("#ccl").addEventListener("click",function(){
-	paging(0,"4","출고취소");
-});
 
 function paging(_page,_select,_param){
 	pagingIns.getPage("./page",_page,_select,_param).then(result => {
@@ -104,7 +98,7 @@ function expand_post(thisElement,onum){
 		fetch("./detail",{
 				method : "POST",
 				headers : {"content-type":"application/x-www-form-urlencoded"},
-				body : "orderNum="+encodeURIComponent(onum)
+				body : "rNum="+encodeURIComponent(onum)
 			})
 			.then(function(response){
 				return response.json();

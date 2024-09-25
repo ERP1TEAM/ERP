@@ -37,9 +37,6 @@ document.querySelector("#apv").addEventListener("click",function(){
 document.querySelector("#wait").addEventListener("click",function(){
 	paging(0,"4","미승인");
 });
-document.querySelector("#ccl").addEventListener("click",function(){
-	paging(0,"4","취소");
-});
 window.onload = function() {
 	pagingIns.currentPage_=localStorage.getItem("currentpg");
 	pagingIns.mapping_=localStorage.getItem("mapping");

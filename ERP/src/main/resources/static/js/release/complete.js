@@ -81,10 +81,26 @@ function expand_post(thisElement,onum){
 						li2.innerText="발주처 : "+data.supplierName+"("+data.supplierCode+")";
 						let li3 = document.createElement("li");
 						li3.innerText="수량 : "+data.qty;
+						let li5 = document.createElement("li");
+						let span = document.createElement("span");
+						span.innerText="반품할 수량을 입력하세요 : ";
+						let inp = document.createElement("inp");
+						inp.type="number";
+						let btn = document.createElement("input");
+						btn.type="button";
+						btn.value="반품";
+						btn.addEventListener("click",function(){
+							returnProduct(rCode,lCode,qty);
+						});
+						li5.append(span);
+						li5.append(inp);
+						li5.append(btn);
+						li3.innerText="수량 : "+data.qty;
 						ul.append(li1);
 						ul.append(li4);
 						ul.append(li2);
 						ul.append(li3);
+						ul.append(li5);
 						td.colSpan="8";
 						td.append(ul);
 					});
@@ -103,6 +119,26 @@ function expand_post(thisElement,onum){
 	}
 	
 }
+window.returnProduct = function(rCode,lCode,qty,reason) {
+    fetch("./addReturnProduct",{
+				method : "POST",
+				headers : {"content-type":"application/x-www-form-urlencoded"},
+				body : "rCode="+encodeURIComponent(rCode)+"&lCode="+encodeURIComponent(lCode)
+				+"&qty="+encodeURIComponent(qty)+"&reason="+encodeURIComponent(reason)
+			})
+			.then(function(response){
+				return response.text();
+			})
+			.then(function(result){
+				if(result="OK"){
+					alert("반품 처리가 완료되었습니다");
+					
+				}
+				
+			}).catch(function(error){
+				alert('오류 발생으로 환불 처리 하지 못했습니다.');
+			});	
+};
 document.querySelector("#searchbtn").addEventListener("click",function(){
 	let select=document.querySelector("#searchselect").value;
 	let prm=document.querySelector("#searchtxt").value;
