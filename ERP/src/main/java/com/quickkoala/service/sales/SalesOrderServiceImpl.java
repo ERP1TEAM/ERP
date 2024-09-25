@@ -54,85 +54,97 @@ public class SalesOrderServiceImpl implements SalesOrderService {
 
     @Transactional
     @Override
-    public void saveOrder(List<ClientsOrdersDTO> orders, String token) {
-    	LocalDateTime now=LocalDateTime.now();
+    public List<String> saveOrder(List<ClientsOrdersDTO> orders, String token) {
+        LocalDateTime now = LocalDateTime.now();
+        List<String> duplicateOrders = new ArrayList<>();  // 중복된 주문을 저장할 리스트
+        String orderId = null;
         for (ClientsOrdersDTO orderDTO : orders) {
-            ClientsOrdersEntity order = findExistingOrder(orderDTO);
-            
-            String orderId = null;
-            OrderEntity salesOrder=null;
-            int orderTotal = 0;
-            // 주문 정보가 이미 저장되어 있지 않다면 새로 생성
-            if (order == null) {
-                order = new ClientsOrdersEntity();
-                //주문자정보
-                order.setName(orderDTO.getName());
-                order.setTel(orderDTO.getTel());
-                order.setEmail(orderDTO.getEmail());
-                order.setPost(orderDTO.getPost());
-                order.setAddress(orderDTO.getAddress());
-                order.setAddressDetail(orderDTO.getAddressDetail());
-                order.setClientMemo(orderDTO.getClientMemo());
-                //관리자
-                order.setManager(jwtTokenProvider.getName(token));
-                order.setCode(jwtTokenProvider.getCode(token));
-                order.setManagerMemo(orderDTO.getManagerMemo());
-                // 주문 날짜 설정
-                order.setOrderDate(orderDTO.getOrderDate());
-                //입력 날짜
-                order.setCreatedDt(now);
 
-                //주문고유식별자
-                // 고유한 주문 ID 생성 (order_id 설정)
-                orderId = generateOrderId(orderDTO.getOrderDate());
-                order.setOrderId(orderId); // order_id 필드에 설정
+            // 유효성 검사
+            if (orderDTO.getOrderDate() == null || 
+                orderDTO.getName() == null || 
+                orderDTO.getTel() == null || 
+                orderDTO.getEmail() == null) {
                 
-                // 새 주문을 저장하고 order_id 가져오기
-                clientsOrdersRepository.save(order);
-                
-                //salesOrder 저장
+                //System.out.println("유효하지 않은 주문 정보: 주문을 저장하지 않습니다.");
+                continue;
+            }
+
+            ClientsOrdersEntity order = findExistingOrder(orderDTO);
+
+            // 중복된 주문이 있을 경우 리스트에 추가하고 건너뜀
+            if (order != null) {
+                duplicateOrders.add(orderDTO.getName() + " - " + orderDTO.getTel());  // 중복된 주문 정보 저장
+                continue;
+            }
+            orderId=generateOrderId(orderDTO.getOrderDate());
+            // 주문 정보 생성 및 저장
+            order = new ClientsOrdersEntity();
+            order.setName(orderDTO.getName());
+            order.setTel(orderDTO.getTel());
+            order.setEmail(orderDTO.getEmail());
+            order.setPost(orderDTO.getPost());
+            order.setAddress(orderDTO.getAddress());
+            order.setAddressDetail(orderDTO.getAddressDetail());
+            order.setClientMemo(orderDTO.getClientMemo());
+            order.setManager(jwtTokenProvider.getName(token));
+            order.setCode(jwtTokenProvider.getCode(token));
+            order.setManagerMemo(orderDTO.getManagerMemo());
+            order.setOrderDate(orderDTO.getOrderDate());
+            order.setCreatedDt(now);
+            order.setOrderId(orderId);
+            
+            clientsOrdersRepository.save(order);
+
+            // 상품 정보 저장
+            List<String> productCodes = new ArrayList<>();
+            for (ClientsOrderProductsDTO productDTO : orderDTO.getProducts()) {
+                List<ClientsOrderProductsEntity> existingProducts = clientsOrderProductsRepository.findByClientsOrdersOrderIdAndProductCode(order.getOrderId(), productDTO.getProductCode());
+
+                if (existingProducts.isEmpty()) {
+                    ClientsOrderProductsEntity product = new ClientsOrderProductsEntity();
+                    product.setClientsOrders(order);
+                    product.setProductCode(productDTO.getProductCode());
+                    product.setProductName(productDTO.getProductName());
+                    product.setQty(productDTO.getQty());
+                    clientsOrderProductsRepository.save(product);
+                    productCodes.add(productDTO.getProductCode());
+                }
+            }
+
+            
+            OrderEntity salesOrder = null;
+            int orderTotal = 0;
+            // OrderEntity 초기화 (기존 주문이 있는지 확인 후 생성)
+            List<OrderEntity> temp = orderRepository.findByOrderId(orderId);
+            if (!temp.isEmpty()) {
+                salesOrder = temp.get(0);
+                orderTotal = salesOrder.getOrderTotal();
+            } else {
+                // salesOrder가 없으면 새로 생성
                 salesOrder = new OrderEntity();
                 salesOrder.setDt(now);
                 salesOrder.setManager(jwtTokenProvider.getName(token));
                 salesOrder.setMemo(null);
                 salesOrder.setStatus(OrderStatus.미승인);
                 salesOrder.setSalesCode(jwtTokenProvider.getCode(token));
-                salesOrder.setOrderId(generateOrderId(orderDTO.getOrderDate()));
-                salesOrder.setOrderTotal(1);
-                salesOrder.setNumber(generateOrderNumber(LocalDateTime.now()));
-                
-            }else {
-            	List<OrderEntity> temp = orderRepository.findByOrderId(orderId);
-            	if(temp.size()!=0) {
-            		salesOrder = temp.get(0);
-            		orderTotal= salesOrder.getOrderTotal();
-            	}
-            	
+                salesOrder.setOrderId(orderId);  // 새로 생성한 orderId 사용
+                salesOrder.setNumber(generateOrderNumber(now));
             }
-            
-            List<String> productCodes = new ArrayList<String>();
-            
-            // 상품 정보 저장
-            for (ClientsOrderProductsDTO productDTO : orderDTO.getProducts()) {
-                ClientsOrderProductsEntity product = new ClientsOrderProductsEntity();
-                product.setClientsOrders(order);  // 이미 저장된 order_id와 연동
-                product.setProductCode(productDTO.getProductCode());
-                product.setProductName(productDTO.getProductName());
-                product.setQty(productDTO.getQty());
-                clientsOrderProductsRepository.save(product);
-                productCodes.add(productDTO.getProductCode());
-            }
-            
-            //주문총액계산
+            // 주문 총액 계산
             List<Integer> productPrices = productRepository.findPricesByCodes(productCodes);
-            for(Integer price : productPrices) {
-            	orderTotal+=price;
+            for (Integer price : productPrices) {
+                orderTotal += price;
             }
+
+            // 주문 총액 업데이트 및 저장
             salesOrder.setOrderTotal(orderTotal);
             orderRepository.save(salesOrder);
-            
         }
+
+        return duplicateOrders;  // 중복된 주문 정보를 반환
     }
+
     
 
     @Override
@@ -142,52 +154,59 @@ public class SalesOrderServiceImpl implements SalesOrderService {
              XSSFWorkbook workbook = new XSSFWorkbook(fis)) {
 
             XSSFSheet sheet = workbook.getSheetAt(0);
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd"); // 엑셀 날짜 형식과 맞는 포맷터
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
             for (int i = 1; i <= sheet.getLastRowNum(); i++) {
                 Row row = sheet.getRow(i);
                 ClientsOrdersDTO orderDTO = new ClientsOrdersDTO();
-                orderDTO.setName(row.getCell(0).getStringCellValue());
-                orderDTO.setTel(row.getCell(1).getStringCellValue());
-                orderDTO.setEmail(row.getCell(2).getStringCellValue());
-                orderDTO.setPost(row.getCell(3).getStringCellValue());
-                orderDTO.setAddress(row.getCell(4).getStringCellValue());
-                orderDTO.setAddressDetail(row.getCell(5).getStringCellValue());
+
+                // 각 셀에 대한 null 체크
+                orderDTO.setName(getCellValueAsString(row, 0));
+                orderDTO.setTel(getCellValueAsString(row, 1));
+                orderDTO.setEmail(getCellValueAsString(row, 2));
+                orderDTO.setPost(getCellValueAsString(row, 3));
+                orderDTO.setAddress(getCellValueAsString(row, 4));
+                orderDTO.setAddressDetail(getCellValueAsString(row, 5));
+
                 // 주문자 메모 처리 (nullable)
-                if (row.getCell(10) != null) {
-                    orderDTO.setClientMemo(row.getCell(10).getStringCellValue());
+                orderDTO.setClientMemo(getCellValueAsString(row, 10));
+
+             // 주문 날짜 처리
+                if (row.getCell(8) != null) {
+                    if (row.getCell(8).getCellType() == CellType.NUMERIC) {
+                        // 엑셀에서 날짜 타입으로 읽는 경우
+                        LocalDateTime orderDate = row.getCell(8).getLocalDateTimeCellValue();
+                        System.out.println("Parsed Numeric Order Date: " + orderDate); // 로그 추가
+                        orderDTO.setOrderDate(orderDate);
+                    } else if (row.getCell(8).getCellType() == CellType.STRING) {
+                        // AM/PM 포맷의 날짜 문자열을 처리하는 포맷터
+                        formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd h:mm:ss a");
+                        String dateStr = row.getCell(8).getStringCellValue();
+                        
+                        try {
+                            LocalDateTime orderDate = LocalDateTime.parse(dateStr, formatter);
+                            System.out.println("Parsed String Order Date: " + orderDate); // 로그 추가
+                            orderDTO.setOrderDate(orderDate);
+                        } catch (Exception e) {
+                            System.err.println("날짜 변환 오류: " + e.getMessage());
+                            //orderDTO.setOrderDate(LocalDateTime.now());  // 기본값으로 현재 시간 설정
+                        }
+                    }
                 } else {
-                	orderDTO.setClientMemo(null);  // 값이 비어있으면 null 설정
+                    System.out.println("Order Date is null");
+                    //orderDTO.setOrderDate(LocalDateTime.now());
                 }
-                // 주문 날짜 처리
-                if (row.getCell(8).getCellType() == CellType.NUMERIC) {
-                    // 엑셀에서 날짜 타입으로 읽는 경우 (NUMERIC)
-                    LocalDateTime orderDate = row.getCell(8).getLocalDateTimeCellValue();
-                    orderDTO.setOrderDate(orderDate);
-                } else {
-                    // 엑셀에서 문자열 형식으로 읽는 경우
-                    String dateStr = row.getCell(8).getStringCellValue();
-                    LocalDateTime orderDate = LocalDateTime.parse(dateStr, formatter);
-                    orderDTO.setOrderDate(orderDate);
-                }
-                
-                // 추가된 manager 관련 정보 처리
-                //orderDTO.setManager();  쿠키에서 관리자 정보 추출해야함
-                //orderDTO.setManagerCode(); 쿠키에서 관리자 정보 추출해야함
-                
-                
+
                 // 담당자 메모 처리 (nullable)
-                if (row.getCell(11) != null) {
-                    orderDTO.setManagerMemo(row.getCell(11).getStringCellValue());
-                } else {
-                    orderDTO.setManagerMemo(null);  // 값이 비어있으면 null 설정
-                }
+                orderDTO.setManagerMemo(getCellValueAsString(row, 11));
 
                 // 상품 정보 설정
                 ClientsOrderProductsDTO productDTO = new ClientsOrderProductsDTO();
-                productDTO.setProductCode(row.getCell(6).getStringCellValue());
-                productDTO.setProductName(row.getCell(7).getStringCellValue());
-                productDTO.setQty((int) row.getCell(9).getNumericCellValue());
+                productDTO.setProductCode(getCellValueAsString(row, 6));
+                productDTO.setProductName(getCellValueAsString(row, 7));
+                if (row.getCell(9) != null && row.getCell(9).getCellType() == CellType.NUMERIC) {
+                    productDTO.setQty((int) row.getCell(9).getNumericCellValue());
+                }
 
                 List<ClientsOrderProductsDTO> products = new ArrayList<>();
                 products.add(productDTO);
@@ -200,18 +219,43 @@ public class SalesOrderServiceImpl implements SalesOrderService {
         }
         return orders;
     }
+
+    // 셀 값을 안전하게 가져오는 유틸리티 메서드
+    private String getCellValueAsString(Row row, int cellIndex) {
+        if (row.getCell(cellIndex) != null) {
+            if (row.getCell(cellIndex).getCellType() == CellType.STRING) {
+                return row.getCell(cellIndex).getStringCellValue();
+            } else if (row.getCell(cellIndex).getCellType() == CellType.NUMERIC) {
+                return String.valueOf((int) row.getCell(cellIndex).getNumericCellValue());
+            }
+        }
+        return null;
+    }
+
     
     // 주문 날짜를 기반으로 고유한 customOrderId를 생성
     private String generateOrderId(LocalDateTime orderDate) {
-        // 해당 날짜에 존재하는 주문의 개수를 가져옴
-        Long orderCountForDate = clientsOrdersRepository.countByOrderDate(orderDate);
-        
         // YYYYMMDD 형식의 날짜 문자열 생성
         String dateStr = orderDate.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
         
-        // 고유 식별자 생성 (날짜 + 001 형식으로)
-        return dateStr + "-" + String.format("%03d", orderCountForDate + 1);
+        // 해당 날짜에 존재하는 주문 수를 카운트하여 그에 맞는 ID 생성
+        List<String> existingOrderIds = clientsOrdersRepository.findOrderIdsByDate(dateStr);
+
+        // 가장 높은 순번을 찾아 다음 순번 설정
+        int nextNumber = 1; // 기본 값은 1 (001)
+        if (!existingOrderIds.isEmpty()) {
+            for (String orderId : existingOrderIds) {
+                int existingNumber = Integer.parseInt(orderId.substring(orderId.length() - 3));
+                if (existingNumber >= nextNumber) {
+                    nextNumber = existingNumber + 1;
+                }
+            }
+        }
+        
+        // 고유 식별자 생성 (날짜 + 순번 형식)
+        return dateStr + "-" + String.format("%03d", nextNumber);
     }
+
     
     private String generateOrderNumber(LocalDateTime date) {
     	String orderDay=date.format(DateTimeFormatter.ofPattern("yyyyMMdd"));

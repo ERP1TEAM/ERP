@@ -40,7 +40,7 @@
        }
    }
 
-// 파일 업로드 함수
+   // 파일 업로드 함수
    function uploadFile() {
        const file = fileInput.files[0];
        if (file) {
@@ -53,7 +53,7 @@
            })
            .then(response => response.text())
            .then(result => {
-               document.getElementById('uploadStatus').innerText = result;  // 서버 응답 메시지 출력
+               document.getElementById('uploadStatus').innerHTML = result;  // 서버 응답 메시지 출력 (innerHTML 사용)
            })
            .catch(error => {
                document.getElementById('uploadStatus').innerText = '파일 업로드 실패';

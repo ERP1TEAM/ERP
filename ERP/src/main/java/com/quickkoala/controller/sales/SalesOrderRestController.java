@@ -13,6 +13,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -52,28 +53,43 @@ public class SalesOrderRestController {
 	@Autowired
 	private SupplierServiceImpl supplierService;
 
-    //주문등록 (액셀 등록)
+	//주문등록 (액셀 등록)
 	@PostMapping("/uploadFile")
 	public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file, HttpServletRequest request) {
 	    try {
 	        // 파일 변환 및 저장 위치 설정
 	        File convFile = new File(System.getProperty("java.io.tmpdir") + "/" + file.getOriginalFilename());
 	        file.transferTo(convFile);
-	        
+
 	        // 파일 파싱 및 주문 저장
 	        List<ClientsOrdersDTO> orders = orderService.parseExcelFile(convFile);
 	        String token = jwtTokenProvider.resolveToken(request);
-	        orderService.saveOrder(orders, token);
+	        
+	        // 주문 저장 후 중복된 주문 정보 반환받기
+	        List<String> duplicateOrders = orderService.saveOrder(orders, token);
 
-	        return ResponseEntity.ok("주문 등록 성공");
+	        // 메시지 생성
+	        StringBuilder message = new StringBuilder("등록 완료<br>");
+	        if (!duplicateOrders.isEmpty()) {
+	            message.append("중복된 주문이 있어 제외하였습니다 : ");
+	            message.append(String.join(", ", duplicateOrders));  // 중복된 주문 정보 추가
+	        }
+
+	        // 응답 시 Content-Type을 text/html로 설정하여 줄바꿈 적용
+	        return ResponseEntity.ok()
+	                             .contentType(MediaType.TEXT_HTML)  // HTML 컨텐츠 타입 설정
+	                             .body(message.toString());
 	    } catch (IOException e) {
 	        e.printStackTrace();
-	        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("파일 처리 중 오류가 발생했습니다.");
+	        return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.TEXT_HTML)
+	                             .body("<p>파일 처리 중 오류가 발생했습니다.</p>");
 	    } catch (Exception e) {
 	        e.printStackTrace();
-	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("주문 등록 실패");
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).contentType(MediaType.TEXT_HTML)
+	                             .body("<p>주문 등록 실패</p>");
 	    }
 	}
+
 	
     //직접 주문등록
 	@PostMapping("/saveOrder")
