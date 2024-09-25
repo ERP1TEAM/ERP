@@ -6,10 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.quickkoala.dto.stock.ProductDto;
-import com.quickkoala.entity.stock.LocationEntity;
 import com.quickkoala.entity.stock.ProductEntity;
 import com.quickkoala.entity.stock.ProductEntity.UseFlag;
+import com.quickkoala.entity.stock.StockEntity;
 import com.quickkoala.repository.stock.ProductRepository;
+import com.quickkoala.repository.stock.StockRepository;
 
 import jakarta.transaction.Transactional;
 
@@ -18,6 +19,8 @@ public class ProductServiceImpl implements ProductService{
 
 	@Autowired
 	private ProductRepository productRepository;
+	@Autowired
+	private StockRepository stockRepository;
 	
 	
 	//Entity -> DTO 변환
@@ -31,7 +34,9 @@ public class ProductServiceImpl implements ProductService{
 		
 		if (productEntity.getStorageLocation() != null) {
 	        maptoProductDto.setStorageLocation(productEntity.getStorageLocation());
-	    }
+	    }else {
+            maptoProductDto.setStorageLocation(null);
+        }
 		
 		maptoProductDto.setSupplierCode(productEntity.getSupplierCode());
 		maptoProductDto.setMemo(productEntity.getMemo());
@@ -48,6 +53,8 @@ public class ProductServiceImpl implements ProductService{
         
         if (productDto.getStorageLocation() != null) {
             maptoProductEntity.setStorageLocation(productDto.getStorageLocation());
+        } else {
+            maptoProductEntity.setStorageLocation(null);
         }
         
         maptoProductEntity.setSupplierCode(productDto.getSupplierCode());
@@ -68,18 +75,33 @@ public class ProductServiceImpl implements ProductService{
 	}
 	@Override
 	public ProductEntity saveProduct(ProductDto productDto, String manager) {
-		ProductEntity productEntity =convertToEntity(productDto);
-		
-		if(productRepository.existsByCode(productEntity .getCode())) {
-			throw new IllegalArgumentException("이미 존재하는 상품 코드입니다");
-		}
-		if (productEntity.getCreatedDt() == null) {
-            productEntity.setCreatedDt(LocalDateTime.now());
-            productEntity.setCreatedManager(manager);
-            productEntity.setUpdatedDt(LocalDateTime.now());
-            productEntity.setManager(manager);
-		}
-		return productRepository.save(productEntity);
+	    ProductEntity productEntity = convertToEntity(productDto);
+	    
+	    if (productRepository.existsByCode(productEntity.getCode())) {
+	        throw new IllegalArgumentException("이미 존재하는 상품 코드입니다");
+	    }
+	    
+	    LocalDateTime now = LocalDateTime.now();
+	    
+	    if (productEntity.getCreatedDt() == null) {
+	        productEntity.setCreatedDt(now);
+	        productEntity.setCreatedManager(manager);
+	        productEntity.setUpdatedDt(now);
+	        productEntity.setManager(manager);
+	    }
+	    ProductEntity savedProduct = productRepository.save(productEntity);
+	    
+	    StockEntity stock = new StockEntity();
+        stock.setProductCode(savedProduct.getCode());
+        stock.setTotalQty(0);
+        stock.setAvailableQty(0);
+        stock.setUnavailableQty(0);
+        stock.setSafetyQty(0);
+        stock.setManager(manager);
+        stockRepository.save(stock);
+        
+        return savedProduct;
+        
 	}
 	
 	//상품코드 중복체크

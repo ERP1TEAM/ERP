@@ -16,21 +16,21 @@ public class StockEntity {
 	
 	@Id
 	@Column(name="product_code", length=8, nullable=false)
-	private String product_code;
+	private String productCode;
 	
 	@Column(name="total_qty", nullable=false)
-	private int total_qty;
+	private int totalQty;
 	
 	@Column(name="available_qty", nullable=false)
-	private int available_qty;
+	private int availableQty;
 
 	@Column(name="unavailable_qty", nullable=false)
-	private int unavailable_qty;
+	private int unavailableQty;
 	
 	@Column(name="safety_qty", nullable=false)
-	private int safety_qty;
+	private int safetyQty;
 	
-    @Column(name = "manager", length = 100, nullable = false)
+    @Column(name = "manager", length = 255, nullable = false)
     private String manager;
 }
 	

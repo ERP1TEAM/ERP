@@ -15,7 +15,6 @@
 <link href="../../assets/js/morris/morris-0.4.3.min.css"
 	rel="stylesheet" />
 <link href="../../assets/css/custom-styles.css" rel="stylesheet" />
-<link href="../../css/receive/purchaseDetail.css" rel="stylesheet" />
 <link href='http://fonts.googleapis.com/css?family=Open+Sans'
 	rel='stylesheet' type='text/css' />
 <link rel="stylesheet"
@@ -26,13 +25,19 @@
 </head>
 <body>
 	<div id="wrapper">
-        <nav th:replace="~{/main/header :: header}"></nav>
-                <div th:replace="~{/main/dropdown :: dropdown}"></div>
-		<div th:insert="~{/sidebar::sidebar}"></div>
-		<!-- nav  -->
+		<nav th:replace="~{/main/header :: header}"></nav>
+        
+        <div th:replace="~{/main/dropdown :: dropdown}"></div>
+		<!--/. NAV TOP  -->
+		<nav class="navbar-default navbar-side" role="navigation"
+			th:replace="~{sidebar.html :: sidebar}"></nav>
+		
 		<div id="page-wrapper">
-			<div th:insert="~{layout/stockHeader :: header}"></div>
-
+			 <div class="header"> 
+            <h1 class="page-header">
+                창고 관리
+                </h1>
+              </div>
 			<div id="page-inner">
 
 				<div class="row">
@@ -40,6 +45,9 @@
 						<input type="button" value="로케이션 등록" class="product_btn3"
 							id="locationbtn">
 						<div class="card">
+						<div class="card-action">
+                			로케이션 관리
+                			</div>
 							<div class="card-content">
 								<div class="table-responsive">
 								<form id="search_form">
@@ -67,7 +75,6 @@
 												<th class="center" style="width: 5%;">선반 행</th>
 												<th class="center" style="width: 5%;">선반 층</th>
 												<th class="center" style="width: 5%;">사용 유/무</th>
-												<th class="center" style="width: 5%;">메모</th>
 												<th class="center" style="width: 5%;">관리</th>
 											</tr>
 										</thead>
@@ -85,14 +92,22 @@
 					</div>
 				</div>
 			</div>
-
-
-
-
-			<footer th:insert="~{layout/stockfooter :: footer}"></footer>
-		</div>
-	</div>
-
-	<div th:insert="~{layout/stockfooter :: src}"></div>
+<footer><p>Copyright 2024 ⓒ quickkoala.com by <i class="fa fa-love"></i><a href="http://quickkoala.com">Quick Koala All right reserved.</a>
+</p></footer>
+            </div>
+        </div>
+    <script src="../../assets/js/jquery-1.10.2.js"></script>
+    <script src="../../assets/js/bootstrap.min.js"></script>
+	<script src="../../assets/materialize/js/materialize.min.js"></script>
+    <script src="../../assets/js/jquery.metisMenu.js"></script>
+    <script src="../../assets/js/morris/raphael-2.1.0.min.js"></script>
+    <script src="../../assets/js/morris/morris.js"></script>
+	<script src="../../assets/js/easypiechart.js"></script>
+	<script src="../../assets/js/easypiechart-data.js"></script>
+	<script src="../../assets/js/Lightweight-Chart/jquery.chart.js"></script>
+    <script src="../../assets/js/custom-scripts.js"></script>
+    <script th:src="@{/js/stock/locationList.js}"></script>
+    <script th:src="@{/js/stock/warehouseModal.js}"></script>
+    <script th:src="@{/js/stock/locationModal.js}"></script>
 </body>
 </html>

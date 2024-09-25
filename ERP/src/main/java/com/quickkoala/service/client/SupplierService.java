@@ -20,4 +20,5 @@ public interface SupplierService {
 
 	// 관리자 등록 - 코드로 관리자 소속사 확인
 	Optional<SupplierEntity> findByCode(String code);
+	
 }
