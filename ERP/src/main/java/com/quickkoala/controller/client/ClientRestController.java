@@ -3,6 +3,7 @@ package com.quickkoala.controller.client;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -52,9 +53,23 @@ public class ClientRestController {
 	
 	// 거래처 등록
 	@PostMapping("client/addSales")
-	public String addSales() {
+	public String addSales(@ModelAttribute SalesEntity data) {
 		String result = "ok";
-		
+		SalesEntity salesEntity = salesService.addSales(data);
+		if(salesEntity == null) {
+			result = "no";
+		}
+		return result;
+	}
+	
+	// 발주처 등록
+	@PostMapping("client/addSupplier")
+	public String addSupplier(@ModelAttribute SupplierEntity data) {
+		String result = "ok";
+		SupplierEntity supplierEntity = supplierService.addSupplier(data);
+		if(supplierEntity == null) {
+			result = "no";
+		}
 		return result;
 	}
 }
