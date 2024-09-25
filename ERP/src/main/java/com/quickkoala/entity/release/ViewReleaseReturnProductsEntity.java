@@ -1,11 +1,8 @@
 package com.quickkoala.entity.release;
 
 import java.time.LocalDateTime;
-
-import com.quickkoala.entity.order.OrderEntity.OrderStatus;
-import com.quickkoala.entity.release.ReleaseReturnProductsEntity.ReleaseRefundReason;
-import com.quickkoala.entity.release.ReleaseReturnProductsEntity.ReleaseRefundStatus;
-
+import com.quickkoala.entity.release.ReleaseReturnProductsEntity.ReleaseReturnReason;
+import com.quickkoala.entity.release.ReleaseReturnProductsEntity.ReleaseReturnStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -55,10 +52,10 @@ public class ViewReleaseReturnProductsEntity {
 	
 	@Enumerated(EnumType.STRING) 
 	@Column(name = "reason", nullable = false)
-	private ReleaseRefundReason reason;
+	private ReleaseReturnReason reason;
 	
 	@Enumerated(EnumType.STRING) 
 	@Column(name = "status", nullable = false)
-	private ReleaseRefundStatus status;
+	private ReleaseReturnStatus status;
 
 }

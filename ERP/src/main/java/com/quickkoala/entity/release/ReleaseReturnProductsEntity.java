@@ -44,19 +44,19 @@ public class ReleaseReturnProductsEntity {
 	
 	@Enumerated(EnumType.STRING) 
 	@Column(name = "reason", nullable = false)
-	private ReleaseRefundReason reason;
+	private ReleaseReturnReason reason;
 	
 	@Enumerated(EnumType.STRING) 
 	@Column(name = "status", nullable = false)
-	private ReleaseRefundStatus status;
+	private ReleaseReturnStatus status;
 	
-	public enum ReleaseRefundReason{
+	public enum ReleaseReturnReason{
 		상품불량,
 		단순변심,
 		기타
 	}
 	
-	public enum ReleaseRefundStatus{
+	public enum ReleaseReturnStatus{
 		대기,
 		폐기,
 		입고
