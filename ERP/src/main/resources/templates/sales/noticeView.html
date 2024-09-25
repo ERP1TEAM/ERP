@@ -37,7 +37,7 @@
                         <p><strong>작성시간 : </strong> <span th:text="${#temporals.format(notice.createdAt, 'yyyy-MM-dd HH:mm')}"></span></p>
                         <p><strong>조회수 : </strong> <span th:text="${notice.views}"></span></p><br>
                         <div>
-                            <p th:text="${notice.content}"></p>
+                            <p th:utext="${notice.content}"></p>
                         </div>
                         <br>
                         <a href="/sales/home" class="btn" style="background-color: #474B54">목록으로 돌아가기</a>

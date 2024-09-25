@@ -3,10 +3,16 @@ CKEDITOR.replace('editor', {
 });
 
 // 폼 제출 시 HTML 태그 제거
+//document.querySelector('form').addEventListener('submit', function(event) {
+//    var editorData = CKEDITOR.instances.editor.getData();
+//    var strippedData = editorData.replace(/<\/?[^>]+(>|$)/g, "");  // HTML 태그 제거
+//    CKEDITOR.instances.editor.setData(strippedData);
+//});
 document.querySelector('form').addEventListener('submit', function(event) {
-    var editorData = CKEDITOR.instances.editor.getData();
-    var strippedData = editorData.replace(/<\/?[^>]+(>|$)/g, "");  // HTML 태그 제거
-    CKEDITOR.instances.editor.setData(strippedData);
+    // CKEditor 데이터를 textarea에 반영
+    for (instance in CKEDITOR.instances) {
+        CKEDITOR.instances[instance].updateElement();
+    }
 });
 
 document.addEventListener('DOMContentLoaded', function() {

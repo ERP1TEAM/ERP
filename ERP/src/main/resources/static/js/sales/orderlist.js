@@ -48,25 +48,30 @@ function filterOrders(page = 0) {
 
 
 
-// 페이징 UI 업데이트
+// 페이징 UI 업데이트 함수
 function updatePagination() {
     const pagination = document.querySelector('.pagination');
     pagination.innerHTML = '';
-	// currentPage와 totalPages 값 디버깅을 위한 출력
+    const pagesPerGroup = 5; // 그룹당 5개의 페이지 버튼
+    const currentGroup = Math.floor(currentPage / pagesPerGroup); // 현재 페이지 그룹
 
-    // < 버튼
-    if (currentPage > 0) {
-        pagination.innerHTML += `<li><a href="#" onclick="filterOrders(${currentPage - 1})">&lt;</a></li>`;
+    const startPage = currentGroup * pagesPerGroup; // 현재 그룹의 시작 페이지
+    const endPage = Math.min(startPage + pagesPerGroup, totalPages); // 현재 그룹의 마지막 페이지
+
+    // < 버튼 (이전 그룹으로 이동)
+    if (currentGroup > 0) {
+        pagination.innerHTML += `<li><a href="#" onclick="filterNotices(${startPage - 1})">&lt;</a></li>`;
     }
 
-    // 페이지 번호들
-    for (let i = 0; i < totalPages; i++) {
-        pagination.innerHTML += `<li><a href="#" onclick="filterOrders(${i})">${i + 1}</a></li>`;
+    // 현재 그룹의 페이지 번호들
+    for (let i = startPage; i < endPage; i++) {
+        const activeClass = (i === currentPage) ? 'active' : '';
+        pagination.innerHTML += `<li class="${activeClass}"><a href="#" onclick="filterNotices(${i})">${i + 1}</a></li>`;
     }
 
-    // > 버튼
-    if (currentPage < totalPages - 1) {
-        pagination.innerHTML += `<li><a href="#" onclick="filterOrders(${currentPage + 1})">&gt;</a></li>`;
+    // > 버튼 (다음 그룹으로 이동)
+    if (endPage < totalPages) {
+        pagination.innerHTML += `<li><a href="#" onclick="filterNotices(${endPage})">&gt;</a></li>`;
     }
 }
 
