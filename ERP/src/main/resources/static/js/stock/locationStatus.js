@@ -10,7 +10,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 });
 
-// 로케이션 데이터를 받아와서 선반(R1, R2 등) 버튼을 동적으로 생성하는 함수
 function renderRackButtons(locations) {
     const locationContainer = document.querySelector('.location_frame1');
     locationContainer.innerHTML = '';
@@ -18,28 +17,23 @@ function renderRackButtons(locations) {
     const uniqueRacks = [...new Set(locations.map(location => location.rackCode))];  // 중복 제거 후 unique한 rackCode만 추출
 
     uniqueRacks.forEach(rackCode => {
-        // rackButton 변수를 이 안에서 선언합니다.
         const rackButton = document.createElement('div');  // 변수가 함수 안에서 선언되어야 합니다.
         rackButton.className = 'location_large_controller';
         rackButton.textContent = rackCode;
 
-        // 클릭 이벤트: 해당 선반의 row_code와 level_code 결합하여 출력
         rackButton.addEventListener('click', function() {
-            // 기존에 active 클래스를 가지고 있는 상자가 있다면 제거
             const activeButton = document.querySelector('.location_large_controller.active');
             if (activeButton) {
                 activeButton.classList.remove('active');
             }
 
-            // 현재 클릭한 상자에 active 클래스 추가
             this.classList.add('active');
-
-            // 클릭한 선반에 맞는 row와 level 데이터를 출력
             renderLocationDetails(locations, rackCode);
+            document.getElementById('showinventory').style.display = 'none';
         });
 
-        locationContainer.appendChild(rackButton);  // rackButton을 DOM에 추가
-    });
+        locationContainer.appendChild(rackButton);
+});
 }
 
 // 선택한 rack_code에 따른 row_code와 level_code를 화면에 출력하는 함수
