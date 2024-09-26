@@ -27,37 +27,9 @@ public class ReceiveTempServiceImpl implements ReceiveTempService{
 	private ReceiveTempRepository receiveTempRepository;
 	
 	@Override
-	public List<ReceiveTempEntity> addAllReceive(SupplierDeliveryListDto orders) {
-		List<ReceiveTempEntity> orderEntities = new ArrayList<>();
-		
-		
-	    /*for (int f=0; f<orders.getProduct_code().size(); f++) {
-	    	ReceiveTempEntity order = new ReceiveTempEntity();
-	        String formattedNumber = String.format("%02d", number);
-	        order.setCode("20240903-" + formattedNumber);
-	        order.setOrderNumber(orders.get);
-	        order.setManager("홍길동");
-	        order.setQuantity(orders.getQuantity().get(f));
-	        order.setPrice(orders.getPrice().get(f));
-	        order.setTotalPrice(orders.getQuantity().get(f) * orders.getPrice().get(f));
-	        if (order.getOrderDate() == null) {
-	            order.setOrderDate(LocalDateTime.now());
-	        }
-	        order.setExpectedDate("2024-09-10");
-	        order.setStatus("입고대기");
-	        orderEntities.add(order);
-	        number += 1;
-	    }
-		*/
-	    System.out.println("3번까진됨");
-	    // 여러 엔티티를 저장하므로 saveAll 사용
-	    return receiveTempRepository.saveAll(orderEntities);
-	}
-	
-	@Override
 	public ReceiveTempEntity addDelivery(String data, Integer ea, String code) {
-		int number = (int)this.getCountOfOrdersToday()+1;
-		
+		String numberStr = this.getMaxCode().substring(this.getMaxCode().lastIndexOf("-") + 1);
+		int number = Integer.parseInt(numberStr) + 1;
 		PurchaseEntity purchaseEntity = purchaseRepository.findByOrderNumber(data);
 		ReceiveTempEntity receiveTempEntity = new ReceiveTempEntity();
 		String formattedNumber = String.format("%03d", number);
@@ -73,9 +45,9 @@ public class ReceiveTempServiceImpl implements ReceiveTempService{
 	}
 	
 	@Override
-	public long getCountOfOrdersToday() {
+	public String getMaxCode() {
 		LocalDate today = LocalDate.now();
-        return receiveTempRepository.countByOrderDate(today);
+		return receiveTempRepository.findMaxCodeByOrderDate(today);
 	}
 	
 	@Override

@@ -25,15 +25,6 @@ import com.quickkoala.utils.ExcelUpload;
 @RequestMapping("supplier")
 public class SupplierController {
 
-	@Autowired
-	private PurchaseService purchaseService;
-
-	@Autowired
-	private ReceiveTempService receiveTempService;
-
-	@Autowired
-	private DeliveryDetailService deliveryDetailService;
-
 	// 납품등록 페이지
 	@GetMapping("supplierPurchaseList")
 	public String supplierOrderList() {
@@ -72,17 +63,6 @@ public class SupplierController {
 		return ResponseEntity.ok(data);
 	}
 
-	// 납품등록
-	@GetMapping("delivery_regi")
-	public ResponseEntity<String> deliveryRegi(@RequestParam("data") String data, @RequestParam("ea") Integer ea) {
-		PurchaseEntity purchaseEntity = purchaseService.getOrderByNumber(data);
-		if (purchaseEntity.getQuantity() < ea) {
-			return ResponseEntity.ok("over");
-		} else {
-			DeliveryDetailEntity ent = deliveryDetailService.addDelivery(data, ea);
-			receiveTempService.addDelivery(data, ea, ent.getCode());
-			return ResponseEntity.ok("ok");
-		}
-	}
+	
 
 }
