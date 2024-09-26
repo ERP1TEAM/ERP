@@ -1,9 +1,11 @@
 package com.quickkoala.controller.stock;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -25,11 +27,13 @@ import com.quickkoala.dto.stock.ProductDto;
 import com.quickkoala.entity.client.SupplierEntity;
 import com.quickkoala.entity.stock.CategoryEntity;
 import com.quickkoala.entity.stock.ProductEntity;
+import com.quickkoala.entity.stock.ViewDailyStockSummaryEntity;
 import com.quickkoala.entity.stock.ViewProductStockSupplierEntity;
 import com.quickkoala.service.client.SupplierService;
 import com.quickkoala.service.stock.CategoryService;
 import com.quickkoala.service.stock.ProductService;
 import com.quickkoala.service.stock.StockService;
+import com.quickkoala.service.stock.ViewDailyStockSummaryService;
 import com.quickkoala.service.stock.ViewProductStockSupplierService;
 import com.quickkoala.token.config.JwtTokenProvider;
 
@@ -54,6 +58,28 @@ public class StockRestController {
 	
 	@Autowired
 	private StockService stockService;
+	
+	@Autowired
+	private ViewDailyStockSummaryService viewDailyStockSummaryService;
+	
+	@GetMapping("/stock/daily_summary")
+	public ResponseEntity<Map<String,Object>> datedailystocksummary(@RequestParam("date") String date, 
+            @RequestParam("productCode") String productCode){
+		
+		Map<String, Object> response = new HashMap<>();
+	    try {
+	        LocalDate stockDate = LocalDate.parse(date);
+
+	        ViewDailyStockSummaryEntity dailySummary = viewDailyStockSummaryService.getDailyStockSummary(stockDate, productCode);
+
+	        response.put("data", dailySummary);
+	        response.put("message", "재고 요약 정보를 성공적으로 가져왔습니다.");
+	        return ResponseEntity.ok(response);
+	    } catch (Exception e) {
+	        response.put("error", "오류가 발생했습니다.");
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+	    }
+	}
 	
 	@GetMapping("/stock/inventorysupplierlist/{pno}")
 	public Map<String, Object> inventorysupplierlist(@PathVariable Integer pno, @RequestParam String code,
