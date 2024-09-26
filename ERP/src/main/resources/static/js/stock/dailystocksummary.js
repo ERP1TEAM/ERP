@@ -46,5 +46,10 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById("dailystockoverlay").style.display = "none";
         document.body.style.overflow = "auto";
     });
+    document.getElementById("dailystockcancle").addEventListener("click", function() {
+        document.getElementById("dailystockmodal").style.display = "none";
+        document.getElementById("dailystockoverlay").style.display = "none";
+        document.body.style.overflow = "auto";
+    });
     
 });
