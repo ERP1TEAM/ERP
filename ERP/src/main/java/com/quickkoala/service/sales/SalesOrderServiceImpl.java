@@ -303,8 +303,8 @@ public class SalesOrderServiceImpl implements SalesOrderService {
     
  // 검색 메서드 수정
     public Page<ClientsOrdersEntity> searchOrders(String managerCompanyCode, String searchType, String searchText, LocalDate startDate, LocalDate endDate, int page, int size) {
-        // 페이지 요청 시 orderDate 기준으로 오름차순 정렬을 추가
-        Pageable pageable = PageRequest.of(page, size, Sort.by("orderDate").descending());
+        // 페이지 요청 시 orderId 기준으로 오름차순 정렬을 추가
+        Pageable pageable = PageRequest.of(page, size, Sort.by("orderId").descending());
 
         if (startDate != null && endDate != null) {
             LocalDateTime startOfDay = startDate.atStartOfDay();
