@@ -13,7 +13,6 @@ public interface OrderReleaseService{
 	
 	public String asignRelNumber();
 	public String addReleaseFromOrder(OrderReleaseEntity entity);
-	//public void addAllReleaseFromOrder(List<OrderReleaseEntity> list);
 	public List<ReleaseProductsEntity> asignLotNumber(String pcode, String scode, Integer qty, ReleaseProductsEntity entity);
 	public String saveStatus(String id, String status,String manager);
 }

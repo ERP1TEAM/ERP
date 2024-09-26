@@ -14,7 +14,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ReleaseProductsRepository extends JpaRepository<ReleaseProductsEntity,Integer> {
 	
-	
+	List<ReleaseProductsEntity>findByRelNumberAndLotNumber(String rCode,String lCode);
 	
 	
 }

@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 window.expand_post=expand_post;
 function paging(_pg,_select,_param){
-	pagingIns.getPage("./cancel/page",_page,_select,_param).then(result => {
+	pagingIns.getPage("./cancel/page",_pg,_select,_param).then(result => {
 		let data = result.content;
 		while (tBody.firstChild) {
             tBody.removeChild(tBody.firstChild);

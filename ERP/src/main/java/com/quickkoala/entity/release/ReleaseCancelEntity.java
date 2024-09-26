@@ -25,6 +25,9 @@ public class ReleaseCancelEntity {
 	@Column(name = "rel_number", length = 14, nullable = false)
 	private String relNumber;
 	
+	@Column(name = "order_number", length = 14, nullable = false)
+	private String orderNumber;
+	
 	@Enumerated(EnumType.STRING) 
 	@Column(name = "who", nullable = false)
 	private ReleaseCancelWho who;
@@ -35,6 +38,9 @@ public class ReleaseCancelEntity {
 	
 	@Column(name = "dt", nullable = false, columnDefinition="DATETIME DEFAULT CURRENT_TIMESTAMP")
 	private LocalDateTime dt;
+	
+	@Column(name = "sales_code", length = 20, nullable = false)
+	private String salesCode;
 	
 	@Column(name = "manager", length = 20, nullable = false)
 	private String manager;

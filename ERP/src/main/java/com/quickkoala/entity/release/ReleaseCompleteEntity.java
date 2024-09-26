@@ -25,6 +25,9 @@ public class ReleaseCompleteEntity {
 	@Column(name = "rel_number", length = 14, nullable = false)
 	private String relNumber;
 	
+	@Column(name = "order_number", length = 14, nullable = false)
+	private String orderNumber;
+	
 	@Column(name = "dt", nullable = false, columnDefinition="DATETIME DEFAULT CURRENT_TIMESTAMP")
 	private LocalDateTime dt;
 	
@@ -33,5 +36,8 @@ public class ReleaseCompleteEntity {
 	
 	@Column(name = "manager", length = 20, nullable = false)
 	private String manager;
+	
+	@Column(name = "sales_code", length = 20, nullable = false)
+	private String salesCode;
 
 }

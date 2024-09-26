@@ -33,6 +33,12 @@ public class OrderCancelEntity {
 	@Column(name = "dt", nullable = false, columnDefinition="datetime default now()")
 	private LocalDateTime dt;
 	
+	@Column(name = "total_price", nullable = false)
+	private Integer totalPrice;
+	
+	@Column(name = "sales_code", length = 10, nullable = false)
+	private String salesCode;
+	
 	
 	
 

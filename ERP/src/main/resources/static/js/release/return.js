@@ -34,8 +34,9 @@ function paging(_page,_select,_param){
 				 let btns = "";
                 if (product.status === '대기') {
                     btns = `
-                        <input type="button" value="폐기" onclick="discard(event, '${product.relNumber}','${product.lotNumber}','${product.qty}')">
-                        <input type="button" value="입고" onclick="receive(event, '${product.relNumber}','${product.lotNumber}','${product.qty}')">
+                    	<input type="number" id="returnnum">
+                        <input type="button" value="폐기" onclick="discard(event, '${product.relNumber}','${product.lotNumber}')">
+                        <input type="button" value="입고" onclick="receive(event, '${product.relNumber}','${product.lotNumber}')">
                     `;
                 }
                 html += `
@@ -67,12 +68,12 @@ function expand_post(thisElement,onum){
 	
 }
 
-function discard(e,lotNumber, productQty){
+function discard(e,relNumber,lotNumber){
 	e.stopPropagation();
 	fetch("./return/discard",{
 				method : "POST",
 				headers : {"content-type":"application/x-www-form-urlencoded"},
-				body : "lotNum="+encodeURIComponent(lotNumber)+"&qty="+encodeURIComponent(productQty)
+				body : "relNum="+encodeURIComponent(relNumber)+"lotNum="+encodeURIComponent(lotNumber)+"&qty="+encodeURIComponent(document.querySelector("#returnnum").value)
 			})
 			.then(function(response){
 				return response.text();
@@ -90,12 +91,12 @@ function discard(e,lotNumber, productQty){
 			});	
 	
 }
-function receive(e,relNumber,lotNumber, productQty){
+function receive(e,relNumber,lotNumber){
 	e.stopPropagation();
 	fetch("./return/discard",{
 				method : "POST",
 				headers : {"content-type":"application/x-www-form-urlencoded"},
-				body : "relNum="+encodeURIComponent(relNumber)+"&lotNum="+encodeURIComponent(lotNumber)+"&qty="+encodeURIComponent(productQty)
+				body : "relNum="+encodeURIComponent(relNumber)+"&lotNum="+encodeURIComponent(lotNumber)+"&qty="+encodeURIComponent(document.querySelector("#returnnum").value)
 			})
 			.then(function(response){
 				return response.text();

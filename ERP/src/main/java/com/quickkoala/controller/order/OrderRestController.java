@@ -54,8 +54,8 @@ public class OrderRestController {
 	}
 	
 	@GetMapping("order/cancel/page")	
-	public Page<ViewOrderCancelEntity> cancelPaging(@RequestParam int pg, @RequestParam(required = false) Integer select,  @RequestParam(required = false) String param){
-		return this.viewOrderCancelService.getAll(pg,SIZE,select,param);
+	public Page<ViewOrderCancelEntity> cancelPaging(@RequestParam int pg, @RequestParam(required = false) String select,  @RequestParam(required = false) String param, @RequestParam(required = false) String startDate, @RequestParam(required = false) String endDate){
+		return this.viewOrderCancelService.getAll(pg,SIZE,select,param,startDate,endDate);
 	}
 	
 	@PostMapping("order/detailok.do")

@@ -72,21 +72,29 @@ public class OrderReleaseServiceImpl implements OrderReleaseService{
 				releaseCancelEntity.setReason(ReleaseCancelReason.기타);
 				releaseCancelEntity.setRelNumber(optional.get().getNumber());
 				releaseCancelEntity.setWho(ReleaseCancelWho.기타);
+				releaseCancelEntity.setOrderNumber(optional.get().getOrderNumber());
+				releaseCancelEntity.setSalesCode(optional.get().getSalesCode());
 				ReleaseCancelEntity saved = releaseCancelRepository.save(releaseCancelEntity);
 				if(saved!=null) {
 					result=1;
 				}
 			}else if(status=="출고완료") {
+				try {
 				orderReleaseRepository.deleteByNumber(id);
 				ReleaseCompleteEntity releaseCompleteEntity = new ReleaseCompleteEntity();
 				releaseCompleteEntity.setDt(date);
-				releaseCompleteEntity.setManager("김하주");
+				releaseCompleteEntity.setManager(manager);
 				releaseCompleteEntity.setMemo(null);
+				releaseCompleteEntity.setOrderNumber(optional.get().getOrderNumber());
+				releaseCompleteEntity.setSalesCode(optional.get().getSalesCode());
 				releaseCompleteEntity.setRelNumber(optional.get().getNumber());
 				ReleaseCompleteEntity saved = releaseCompleteRepository.save(releaseCompleteEntity);
 				if(saved!=null) {
 					result=1;
+				}}catch(Exception e) {
+					e.printStackTrace();
 				}
+				
 			}else if(status=="출고지연"){
 				result = orderReleaseRepository.updateStatus(id,OrderReleaseEntity.ReleaseStatus.valueOf(status));
 			}
@@ -108,6 +116,7 @@ public class OrderReleaseServiceImpl implements OrderReleaseService{
 		 ReleaseProductsEntity releaseProduct = null;
 		 for(ClientsOrderProductsEntity released : orderedList) {
 			 releaseProduct = new ReleaseProductsEntity();
+			 releaseProduct.setReturnFlag("N");
 			 releaseProduct.setLotNumber(null);
 			 releaseProduct.setDt(orderReleaseEntity.getDt());
 			 releaseProduct.setManager(orderReleaseEntity.getManager());
@@ -148,48 +157,57 @@ public class OrderReleaseServiceImpl implements OrderReleaseService{
 	}
 	
 	@Override
-	public List<ReleaseProductsEntity> asignLotNumber(String pcode, String scode, Integer qty, ReleaseProductsEntity entity) {
-		List<LotEntity> list = lotRepository.findAllByProductCodeOrderByLotNumberAsc(pcode);
-	    List<ReleaseProductsEntity> rpe = new ArrayList<>();
-	    Iterator<LotEntity> it = list.iterator();
-	    return asignLotRecursively(entity, qty, it, rpe)?rpe:null;
+	public List<ReleaseProductsEntity> asignLotNumber(String pcode, String scode, Integer qty, ReleaseProductsEntity releaseProduct) {
+		List<LotEntity> lots = lotRepository.findAllByProductCodeOrderByLotNumberAsc(pcode);
+	    List<ReleaseProductsEntity> result = new ArrayList<>();
+	    Iterator<LotEntity> lot = lots.iterator();
+	    return asignLotRecursively(releaseProduct, qty, lot, result)?result:null;
 	}
 
-	private boolean asignLotRecursively(ReleaseProductsEntity entity, Integer remainingQty, Iterator<LotEntity> lotIterator, List<ReleaseProductsEntity> rpe) {
-	    if (!lotIterator.hasNext() || remainingQty <= 0) {
-	        if (remainingQty > 0) {
-	            return false;
-	        }
+	private boolean asignLotRecursively(ReleaseProductsEntity entity, Integer qty, Iterator<LotEntity> lotIterator, List<ReleaseProductsEntity> result) {
+	    if (!lotIterator.hasNext() && qty > 0) {
+	        System.out.println("FALSEEEEEEEE");
+	        return false;
+	    } else if (qty == 0) {
+	        System.out.println("TRUEEEEEEEEE");
 	        return true;
 	    }
+	    
 	    LotEntity lot = lotIterator.next();
 	    int lotQty = lot.getQuantity();
-	    ReleaseProductsEntity entity2 = new ReleaseProductsEntity();
-	    entity2.setDt(entity.getDt());
-	    entity2.setManager(entity.getManager());
-	    entity2.setMemo(entity.getMemo());
-	    entity2.setRelNumber(entity.getRelNumber());
-	    entity2.setLotNumber(lot.getLotNumber());
-	    entity2.setProductCode(entity.getProductCode());
-	    Optional<ProductEntity> pe =productRepository.findByCode(entity.getProductCode());
-		 if(pe.isPresent()) {
-			 entity2.setSupplierCode(pe.get().getSupplierCode());
-		 }else {
-			return false;
-		 }
-		 productRepository.flush();
-	    if (remainingQty <= lotQty) {
-	        entity2.setQty(remainingQty);
-	        rpe.add(entity2);
-	        remainingQty = 0; 
-	    } else {
-	        entity2.setQty(lotQty);
-	        rpe.add(entity2);
-	        remainingQty -= lotQty;
+
+	    if (lotQty <= 0) {
+	        return asignLotRecursively(entity, qty, lotIterator, result);
 	    }
-	    return asignLotRecursively(entity, remainingQty, lotIterator, rpe);
+
+	    ReleaseProductsEntity newLotAssigned = new ReleaseProductsEntity();
+	    newLotAssigned.setDt(entity.getDt());
+	    newLotAssigned.setManager(entity.getManager());
+	    newLotAssigned.setMemo(entity.getMemo());
+	    newLotAssigned.setRelNumber(entity.getRelNumber());
+	    newLotAssigned.setReturnFlag("N");
+	    newLotAssigned.setLotNumber(lot.getLotNumber());
+	    newLotAssigned.setProductCode(entity.getProductCode());
+	    
+	    Optional<ProductEntity> pe = productRepository.findByCode(entity.getProductCode());
+	    if (pe.isPresent()) {
+	        newLotAssigned.setSupplierCode(pe.get().getSupplierCode());
+	    } else {
+	        return false;
+	    }
+	    if (qty <= lotQty) {
+	        newLotAssigned.setQty(qty);
+	        result.add(newLotAssigned);
+	        qty = 0; 
+	    } else {
+	        newLotAssigned.setQty(lotQty);
+	        result.add(newLotAssigned);
+	        qty -= lotQty; 
+	    }
+
+	    return asignLotRecursively(entity, qty, lotIterator, result);
 	}
-	
+
 	
 
 	

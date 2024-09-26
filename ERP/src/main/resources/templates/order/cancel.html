@@ -21,7 +21,7 @@
     <div id="wrapper"> 
         <nav th:replace="~{/main/header :: header}"></nav>
         
-        <div th:replace="~{/main/dropdown :: dropdown}"></div>
+        <div th:replace="~{/main/dropdown :: dropdown}"></div>n1}"></ul>
 		<!--/. NAV TOP  -->
 		<nav class="navbar-default navbar-side" role="navigation"
 			th:replace="~{sidebar.html :: sidebar}"></nav>
@@ -53,6 +53,7 @@
                          주문진행 
                     </div>
                     <div class="search">
+                    <input type="date" id="start_date" style="width:120px;"> ~ <input type="date" id="end_date" style="width:120px;">
                     <select id="searchselect">
 						<option value="1">주문번호</option>
 						<option value="2">거래처</option>

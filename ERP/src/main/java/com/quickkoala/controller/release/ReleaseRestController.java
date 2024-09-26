@@ -10,12 +10,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.quickkoala.entity.release.ViewReleaseCancelEntity;
 import com.quickkoala.entity.release.ViewReleaseCompleteEntity;
+import com.quickkoala.entity.release.ViewReleaseCompleteProductsEntity;
 import com.quickkoala.entity.release.ViewReleaseOngoingEntity;
 import com.quickkoala.entity.release.ViewReleaseProductsEntity;
 import com.quickkoala.entity.release.ViewReleaseReturnProductsEntity;
 import com.quickkoala.service.release.OrderReleaseService;
 import com.quickkoala.service.release.ReleaseReturnProductsService;
 import com.quickkoala.service.release.ViewReleaseCancelService;
+import com.quickkoala.service.release.ViewReleaseCompleteProductsService;
 import com.quickkoala.service.release.ViewReleaseCompleteService;
 import com.quickkoala.service.release.ViewReleaseOngoingService;
 import com.quickkoala.service.release.ViewReleaseProductsService;
@@ -47,6 +49,9 @@ public class ReleaseRestController {
 	private ViewReleaseProductsService viewReleaseProductsService;
 	
 	@Autowired
+	private ViewReleaseCompleteProductsService viewReleaseCompleteProductsService;
+	
+	@Autowired
 	private ViewReleaseReturnProductsService viewReleaseRefundPrdouctsService;
 	
 	private final int SIZE=10;
@@ -76,10 +81,16 @@ public class ReleaseRestController {
 		return viewReleaseProductsService.getProducts(rNum);
 	}
 	
+	@PostMapping("release/completedetail")
+	public List<ViewReleaseCompleteProductsEntity> completedetail(@RequestParam("rNum") String rNum) {
+		return viewReleaseCompleteProductsService.getProducts(rNum);
+	}
+	
 	@PostMapping("release/cancel.do")
 	public String cancel(@RequestParam String id, HttpServletRequest request) {
 		return orderReleaseService.saveStatus(id,"출고취소",GetToken.getManagerName(request));
 	}
+	
 	
 	@PostMapping("release/complete.do")
 	public String complete(@RequestParam String id, HttpServletRequest request) {
@@ -102,7 +113,7 @@ public class ReleaseRestController {
 	}
 	
 	@PostMapping("release/return/add")
-	public String addReturnProduct(String rCode,  String lCode, int qty,String reason,HttpServletRequest request) {
+	public String addReturnProduct(String rCode,  String lCode, int qty,@RequestParam(required=false)String reason,HttpServletRequest request) {
 		releaseRefundPrdouctsService.saveProduct(rCode,lCode,qty,reason,GetToken.getManagerName(request));
 		return null;
 		

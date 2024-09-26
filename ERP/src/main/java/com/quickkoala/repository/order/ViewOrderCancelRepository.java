@@ -1,15 +1,14 @@
 package com.quickkoala.repository.order;
 
+import java.time.LocalDateTime;
 import java.util.List;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-
-import com.quickkoala.dto.order.OrderCancelDto;
 import com.quickkoala.entity.order.ViewOrderCancelEntity;
-import com.quickkoala.entity.order.ViewOrderOngoingEntity;
 
 @Repository
 public interface ViewOrderCancelRepository extends JpaRepository<ViewOrderCancelEntity,String> {
@@ -20,5 +19,10 @@ public interface ViewOrderCancelRepository extends JpaRepository<ViewOrderCancel
 	Page<ViewOrderCancelEntity> findByOrderNumberContainingOrderByOrderNumberDesc(String param, Pageable pageable);
 	Page<ViewOrderCancelEntity> findBySalesNameContainingOrderByOrderNumberDesc(String param, Pageable pageable);
 	Page<ViewOrderCancelEntity> findByManagerContainingOrderByOrderNumberDesc(String param, Pageable pageable);
+	
+	Page<ViewOrderCancelEntity> findAllByDtBetween(String param, LocalDateTime startDate, LocalDateTime endDate, Pageable pageable);
+	Page<ViewOrderCancelEntity> findByOrderNumberContainingAndDtBetweenOrderByOrderNumberDesc(String param, LocalDateTime startDate, LocalDateTime endDate, Pageable pageable);
+	Page<ViewOrderCancelEntity> findBySalesNameContainingAndDtBetweenOrderByOrderNumberDesc(String param, LocalDateTime startDate, LocalDateTime endDate, Pageable pageable);
+	Page<ViewOrderCancelEntity> findByManagerContainingAndDtBetweenOrderByOrderNumberDesc(String param, LocalDateTime startDate, LocalDateTime endDate, Pageable pageable);
+	
 }
-

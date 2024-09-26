@@ -54,8 +54,10 @@ public class OrderServiceImpl implements OrderService{
 				 entity.setDt(LocalDateTime.now());
 				 entity.setManager(manager);
 				 entity.setMemo(null);
+				 entity.setTotalPrice(optional.get().getOrderTotal());
 				 entity.setOrderId(optional.get().getOrderId());
 				 entity.setOrderNumber(optional.get().getNumber());
+				 entity.setSalesCode(optional.get().getSalesCode());
 				 OrderCancelEntity saved= orderCancelRepository.save(entity);
 				 if(saved!=null) {
 					 result="OK";

@@ -51,6 +51,7 @@
                          주문진행
                     </div>
                     <div class="search">
+                    <input type="date" id="start_date" style="width:120px;"> ~ <input type="date" id="end_date" style="width:120px;">
                     <select id="searchselect" style="display:block;">
 						<option value="1">주문번호</option>
 						<option value="2">거래처</option>
@@ -140,6 +141,7 @@
                                 </tbody>
                             </table>
                             <input type="hidden" id="reqPdt">
+                            <input type="hidden" id="reqPrice">
 					        </div>
 					        <span>입고 신청 하시겠습니까 ? </span><br>
                             <input class="cd-paging-right-btn" type="button" value="확인" id="reqOk">

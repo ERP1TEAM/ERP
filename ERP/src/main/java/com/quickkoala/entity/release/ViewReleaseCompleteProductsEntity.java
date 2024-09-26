@@ -1,15 +1,7 @@
 package com.quickkoala.entity.release;
 
-import java.time.LocalDateTime;
-
-import com.quickkoala.entity.order.OrderEntity.OrderStatus;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -20,22 +12,21 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-@Table(name = "release_products")
-public class ReleaseProductsEntity {
-	
+@Table(name = "view_release_complete_products")
+public class ViewReleaseCompleteProductsEntity {
+
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY) 
 	@Column(name = "idx", length = 8, nullable = false)
 	private int idx;
 	
 	@Column(name = "rel_number", length = 14, nullable = false)
 	private String relNumber;
 	
+	@Column(name = "order_number", length = 14, nullable = false)
+	private String orderNumber;
+	
 	@Column(name = "lot_number", length = 20, nullable = false)
 	private String lotNumber;
-	
-	@Column(name = "dt", nullable = false, columnDefinition="DATETIME DEFAULT CURRENT_TIMESTAMP")
-	private LocalDateTime dt;
 	
 	@Column(name = "manager", length = 20, nullable = false)
 	private String manager;
@@ -46,13 +37,15 @@ public class ReleaseProductsEntity {
 	@Column(name = "qty", nullable = false)
 	private int qty;
 	
-	@Column(name="product_code", nullable=false)
+	@Column(name = "product_code", length = 8, nullable = false)
 	private String productCode;
 	
-	@Column(name="supplier_code", nullable=false)
+	@Column(name = "product_name", length = 200, nullable = false)
+	private String productName;
+	
+	@Column(name = "supplier_code", length = 6, nullable = false)
 	private String supplierCode;
 	
-	@Column(name="return_flag", nullable=false)
-	private String returnFlag;
-	
+	@Column(name = "supplier_name", length = 255, nullable = false)
+	private String supplierName;
 }

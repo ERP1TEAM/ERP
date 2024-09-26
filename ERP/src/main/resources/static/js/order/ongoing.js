@@ -226,9 +226,9 @@ function open_modal(product){
 	document.getElementById("sup").innerText=product.supplierName;
 	document.getElementById("qty").innerText=product.qty;
 	document.getElementById("avqty").innerText=product.availableQty;
-	document.getElementById("avqty").innerText=product.availableQty;
 	//document.getElementById("memo").innerText="아직";
 	document.getElementById("reqPrice").value=product.price;
+	document.getElementById("reqPdt").value=product.productCode;
 	myModal.style="display:block;";
 	modal_opened=true;
 }
@@ -240,11 +240,12 @@ function close_modal(){
 
 document.querySelector("#reqOk").addEventListener("click",function(){
 	var req_qty = document.querySelector("#reqNum").value;
-	var req_pdt_code = document.querySelector("#pdt").value;
-	var req_pdt_name = document.querySelector("#reqPdt").value;
-	var req_sup_name = document.querySelector("#sup").value;
+	var req_pdt_name = document.querySelector("#pdt").innerText;
+	var req_pdt_code = document.querySelector("#reqPdt").value;
+	var req_sup_name = document.querySelector("#sup").innerText;
 	var req_price = document.querySelector("#reqPrice").value;
-	formData = new FormData();
+	let formData = new FormData();
+	alert(req_pdt_code);
 	formData.set("product_code", req_pdt_code);
 	formData.set("supplier", req_sup_name);
 	formData.set("product", req_pdt_name);
