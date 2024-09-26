@@ -222,7 +222,7 @@ document.addEventListener("DOMContentLoaded", function() {
 		cell1.style.display = 'flex';
 		cell1.innerHTML = `
         <button class="product-btn modal-btn" style="width:170px;" data-row="${rowCount}">상품목록</button>
-        <input type="text" id="product_code_${rowCount}" name="product_code" readonly>
+        <input type="text" id="product_code_${rowCount}" name="product_code" readonly style="text-align:center;">
     `;
 
 		const cell2 = newRow.insertCell(1);
