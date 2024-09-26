@@ -27,8 +27,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     document.getElementById('dailystockshippedqty').value = data.data.shippedQty;
                 })
                 .catch(error => {
-                    console.log(error);
-                    alert('데이터 조회 중 오류가 발생했습니다.');
+                    alert('해당 날짜의 데이터가 없습니다.');
                 });
         } else {
             alert('날짜를 선택해 주세요.');
