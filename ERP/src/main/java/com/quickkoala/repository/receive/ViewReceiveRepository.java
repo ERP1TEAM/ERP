@@ -37,9 +37,12 @@ public interface ViewReceiveRepository extends JpaRepository<ViewReceiveEntity, 
 			"(:codeType = '발주번호' AND LOWER(CONCAT(v.orderNumber)) LIKE LOWER(CONCAT('%', :searchField, '%'))) OR " + // 발주번호
 			"(:codeType = '제조사' AND LOWER(CONCAT(v.supplierName)) LIKE LOWER(CONCAT('%', :searchField, '%'))) OR " + // 제조사
 			"(:codeType = '상품명' AND LOWER(CONCAT(v.productName)) LIKE LOWER(CONCAT('%', :searchField, '%')))) AND " + // 상품명
-			"(:startDate IS NULL OR " + // 날짜가 없을 경우
-			"(v.receiveDate >= :startDate AND v.receiveDate <= :endDate)) " + // 날짜가 있을 경우
-			"ORDER BY v.receiveCode DESC") // receiveCode를 기준으로 내림차순 정렬
+			"(" + "(:startDate IS NULL AND :endDate IS NOT NULL AND v.receiveDate <= :endDate) OR "
+			+ "(:startDate IS NOT NULL AND :endDate IS NULL AND v.receiveDate >= :startDate) OR "
+			+ "(:startDate IS NOT NULL AND :endDate IS NOT NULL AND v.receiveDate BETWEEN :startDate AND :endDate) OR "
+			+ "(:startDate IS NULL AND :endDate IS NULL)" // 둘 다 NULL일 때
+			+ ") "// 날짜가 있을 경우
+			+ "ORDER BY v.receiveCode DESC") // receiveCode를 기준으로 내림차순 정렬
 	Page<ViewReceiveEntity> search(@Param("searchField") String searchField, // 검색할 값
 			@Param("codeType") String codeType, // 어떤 코드인지 (입고번호, 발주번호 등)
 			@Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate, Pageable pageable);

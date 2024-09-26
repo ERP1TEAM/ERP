@@ -26,17 +26,20 @@ public interface ViewReceiveTempRepository extends JpaRepository<ViewReceiveTemp
 
 	// 상품명으로 검색
 	Page<ViewReceiveTempEntity> findByProductNameContainingOrderByCodeDesc(String productName, Pageable pageable);
-	
+
 	@Query("SELECT v FROM ViewReceiveTempEntity v WHERE " + "(:searchField IS NULL OR "
-			+ "(:codeType = '가입고코드' AND LOWER(CONCAT(v.code)) LIKE LOWER(CONCAT('%', :searchField, '%'))) OR " + 
-			"(:codeType = '발주번호' AND LOWER(CONCAT(v.orderNumber)) LIKE LOWER(CONCAT('%', :searchField, '%'))) OR " + 
-			"(:codeType = '제조사' AND LOWER(CONCAT(v.supplierName)) LIKE LOWER(CONCAT('%', :searchField, '%'))) OR " + 
-			"(:codeType = '상품명' AND LOWER(CONCAT(v.productName)) LIKE LOWER(CONCAT('%', :searchField, '%')))) AND " + 
-			"(:startDate IS NULL OR " + 
-			"(v.date >= :startDate AND v.date <= :endDate)) " + 
-			"ORDER BY v.code DESC") // 
-	Page<ViewReceiveTempEntity> search(@Param("searchField") String searchField, 
-			@Param("codeType") String codeType,
+			+ "(:codeType = '가입고코드' AND LOWER(CONCAT(v.code)) LIKE LOWER(CONCAT('%', :searchField, '%'))) OR "
+			+ "(:codeType = '발주번호' AND LOWER(CONCAT(v.orderNumber)) LIKE LOWER(CONCAT('%', :searchField, '%'))) OR "
+			+ "(:codeType = '제조사' AND LOWER(CONCAT(v.supplierName)) LIKE LOWER(CONCAT('%', :searchField, '%'))) OR "
+			+ "(:codeType = '상품명' AND LOWER(CONCAT(v.productName)) LIKE LOWER(CONCAT('%', :searchField, '%')))) AND "
+			+ "("
+	        + "(:startDate IS NULL AND :endDate IS NOT NULL AND v.date <= :endDate) OR "
+	        + "(:startDate IS NOT NULL AND :endDate IS NULL AND v.date >= :startDate) OR "
+	        + "(:startDate IS NOT NULL AND :endDate IS NOT NULL AND v.date BETWEEN :startDate AND :endDate) OR "
+	        + "(:startDate IS NULL AND :endDate IS NULL)"
+	        + ") "
+			+ "ORDER BY v.code DESC") //
+	Page<ViewReceiveTempEntity> search(@Param("searchField") String searchField, @Param("codeType") String codeType,
 			@Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate, Pageable pageable);
 
 }

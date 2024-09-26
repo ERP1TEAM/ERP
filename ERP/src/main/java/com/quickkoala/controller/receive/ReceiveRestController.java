@@ -116,14 +116,9 @@ public class ReceiveRestController {
 			@ModelAttribute SearchDto dto) {
 		String sDate = dto.getSDate();
 		String word = dto.getWord();
-
 		Page<ViewPurchaseDetailEntity> result = null;
 		if (status.equals("all")) {
-			if (word.equals("") && sDate.equals("")) {
-				result = viewPurchaseDetailService.getPaginatedData(pno, SIZE);
-			} else {
-				result = viewPurchaseDetailService.getPaginatedData(pno, SIZE, dto);
-			}
+			result = viewPurchaseDetailService.getPaginatedData(pno, SIZE, dto);
 		} else {
 			if (word.equals("") && sDate.equals("")) {
 				result = viewPurchaseDetailService.getPaginatedDataByStatus(status, pno, SIZE);
@@ -137,15 +132,8 @@ public class ReceiveRestController {
 	// 가입고 페이지 데이터
 	@GetMapping("receive/tempReceiveData/{pno}")
 	public Page<ViewReceiveTempEntity> tempReceiveData(@PathVariable Integer pno, @ModelAttribute SearchDto dto) {
-		String sDate = dto.getSDate();
-		String word = dto.getWord(); 
-		
 		Page<ViewReceiveTempEntity> result = null;
-		if (word.equals("") && sDate.equals("")) {
-			result = viewReceiveTempService.getPaginatedData(pno, SIZE);
-		} else {
-			result = viewReceiveTempService.getPaginatedData(pno, SIZE, dto);
-		}
+		result = viewReceiveTempService.getPaginatedData(pno, SIZE, dto);
 		return result;
 	}
 
@@ -223,30 +211,16 @@ public class ReceiveRestController {
 	// 입고내역 데이터 + 페이징
 	@GetMapping("receive/detailData/{pno}")
 	public Page<ViewReceiveEntity> detailData(@PathVariable Integer pno, @ModelAttribute SearchDto dto) {
-		String sDate = dto.getSDate();
-		String word = dto.getWord(); 
-				
 		Page<ViewReceiveEntity> result = null;
-		if (word.equals("") && sDate.equals("")) {
-			result = viewReceiveService.getPaginatedData(pno, SIZE);
-		} else {
-			result = viewReceiveService.getPaginatedData(pno, SIZE, dto);
-		}
+		result = viewReceiveService.getPaginatedData(pno, SIZE, dto);
 		return result;
 	}
 	
 	// 입고반품 데이터 + 페이징
 	@GetMapping("receive/returnData/{pno}")
 	public Page<ViewReceiveReturnEntity> returnData(@PathVariable Integer pno, @ModelAttribute SearchDto dto) {
-		String sDate = dto.getSDate();
-		String word = dto.getWord(); 
-		
 		Page<ViewReceiveReturnEntity> result = null;
-		if (word.equals("") && sDate.equals("")) {
-			result = viewReceiveReturnService.getPaginatedData(pno, SIZE);
-		} else {
-			result = viewReceiveReturnService.getPaginatedData(pno, SIZE, dto);
-		}
+		result = viewReceiveReturnService.getPaginatedData(pno, SIZE, dto);
 		return result;
 	}
 
