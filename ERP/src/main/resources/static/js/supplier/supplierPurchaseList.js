@@ -1,3 +1,8 @@
+let searchCode = "";
+let searchWord = "";
+let startDate = "";
+let endDate = "";
+
 document.addEventListener("DOMContentLoaded", function() {
 	var totalPages = 1;
 	var startPage = 0;
@@ -9,10 +14,10 @@ document.addEventListener("DOMContentLoaded", function() {
 		return urlParams.get(param);
 	}
 	let p = parseInt(getQueryParam("p")) || 1;
-	let searchCode = getQueryParam("code") || '발주번호';  // 검색 코드
-    let searchWord = getQueryParam("word") || '';  // 검색어
-    let startDate = getQueryParam("sDate") || '';
-	let endDate = getQueryParam("eDate") || new Date().toISOString().split('T')[0];
+	searchCode = getQueryParam("code") || '발주번호';  // 검색 코드
+    searchWord = getQueryParam("word") || '';  // 검색어
+    startDate = getQueryParam("sDate") || '';
+	endDate = getQueryParam("eDate") || new Date().toISOString().split('T')[0];
     
     document.getElementById("search_code").value = searchCode;
     document.getElementById("search_word").value = searchWord;
@@ -124,15 +129,16 @@ document.addEventListener("DOMContentLoaded", function() {
 
 				// 페이징 HTML을 페이지에 삽입
 				paging.innerHTML = paginationHTML;
-				
-                if (word === "" && sDate === "") {
+				if(eDate === ""){
 					history.replaceState({}, '', location.pathname + `?p=${pno}`);
+				}else if (word === "" && sDate === "") {
+					history.replaceState({}, '', location.pathname + `?p=${pno}` + `&eDate=${eDate}`);
 				} else if (sDate === "") {
-					history.replaceState({}, '', location.pathname + `?p=${pno}&code=${code}&word=${word}`);
+					history.replaceState({}, '', location.pathname + `?p=${pno}` + `&code=${code}&word=${word}&eDate=${eDate}`);
 				} else if (word === "") {
-					history.replaceState({}, '', location.pathname + `?p=${pno}&sDate=${sDate}&eDate=${eDate}`);
+					history.replaceState({}, '', location.pathname + `?p=${pno}` + `&sDate=${sDate}&eDate=${eDate}`);
 				} else {
-					history.replaceState({}, '', location.pathname + `?p=${pno}&sDate=${sDate}&eDate=${eDate}&code=${code}&word=${word}`);
+					history.replaceState({}, '', location.pathname + `?p=${pno}` + `&sDate=${sDate}&eDate=${eDate}&code=${code}&word=${word}`);
 				}
 			})
 			.catch(function(error) {

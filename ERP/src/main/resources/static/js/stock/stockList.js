@@ -47,16 +47,16 @@ function stocklistmain(pno, code = '', word = ''){
     	items.forEach(function(stocklist){
 		
         let stocklistth = `<tr class="odd gradeX">
-                    <td>${stocklist.productCode}</td>
+                    <td style="text-align:center;">${stocklist.productCode}</td>
                     <td>${stocklist.productName}</td>
-                    <td>${stocklist.supplierCode}</td>
+                    <td style="text-align:center;">${stocklist.supplierCode}</td>
                     <td>${stocklist.supplierName}</td>
-                    <td>${stocklist.totalQty}</td>
-                    <td>${stocklist.availableQty}</td>
-                    <td>${stocklist.unavailableQty}</td>
-                    <td>${stocklist.safetyQty}</td>
-                    <td><input type="button" value="상세보기" class="dailyinventorybtn" data-product-code="${stocklist.productCode}"></td>
-                    <td><input type="button" value="설정" class="safetyqtysetting"></td>
+                    <td style="text-align:right;">${stocklist.totalQty}</td>
+                    <td style="text-align:right;">${stocklist.availableQty}</td>
+                    <td style="text-align:right;">${stocklist.unavailableQty}</td>
+                    <td style="text-align:right;">${stocklist.safetyQty}</td>
+                    <td style="text-align:center;"><input type="button" value="상세보기" class="dailyinventorybtn" data-product-code="${stocklist.productCode}"></td>
+                    <td style="text-align:center;"><input type="button" value="설정" class="safetyqtysetting"></td>
                  </tr>`;
 			stocklisttbody.innerHTML +=stocklistth;
 		}); 

@@ -7,8 +7,8 @@
     display: none;
 }
 .checkbox{
-	position: relative !important;
-	transform: scale(1.5); /* 1.5배로 확대 */
+	position: relative;
+	transform: scale(1.5);
 }
 .postit-content {
     background-color: yellow;
