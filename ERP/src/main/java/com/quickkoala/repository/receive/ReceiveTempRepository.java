@@ -16,6 +16,9 @@ public interface ReceiveTempRepository extends JpaRepository<ReceiveTempEntity, 
 	@Query("SELECT COUNT(p) FROM ReceiveTempEntity p WHERE DATE(p.date) = :today")
     long countByOrderDate(@Param("today") LocalDate today);
 	
+	@Query("SELECT MAX(p.code) FROM ReceiveTempEntity p WHERE DATE(p.date) = :today")
+	String findMaxCodeByOrderDate(@Param("today") LocalDate today);
+	
 	List<ReceiveTempEntity> findAllByOrderByCodeDesc();
 	ReceiveTempEntity findByCode(String data);
 	
@@ -24,12 +27,6 @@ public interface ReceiveTempRepository extends JpaRepository<ReceiveTempEntity, 
 	
 	@Query("SELECT r.orderNumber FROM ReceiveTempEntity r WHERE r.code = :code")
 	String findOrderNumberByCode(@Param("code") String code);
-	
-	/*
-	@Modifying
-	@Query("UPDATE ReceiveTempEntity rt SET rt.wtQuantity = :quantity WHERE rt.code = :code")
-	void updateWtQuantityByCode(@Param("code") String code, @Param("quantity") Integer quantity);
-	*/
 	
 	@Modifying
 	@Query("DELETE FROM ReceiveTempEntity rt WHERE rt.code = :code")

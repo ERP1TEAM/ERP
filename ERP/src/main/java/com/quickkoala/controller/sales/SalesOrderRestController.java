@@ -67,7 +67,7 @@ public class SalesOrderRestController {
 	        // 메시지 생성
 	        StringBuilder message = new StringBuilder("등록 완료<br>");
 	        if (!duplicateOrders.isEmpty()) {
-	            message.append("중복된 주문이 있어 제외하였습니다 : <br>");
+	            message.append("등록 제외된 주문 : <br>");
 	            message.append(String.join("<br> ", duplicateOrders));  // 중복된 주문 정보 추가
 	        }
 
