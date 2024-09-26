@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -38,7 +40,8 @@ public interface OrderRepository extends JpaRepository<OrderEntity,String> {
 	
 
     // JPQL을 사용하여 orderId로 상태만 조회
-    @Query("SELECT o.status FROM OrderEntity o WHERE o.orderId = :orderId")
-    Optional<OrderStatus> getStatusByOrderId(@Param("orderId") String orderId);
+	@Query("SELECT o.status FROM OrderEntity o WHERE o.orderId = :orderId")
+	Page<OrderStatus> getStatusByOrderId(@Param("orderId") String orderId, Pageable pageable);
+
 	
 }

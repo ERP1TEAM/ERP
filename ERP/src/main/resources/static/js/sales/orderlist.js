@@ -111,6 +111,10 @@ function showOrderDetails(button) {
         .then(response => response.json())
         .then(data => {
             var productDetails = '';
+            var clientMemo = '';  // 수취인 메모
+            var managerMemo = ''; // 관리자 메모
+
+            // 상품 목록 처리
             data.forEach(product => {
                 productDetails += `
                     <tr>
@@ -118,18 +122,28 @@ function showOrderDetails(button) {
                         <td>${product.productName}</td>
                         <td>${product.qty}</td>
                         <td>${product.status ?? '처리중'}</td>  <!-- 처리현황 출력 -->
-                    </tr>
-					
-					<tr>
-					    <th>수취인 메모</th>
-					    <td colspan="3">${product.clientMemo}</td>  <!-- 수취인 메모 출력 -->
-					</tr>
-					<tr>
-					    <th>관리자 메모</th>
-					    <td colspan="3">${product.managerMemo}</td>  <!-- 관리자 메모 출력 -->
-					</tr>
-					`;
+                    </tr>`;
+                
+                // 수취인 메모와 관리자 메모는 첫 번째 product에서만 가져옴
+                if (!clientMemo && product.clientMemo) {
+                    clientMemo = product.clientMemo;
+                }
+                if (!managerMemo && product.managerMemo) {
+                    managerMemo = product.managerMemo;
+                }
             });
+
+            // 메모 출력 (forEach 바깥에서 한 번만 추가)
+            productDetails += `
+                <tr class="no-border">
+                    <th>수취인 메모</th>
+                    <td colspan="3">${clientMemo || '없음'}</td>  <!-- 수취인 메모 출력 -->
+                </tr>
+                <tr class="no-border">
+                    <th>관리자 메모</th>
+                    <td colspan="3">${managerMemo || '없음'}</td>  <!-- 관리자 메모 출력 -->
+                </tr>`;
+
             document.getElementById('orderProductDetails').innerHTML = productDetails;
             // 모달 표시
             openModal();
