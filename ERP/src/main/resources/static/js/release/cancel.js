@@ -1,9 +1,8 @@
 let tBody = document.querySelector("#tbody");
 import Paging from '../module/paging.js';
 const pagingIns = new Paging();
-window.clickPageBtn = function(pg,sel,par) {
-    console.log(pg);
-    paging(pg-1, sel, par);
+window.clickPageBtn = function(pg) {
+    paging(pg-1);
 };
 document.addEventListener("DOMContentLoaded", function() {
     paging(pagingIns.currentPage_);
@@ -11,18 +10,19 @@ document.addEventListener("DOMContentLoaded", function() {
 window.expand_post=expand_post;
 window.pgNext = function() {
     pagingIns.pgNext();
-     paging(pagingIns.currentPage_ - 1, pagingIns.select_, pagingIns.param_);
+     paging(pagingIns.currentPage_ - 1);
 };
 
 window.pgPrev = function() {
     pagingIns.pgPrev();
-     paging(pagingIns.currentPage_ - 1, pagingIns.select_, pagingIns.param_);
+     paging(pagingIns.currentPage_ - 1);
 };
-function paging(_page,_select,_param){
-	pagingIns.getPage("./cancel/page",_page,_select,_param).then(result => {
+function paging(_page,_select,_param,_sd,_ed){
+	pagingIns.getPage("./cancel/page",_page,_select,_param,_sd,_ed).then(result => {
 		let list = result.content;
         while (tBody.firstChild) {
             tBody.removeChild(tBody.firstChild);
+            
         }
         
         let html = "";
@@ -47,10 +47,26 @@ function paging(_page,_select,_param){
         tBody.innerHTML = html;
     });
 }
-document.querySelector("#searchbtn").addEventListener("click",function(){
+ document.getElementById('frm').addEventListener('submit', function(event) {
+        event.preventDefault();
+    });
+
+document.querySelector("#searchbtn").addEventListener("click",function(event){
+	let StartDate = document.querySelector("#start_date").value;
+	let EndDate = document.querySelector("#end_date").value;
 	let select=document.querySelector("#searchselect").value;
 	let prm=document.querySelector("#searchtxt").value;
-	paging(0,select,prm);
+	if(StartDate>EndDate||(StartDate==null&&EndDate!=null)||(StartDate!=null&&EndDate==null)){
+		alert("탐색할 날짜를 확인하세요.");
+	}else{
+		if(prm==""||prm==null){
+			paging(0, "", prm,StartDate,EndDate);
+		}else{
+			paging(0, select, prm,StartDate,EndDate);
+		}
+		
+	}
+	
 });
 function expand_post(thisElement,onum){
 }
