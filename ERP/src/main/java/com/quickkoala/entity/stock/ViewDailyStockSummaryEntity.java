@@ -19,12 +19,12 @@ import lombok.NoArgsConstructor;
 public class ViewDailyStockSummaryEntity {
 	
 		@Id
+		@Column(name = "product_code", length = 8, nullable = false)
+		private String productCode;
+		
 		@Column(name = "stock_date", nullable = false)
 		private LocalDate stockDate;
 	 	
-		@Id
-	    @Column(name = "product_code", length = 8, nullable = false)
-	    private String productCode;
 
 	    @Column(name = "total_qty")
 	    private Integer totalQty;
