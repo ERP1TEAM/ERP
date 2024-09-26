@@ -26,5 +26,4 @@ public interface ProductRepository extends JpaRepository<ProductEntity, String>{
     int updateLocationCode(@Param("productCode") String productCode, @Param("locationCode") String locationCode);
 	
 
-
 }
