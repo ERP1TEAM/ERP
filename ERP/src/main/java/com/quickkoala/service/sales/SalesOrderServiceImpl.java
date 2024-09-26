@@ -57,7 +57,7 @@ public class SalesOrderServiceImpl implements SalesOrderService {
     public List<String> saveOrder(List<ClientsOrdersDTO> orders, String token) {
         LocalDateTime now = LocalDateTime.now();
         List<String> duplicateOrders = new ArrayList<>();  // 중복된 주문을 저장할 리스트
-        String orderId = null;
+
         for (ClientsOrdersDTO orderDTO : orders) {
 
             // 유효성 검사
@@ -65,56 +65,60 @@ public class SalesOrderServiceImpl implements SalesOrderService {
                 orderDTO.getName() == null || 
                 orderDTO.getTel() == null || 
                 orderDTO.getEmail() == null) {
-                
                 //System.out.println("유효하지 않은 주문 정보: 주문을 저장하지 않습니다.");
                 continue;
             }
 
-            ClientsOrdersEntity order = findExistingOrder(orderDTO);
+            // 주문이 존재하는지 확인
+            ClientsOrdersEntity existingOrder = findExistingOrder(orderDTO);
 
             // 중복된 주문이 있을 경우 리스트에 추가하고 건너뜀
-            if (order != null) {
+            if (existingOrder != null) {
                 duplicateOrders.add(orderDTO.getName() + " - " + orderDTO.getTel());  // 중복된 주문 정보 저장
                 continue;
             }
-            orderId=generateOrderId(orderDTO.getOrderDate());
-            // 주문 정보 생성 및 저장
-            order = new ClientsOrdersEntity();
-            order.setName(orderDTO.getName());
-            order.setTel(orderDTO.getTel());
-            order.setEmail(orderDTO.getEmail());
-            order.setPost(orderDTO.getPost());
-            order.setAddress(orderDTO.getAddress());
-            order.setAddressDetail(orderDTO.getAddressDetail());
-            order.setClientMemo(orderDTO.getClientMemo());
-            order.setManager(jwtTokenProvider.getName(token));
-            order.setCode(jwtTokenProvider.getCode(token));
-            order.setManagerMemo(orderDTO.getManagerMemo());
-            order.setOrderDate(orderDTO.getOrderDate());
-            order.setCreatedDt(now);
-            order.setOrderId(orderId);
-            
-            clientsOrdersRepository.save(order);
 
-            // 상품 정보 저장
+            // 새 주문 정보 생성 및 저장
+            String orderId = generateOrderId(orderDTO.getOrderDate());
+            ClientsOrdersEntity newOrder = new ClientsOrdersEntity();
+            newOrder.setOrderId(orderId);
+            newOrder.setName(orderDTO.getName());
+            newOrder.setTel(orderDTO.getTel());
+            newOrder.setEmail(orderDTO.getEmail());
+            newOrder.setPost(orderDTO.getPost());
+            newOrder.setAddress(orderDTO.getAddress());
+            newOrder.setAddressDetail(orderDTO.getAddressDetail());
+            newOrder.setClientMemo(orderDTO.getClientMemo());
+            newOrder.setManager(jwtTokenProvider.getName(token));
+            newOrder.setCode(jwtTokenProvider.getCode(token));
+            newOrder.setManagerMemo(orderDTO.getManagerMemo());
+            newOrder.setOrderDate(orderDTO.getOrderDate());
+            newOrder.setCreatedDt(now);
+
+            clientsOrdersRepository.save(newOrder);  // 주문 저장
+
+            // 상품 정보 저장 (동일한 orderId로 여러 상품 저장)
             List<String> productCodes = new ArrayList<>();
             for (ClientsOrderProductsDTO productDTO : orderDTO.getProducts()) {
-                List<ClientsOrderProductsEntity> existingProducts = clientsOrderProductsRepository.findByClientsOrdersOrderIdAndProductCode(order.getOrderId(), productDTO.getProductCode());
+                // 상품이 중복되지 않도록 검사하지만 각 주문에 대해 반드시 상품이 저장되도록 처리
+                List<ClientsOrderProductsEntity> existingProducts = 
+                    clientsOrderProductsRepository.findByClientsOrdersOrderIdAndProductCode(newOrder.getOrderId(), productDTO.getProductCode());
 
+                // 중복된 상품이 없을 경우에만 저장
                 if (existingProducts.isEmpty()) {
-                    ClientsOrderProductsEntity product = new ClientsOrderProductsEntity();
-                    product.setClientsOrders(order);
-                    product.setProductCode(productDTO.getProductCode());
-                    product.setProductName(productDTO.getProductName());
-                    product.setQty(productDTO.getQty());
-                    clientsOrderProductsRepository.save(product);
+                    ClientsOrderProductsEntity newProduct = new ClientsOrderProductsEntity();
+                    newProduct.setClientsOrders(newOrder);  // 새로 생성한 주문과 연관
+                    newProduct.setProductCode(productDTO.getProductCode());
+                    newProduct.setProductName(productDTO.getProductName());
+                    newProduct.setQty(productDTO.getQty());
+                    clientsOrderProductsRepository.save(newProduct);
                     productCodes.add(productDTO.getProductCode());
                 }
             }
 
-            
             OrderEntity salesOrder = null;
             int orderTotal = 0;
+
             // OrderEntity 초기화 (기존 주문이 있는지 확인 후 생성)
             List<OrderEntity> temp = orderRepository.findByOrderId(orderId);
             if (!temp.isEmpty()) {
@@ -131,6 +135,7 @@ public class SalesOrderServiceImpl implements SalesOrderService {
                 salesOrder.setOrderId(orderId);  // 새로 생성한 orderId 사용
                 salesOrder.setNumber(generateOrderNumber(now));
             }
+
             // 주문 총액 계산
             List<Integer> productPrices = productRepository.findPricesByCodes(productCodes);
             for (Integer price : productPrices) {
@@ -144,6 +149,7 @@ public class SalesOrderServiceImpl implements SalesOrderService {
 
         return duplicateOrders;  // 중복된 주문 정보를 반환
     }
+
 
     
 
