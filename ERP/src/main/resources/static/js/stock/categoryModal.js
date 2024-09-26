@@ -129,7 +129,7 @@ function categorymainmodal(pno, code = '', word = '') {
     
     	document.querySelectorAll("#categorytbody tr").forEach(row => {
    		row.style.cursor = 'pointer' ;
-   		 
+   		  
    		 
 		});
     })
