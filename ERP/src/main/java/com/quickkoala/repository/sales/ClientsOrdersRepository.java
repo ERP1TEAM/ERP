@@ -10,9 +10,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import com.quickkoala.entity.sales.ClientsOrderProductsEntity;
 import com.quickkoala.entity.sales.ClientsOrdersEntity;
 
 public interface ClientsOrdersRepository extends JpaRepository<ClientsOrdersEntity, String> {
+	
+	//주문번호로 처리상태 가져오기위해 사용
+	Optional<ClientsOrdersEntity> findByOrderId(String orderId);
 	
     // 특정 날짜에 존재하는 주문 ID 목록을 가져오는 메서드
     @Query("SELECT o.orderId FROM ClientsOrdersEntity o WHERE o.orderId LIKE :date%")

@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import com.quickkoala.entity.order.OrderEntity;
 import com.quickkoala.entity.stock.ProductEntity;
 
 @Repository
@@ -24,4 +25,7 @@ public interface ProductRepository extends JpaRepository<ProductEntity, String>{
 	@Modifying
     @Query("UPDATE ProductEntity p SET p.storageLocation = :locationCode WHERE p.code = :productCode")
     int updateLocationCode(@Param("productCode") String productCode, @Param("locationCode") String locationCode);
+	
+
+
 }
