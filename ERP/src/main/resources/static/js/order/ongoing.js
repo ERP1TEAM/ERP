@@ -53,7 +53,7 @@ function paging(_page,_select,_param){
         }
         let html = "";
         if (list.length === 0) {
-            html = "<tr><td colspan='8'>데이터가 존재하지 않습니다.</td></tr>";
+            html = "<tr><td colspan='8' style='text-align:center;'>데이터가 존재하지 않습니다.</td></tr>";
         } else {
             list.forEach(function(order) {
                 let btns = "";
@@ -69,14 +69,14 @@ function paging(_page,_select,_param){
 				}
                 html += `
                     <tr class='odd gradeX' onclick='expand_post(this, "${order.number}")'>
-                        <td>${order.number}</td>
+                        <td style="text-align:center;">${order.number}</td>
                         <td>${order.salesName}</td>
-                        <td>${order.manager}</td>
-                        <td>${pagingIns.dateFormat(order.dt)}</td>
-                        <td>${approveDt}</td>
-                        <td>${order.orderTotal}</td>
-                        <td>${order.status}</td>
-                        <td>${btns}</td>
+                        <td style="text-align:center;">${order.manager}</td>
+                        <td style="text-align:center;">${pagingIns.dateFormat(order.dt)}</td>
+                        <td style="text-align:center;">${approveDt}</td>
+                        <td style="text-align:right;">${order.orderTotal}</td>
+                        <td style="text-align:center;">${order.status}</td>
+                        <td style="text-align:center;">${btns}</td>
                     </tr>
                 `;
             });

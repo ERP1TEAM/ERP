@@ -26,17 +26,17 @@ function paging(_pg,_select,_param){
         }
         let html = "";
         if (data.length === 0) {
-            html = "<tr><td colspan='8'>데이터가 존재하지 않습니다.</td></tr>";
+            html = "<tr><td colspan='8' style='text-align:center;'>데이터가 존재하지 않습니다.</td></tr>";
         } else {
             data.forEach(function(order) {
                 html += `
                     <tr class='odd gradeX' onclick='expand_post(this, "${order.orderNumber}")'>
-                        <td>${order.orderNumber}</td>
+                        <td style="text-align:center;">${order.orderNumber}</td>
                         <td>${order.salesName}</td>
-                        <td>${order.manager}</td>
-                        <td>${pagingIns.dateFormat(order.dt)}</td>
-                        <td>${order.orderTotal}</td>
-                        <td><input type="button" value="삭제" onclick="approve(event,'${order.orderNumber}')"></td>
+                        <td style="text-align:center;">${order.manager}</td>
+                        <td style="text-align:center;">${pagingIns.dateFormat(order.dt)}</td>
+                        <td style="text-align:right;">${order.orderTotal}</td>
+                        <td style="text-align:center;"><input type="button" value="삭제" onclick="approve(event,'${order.orderNumber}')"></td>
                     </tr>
                 `;
             });
