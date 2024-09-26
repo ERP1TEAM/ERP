@@ -111,7 +111,7 @@ public class WarehouseRestController {
 	*/
 	//****location 부분****//
 	
-	private final int SIZE = 5;
+	private final int SIZE = 10;
 	
 	@Autowired
 	private LocationService locationService;
