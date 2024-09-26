@@ -290,10 +290,12 @@ public class SalesOrderServiceImpl implements SalesOrderService {
         // ClientsOrdersEntity를 가져옴
         ClientsOrdersEntity clientsOrdersEntity = clientsOrdersRepository.findByOrderId(orderId)
             .orElseThrow(() -> new IllegalArgumentException("Invalid order ID: " + orderId));
-
+        String orderStatus = orderRepository.getStatusByOrderId(orderId)
+        	    .map(OrderStatus::name)
+        	    .orElse("처리중");
         // 주문 상태(OrderEntity) 가져오기
-        OrderEntity orderEntity = clientsOrdersEntity.getOrderEntity();
-        String orderStatus = orderEntity != null ? orderEntity.getStatus().name() : "처리중";
+//        OrderEntity orderEntity = clientsOrdersEntity.getOrderEntity();
+        //String orderStatus = orderEntity != null ? orderEntity.getStatus().name() : "처리중";
 
         // 주문에 해당하는 상품 목록을 가져옴
         List<ClientsOrderProductsEntity> products = clientsOrderProductsRepository.findByClientsOrdersOrderId(orderId);
@@ -305,6 +307,8 @@ public class SalesOrderServiceImpl implements SalesOrderService {
             dto.setProductName(productEntity.getProductName());
             dto.setQty(productEntity.getQty());
             dto.setStatus(orderStatus);  // OrderEntity의 상태를 DTO에 설정
+            dto.setManagerMemo(clientsOrdersEntity.getManagerMemo());
+            dto.setClientMemo(clientsOrdersEntity.getClientMemo());
             return dto;
         }).collect(Collectors.toList());
     }

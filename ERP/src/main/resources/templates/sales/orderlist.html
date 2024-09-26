@@ -29,9 +29,10 @@
 
             <!-- 검색 영역: 날짜 선택, 검색 옵션, 검색 필드 -->
 			<div class="search-container">
-			    <input type="date" id="startDate" class="form-control" placeholder="시작 날짜">
-			    <span style="margin-left: 10px;">~</span>
-			    <input type="date" id="endDate" class="form-control" placeholder="종료 날짜">
+				<div style="padding-bottom: 10px; padding-right: 10px;">주문날짜 : </div>
+				<input type="date" id="startDate" class="form-control" placeholder="시작 날짜">
+				<span style="margin-left: 10px;">~</span>
+				<input type="date" id="endDate" class="form-control" placeholder="종료 날짜">
 			    <select id="searchOption" class="form-control">
 			        <option value="orderId">주문번호</option>
 			        <option value="name">주문자명</option>
@@ -58,7 +59,7 @@
 										        <th class="center">이메일</th>
 										        <th class="center">배송지</th>
 										        <th class="center">주문날짜</th>
-										        <th class="center">관리자메모</th>
+										        <th class="center">관리자</th>
 										        <th class="center">주문상세</th>
 										    </tr>
 										</thead>
@@ -83,8 +84,8 @@
 										<!-- 페이징 UI -->
 										
 										    <ul class="pagination">
-
 										    </ul>
+											<input type="hidden" id="currentPage">
 										
                                 </div>
                             </div>

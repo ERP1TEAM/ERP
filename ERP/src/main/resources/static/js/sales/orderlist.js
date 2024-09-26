@@ -1,10 +1,10 @@
 let currentPage = 0;
 let totalPages = 0;
 
-// 페이지 로드 시 로컬 스토리지에서 저장된 값 복원
+// 페이지 로드 시 세션 스토리지에서 저장된 값 복원
 document.addEventListener('DOMContentLoaded', function() {
-    loadStateFromLocalStorage(); // 로컬 스토리지에서 상태 로드
-    filterOrders(); // 페이지 로드 시 첫 페이지 로드
+    loadStateFromSessionStorage(); // 세션 스토리지에서 상태 로드
+    filterOrders(currentPage); // 페이지 로드 시 첫 페이지 로드
 });
 
 // 주문 목록 필터링 및 검색 기능
@@ -13,11 +13,10 @@ function filterOrders(page = 0) {
     const searchText = document.getElementById('searchInput').value.toLowerCase();
     const startDate = document.getElementById('startDate').value;
     const endDate = document.getElementById('endDate').value;
-
     const size = 30;  // 한 페이지에 표시할 데이터 수
 
-    // 현재 상태를 로컬 스토리지에 저장
-    saveStateToLocalStorage(searchType, searchText, startDate, endDate, page);
+    // 현재 상태를 세션 스토리지에 저장 (여기서 page는 현재 페이지)
+    saveStateToSessionStorage(searchType, searchText, startDate, endDate, page);
 
     fetch(`/sales/filter?searchType=${searchType}&searchText=${searchText}&startDate=${startDate}&endDate=${endDate}&page=${page}&size=${size}`)
         .then(response => response.json())
@@ -30,21 +29,20 @@ function filterOrders(page = 0) {
                 const row = `
                     <tr data-order-id="${order.orderId}">
                         <td class="center">${order.orderId}</td>
-                        <td class="center">${order.name}</td>
+                        <td>${order.name}</td>
                         <td class="center">${order.tel}</td>
-                        <td class="center">${order.email}</td>
+                        <td>${order.email}</td>
                         <td>[${order.post}] ${order.address} ${order.addressDetail}</td>
                         <td class="center">${orderDate}</td>  
-                        <td>${order.managerMemo ?? ''}</td>
+                        <td>${order.manager}</td>
                         <td class="center">
                             <button type="button" class="btn btn-primary" style="background-color: #474B54; border: none;" onclick="showOrderDetails(this)">상세보기</button>
                         </td>
                     </tr>`;
                 tbody.insertAdjacentHTML('beforeend', row);
             });
-
-            currentPage = data.currentPage;
-            totalPages = data.totalPages;
+            currentPage = data.currentPage;  // 서버에서 받은 현재 페이지로 업데이트
+            totalPages = data.totalPages;  // 서버에서 받은 총 페이지 수로 업데이트
             updatePagination();
         })
         .catch(error => console.error('Error fetching filtered orders:', error));
@@ -77,30 +75,31 @@ function updatePagination() {
     }
 }
 
-// 상태를 로컬 스토리지에 저장하는 함수
-function saveStateToLocalStorage(searchType, searchText, startDate, endDate, page) {
+// 상태를 세션 스토리지에 저장하는 함수
+function saveStateToSessionStorage(searchType, searchText, startDate, endDate, page) {
     const state = {
         searchType: searchType,
         searchText: searchText,
         startDate: startDate,
         endDate: endDate,
-        currentPage: page
+        currentPage: page // 현재 페이지 저장
     };
-    localStorage.setItem('orderListState', JSON.stringify(state));
+    sessionStorage.setItem('orderListState', JSON.stringify(state));
 }
 
-// 로컬 스토리지에서 상태를 로드하는 함수
-function loadStateFromLocalStorage() {
-    const savedState = localStorage.getItem('orderListState');
+// 세션 스토리지에서 상태를 로드하는 함수
+function loadStateFromSessionStorage() {
+    const savedState = sessionStorage.getItem('orderListState');
     if (savedState) {
         const state = JSON.parse(savedState);
         document.getElementById('searchOption').value = state.searchType;
         document.getElementById('searchInput').value = state.searchText;
         document.getElementById('startDate').value = state.startDate;
         document.getElementById('endDate').value = state.endDate;
-        currentPage = state.currentPage || 0;
+        currentPage = state.currentPage || 0; // 세션 스토리지에서 저장된 currentPage 값 복원
     }
 }
+
 
 // 주문 상세보기 버튼 클릭 시 호출되는 함수
 function showOrderDetails(button) {
@@ -119,10 +118,19 @@ function showOrderDetails(button) {
                         <td>${product.productName}</td>
                         <td>${product.qty}</td>
                         <td>${product.status ?? '처리중'}</td>  <!-- 처리현황 출력 -->
-                    </tr>`;
+                    </tr>
+					
+					<tr>
+					    <th>수취인 메모</th>
+					    <td colspan="3">${product.clientMemo}</td>  <!-- 수취인 메모 출력 -->
+					</tr>
+					<tr>
+					    <th>관리자 메모</th>
+					    <td colspan="3">${product.managerMemo}</td>  <!-- 관리자 메모 출력 -->
+					</tr>
+					`;
             });
             document.getElementById('orderProductDetails').innerHTML = productDetails;
-
             // 모달 표시
             openModal();
         })
@@ -130,7 +138,6 @@ function showOrderDetails(button) {
             console.error('Error fetching order products:', error);
         });
 }
-
 
 // 모달을 열 때 호출되는 함수
 function openModal() {
@@ -154,3 +161,25 @@ function closeModal() {
         document.body.removeChild(backdrop);
     }
 }
+
+// 시작 날짜가 변경되었을 때의 이벤트 리스너
+document.getElementById('startDate').addEventListener('change', function() {
+    const startDate = document.getElementById('startDate').value;
+    const endDate = document.getElementById('endDate').value;
+
+    // 종료 날짜가 선택되지 않았거나, 시작 날짜보다 이전일 경우
+    if (!endDate || new Date(endDate) < new Date(startDate)) {
+        document.getElementById('endDate').value = startDate;  // 종료 날짜를 시작 날짜로 설정
+    }
+});
+
+// 종료 날짜가 변경되었을 때의 이벤트 리스너
+document.getElementById('endDate').addEventListener('change', function() {
+    const startDate = document.getElementById('startDate').value;
+    const endDate = document.getElementById('endDate').value;
+
+    // 종료 날짜가 시작 날짜보다 이전일 경우
+    if (!startDate | new Date(endDate) < new Date(startDate)) {
+        document.getElementById('startDate').value = endDate;  // 시작 날짜를 종료 날짜로 설정
+    }
+});

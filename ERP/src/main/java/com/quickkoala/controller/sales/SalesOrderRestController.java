@@ -94,7 +94,7 @@ public class SalesOrderRestController {
 	        // 주문 정보 저장 로직
 	        String token = jwtTokenProvider.resolveToken(request);
 	        orderService.saveOrder(orders, token);
-	        return ResponseEntity.ok(Collections.singletonMap("message", "주문이 성공적으로 등록되었습니다."));
+	        return ResponseEntity.ok(Collections.singletonMap("message", "등록 완료"));
 	    } catch (Exception e) {
 	        e.printStackTrace();
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
