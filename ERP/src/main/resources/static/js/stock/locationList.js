@@ -53,14 +53,16 @@ function locationlistmain(pno, code = '', word = ''){
                 }
 			
     	let locationlistth = `<tr class="odd gradeX">
-                    <th><input type="checkbox" class="checkbox" value="${locationlist.code}"></th>
-                    <td>${locationlist.code}</td>
-                    <td>${locationlist.warehouseCode}</td>
-                    <td>${locationlist.rackCode}</td>
-                    <td>${locationlist.rowCode}</td>
-                    <td>${locationlist.levelCode}</td>
-                    <td>${locationlistuseFlag}</td>
-                    <td><input type="button" value="수정" class="locationlistmodifybtn"></td>
+                    <td style="text-align:center;">
+                    <input type="checkbox" class="checkbox" value="${locationlist.code}">
+                    </td>
+                    <td style="text-align:center;">${locationlist.code}</td>
+                    <td style="text-align:center;">${locationlist.warehouseCode}</td>
+                    <td style="text-align:center;">${locationlist.rackCode}</td>
+                    <td style="text-align:center;">${locationlist.rowCode}</td>
+                    <td style="text-align:center;">${locationlist.levelCode}</td>
+                    <td style="text-align:center;">${locationlistuseFlag}</td>
+                    <td style="text-align:center;"><input type="button" value="수정" class="locationlistmodifybtn"></td>
                  </tr>`;
 			locationlisttbody.innerHTML +=locationlistth;
 		});
