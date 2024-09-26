@@ -1,7 +1,6 @@
 package com.quickkoala.repository.supplier;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -10,10 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.quickkoala.entity.receive.ViewReceiveEntity;
-import com.quickkoala.entity.receive.ViewReceiveSummaryEntity;
 import com.quickkoala.entity.supplier.ViewDeliveryDetailEntity;
-import com.quickkoala.entity.supplier.ViewPurchaseSummaryEntity;
 
 @Repository
 public interface ViewDeliveryDetailRepository extends JpaRepository<ViewDeliveryDetailEntity, String> {

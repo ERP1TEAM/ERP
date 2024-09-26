@@ -3,8 +3,6 @@ package com.quickkoala.service.release;
 
 import java.util.List;
 
-import org.springframework.data.jpa.repository.Query;
-
 import com.quickkoala.entity.release.OrderReleaseEntity;
 import com.quickkoala.entity.release.ReleaseProductsEntity;
 

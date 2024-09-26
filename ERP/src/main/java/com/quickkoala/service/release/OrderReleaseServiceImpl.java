@@ -1,7 +1,6 @@
 package com.quickkoala.service.release;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -10,15 +9,13 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.quickkoala.entity.order.OrderCancelEntity;
-import com.quickkoala.entity.order.OrderEntity;
 import com.quickkoala.entity.release.OrderReleaseEntity;
-import com.quickkoala.entity.release.ReleaseCancelEntity;
-import com.quickkoala.entity.release.ReleaseCompleteEntity;
-import com.quickkoala.entity.release.ReleaseProductsEntity;
 import com.quickkoala.entity.release.OrderReleaseEntity.ReleaseStatus;
+import com.quickkoala.entity.release.ReleaseCancelEntity;
 import com.quickkoala.entity.release.ReleaseCancelEntity.ReleaseCancelReason;
 import com.quickkoala.entity.release.ReleaseCancelEntity.ReleaseCancelWho;
+import com.quickkoala.entity.release.ReleaseCompleteEntity;
+import com.quickkoala.entity.release.ReleaseProductsEntity;
 import com.quickkoala.entity.sales.ClientsOrderProductsEntity;
 import com.quickkoala.entity.stock.LotEntity;
 import com.quickkoala.entity.stock.ProductEntity;
@@ -29,7 +26,6 @@ import com.quickkoala.repository.release.ReleaseProductsRepository;
 import com.quickkoala.repository.sales.ClientsOrderProductsRepository;
 import com.quickkoala.repository.stock.LotRepository;
 import com.quickkoala.repository.stock.ProductRepository;
-import com.quickkoala.utils.GetToken;
 
 import jakarta.transaction.Transactional;
 
@@ -131,7 +127,8 @@ public class OrderReleaseServiceImpl implements OrderReleaseService{
 				 releaseProduct.setSupplierCode("error-code");
 			 }
 			 productRepository.flush();
-			 ArrayList<ReleaseProductsEntity> asignResult =  (ArrayList)this.asignLotNumber(released.getProductCode(),orderReleaseEntity.getSalesCode(),released.getQty(),releaseProduct);
+			 @SuppressWarnings({ "unchecked", "rawtypes" })
+			ArrayList<ReleaseProductsEntity> asignResult =  (ArrayList)this.asignLotNumber(released.getProductCode(),orderReleaseEntity.getSalesCode(),released.getQty(),releaseProduct);
 			 if(asignResult==null) {
 				 asignok=false;
 				 break;

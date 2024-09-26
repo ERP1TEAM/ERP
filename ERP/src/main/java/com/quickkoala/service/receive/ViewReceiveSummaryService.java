@@ -1,7 +1,5 @@
 package com.quickkoala.service.receive;
 
-import java.util.List;
-
 import org.springframework.data.domain.Page;
 
 import com.quickkoala.entity.receive.ViewReceiveSummaryEntity;

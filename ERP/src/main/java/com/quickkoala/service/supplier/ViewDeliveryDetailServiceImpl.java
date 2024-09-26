@@ -2,7 +2,6 @@ package com.quickkoala.service.supplier;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -11,9 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.quickkoala.dto.receive.SearchDto;
-import com.quickkoala.entity.receive.ViewReceiveSummaryEntity;
 import com.quickkoala.entity.supplier.ViewDeliveryDetailEntity;
-import com.quickkoala.entity.supplier.ViewPurchaseSummaryEntity;
 import com.quickkoala.repository.supplier.ViewDeliveryDetailRepository;
 
 @Service

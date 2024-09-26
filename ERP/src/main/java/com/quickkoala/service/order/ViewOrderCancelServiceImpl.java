@@ -1,14 +1,12 @@
 package com.quickkoala.service.order;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
 import com.quickkoala.entity.order.ViewOrderCancelEntity;
 import com.quickkoala.repository.order.ViewOrderCancelRepository;
 
@@ -43,7 +41,6 @@ public class ViewOrderCancelServiceImpl implements ViewOrderCancelService{
 		//LocalDateTime sd = LocalDateTime.parse(startDate);
 		//LocalDateTime ed = LocalDateTime.parse(endDate);
 		Pageable pageable=(Pageable) PageRequest.of(pg, size, Sort.by(Sort.Order.desc("orderNumber")));
-		List<ViewOrderCancelEntity> before = null;
 		if(select.equals(null)||select.equals("null")) {
 			return viewOrderCancelRepository.findAll(pageable);
 		}else if(select.equals("1")&&param!=null) {

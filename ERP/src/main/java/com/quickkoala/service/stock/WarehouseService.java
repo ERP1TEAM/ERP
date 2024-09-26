@@ -6,7 +6,6 @@ import java.util.Map;
 import org.springframework.data.domain.Page;
 
 import com.quickkoala.dto.stock.WarehouseDto;
-import com.quickkoala.entity.stock.LocationEntity;
 import com.quickkoala.entity.stock.WarehouseEntity;
 
 public interface WarehouseService {

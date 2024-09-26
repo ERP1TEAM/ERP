@@ -30,7 +30,6 @@ import com.quickkoala.dto.sales.SearchProductCodeDTO;
 import com.quickkoala.entity.sales.ClientsOrdersEntity;
 import com.quickkoala.entity.stock.ProductEntity;
 import com.quickkoala.repository.stock.ProductRepository;
-import com.quickkoala.service.client.SupplierServiceImpl;
 import com.quickkoala.service.sales.SalesOrderServiceImpl;
 import com.quickkoala.token.config.JwtTokenProvider;
 
@@ -49,8 +48,6 @@ public class SalesOrderRestController {
 	@Autowired
 	private ProductRepository productRepository;
 	
-	@Autowired
-	private SupplierServiceImpl supplierService;
 
 	//주문등록 (액셀 등록)
 	@PostMapping("/uploadFile")

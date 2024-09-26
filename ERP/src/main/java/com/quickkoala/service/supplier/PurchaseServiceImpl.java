@@ -8,11 +8,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.quickkoala.dto.receive.PurchaseDto;
 import com.quickkoala.dto.receive.PurchaseListDto;
-import com.quickkoala.entity.client.SupplierEntity;
 import com.quickkoala.entity.supplier.PurchaseEntity;
-import com.quickkoala.repository.client.SupplierRepository;
 import com.quickkoala.repository.supplier.PurchaseRepository;
 import com.quickkoala.service.client.SupplierService;
 import com.quickkoala.utils.TodayUtils;

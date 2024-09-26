@@ -126,8 +126,8 @@ public class TokenRestController {
             String code = jwtTokenProvider.getClaim(token, "code");
 
             // 새로운 만료 시간으로 토큰 재생성
-            Date now = new Date();
-            Date newExpirationTime = new Date(now.getTime() + jwtTokenProvider.getValidityInMilliseconds());
+            //Date now = new Date();
+            //Date newExpirationTime = new Date(now.getTime() + jwtTokenProvider.getValidityInMilliseconds());
             String newToken = jwtTokenProvider.createToken(userId, role, name, code);
 
             HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();

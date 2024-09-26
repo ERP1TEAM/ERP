@@ -11,8 +11,6 @@ import org.springframework.stereotype.Service;
 
 import com.quickkoala.dto.receive.SearchDto;
 import com.quickkoala.entity.receive.ViewPurchaseDetailEntity;
-import com.quickkoala.entity.receive.ViewReceiveEntity;
-import com.quickkoala.entity.receive.ViewReceiveReturnEntity;
 import com.quickkoala.repository.receive.ViewPurchaseDetailRepository;
 
 @Service

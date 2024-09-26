@@ -28,7 +28,6 @@ import com.quickkoala.entity.order.OrderEntity;
 import com.quickkoala.entity.order.OrderEntity.OrderStatus;
 import com.quickkoala.entity.sales.ClientsOrderProductsEntity;
 import com.quickkoala.entity.sales.ClientsOrdersEntity;
-import com.quickkoala.entity.stock.ProductEntity;
 import com.quickkoala.repository.order.OrderRepository;
 import com.quickkoala.repository.sales.ClientsOrderProductsRepository;
 import com.quickkoala.repository.sales.ClientsOrdersRepository;
@@ -310,15 +309,6 @@ public class SalesOrderServiceImpl implements SalesOrderService {
         }).collect(Collectors.toList());
     }
 
-
-    // Entity를 DTO로 변환
-    private ClientsOrderProductsDTO convertToDto(ClientsOrderProductsEntity entity) {
-        ClientsOrderProductsDTO dto = new ClientsOrderProductsDTO();
-        dto.setProductCode(entity.getProductCode());
-        dto.setProductName(entity.getProductName());
-        dto.setQty(entity.getQty());
-        return dto;
-    }
     
  // 검색 메서드 수정
     public Page<ClientsOrdersEntity> searchOrders(String managerCompanyCode, String searchType, String searchText, LocalDate startDate, LocalDate endDate, int page, int size) {

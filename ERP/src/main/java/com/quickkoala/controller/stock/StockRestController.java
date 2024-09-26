@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.quickkoala.dto.stock.CategoryDto;
-import com.quickkoala.dto.stock.LocationDto;
 import com.quickkoala.dto.stock.ProductDto;
 import com.quickkoala.entity.client.SupplierEntity;
 import com.quickkoala.entity.stock.CategoryEntity;
@@ -29,7 +28,6 @@ import com.quickkoala.entity.stock.ProductEntity;
 import com.quickkoala.entity.stock.ViewProductStockSupplierEntity;
 import com.quickkoala.service.client.SupplierService;
 import com.quickkoala.service.stock.CategoryService;
-import com.quickkoala.service.stock.LocationService;
 import com.quickkoala.service.stock.ProductService;
 import com.quickkoala.service.stock.StockService;
 import com.quickkoala.service.stock.ViewProductStockSupplierService;
@@ -47,8 +45,6 @@ public class StockRestController {
 	
 	@Autowired
 	private JwtTokenProvider jwtTokenProvider;
-	@Autowired
-	private LocationService locationService;
 	
 	@Autowired
 	private SupplierService supplierService;

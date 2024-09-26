@@ -13,7 +13,6 @@ import com.quickkoala.entity.receive.ReceiveTempEntity;
 import com.quickkoala.entity.supplier.PurchaseEntity;
 import com.quickkoala.repository.receive.ReceiveTempRepository;
 import com.quickkoala.repository.supplier.PurchaseRepository;
-import com.quickkoala.service.supplier.DeliveryDetailService;
 import com.quickkoala.utils.TodayUtils;
 
 import jakarta.transaction.Transactional;

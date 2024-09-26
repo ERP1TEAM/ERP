@@ -2,12 +2,8 @@ package com.quickkoala.entity.release;
 
 import java.time.LocalDateTime;
 
-import com.quickkoala.entity.order.OrderEntity.OrderStatus;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;

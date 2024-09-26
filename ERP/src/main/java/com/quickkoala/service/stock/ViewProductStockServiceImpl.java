@@ -10,7 +10,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.quickkoala.dto.stock.ViewProductStockDto;
-import com.quickkoala.entity.stock.LocationEntity;
 import com.quickkoala.entity.stock.ViewProductStockEntity;
 import com.quickkoala.repository.stock.ViewProductStockRepository;
 

@@ -1,6 +1,5 @@
 package com.quickkoala.service.order;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,15 +9,8 @@ import com.quickkoala.entity.order.OrderCancelEntity;
 import com.quickkoala.entity.order.OrderEntity;
 import com.quickkoala.entity.order.OrderEntity.OrderStatus;
 import com.quickkoala.entity.release.OrderReleaseEntity;
-import com.quickkoala.entity.release.ReleaseCancelEntity;
-import com.quickkoala.entity.release.ReleaseProductsEntity;
-import com.quickkoala.entity.release.ReleaseCancelEntity.ReleaseCancelReason;
-import com.quickkoala.entity.release.ReleaseCancelEntity.ReleaseCancelWho;
-import com.quickkoala.entity.sales.ClientsOrderProductsEntity;
 import com.quickkoala.repository.order.OrderCancelRepository;
 import com.quickkoala.repository.order.OrderRepository;
-import com.quickkoala.repository.release.ReleaseCancelRepository;
-import com.quickkoala.repository.release.ReleaseProductsRepository;
 import com.quickkoala.repository.sales.ClientsOrderProductsRepository;
 import com.quickkoala.service.release.OrderReleaseService;
 
@@ -37,9 +29,6 @@ public class OrderServiceImpl implements OrderService{
 	
 	@Autowired
 	private OrderCancelRepository orderCancelRepository;
-	
-	@Autowired
-	private ReleaseProductsRepository releaseProductsRepository;
 	
 	@Autowired ClientsOrderProductsRepository clientsOrderProductsRepository;
 	

@@ -7,9 +7,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.quickkoala.entity.receive.ReceiveTempEntity;
 import com.quickkoala.entity.supplier.DeliveryDetailEntity;
-import com.quickkoala.entity.supplier.PurchaseEntity;
 import com.quickkoala.repository.supplier.DeliveryDetailRepository;
 import com.quickkoala.utils.TodayUtils;
 

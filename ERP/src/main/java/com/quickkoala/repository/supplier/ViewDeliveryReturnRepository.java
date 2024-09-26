@@ -9,7 +9,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.quickkoala.entity.supplier.ViewDeliveryDetailEntity;
 import com.quickkoala.entity.supplier.ViewDeliveryReturnEntity;
 
 @Repository

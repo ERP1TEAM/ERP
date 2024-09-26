@@ -10,7 +10,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.quickkoala.dto.receive.SearchDto;
-import com.quickkoala.entity.receive.ViewReceiveEntity;
 import com.quickkoala.entity.supplier.ViewPurchaseSummaryEntity;
 import com.quickkoala.repository.supplier.ViewPurchaseSummaryRepository;
 

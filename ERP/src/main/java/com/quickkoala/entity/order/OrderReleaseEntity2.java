@@ -2,8 +2,6 @@ package com.quickkoala.entity.order;
 
 import java.time.LocalDateTime;
 
-import com.quickkoala.entity.order.OrderEntity.OrderStatus;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

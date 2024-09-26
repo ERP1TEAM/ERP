@@ -10,7 +10,6 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.quickkoala.entity.receive.ViewPurchaseDetailEntity;
-import com.quickkoala.entity.receive.ViewReceiveEntity;
 
 @Repository
 public interface ViewPurchaseDetailRepository extends JpaRepository<ViewPurchaseDetailEntity, String> {

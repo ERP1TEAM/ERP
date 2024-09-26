@@ -1,9 +1,6 @@
 package com.quickkoala.service.supplier;
 
-import java.util.List;
-
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 
 import com.quickkoala.dto.receive.SearchDto;
 import com.quickkoala.entity.supplier.ViewDeliveryDetailEntity;

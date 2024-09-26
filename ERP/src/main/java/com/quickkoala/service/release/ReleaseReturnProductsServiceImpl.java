@@ -1,6 +1,5 @@
 package com.quickkoala.service.release;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -94,6 +93,7 @@ public class ReleaseReturnProductsServiceImpl implements ReleaseReturnProductsSe
 						entity.setStatus(ReleaseReturnStatus.대기);
 						entity.setRelNumber(rCode);
 						entity.setManager(manager);
+						@SuppressWarnings("unused")
 						ReleaseReturnProductsEntity temp = releaseReturnProductsRepository.save(entity);
 						return "OK";
 					}else {
@@ -121,6 +121,7 @@ public class ReleaseReturnProductsServiceImpl implements ReleaseReturnProductsSe
 						entity.setStatus(ReleaseReturnStatus.대기);
 						entity.setRelNumber(rCode);
 						entity.setManager(manager);
+						@SuppressWarnings("unused")
 						ReleaseReturnProductsEntity temp = releaseReturnProductsRepository.save(entity);
 						return "OK";
 						

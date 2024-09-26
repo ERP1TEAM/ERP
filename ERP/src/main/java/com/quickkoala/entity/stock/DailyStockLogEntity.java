@@ -2,12 +2,8 @@ package com.quickkoala.entity.stock;
 
 import java.time.LocalDate;
 
-import com.quickkoala.entity.stock.ProductEntity.UseFlag;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
