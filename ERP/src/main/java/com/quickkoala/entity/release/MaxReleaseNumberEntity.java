@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-@Table(name = "release_number")
+@Table(name = "max_release_number")
 public class MaxReleaseNumberEntity {
 	@Id
 	@Column(name = "dt", nullable = false)
