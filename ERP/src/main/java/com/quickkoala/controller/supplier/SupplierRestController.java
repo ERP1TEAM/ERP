@@ -20,6 +20,8 @@ import com.quickkoala.service.supplier.ViewPurchaseSummaryService;
 @RequestMapping("supplier")
 public class SupplierRestController {
 
+	public static final int SIZE = 10;
+	
 	@Autowired
 	private ViewPurchaseSummaryService viewPurchaseSummaryService;
 	
@@ -32,48 +34,24 @@ public class SupplierRestController {
 	// 발주내역 리스트
 	@GetMapping("purchaseData/{pno}")
 	public Page<ViewPurchaseSummaryEntity> purchaseData(@PathVariable Integer pno, @ModelAttribute SearchDto dto) {
-		String sDate = dto.getSDate();
-		String word = dto.getWord(); 
-		
 		Page<ViewPurchaseSummaryEntity> result = null;
-		int size = 5;
-		if (word.equals("") && sDate.equals("")) {
-			result = viewPurchaseSummaryService.getPaginadtedData(pno, size);
-		} else {
-			result = viewPurchaseSummaryService.getPaginadtedData(pno, size, dto);
-		}
+		result = viewPurchaseSummaryService.getPaginadtedData(pno, SIZE, dto);
 		return result;
 	}
 	
 	// 납품내역 리스트
 	@GetMapping("deliveryData/{pno}")
 	public Page<ViewDeliveryDetailEntity> deliveryData(@PathVariable Integer pno, @ModelAttribute SearchDto dto) {
-		String sDate = dto.getSDate();
-		String word = dto.getWord(); 
-		
 		Page<ViewDeliveryDetailEntity> result = null;
-		int size = 10;
-		if (word.equals("") && sDate.equals("")) {
-			result = viewDeliveryDetailService.getPaginatedData(pno, size);
-		} else {
-			result = viewDeliveryDetailService.getPaginatedData(pno, size, dto);
-		}
+		result = viewDeliveryDetailService.getPaginatedData(pno, SIZE, dto);
 		return result;
 	}
 
 	// 반품내역 리스트
 	@GetMapping("returnData/{pno}")
 	public Page<ViewDeliveryReturnEntity> returnData(@PathVariable Integer pno, @ModelAttribute SearchDto dto) {
-		String sDate = dto.getSDate();
-		String word = dto.getWord(); 
-		
 		Page<ViewDeliveryReturnEntity> result = null;
-		int size = 5;
-		if (word.equals("") && sDate.equals("")) {
-			result = viewDeliveryReturnService.getPaginadtedData(pno, size);
-		} else {
-			result = viewDeliveryReturnService.getPaginadtedData(pno, size, dto);
-		}
+		result = viewDeliveryReturnService.getPaginadtedData(pno, SIZE, dto);
 		return result;
 	}
 }

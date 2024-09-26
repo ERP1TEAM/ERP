@@ -1,3 +1,8 @@
+let searchCode = "";
+let searchWord = "";
+let startDate = "";
+let endDate = "";
+
 document.addEventListener("DOMContentLoaded", function() {
 	var totalPages = 1;
 	var startPage = 0;
@@ -23,21 +28,21 @@ document.addEventListener("DOMContentLoaded", function() {
 	// 파라미터 값 갖고오기 및 기본값 설정
 	let pa1 = queryParams["p"] || 1;
 	let pa2 = queryParams["s"] || "all";
-	let searchCode = queryParams["code"] || '발주번호';
-	let searchWord = queryParams["word"] || '';
-	let startDate =  queryParams["sDate"] || '';
-	let endDate =  queryParams["eDate"] || new Date().toISOString().split('T')[0];
-	
+	searchCode = queryParams["code"] || '발주번호';
+	searchWord = queryParams["word"] || '';
+	startDate = queryParams["sDate"] || '';
+	endDate = queryParams["eDate"] || new Date().toISOString().split('T')[0];
+
 	// 검색 코드와 단어를 폼 필드에 설정
-    document.getElementById("search_code").value = searchCode;
-    document.getElementById("search_word").value = searchWord;
-    document.getElementById("start_date").value = startDate;
+	document.getElementById("search_code").value = searchCode;
+	document.getElementById("search_word").value = searchWord;
+	document.getElementById("start_date").value = startDate;
 	document.getElementById("end_date").value = endDate;
 
 	//paging 함수를 전역으로 설정
-	window.paging = function(p,s, code = searchCode, word = searchWord, sDate = startDate, eDate = endDate) {
+	window.paging = function(p, s, code = searchCode, word = searchWord, sDate = startDate, eDate = endDate) {
 		params = getQueryParams(["p", "s", "code", "word", "sDate", "eDate"]);
-		if(s !== "all"){
+		if (s !== "all") {
 			s = params["s"];
 		}
 		tableData(p, s, code, word, sDate, eDate);
@@ -142,15 +147,17 @@ document.addEventListener("DOMContentLoaded", function() {
 
 				// 페이징 HTML을 페이지에 삽입
 				paging.innerHTML = paginationHTML;
-
-				if (word === "" && sDate === "") {
-					history.replaceState({}, '', location.pathname + `?p=${pno}`+ `&s=${sta}`);
+				
+				if(eDate === ""){
+					history.replaceState({}, '', location.pathname + `?p=${pno}` + `&s=${sta}`);
+				}else if (word === "" && sDate === "") {
+					history.replaceState({}, '', location.pathname + `?p=${pno}` + `&s=${sta}&eDate=${eDate}`);
 				} else if (sDate === "") {
-					history.replaceState({}, '', location.pathname + `?p=${pno}`+ `&s=${sta}&code=${code}&word=${word}`);
+					history.replaceState({}, '', location.pathname + `?p=${pno}` + `&s=${sta}&code=${code}&word=${word}&eDate=${eDate}`);
 				} else if (word === "") {
-					history.replaceState({}, '', location.pathname + `?p=${pno}`+ `&s=${sta}&sDate=${sDate}&eDate=${eDate}`);
+					history.replaceState({}, '', location.pathname + `?p=${pno}` + `&s=${sta}&sDate=${sDate}&eDate=${eDate}`);
 				} else {
-					history.replaceState({}, '', location.pathname + `?p=${pno}`+ `&s=${sta}&sDate=${sDate}&eDate=${eDate}&code=${code}&word=${word}`);
+					history.replaceState({}, '', location.pathname + `?p=${pno}` + `&s=${sta}&sDate=${sDate}&eDate=${eDate}&code=${code}&word=${word}`);
 				}
 
 			})
@@ -165,10 +172,8 @@ document.addEventListener("DOMContentLoaded", function() {
 	}
 	start();
 
-
-
 	// 스타일을 설정하는 함수
-	function setActiveStyle(activeElement) {
+	window.setActiveStyle = function(activeElement) {
 		const elements = [document.getElementById("wait"), document.getElementById("finish"), document.getElementById("all")];
 		elements.forEach(element => {
 			if (element === activeElement) {
@@ -241,11 +246,11 @@ document.addEventListener("DOMContentLoaded", function() {
 		if (startDate !== "" && endDate === "") {
 			endDate = new Date().toISOString().split('T')[0];
 			document.getElementById("end_date").value = endDate;
-			paging(1,"all", searchCode, searchWord, startDate, endDate);
+			paging(1, "all", searchCode, searchWord, startDate, endDate);
 		} else if (startDate > endDate) {
 			alert("기간이 잘못 설정되었습니다.");
 		} else {
-			paging(1,"all", searchCode, searchWord, startDate, endDate); // 검색 후 첫 페이지부터 시작						
+			paging(1, "all", searchCode, searchWord, startDate, endDate); // 검색 후 첫 페이지부터 시작						
 		}
 	});
 
@@ -260,8 +265,11 @@ document.addEventListener("DOMContentLoaded", function() {
 		document.getElementById("end_date").value = endDate;
 		pa2 = "all";
 		setActiveStyle(document.getElementById("all"));
-		paging(1,"all", '', '', '', '');
+		paging(1, "all", '', '', '', '');
 	})
+
+
 	
-	
+
+
 });
