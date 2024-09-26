@@ -28,6 +28,7 @@ import com.quickkoala.entity.order.OrderEntity;
 import com.quickkoala.entity.order.OrderEntity.OrderStatus;
 import com.quickkoala.entity.sales.ClientsOrderProductsEntity;
 import com.quickkoala.entity.sales.ClientsOrdersEntity;
+import com.quickkoala.entity.stock.ProductEntity;
 import com.quickkoala.repository.order.OrderRepository;
 import com.quickkoala.repository.sales.ClientsOrderProductsRepository;
 import com.quickkoala.repository.sales.ClientsOrdersRepository;
@@ -287,9 +288,28 @@ public class SalesOrderServiceImpl implements SalesOrderService {
     
     @Override
     public List<ClientsOrderProductsDTO> getOrderProductsByOrderId(String orderId) {
-        List<ClientsOrderProductsEntity> productEntities = clientsOrderProductsRepository.findByClientsOrdersOrderId(orderId);
-        return productEntities.stream().map(this::convertToDto).collect(Collectors.toList());
+        // ClientsOrdersEntity를 가져옴
+        ClientsOrdersEntity clientsOrdersEntity = clientsOrdersRepository.findByOrderId(orderId)
+            .orElseThrow(() -> new IllegalArgumentException("Invalid order ID: " + orderId));
+
+        // 주문 상태(OrderEntity) 가져오기
+        OrderEntity orderEntity = clientsOrdersEntity.getOrderEntity();
+        String orderStatus = orderEntity != null ? orderEntity.getStatus().name() : "처리중";
+
+        // 주문에 해당하는 상품 목록을 가져옴
+        List<ClientsOrderProductsEntity> products = clientsOrderProductsRepository.findByClientsOrdersOrderId(orderId);
+
+        // 상품 목록을 DTO로 변환하면서 처리 상태를 함께 설정
+        return products.stream().map(productEntity -> {
+            ClientsOrderProductsDTO dto = new ClientsOrderProductsDTO();
+            dto.setProductCode(productEntity.getProductCode());
+            dto.setProductName(productEntity.getProductName());
+            dto.setQty(productEntity.getQty());
+            dto.setStatus(orderStatus);  // OrderEntity의 상태를 DTO에 설정
+            return dto;
+        }).collect(Collectors.toList());
     }
+
 
     // Entity를 DTO로 변환
     private ClientsOrderProductsDTO convertToDto(ClientsOrderProductsEntity entity) {

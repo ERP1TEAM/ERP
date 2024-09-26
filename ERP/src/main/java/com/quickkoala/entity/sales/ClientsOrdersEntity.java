@@ -3,11 +3,15 @@ package com.quickkoala.entity.sales;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.quickkoala.entity.order.OrderEntity;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
 
@@ -45,5 +49,10 @@ public class ClientsOrdersEntity {
 
     @OneToMany(mappedBy = "clientsOrders", cascade = CascadeType.ALL)
     private List<ClientsOrderProductsEntity> products;
+    
+    // OrderEntity와 일대일 관계 설정 (외래 키)
+    @OneToOne
+    @JoinColumn(name = "order_id", referencedColumnName = "order_id") // OrderEntity의 order_id를 외래 키로 사용
+    private OrderEntity orderEntity;
 
 }

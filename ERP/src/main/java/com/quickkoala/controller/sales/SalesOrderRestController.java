@@ -108,10 +108,11 @@ public class SalesOrderRestController {
 
     
     //주문완료 (주문 상품 출력)
-    @GetMapping("/{orderId}/products")
-    public List<ClientsOrderProductsDTO> getOrderProducts(@PathVariable("orderId") String orderId) {
-        return orderService.getOrderProductsByOrderId(orderId);
-    }
+	// 주문완료 (주문 상품 출력)
+	@GetMapping("/{orderId}/products")
+	public List<ClientsOrderProductsDTO> getOrderProducts(@PathVariable("orderId") String orderId) {
+	    return orderService.getOrderProductsByOrderId(orderId);
+	}
     
  // 검색 및 페이징 처리 엔드포인트
     @GetMapping("/filter")

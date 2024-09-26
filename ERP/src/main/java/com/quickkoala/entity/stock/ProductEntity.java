@@ -57,7 +57,7 @@ public class ProductEntity {
 
     @Column(name = "memo", columnDefinition = "TEXT")
     private String memo;
-
+    
     public enum UseFlag {
         Y, N
     }

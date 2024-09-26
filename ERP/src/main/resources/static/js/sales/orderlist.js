@@ -36,7 +36,6 @@ function filterOrders(page = 0) {
                         <td>[${order.post}] ${order.address} ${order.addressDetail}</td>
                         <td class="center">${orderDate}</td>  
                         <td>${order.managerMemo ?? ''}</td>
-                        <td class="center">처리중</td>
                         <td class="center">
                             <button type="button" class="btn btn-primary" style="background-color: #474B54; border: none;" onclick="showOrderDetails(this)">상세보기</button>
                         </td>
@@ -119,6 +118,7 @@ function showOrderDetails(button) {
                         <td>${product.productCode}</td>
                         <td>${product.productName}</td>
                         <td>${product.qty}</td>
+                        <td>${product.status ?? '처리중'}</td>  <!-- 처리현황 출력 -->
                     </tr>`;
             });
             document.getElementById('orderProductDetails').innerHTML = productDetails;
@@ -130,6 +130,7 @@ function showOrderDetails(button) {
             console.error('Error fetching order products:', error);
         });
 }
+
 
 // 모달을 열 때 호출되는 함수
 function openModal() {

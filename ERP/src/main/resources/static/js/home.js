@@ -163,7 +163,7 @@ document.addEventListener('DOMContentLoaded', function() {
         },
         eventContent: function(arg) {
             let fullTitle = arg.event.title;
-            let truncatedTitle = fullTitle.length > 20 ? fullTitle.substring(0, 20) + '...' : fullTitle;
+            let truncatedTitle = fullTitle.length > 9 ? fullTitle.substring(0, 9) + '...' : fullTitle;
 
             let eventElement = document.createElement('div');
             eventElement.innerHTML = truncatedTitle;
