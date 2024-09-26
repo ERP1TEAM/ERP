@@ -27,7 +27,6 @@ import org.springframework.web.multipart.MultipartFile;
 import com.quickkoala.dto.sales.ClientsOrderProductsDTO;
 import com.quickkoala.dto.sales.ClientsOrdersDTO;
 import com.quickkoala.dto.sales.SearchProductCodeDTO;
-import com.quickkoala.entity.client.SupplierEntity;
 import com.quickkoala.entity.sales.ClientsOrdersEntity;
 import com.quickkoala.entity.stock.ProductEntity;
 import com.quickkoala.repository.stock.ProductRepository;
@@ -71,8 +70,8 @@ public class SalesOrderRestController {
 	        // 메시지 생성
 	        StringBuilder message = new StringBuilder("등록 완료<br>");
 	        if (!duplicateOrders.isEmpty()) {
-	            message.append("중복된 주문이 있어 제외하였습니다 : ");
-	            message.append(String.join(", ", duplicateOrders));  // 중복된 주문 정보 추가
+	            message.append("중복된 주문이 있어 제외하였습니다 : <br>");
+	            message.append(String.join("<br> ", duplicateOrders));  // 중복된 주문 정보 추가
 	        }
 
 	        // 응답 시 Content-Type을 text/html로 설정하여 줄바꿈 적용
