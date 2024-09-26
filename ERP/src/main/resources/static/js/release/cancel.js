@@ -27,7 +27,7 @@ function paging(_page,_select,_param){
         
         let html = "";
         if (list.length === 0) {
-            html = "<tr><td colspan='8'>데이터가 존재하지 않습니다.</td></tr>";
+            html = "<tr><td colspan='8' style='text-align:center;'>데이터가 존재하지 않습니다.</td></tr>";
         } else {
             list.forEach(function(release) {
                 html += `
