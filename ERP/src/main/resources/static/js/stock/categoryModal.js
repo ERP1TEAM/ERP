@@ -128,7 +128,7 @@ function categorymainmodal(pno, code = '', word = '') {
         document.body.style.overflow = 'hidden';
     
     	document.querySelectorAll("#categorytbody tr").forEach(row => {
-   		row.style.cursor = 'pointer';
+   		row.style.cursor = 'pointer' ;
    		
    		
 		});
