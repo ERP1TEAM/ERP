@@ -170,11 +170,11 @@ document.getElementById('warehouseSearchbtn').addEventListener('click', function
 		}else{
 	data.forEach(warehouse => {
     let th = `<tr class="odd gradeX">
-                  <th><input type="checkbox" class="checkbox" value="${warehouse.code}"></th>
-                  <td>${warehouse.code}</td>
+                  <th style="text-align:center;"><input type="checkbox" class="checkbox" value="${warehouse.code}"></th>
+                  <td style="text-align:center;">${warehouse.code}</td>
                   <td>${warehouse.name}</td>
-                  <td><input type="button" value="메모"></td>
-                  <td><input type="button" value="수정" class="warehousemodifybtn"></td>
+                  <td>${warehouse.memo}</td>
+                  <td style="text-align:center;"><input type="button" value="수정" class="warehousemodifybtn"></td>
               </tr>`;
     warehousetbody.innerHTML += th;
         });
@@ -294,8 +294,7 @@ if (event.target && event.target.classList.contains('warehousemodifybtn')) {
             document.getElementById('overlay').style.display = 'block';
 		})
 		.catch(error => {
-            console.error('Error fetching warehouse info:', error);
-            alert('창고 정보를 불러오는 데 실패했습니다.');
+            alert(' 창고 수정 페이지 ERROR!! ');
         });
     }
 });
@@ -382,10 +381,10 @@ function warehousemainmodal(){
 			
     	let th = `<tr class="odd gradeX">
                     <th><input type="checkbox" class="checkbox" value="${warehouse.code}"></th>
-                    <td>${warehouse.code}</td>
+                    <td style="text-align:center;">${warehouse.code}</td>
                     <td>${warehouse.name}</td>
                     <td>${warehousememo}</td>
-                    <td><input type="button" value="수정" class="warehousemodifybtn"></td>
+                    <td style="text-align:center;"><input type="button" value="수정" class="warehousemodifybtn"></td>
                  </tr>`;
 			warehousetbody.innerHTML +=th;
 		});

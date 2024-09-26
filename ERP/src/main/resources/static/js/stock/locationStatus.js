@@ -94,7 +94,6 @@ function fetchInventoryData(locationCode) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
 
-            // 응답이 빈 경우 JSON으로 파싱하지 않고 빈 배열 반환
             return response.text().then(text => {
                 return text ? JSON.parse(text) : [];
             });
@@ -112,14 +111,12 @@ function renderInventoryTable(inventoryData) {
     tableBody.innerHTML = '';
 
 	const filterData = inventoryData.filter(item => item.lotQuantity > 0);
-	console.log(inventoryData);
 	if (filterData.length == 0) {
         const emptyRow = document.createElement('tr');
         const emptyCell = document.createElement('td');
 
         emptyCell.colSpan = 5;  // 4개의 열을 합친 셀
         emptyCell.textContent = "해당 로케이션은 현재 비어있습니다.";
-        emptyCell.style.textAlign = "center";
 
         emptyRow.appendChild(emptyCell);
         tableBody.appendChild(emptyRow);
@@ -131,10 +128,10 @@ function renderInventoryTable(inventoryData) {
     filterData.forEach(item => {
         const row = document.createElement('tr');
         row.innerHTML = `
-            <td class="lot-number-column">${item.lotNumber}</td>
+            <td style="text-align:center;" class="lot-number-column">${item.lotNumber}</td>
             <td class="supplier-name-column">${item.supplierName}</td>
             <td class="product-name-column">${item.productName}</td>
-            <td class="quantity-column">${item.lotQuantity}</td>
+            <td style="text-align:right;"class="quantity-column">${item.lotQuantity}</td>
         `;
         tableBody.appendChild(row);
     });

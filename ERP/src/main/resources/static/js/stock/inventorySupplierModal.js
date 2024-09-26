@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 let inventorySupplierlistRow = 
                 `<tr class="odd gradeX"  data-code="${inventorySupplierlist.code}" data-name="${inventorySupplierlist.name}">
-                    <td>${inventorySupplierlist.code}</td>
+                    <td style="text-align:center;">${inventorySupplierlist.code}</td>
                     <td>${inventorySupplierlist.name}</td>
                 </tr>`;
                 inventorySuppliertbody.innerHTML += inventorySupplierlistRow;
