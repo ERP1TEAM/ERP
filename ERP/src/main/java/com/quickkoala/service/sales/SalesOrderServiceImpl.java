@@ -24,10 +24,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.quickkoala.dto.sales.ClientsOrderProductsDTO;
 import com.quickkoala.dto.sales.ClientsOrdersDTO;
+import com.quickkoala.entity.order.MaxOrderNumberEntity;
 import com.quickkoala.entity.order.OrderEntity;
 import com.quickkoala.entity.order.OrderEntity.OrderStatus;
 import com.quickkoala.entity.sales.ClientsOrderProductsEntity;
 import com.quickkoala.entity.sales.ClientsOrdersEntity;
+import com.quickkoala.repository.order.MaxOrderNumberRepository;
 import com.quickkoala.repository.order.OrderRepository;
 import com.quickkoala.repository.sales.ClientsOrderProductsRepository;
 import com.quickkoala.repository.sales.ClientsOrdersRepository;
@@ -51,6 +53,9 @@ public class SalesOrderServiceImpl implements SalesOrderService {
     
     @Autowired
     private ProductRepository productRepository;
+    
+    @Autowired
+    private MaxOrderNumberRepository maxOrderNumberRepository;
 
     @Transactional
     @Override
