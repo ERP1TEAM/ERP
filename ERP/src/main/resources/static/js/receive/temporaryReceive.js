@@ -258,10 +258,10 @@ document.addEventListener("DOMContentLoaded", function() {
 				th += `
 			            </select>
 			        </td>
-			        <td><input type="text" id="qty" value="${data.qty}" readonly class="no-style" style="text-align:right;"></td>
-			        <td><input type="text" id="wqty" value="${data.wqty}" readonly class="no-style" style="text-align:right;"></td>
-			        <td><input type="text" id="re-qty" name="re_qty" style="text-align:right;"></td>
-			        <td><input type="text" id="ca-qty" name="ca_qty" readonly class="no-style" style="text-align:right;"></td>
+			        <td><input type="text" id="qty" value="${data.qty}" readonly class="no-style" style="text-align:right; border-bottom:none;"></td>
+			        <td><input type="text" id="wqty" value="${data.wqty}" readonly class="no-style" style="text-align:right; border-bottom:none;"></td>
+			        <td><input type="text" id="re-qty" name="re_qty" style="text-align:right;" placeHolder="수량입력"></td>
+			        <td><input type="text" id="ca-qty" name="ca_qty" readonly class="no-style" style="text-align:right; border-bottom:none;" placeHolder="자동입력"></td>
 			        <td>
 			            <select id="condition" name="condition" class="condition-select" style="display:block;" disabled>
 			                <option value="">반품없음</option>
@@ -286,7 +286,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	document.querySelector('#tbody2').addEventListener('change', function(event) {
 		if (event.target && event.target.matches('select.condition-select')) {
 			if (event.target.value === "기타") {
-				document.getElementById("memos").innerHTML = `<input type="text" id="memo" class="no-style">`;
+				document.getElementById("memos").innerHTML = `<input type="text" id="memo" class="no-style" placeHolder="기타 사유를 입력해주세요" maxlength="100">`;
 			} else {
 				document.getElementById("memos").innerHTML = "";
 			}

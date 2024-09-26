@@ -76,7 +76,7 @@ document.addEventListener("DOMContentLoaded", function() {
 				        <td style="text-align:right;">${item.totalPrice.toLocaleString()}</td>
 				        <td style="text-align:center;">${rdt}</td>
 				        <td style="text-align:right;">${item.totalWtQuantity}</td>
-				        <td><input type="text" id="${item.orderNumber}"></td>
+				        <td><input type="text" id="${item.orderNumber}" style="all: unset; width: 100%;text-align:right;" placeHolder="수량입력"></td>
 				        <td style="text-align:center;"><input class="cd-paging-right-btn purchase_request" type="button"
 								value="납품등록" data-idx="${item.orderNumber}"
 								data-wt="${item.wtQuantity}"></td>
@@ -195,7 +195,7 @@ document.addEventListener("DOMContentLoaded", function() {
                             alert('납품등록이 완료되었습니다.');
                             window.location.reload();
                         } else if (data === "over") {
-                            alert("주문수량을 확인해주세요.");
+                            alert("미납수량을 확인해주세요.");
                         }
                     })
                     .catch(error => {
