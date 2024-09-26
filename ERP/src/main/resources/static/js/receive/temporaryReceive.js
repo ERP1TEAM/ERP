@@ -66,9 +66,15 @@ document.addEventListener("DOMContentLoaded", function() {
 
 				let tbody = document.querySelector('#tbody');
 				tbody.innerHTML = '';
-				items.forEach(function(item) {
-					const rdt = formatDate(item.date);
-					let th = `
+				if (items.length === 0) {
+					let th = `<tr>
+								<td colspan="10" style="text-align: center;">등록된 가입고 내역이 없습니다.</td>
+								</tr>`;
+					tbody.innerHTML += th;
+				} else {
+					items.forEach(function(item) {
+						const rdt = formatDate(item.date);
+						let th = `
 				    <tr class="odd gradeX">
 				        <td style="text-align:center;">${item.code}</td>
 				        <td style="text-align:center;">${item.orderNumber}</td>
@@ -88,8 +94,9 @@ document.addEventListener("DOMContentLoaded", function() {
 									data-qty="${item.quantity}"
 									data-wqty="${item.wtQuantity}">입고</button></td>
 				    </tr>`;
-					tbody.innerHTML += th;
-				})
+						tbody.innerHTML += th;
+					})
+				}
 
 				const paging = document.getElementById("paging");
 				paging.innerHTML = ''; // 'innerHTML'로 수정
@@ -200,9 +207,9 @@ document.addEventListener("DOMContentLoaded", function() {
 		document.getElementById('overlay').style.display = 'none';   // 오버레이 숨기기
 		document.body.style.overflow = 'auto';  // 배경 스크롤 다시 활성화
 	});
-	
+
 	const modal = document.getElementById('overlay');
-	
+
 	// 모달 외부 클릭 시 닫기
 	window.addEventListener('click', (event) => {
 		if (event.target === modal) {
@@ -251,10 +258,10 @@ document.addEventListener("DOMContentLoaded", function() {
 				th += `
 			            </select>
 			        </td>
-			        <td><input type="text" id="qty" value="${data.qty}" readonly class="no-style" style="text-align:right;"></td>
-			        <td><input type="text" id="wqty" value="${data.wqty}" readonly class="no-style" style="text-align:right;"></td>
-			        <td><input type="text" id="re-qty" name="re_qty" style="text-align:right;"></td>
-			        <td><input type="text" id="ca-qty" name="ca_qty" readonly class="no-style" style="text-align:right;"></td>
+			        <td><input type="text" id="qty" value="${data.qty}" readonly class="no-style" style="text-align:right; border-bottom:none;"></td>
+			        <td><input type="text" id="wqty" value="${data.wqty}" readonly class="no-style" style="text-align:right; border-bottom:none;"></td>
+			        <td><input type="text" id="re-qty" name="re_qty" style="text-align:right;" placeHolder="수량입력"></td>
+			        <td><input type="text" id="ca-qty" name="ca_qty" readonly class="no-style" style="text-align:right; border-bottom:none;" placeHolder="자동입력"></td>
 			        <td>
 			            <select id="condition" name="condition" class="condition-select" style="display:block;" disabled>
 			                <option value="">반품없음</option>
@@ -279,7 +286,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	document.querySelector('#tbody2').addEventListener('change', function(event) {
 		if (event.target && event.target.matches('select.condition-select')) {
 			if (event.target.value === "기타") {
-				document.getElementById("memos").innerHTML = `<input type="text" id="memo" class="no-style">`;
+				document.getElementById("memos").innerHTML = `<input type="text" id="memo" class="no-style" placeHolder="기타 사유를 입력해주세요" maxlength="100">`;
 			} else {
 				document.getElementById("memos").innerHTML = "";
 			}
@@ -339,7 +346,7 @@ document.addEventListener("DOMContentLoaded", function() {
 		} else if (!location) {
 			alert("입고 선반을 선택해주세요");
 			return;
-		} else if (!confirm(`입고수량:${reQty}, 반품수량:${caQty}\n입고(반품)을 확정하시겠습니까?`)){
+		} else if (!confirm(`입고수량:${reQty}, 반품수량:${caQty}\n입고(반품)을 확정하시겠습니까?`)) {
 			return;
 		}
 		const formData = new FormData();

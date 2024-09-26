@@ -69,6 +69,20 @@
    function addRow() {
        const table = document.getElementById("orderTable").getElementsByTagName('tbody')[0];
 
+       // 마지막 행의 인덱스 가져오기
+       const lastRowIdx = rowCount - 1;
+
+       // 이전 행의 값들 가져오기 (상품코드, 상품명 제외)
+       const previousRecipientName = document.getElementById(`recipientName-${lastRowIdx}`).value;
+       const previousRecipientPhone = document.getElementById(`recipientPhone-${lastRowIdx}`).value;
+       const previousRecipientEmail = document.getElementById(`recipientEmail-${lastRowIdx}`).value;
+       const previousRecipientPostcode = document.getElementById(`recipientPostcode-${lastRowIdx}`).value;
+       const previousRecipientAddress = document.getElementById(`recipientAddress-${lastRowIdx}`).value;
+       const previousRecipientDetailAddress = document.getElementById(`recipientDetailAddress-${lastRowIdx}`).value;
+       const previousOrderDate = document.getElementById(`orderDate-${lastRowIdx}`).value;
+       const previousClientMemo = document.getElementById(`clientMemo-${lastRowIdx}`).value;
+       const previousAdminMemo = document.getElementById(`adminMemo-${lastRowIdx}`).value;
+
        // 새로운 행 추가
        const newRow1 = table.insertRow();
        const newRow2 = table.insertRow();
@@ -87,21 +101,21 @@
        // 첫 번째 행 생성 (수취인 정보)
        newRow1.innerHTML = `
            <th>수취인</th>
-           <td><input type="text" id="recipientName-${currentRow}" placeholder="수취인"></td>
+           <td><input type="text" id="recipientName-${currentRow}" value="${previousRecipientName}" placeholder="수취인" oninput="checkFields()"></td>
            <th>연락처</th>
-           <td><input type="text" id="recipientPhone-${currentRow}" placeholder="수취인 연락처" maxlength="11"></td>
+           <td><input type="text" id="recipientPhone-${currentRow}" value="${previousRecipientPhone}" placeholder="수취인 연락처" maxlength="11" oninput="checkFields()"></td>
            <th>이메일</th>
-           <td><input type="email" id="recipientEmail-${currentRow}" placeholder="수취인 이메일"></td>
+           <td><input type="email" id="recipientEmail-${currentRow}" value="${previousRecipientEmail}" placeholder="수취인 이메일" oninput="checkFields()"></td>
            <th>주소
            </th>
            <td style="width:120px;">
-               <input type="text" id="${recipientPostcodeId}" class="readonly" placeholder="우편번호" onclick="findPostcode('${recipientPostcodeId}', '${recipientAddressId}')" readonly>
+               <input type="text" id="${recipientPostcodeId}" value="${previousRecipientPostcode}" class="readonly" placeholder="우편번호" onclick="findPostcode('${recipientPostcodeId}', '${recipientAddressId}')" readonly oninput="checkFields()">
            </td>
            <td>
-               <input type="text" id="${recipientAddressId}" class="readonly" placeholder="도로명 주소" onclick="findPostcode('${recipientPostcodeId}', '${recipientAddressId}')" readonly>
+               <input type="text" id="${recipientAddressId}" value="${previousRecipientAddress}" class="readonly" placeholder="도로명 주소" onclick="findPostcode('${recipientPostcodeId}', '${recipientAddressId}')" readonly oninput="checkFields()">
            </td>
            <td>
-               <input type="text" id="recipientDetailAddress-${currentRow}" placeholder="상세주소">
+               <input type="text" id="recipientDetailAddress-${currentRow}" value="${previousRecipientDetailAddress}" placeholder="상세주소" oninput="checkFields()">
            </td>
        `;
 
@@ -114,12 +128,90 @@
            <th>주문갯수</th>
            <td><input type="number" id="${productQuantityId}" placeholder="주문 갯수"></td>
            <th>주문날짜</th>
-           <td><input type="datetime-local" id="${orderDateId}"></td>
+           <td><input type="datetime-local" id="${orderDateId}" value="${previousOrderDate}" oninput="checkFields()"></td>
+           <td colspan="1"><input type="text" id="${clientMemoId}" value="${previousClientMemo}" placeholder="수취인 메모" style="width: 100%;" oninput="checkFields()"></td>
+           <td colspan="3"><input type="text" id="${adminMemoId}" value="${previousAdminMemo}" placeholder="관리자 메모" style="width: 100%;" oninput="checkFields()"></td>
+       `;
+   }
+
+   
+   function addNewRow() {
+       const table = document.getElementById("orderTable").getElementsByTagName('tbody')[0];
+
+       // 새로운 행 추가
+       const newRow1 = table.insertRow();
+       const newRow2 = table.insertRow();
+
+       // 각 행의 고유한 rowCount를 부여
+       const currentRow = rowCount++;
+       const productCodeId = `productCode-${currentRow}`;
+       const productNameId = `productName-${currentRow}`;
+       const recipientPostcodeId = `recipientPostcode-${currentRow}`;
+       const recipientAddressId = `recipientAddress-${currentRow}`;
+       const productQuantityId = `productQuantity-${currentRow}`;
+       const orderDateId = `orderDate-${currentRow}`;
+       const clientMemoId = `clientMemo-${currentRow}`;
+       const adminMemoId = `adminMemo-${currentRow}`;
+
+       // 첫 번째 행 생성 (수취인 정보)
+       newRow1.innerHTML = `
+           <th>수취인</th>
+           <td><input type="text" id="recipientName-${currentRow}"  oninput="checkFields()" placeholder="수취인"></td>
+           <th>연락처</th>
+           <td><input type="text" id="recipientPhone-${currentRow}"  oninput="checkFields()" placeholder="수취인 연락처" maxlength="11"></td>
+           <th>이메일</th>
+           <td><input type="email" id="recipientEmail-${currentRow}"  oninput="checkFields()" placeholder="수취인 이메일"></td>
+           <th>주소
+           </th>
+           <td style="width:120px;">
+               <input type="text" id="${recipientPostcodeId}" class="readonly"  oninput="checkFields()" placeholder="우편번호" onclick="findPostcode('${recipientPostcodeId}', '${recipientAddressId}')" readonly>
+           </td>
+           <td>
+               <input type="text" id="${recipientAddressId}" class="readonly"  oninput="checkFields()" placeholder="도로명 주소" onclick="findPostcode('${recipientPostcodeId}', '${recipientAddressId}')" readonly>
+           </td>
+           <td>
+               <input type="text" id="recipientDetailAddress-${currentRow}"  oninput="checkFields()" placeholder="상세주소">
+           </td>
+       `;
+
+       // 두 번째 행 생성 (상품 정보 및 메모)
+       newRow2.innerHTML = `
+           <th>상품코드</th>
+           <td><input type="text" class="productCode" id="${productCodeId}" placeholder="상품코드" oninput="fetchProductName('${productCodeId}', '${productNameId}')"></td>
+           <th>상품명</th>
+           <td><input type="text" class="productName readonly" id="${productNameId}" placeholder="상품명" readonly></td>
+           <th>주문갯수</th>
+           <td><input type="number" id="${productQuantityId}" placeholder="주문 갯수"></td>
+           <th>주문날짜</th>
+           <td><input type="datetime-local" id="${orderDateId}"  oninput="checkFields()"></td>
            <td colspan="1"><input type="text" id="${clientMemoId}" placeholder="수취인 메모" style="width: 100%;"></td>
            <td colspan="3"><input type="text" id="${adminMemoId}" placeholder="관리자 메모" style="width: 100%;"></td>
        `;
    }
 
+   // 입력 필드 값이 모두 채워졌는지 확인하는 함수
+   function checkFields() {
+       // 현재 행 인덱스 (마지막 행을 대상으로 함)
+       const currentRow = rowCount - 1;
+
+       const recipientName = document.getElementById(`recipientName-${currentRow}`).value.trim();
+       const recipientPhone = document.getElementById(`recipientPhone-${currentRow}`).value.trim();
+       const recipientEmail = document.getElementById(`recipientEmail-${currentRow}`).value.trim();
+       const recipientPostcode = document.getElementById(`recipientPostcode-${currentRow}`).value.trim();
+       const recipientAddress = document.getElementById(`recipientAddress-${currentRow}`).value.trim();
+       const recipientDetailAddress = document.getElementById(`recipientDetailAddress-${currentRow}`).value.trim();
+	   const orderDate = document.getElementById(`orderDate-${currentRow}`).value.trim();
+       // 모든 필드가 입력되었는지 확인 (상품코드, 상품명, 주문갯수는 제외)
+       if (recipientName && recipientPhone && recipientEmail && recipientPostcode && recipientAddress && recipientDetailAddress && orderDate) {
+           document.getElementById('addRowButton').disabled = false;  // 버튼 활성화
+       } else {
+           document.getElementById('addRowButton').disabled = true;  // 버튼 비활성화
+       }
+   }
+
+   
+   
+   
    function removeRow() {
        const table = document.getElementById("orderTable").getElementsByTagName('tbody')[0];
        if (rowCount > 1) {

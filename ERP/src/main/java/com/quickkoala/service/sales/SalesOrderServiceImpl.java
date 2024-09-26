@@ -112,6 +112,9 @@ public class SalesOrderServiceImpl implements SalesOrderService {
                     newProduct.setQty(productDTO.getQty());
                     clientsOrderProductsRepository.save(newProduct);
                     productCodes.add(productDTO.getProductCode());
+                }else {
+                	DateTimeFormatter format= DateTimeFormatter.ofPattern("yyyy-MM-dd h:mm:ss a");
+                	duplicateOrders.add("[" + orderDTO.getOrderDate().format(format) + "]" + orderDTO.getName() + "-" + orderDTO.getTel());
                 }
             }
 
