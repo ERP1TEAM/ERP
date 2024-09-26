@@ -43,7 +43,7 @@ import jakarta.servlet.http.HttpServletRequest;
 @RequestMapping("main")
 @CrossOrigin(origins="*", allowedHeaders = "*")
 public class StockRestController {
-	private final int SIZE = 5;
+	private final int SIZE = 10;
 
 	//***** 재고 *****//
 	
