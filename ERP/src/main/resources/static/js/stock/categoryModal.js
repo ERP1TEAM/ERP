@@ -126,7 +126,7 @@ function categorymainmodal(pno, code = '', word = '') {
         document.getElementById('categoryoverlay').style.display = 'block';
         document.getElementById('categorylistmodal').style.display = 'block';
         document.body.style.overflow = 'hidden';
-    
+     
     	document.querySelectorAll("#categorytbody tr").forEach(row => {
    		row.style.cursor = 'pointer' ;
    		  
