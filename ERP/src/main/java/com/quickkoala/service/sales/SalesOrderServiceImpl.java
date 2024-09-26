@@ -57,7 +57,7 @@ public class SalesOrderServiceImpl implements SalesOrderService {
     public List<String> saveOrder(List<ClientsOrdersDTO> orders, String token) {
         LocalDateTime now = LocalDateTime.now();
         List<String> duplicateOrders = new ArrayList<>();  // 중복된 주문을 저장할 리스트
-        String orderId = null;
+
         for (ClientsOrdersDTO orderDTO : orders) {
 
             // 유효성 검사
@@ -65,57 +65,59 @@ public class SalesOrderServiceImpl implements SalesOrderService {
                 orderDTO.getName() == null || 
                 orderDTO.getTel() == null || 
                 orderDTO.getEmail() == null) {
+                continue;
+            }
+
+            ClientsOrdersEntity existingOrder = findExistingOrder(orderDTO);
+
+            String orderId;
+            ClientsOrdersEntity order;
+
+            // 기존 주문이 있으면 해당 주문에 상품을 추가
+            if (existingOrder != null) {
+                order = existingOrder;
+                orderId = order.getOrderId();
+            } else {
+                // 새로운 주문 생성
+                orderId = generateOrderId(orderDTO.getOrderDate());
+                order = new ClientsOrdersEntity();
+                order.setOrderId(orderId);
+                order.setName(orderDTO.getName());
+                order.setTel(orderDTO.getTel());
+                order.setEmail(orderDTO.getEmail());
+                order.setPost(orderDTO.getPost());
+                order.setAddress(orderDTO.getAddress());
+                order.setAddressDetail(orderDTO.getAddressDetail());
+                order.setClientMemo(orderDTO.getClientMemo());
+                order.setManager(jwtTokenProvider.getName(token));
+                order.setCode(jwtTokenProvider.getCode(token));
+                order.setManagerMemo(orderDTO.getManagerMemo());
+                order.setOrderDate(orderDTO.getOrderDate());
+                order.setCreatedDt(now);
                 
-                //System.out.println("유효하지 않은 주문 정보: 주문을 저장하지 않습니다.");
-                continue;
+                clientsOrdersRepository.save(order);  // 주문 저장
             }
 
-            ClientsOrdersEntity order = findExistingOrder(orderDTO);
-
-            // 중복된 주문이 있을 경우 리스트에 추가하고 건너뜀
-            if (order != null) {
-                duplicateOrders.add(orderDTO.getName() + " - " + orderDTO.getTel());  // 중복된 주문 정보 저장
-                continue;
-            }
-            orderId=generateOrderId(orderDTO.getOrderDate());
-            // 주문 정보 생성 및 저장
-            order = new ClientsOrdersEntity();
-            order.setName(orderDTO.getName());
-            order.setTel(orderDTO.getTel());
-            order.setEmail(orderDTO.getEmail());
-            order.setPost(orderDTO.getPost());
-            order.setAddress(orderDTO.getAddress());
-            order.setAddressDetail(orderDTO.getAddressDetail());
-            order.setClientMemo(orderDTO.getClientMemo());
-            order.setManager(jwtTokenProvider.getName(token));
-            order.setCode(jwtTokenProvider.getCode(token));
-            order.setManagerMemo(orderDTO.getManagerMemo());
-            order.setOrderDate(orderDTO.getOrderDate());
-            order.setCreatedDt(now);
-            order.setOrderId(orderId);
-            
-            clientsOrdersRepository.save(order);
-
-            // 상품 정보 저장
+            // 상품 정보 저장 (동일한 orderId로 여러 상품 저장)
             List<String> productCodes = new ArrayList<>();
             for (ClientsOrderProductsDTO productDTO : orderDTO.getProducts()) {
-                List<ClientsOrderProductsEntity> existingProducts = clientsOrderProductsRepository.findByClientsOrdersOrderIdAndProductCode(order.getOrderId(), productDTO.getProductCode());
+                List<ClientsOrderProductsEntity> existingProducts = clientsOrderProductsRepository.findByClientsOrdersOrderIdAndProductCode(orderId, productDTO.getProductCode());
 
+                // 중복된 상품이 없을 경우에만 저장
                 if (existingProducts.isEmpty()) {
-                    ClientsOrderProductsEntity product = new ClientsOrderProductsEntity();
-                    product.setClientsOrders(order);
-                    product.setProductCode(productDTO.getProductCode());
-                    product.setProductName(productDTO.getProductName());
-                    product.setQty(productDTO.getQty());
-                    clientsOrderProductsRepository.save(product);
+                    ClientsOrderProductsEntity newProduct = new ClientsOrderProductsEntity();
+                    newProduct.setClientsOrders(order);  // 기존 또는 새로 생성한 주문과 연관
+                    newProduct.setProductCode(productDTO.getProductCode());
+                    newProduct.setProductName(productDTO.getProductName());
+                    newProduct.setQty(productDTO.getQty());
+                    clientsOrderProductsRepository.save(newProduct);
                     productCodes.add(productDTO.getProductCode());
                 }
             }
 
-            
+            // OrderEntity 초기화 (기존 주문이 있는지 확인 후 생성)
             OrderEntity salesOrder = null;
             int orderTotal = 0;
-            // OrderEntity 초기화 (기존 주문이 있는지 확인 후 생성)
             List<OrderEntity> temp = orderRepository.findByOrderId(orderId);
             if (!temp.isEmpty()) {
                 salesOrder = temp.get(0);
@@ -131,6 +133,7 @@ public class SalesOrderServiceImpl implements SalesOrderService {
                 salesOrder.setOrderId(orderId);  // 새로 생성한 orderId 사용
                 salesOrder.setNumber(generateOrderNumber(now));
             }
+
             // 주문 총액 계산
             List<Integer> productPrices = productRepository.findPricesByCodes(productCodes);
             for (Integer price : productPrices) {
@@ -145,7 +148,6 @@ public class SalesOrderServiceImpl implements SalesOrderService {
         return duplicateOrders;  // 중복된 주문 정보를 반환
     }
 
-    
 
     @Override
     public List<ClientsOrdersDTO> parseExcelFile(File file) {
@@ -297,8 +299,8 @@ public class SalesOrderServiceImpl implements SalesOrderService {
     
  // 검색 메서드 수정
     public Page<ClientsOrdersEntity> searchOrders(String managerCompanyCode, String searchType, String searchText, LocalDate startDate, LocalDate endDate, int page, int size) {
-        // 페이지 요청 시 orderDate 기준으로 오름차순 정렬을 추가
-        Pageable pageable = PageRequest.of(page, size, Sort.by("orderDate").descending());
+        // 페이지 요청 시 orderId 기준으로 오름차순 정렬을 추가
+        Pageable pageable = PageRequest.of(page, size, Sort.by("orderId").descending());
 
         if (startDate != null && endDate != null) {
             LocalDateTime startOfDay = startDate.atStartOfDay();
