@@ -34,22 +34,35 @@ document.addEventListener('DOMContentLoaded', function() {
             alert('날짜를 선택해 주세요.');
         }
     });
-    
+    function resetModalFields() {
+        document.getElementById('dailystockdate').value = "";
+        document.getElementById('dailystockproductcode').value = "";
+        document.getElementById('dailystocktotalqty').value = "";
+        document.getElementById('dailystockavailableqty').value = "";
+        document.getElementById('dailystockunavailableqty').value = "";
+        document.getElementById('dailystockreceivereturnqty').value = "";
+        document.getElementById('dailystockreturnqty').value = "";
+        document.getElementById('dailystockreceivedqty').value = "";
+        document.getElementById('dailystockshippedqty').value = "";
+    }    
     document.getElementById("dailystockclosemodal").addEventListener("click", function() {
         document.getElementById("dailystockmodal").style.display = "none";
         document.getElementById("dailystockoverlay").style.display = "none";
         document.body.style.overflow = "auto";
+         resetModalFields();
     });
 
     document.getElementById("dailystockoverlay").addEventListener("click", function() {
         document.getElementById("dailystockmodal").style.display = "none";
         document.getElementById("dailystockoverlay").style.display = "none";
         document.body.style.overflow = "auto";
+         resetModalFields();
     });
     document.getElementById("dailystockcancle").addEventListener("click", function() {
         document.getElementById("dailystockmodal").style.display = "none";
         document.getElementById("dailystockoverlay").style.display = "none";
         document.body.style.overflow = "auto";
+         resetModalFields();
     });
     
 });
