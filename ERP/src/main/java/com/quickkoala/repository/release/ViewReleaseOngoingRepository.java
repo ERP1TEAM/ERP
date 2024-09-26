@@ -7,8 +7,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.quickkoala.entity.release.OrderReleaseEntity.ReleaseStatus;
+import com.quickkoala.entity.order.ViewOrderOngoingEntity;
+import com.quickkoala.entity.order.OrderEntity.OrderStatus;
 import com.quickkoala.entity.release.ViewReleaseOngoingEntity;
+import com.quickkoala.entity.release.OrderReleaseEntity.ReleaseStatus;
 
 
 

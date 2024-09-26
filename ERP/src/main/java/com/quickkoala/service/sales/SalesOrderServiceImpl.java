@@ -24,10 +24,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.quickkoala.dto.sales.ClientsOrderProductsDTO;
 import com.quickkoala.dto.sales.ClientsOrdersDTO;
+import com.quickkoala.entity.order.MaxOrderNumberEntity;
 import com.quickkoala.entity.order.OrderEntity;
 import com.quickkoala.entity.order.OrderEntity.OrderStatus;
 import com.quickkoala.entity.sales.ClientsOrderProductsEntity;
 import com.quickkoala.entity.sales.ClientsOrdersEntity;
+import com.quickkoala.repository.order.MaxOrderNumberRepository;
 import com.quickkoala.repository.order.OrderRepository;
 import com.quickkoala.repository.sales.ClientsOrderProductsRepository;
 import com.quickkoala.repository.sales.ClientsOrdersRepository;
@@ -51,6 +53,9 @@ public class SalesOrderServiceImpl implements SalesOrderService {
     
     @Autowired
     private ProductRepository productRepository;
+    
+    @Autowired
+    private MaxOrderNumberRepository maxOrderNumberRepository;
 
     @Transactional
     @Override
@@ -134,7 +139,8 @@ public class SalesOrderServiceImpl implements SalesOrderService {
                 salesOrder.setStatus(OrderStatus.미승인);
                 salesOrder.setSalesCode(jwtTokenProvider.getCode(token));
                 salesOrder.setOrderId(orderId);  // 새로 생성한 orderId 사용
-                salesOrder.setNumber(generateOrderNumber(now));
+              //salesOrder.setNumber(generateOrderNumber(now));
+                salesOrder.setNumber(temp(now));
             }
 
             // 주문 총액 계산
@@ -275,6 +281,24 @@ public class SalesOrderServiceImpl implements SalesOrderService {
         return result;
     }
     
+    private String temp(LocalDateTime date) {
+    	LocalDate day = date.toLocalDate();
+    	MaxOrderNumberEntity max = maxOrderNumberRepository.findByDt(day);
+    	
+    	if(max==null) {
+    		MaxOrderNumberEntity temp = new MaxOrderNumberEntity();
+    		temp.setDt(day);
+    		temp.setNum(1);
+    		maxOrderNumberRepository.save(temp);
+    		return day.format(DateTimeFormatter.ofPattern("yyyyMMdd"))+"-001";
+    	}else {
+    		int newNumber = max.getNum()+1;
+        	max.setNum(newNumber);
+        	maxOrderNumberRepository.save(max);
+        	return day.format(DateTimeFormatter.ofPattern("yyyyMMdd"))+"-"+String.format("%03d",newNumber);
+    	}
+    }
+    
     //동일한 주문확인
     private ClientsOrdersEntity findExistingOrder(ClientsOrdersDTO orderDTO) {
         // 이름, 연락처, 주문 날짜를 기준으로 동일한 주문을 찾음
@@ -290,11 +314,11 @@ public class SalesOrderServiceImpl implements SalesOrderService {
         // ClientsOrdersEntity를 가져옴
         ClientsOrdersEntity clientsOrdersEntity = clientsOrdersRepository.findByOrderId(orderId)
             .orElseThrow(() -> new IllegalArgumentException("Invalid order ID: " + orderId));
-
-        // 주문 상태(OrderEntity) 가져오기
-        OrderEntity orderEntity = clientsOrdersEntity.getOrderEntity();
-        String orderStatus = orderEntity != null ? orderEntity.getStatus().name() : "처리중";
-
+        
+        // PageRequest.of(0, 1)을 사용해 첫 번째 결과만 가져옴
+        Page<OrderStatus> orderStatusPage = orderRepository.getStatusByOrderId(orderId, PageRequest.of(0, 1));
+        String orderStatus = orderStatusPage.hasContent() ? orderStatusPage.getContent().get(0).name() : "처리중";
+        
         // 주문에 해당하는 상품 목록을 가져옴
         List<ClientsOrderProductsEntity> products = clientsOrderProductsRepository.findByClientsOrdersOrderId(orderId);
 
@@ -305,9 +329,12 @@ public class SalesOrderServiceImpl implements SalesOrderService {
             dto.setProductName(productEntity.getProductName());
             dto.setQty(productEntity.getQty());
             dto.setStatus(orderStatus);  // OrderEntity의 상태를 DTO에 설정
+            dto.setManagerMemo(clientsOrdersEntity.getManagerMemo());
+            dto.setClientMemo(clientsOrdersEntity.getClientMemo());
             return dto;
         }).collect(Collectors.toList());
     }
+
 
     
  // 검색 메서드 수정

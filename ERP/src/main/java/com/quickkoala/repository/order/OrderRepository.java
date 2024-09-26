@@ -3,6 +3,8 @@ package com.quickkoala.repository.order;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -35,6 +37,11 @@ public interface OrderRepository extends JpaRepository<OrderEntity,String> {
 	@Query("UPDATE OrderEntity o SET o.status = :status WHERE o.number = :ids")
 	int updateStatusMultipleIds(@Param("status") OrderStatus status,@Param("ids") List<String> ids);
 	
+
+
+    // JPQL을 사용하여 orderId로 상태만 조회
+	@Query("SELECT o.status FROM OrderEntity o WHERE o.orderId = :orderId")
+	Page<OrderStatus> getStatusByOrderId(@Param("orderId") String orderId, Pageable pageable);
 
 
 	
