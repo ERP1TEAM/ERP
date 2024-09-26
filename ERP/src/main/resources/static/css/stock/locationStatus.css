@@ -101,3 +101,17 @@
     overflow: hidden;
     text-overflow: ellipsis;
 }
+.locationtablescroll{
+	max-height: 100px; /* 원하는 높이로 조정 */
+    overflow-y: auto;
+}
+.locationtablescroll table{
+	width: 100%;
+    border-collapse: collapse;
+}
+.locationtablescroll th, .locationtablescroll td {
+    padding: 10px;
+    text-align: right;
+    border-bottom: 1px solid #ddd; /* 경계선 */
+}
+

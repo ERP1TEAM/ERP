@@ -111,7 +111,9 @@ function renderInventoryTable(inventoryData) {
     const tableBody = document.querySelector('#showinventory tbody');
     tableBody.innerHTML = '';
 
-	if (inventoryData.length == 0) {
+	const filterData = inventoryData.filter(item => item.lotQuantity > 0);
+	console.log(inventoryData);
+	if (filterData.length == 0) {
         const emptyRow = document.createElement('tr');
         const emptyCell = document.createElement('td');
 
@@ -122,11 +124,11 @@ function renderInventoryTable(inventoryData) {
         emptyRow.appendChild(emptyCell);
         tableBody.appendChild(emptyRow);
 
-        return;  // 빈 리스트일 경우 함수 종료
+        return;
     }
 
 
-    inventoryData.forEach(item => {
+    filterData.forEach(item => {
         const row = document.createElement('tr');
         row.innerHTML = `
             <td class="lot-number-column">${item.lotNumber}</td>
