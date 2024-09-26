@@ -1,9 +1,7 @@
 package com.quickkoala.service.release;
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.quickkoala.entity.release.ReleaseProductsEntity;
 import com.quickkoala.entity.release.ReleaseReturnProductsEntity;
 import com.quickkoala.entity.release.ReleaseReturnProductsEntity.ReleaseReturnReason;
@@ -31,7 +29,7 @@ public class ReleaseReturnProductsServiceImpl implements ReleaseReturnProductsSe
 		}else {
 			for(ReleaseReturnProductsEntity item : optional) {
 				if(item.getStatus()==ReleaseReturnStatus.대기){
-					
+					System.out.println("FINDDD");
 					if(item.getQty()<qty) {
 						return "NO";
 					}
@@ -39,7 +37,6 @@ public class ReleaseReturnProductsServiceImpl implements ReleaseReturnProductsSe
 						item.setStatus(ReleaseReturnStatus.valueOf(status));
 						releaseReturnProductsRepository.save(item);
 						return "OK";
-						
 					}else {
 						int remain = item.getQty()-qty;
 						item.setQty(remain);
@@ -52,28 +49,24 @@ public class ReleaseReturnProductsServiceImpl implements ReleaseReturnProductsSe
 						added.setQty(qty);
 						added.setStatus(ReleaseReturnStatus.valueOf(status));
 						releaseReturnProductsRepository.save(item);
-						releaseReturnProductsRepository.save(added);
-						
-						
+						releaseReturnProductsRepository.save(added);			
 					}
 					return "OK";
 				}
-				
 			}
-			
 		}
 		return "NO";
 	}
 
 	@Override
 	public String saveProduct(String rCode,String lCode,int qty, String reason,String manager) {
+		List<ReleaseProductsEntity> li = releaseProductsRepository.findByRelNumberAndLotNumber(rCode,lCode);
+		System.out.println(li.size());
 		
-		List<ReleaseProductsEntity> optional = releaseProductsRepository.findByRelNumberAndLotNumber(rCode,lCode);
-		
-		if(optional.size()==0) {
+		if(li.size()==0) {
 			return "NO";
 		}else {
-			for(ReleaseProductsEntity item : optional) {
+			for(ReleaseProductsEntity item : li) {
 				if(item.getReturnFlag()=="N"){
 					if(item.getQty()<qty) {
 						return "NO";
@@ -81,7 +74,6 @@ public class ReleaseReturnProductsServiceImpl implements ReleaseReturnProductsSe
 						else if(item.getQty()==qty){
 						item.setReturnFlag("Y");
 						releaseProductsRepository.save(item);
-						
 						ReleaseReturnProductsEntity entity = new ReleaseReturnProductsEntity();
 						entity.setLotNumber(lCode);
 						try {
@@ -93,7 +85,6 @@ public class ReleaseReturnProductsServiceImpl implements ReleaseReturnProductsSe
 						entity.setStatus(ReleaseReturnStatus.대기);
 						entity.setRelNumber(rCode);
 						entity.setManager(manager);
-						@SuppressWarnings("unused")
 						ReleaseReturnProductsEntity temp = releaseReturnProductsRepository.save(entity);
 						return "OK";
 					}else {
@@ -121,7 +112,6 @@ public class ReleaseReturnProductsServiceImpl implements ReleaseReturnProductsSe
 						entity.setStatus(ReleaseReturnStatus.대기);
 						entity.setRelNumber(rCode);
 						entity.setManager(manager);
-						@SuppressWarnings("unused")
 						ReleaseReturnProductsEntity temp = releaseReturnProductsRepository.save(entity);
 						return "OK";
 						

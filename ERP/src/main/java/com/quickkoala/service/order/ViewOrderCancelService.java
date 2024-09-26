@@ -1,7 +1,11 @@
 package com.quickkoala.service.order;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 
+import com.quickkoala.dto.order.OrderCancelDto;
 import com.quickkoala.entity.order.ViewOrderCancelEntity;
 
 public interface ViewOrderCancelService {

@@ -5,7 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.quickkoala.entity.release.ViewReleaseCompleteProductsEntity;
+import com.quickkoala.entity.release.ViewReleaseProductsEntity;
 import com.quickkoala.repository.release.ViewReleaseCompleteProductsRepository;
+import com.quickkoala.repository.release.ViewReleaseProductsRepository;
 
 @Service
 public class ViewReleaseCompleteProductsServiceImpl implements ViewReleaseCompleteProductsService{
