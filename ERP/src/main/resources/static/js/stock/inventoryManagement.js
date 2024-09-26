@@ -47,22 +47,27 @@ function inventorymanagementmain(pno, code = '', word = ''){
 		
     	items.forEach(function(inventorymanagement){
 		let categoryname = categories.find(category => category.code == inventorymanagement.classificationCode); 
-		let locationCode = inventorymanagement.locationCode || 'N/A';
-		let price = inventorymanagement.price || 0;
-		let useFlag = inventorymanagement.useFlag || 'N/A';
-		
+		let locationCode = inventorymanagement.locationCode ||'';
+		let price = (inventorymanagement.price || 0).toLocaleString();
+		let useFlag = inventorymanagement.useFlag ;
+		if(useFlag=='Y'){
+			useFlag='사용';
+		}else{
+			useFlag='미사용';
+		}
+        
         let inventorymanagementth = `<tr class="odd gradeX">
-                    <td>${inventorymanagement.productCode}</td>
+                    <td style="text-align:center;">${inventorymanagement.productCode}</td>
                     <td>${inventorymanagement.productName}</td>
-                    <td>${inventorymanagement.supplierCode}</td>
+                    <td style="text-align:center;">${inventorymanagement.supplierCode}</td>
                     <td>${inventorymanagement.supplierName}</td>
-                    <td>${locationCode}</td>
-                    <td>${inventorymanagement.classificationCode}</td>
+                    <td style="text-align:center;">${locationCode}</td>
+                    <td style="text-align:center;">${inventorymanagement.classificationCode}</td>
                     <td>${categoryname.mainName}(${categoryname.mainCode})</td>
 					<td>${categoryname.subName}(${categoryname.subCode})</td>
-                    <td>${price}</td>
-                    <td>${useFlag}</td>
-                    <td><input type="button" value="수정" class="inventorymanagementmodifybtn" value={}></td>
+                    <td style="text-align:right;">${price}</td>
+                    <td style="text-align:center;">${useFlag}</td>
+                    <td style="text-align:center;"><input type="button" value="수정" class="inventorymanagementmodifybtn" value={}></td>
                  </tr>`;
 			inventorymanagementtbody.innerHTML +=inventorymanagementth;
 		}); 
