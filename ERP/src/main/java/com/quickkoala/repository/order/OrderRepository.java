@@ -2,7 +2,6 @@ package com.quickkoala.repository.order;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -37,8 +36,6 @@ public interface OrderRepository extends JpaRepository<OrderEntity,String> {
 	int updateStatusMultipleIds(@Param("status") OrderStatus status,@Param("ids") List<String> ids);
 	
 
-    // JPQL을 사용하여 orderId로 상태만 조회
-    @Query("SELECT o.status FROM OrderEntity o WHERE o.orderId = :orderId")
-    Optional<OrderStatus> getStatusByOrderId(@Param("orderId") String orderId);
+
 	
 }

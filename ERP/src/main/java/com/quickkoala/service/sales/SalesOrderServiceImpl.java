@@ -134,7 +134,8 @@ public class SalesOrderServiceImpl implements SalesOrderService {
                 salesOrder.setStatus(OrderStatus.미승인);
                 salesOrder.setSalesCode(jwtTokenProvider.getCode(token));
                 salesOrder.setOrderId(orderId);  // 새로 생성한 orderId 사용
-                salesOrder.setNumber(generateOrderNumber(now));
+              //salesOrder.setNumber(generateOrderNumber(now));
+                salesOrder.setNumber(temp(now));
             }
 
             // 주문 총액 계산
@@ -273,6 +274,24 @@ public class SalesOrderServiceImpl implements SalesOrderService {
             result = maxNumber.split("-")[0]+"-"+String.format("%03d",Integer.valueOf(maxNumber.split("-")[1])+1);
         }
         return result;
+    }
+    
+    private String temp(LocalDateTime date) {
+    	LocalDate day = date.toLocalDate();
+    	MaxOrderNumberEntity max = maxOrderNumberRepository.findByDt(day);
+    	
+    	if(max==null) {
+    		MaxOrderNumberEntity temp = new MaxOrderNumberEntity();
+    		temp.setDt(day);
+    		temp.setNum(1);
+    		maxOrderNumberRepository.save(temp);
+    		return day.format(DateTimeFormatter.ofPattern("yyyyMMdd"))+"-001";
+    	}else {
+    		int newNumber = max.getNum()+1;
+        	max.setNum(newNumber);
+        	maxOrderNumberRepository.save(max);
+        	return day.format(DateTimeFormatter.ofPattern("yyyyMMdd"))+"-"+String.format("%03d",newNumber);
+    	}
     }
     
     //동일한 주문확인

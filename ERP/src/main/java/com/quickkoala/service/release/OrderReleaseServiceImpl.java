@@ -1,6 +1,7 @@
 package com.quickkoala.service.release;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -9,16 +10,21 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.quickkoala.entity.order.MaxOrderNumberEntity;
+import com.quickkoala.entity.order.OrderCancelEntity;
+import com.quickkoala.entity.order.OrderEntity;
+import com.quickkoala.entity.release.MaxReleaseNumberEntity;
 import com.quickkoala.entity.release.OrderReleaseEntity;
-import com.quickkoala.entity.release.OrderReleaseEntity.ReleaseStatus;
 import com.quickkoala.entity.release.ReleaseCancelEntity;
-import com.quickkoala.entity.release.ReleaseCancelEntity.ReleaseCancelReason;
-import com.quickkoala.entity.release.ReleaseCancelEntity.ReleaseCancelWho;
 import com.quickkoala.entity.release.ReleaseCompleteEntity;
 import com.quickkoala.entity.release.ReleaseProductsEntity;
+import com.quickkoala.entity.release.OrderReleaseEntity.ReleaseStatus;
+import com.quickkoala.entity.release.ReleaseCancelEntity.ReleaseCancelReason;
+import com.quickkoala.entity.release.ReleaseCancelEntity.ReleaseCancelWho;
 import com.quickkoala.entity.sales.ClientsOrderProductsEntity;
 import com.quickkoala.entity.stock.LotEntity;
 import com.quickkoala.entity.stock.ProductEntity;
+import com.quickkoala.repository.release.MaxReleaseNumberRepository;
 import com.quickkoala.repository.release.OrderReleaseRepository;
 import com.quickkoala.repository.release.ReleaseCancelRepository;
 import com.quickkoala.repository.release.ReleaseCompleteRepository;
@@ -26,6 +32,7 @@ import com.quickkoala.repository.release.ReleaseProductsRepository;
 import com.quickkoala.repository.sales.ClientsOrderProductsRepository;
 import com.quickkoala.repository.stock.LotRepository;
 import com.quickkoala.repository.stock.ProductRepository;
+import com.quickkoala.utils.GetToken;
 
 import jakarta.transaction.Transactional;
 
@@ -52,6 +59,9 @@ public class OrderReleaseServiceImpl implements OrderReleaseService{
 	
 	@Autowired
 	private ProductRepository  productRepository;
+	
+	@Autowired
+	private MaxReleaseNumberRepository maxReleaseNumberRepository;
 	
 	@Override
 	public String saveStatus(String id, String status,String manager) {
@@ -104,7 +114,8 @@ public class OrderReleaseServiceImpl implements OrderReleaseService{
 	@Transactional
 	public String addReleaseFromOrder(OrderReleaseEntity orderReleaseEntity){
 		boolean asignok = true;
-		String newReleaseNumber = this.asignRelNumber();
+		//String newReleaseNumber = this.asignRelNumber();
+		String newReleaseNumber = temp(LocalDate.now());
 		orderReleaseEntity.setNumber(newReleaseNumber);
 		orderReleaseEntity.setStatus(ReleaseStatus.출고준비);
 		 List<ClientsOrderProductsEntity> orderedList = clientsOrderProductsRepository.findByClientsOrdersOrderId(orderReleaseEntity.getOrderId());
@@ -127,8 +138,7 @@ public class OrderReleaseServiceImpl implements OrderReleaseService{
 				 releaseProduct.setSupplierCode("error-code");
 			 }
 			 productRepository.flush();
-			 @SuppressWarnings({ "unchecked", "rawtypes" })
-			ArrayList<ReleaseProductsEntity> asignResult =  (ArrayList)this.asignLotNumber(released.getProductCode(),orderReleaseEntity.getSalesCode(),released.getQty(),releaseProduct);
+			 ArrayList<ReleaseProductsEntity> asignResult =  (ArrayList)this.asignLotNumber(released.getProductCode(),orderReleaseEntity.getSalesCode(),released.getQty(),releaseProduct);
 			 if(asignResult==null) {
 				 asignok=false;
 				 break;
@@ -151,7 +161,31 @@ public class OrderReleaseServiceImpl implements OrderReleaseService{
 		List<OrderReleaseEntity> li = orderReleaseRepository.findByNumberLikeOrderByNumberDesc("L"+today+"-%");
 		String number =(li.size()==0)?"001":""+String.format("%03d",Integer.valueOf(li.get(0).getNumber().split("-")[1])+1);
 		return "L"+today+"-"+number;
+		
+		//
+		
+		
+		
+		//
 	}
+	
+	 private String temp(LocalDate day) {
+	    	MaxReleaseNumberEntity max = maxReleaseNumberRepository.findByDt(day);
+	    	
+	    	if(max==null) {
+	    		MaxReleaseNumberEntity temp = new MaxReleaseNumberEntity();
+	    		temp.setDt(day);
+	    		temp.setNum(1);
+	    		maxReleaseNumberRepository.save(temp);
+	    		return day.format(DateTimeFormatter.ofPattern("yyyyMMdd"))+"-001";
+	    	}else {
+	    		int newNumber = max.getNum()+1;
+	        	max.setNum(newNumber);
+	        	maxReleaseNumberRepository.save(max);
+	        	return "L"+day.format(DateTimeFormatter.ofPattern("yyyyMMdd"))+"-"+String.format("%03d",newNumber);
+	    	}
+	    }
+	    
 	
 	@Override
 	public List<ReleaseProductsEntity> asignLotNumber(String pcode, String scode, Integer qty, ReleaseProductsEntity releaseProduct) {
