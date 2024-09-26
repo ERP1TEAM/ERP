@@ -47,6 +47,7 @@
 						<div class="card">
 							<div class="card-action">주문진행</div>
 							<div class="search">
+							<form id="frm">
 								<input type="date" id="start_date" style="width: 120px;">
 								~ <input type="date" id="end_date" style="width: 120px;">
 								<select id="searchselect" style="display: block;">
@@ -54,12 +55,12 @@
 									<option value="2">거래처</option>
 									<option value="3">담당자</option>
 								</select> <input type="text" id="searchtxt">
-								<button type="button" id="searchbtn">search</button>
+								<button type="submit" id="searchbtn">search</button>
+								</form>
 							</div>
 							<div class="small-tap" id="all">전체</div>
 							<div class="small-tap" id="apv">승인</div>
 							<div class="small-tap" id="wait">미승인</div>
-							<div class="small-tap" id="ccl">취소</div>
 							<br> <br>
 							<div class="card-content">
 								<div class="table-responsive">

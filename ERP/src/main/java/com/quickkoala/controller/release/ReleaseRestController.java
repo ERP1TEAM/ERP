@@ -57,18 +57,21 @@ public class ReleaseRestController {
 	private final int SIZE=10;
 	
 	@GetMapping("release/page")
-	public Page<ViewReleaseOngoingEntity> paging(@RequestParam int pg, @RequestParam(required = false) String select,  @RequestParam(required = false) String param){
-		return viewReleaseOngoingService.getAll(pg,SIZE,select,param);
+	public Page<ViewReleaseOngoingEntity> pagingpaging
+	(@RequestParam int pg, @RequestParam(required = false) String select,  @RequestParam(required = false) String param, @RequestParam(required = false) String startDate, @RequestParam(required = false) String endDate){
+		return viewReleaseOngoingService.getAll(pg,SIZE,select,param,startDate,endDate);
 	}
 	
 	@GetMapping("release/cancel/page")
-	public Page<ViewReleaseCancelEntity> cancelpaging(@RequestParam int pg,@RequestParam(required = false) String select,  @RequestParam(required = false) String param){
-		return viewReleaseCancelService.getAll(pg,SIZE,select,param);
+	public Page<ViewReleaseCancelEntity> cancelpaging
+	(@RequestParam int pg, @RequestParam(required = false) String select,  @RequestParam(required = false) String param, @RequestParam(required = false) String startDate, @RequestParam(required = false) String endDate){
+		return viewReleaseCancelService.getAll(pg,SIZE,select,param,startDate,endDate);
 	}
 	
 	@GetMapping("release/complete/page")
-	public Page<ViewReleaseCompleteEntity> completepaging(@RequestParam int pg, @RequestParam(required = false) String select,  @RequestParam(required = false) String param){
-		return viewReleaseCompleteService.getAll(pg,SIZE,select,param);
+	public Page<ViewReleaseCompleteEntity> completepaging
+	(@RequestParam int pg, @RequestParam(required = false) String select,  @RequestParam(required = false) String param, @RequestParam(required = false) String startDate, @RequestParam(required = false) String endDate){
+		return viewReleaseCompleteService.getAll(pg,SIZE,select,param,startDate,endDate);
 	}
 	
 	@GetMapping("release/return/page")

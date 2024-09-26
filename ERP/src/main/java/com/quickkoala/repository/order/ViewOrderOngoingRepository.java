@@ -1,5 +1,6 @@
 package com.quickkoala.repository.order;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -16,10 +17,15 @@ import com.quickkoala.entity.order.OrderEntity.OrderStatus;
 @Repository
 public interface ViewOrderOngoingRepository extends JpaRepository<ViewOrderOngoingEntity,String> {
 	
-	Page<ViewOrderOngoingEntity> findAll(Pageable pgab);
-	Page<ViewOrderOngoingEntity> findByStatus(OrderStatus status, Pageable pgab);
-	Page<ViewOrderOngoingEntity> findByNumberContainingOrderByNumberDesc(String param, Pageable pgab);
-	Page<ViewOrderOngoingEntity> findBySalesNameContainingOrderByNumberDesc(String param, Pageable pageable);
-	Page<ViewOrderOngoingEntity> findByManagerContainingOrderByNumberDesc(String param, Pageable pageable);
+	Page<ViewOrderOngoingEntity> findAllByStatusIn(OrderStatus[] status,Pageable pgab);
+	Page<ViewOrderOngoingEntity> findAllByStatus(OrderStatus status, Pageable pgab);
+	Page<ViewOrderOngoingEntity> findByNumberContainingAndStatusIn(String param, OrderStatus[] status, Pageable pgab);
+	Page<ViewOrderOngoingEntity> findBySalesNameContainingAndStatusIn(String param, OrderStatus[] status, Pageable pageable);
+	Page<ViewOrderOngoingEntity> findByManagerContainingAndStatusIn(String param, OrderStatus[] status, Pageable pageable);
 	
+	Page<ViewOrderOngoingEntity> findAllByDtBetweenAndStatusIn(LocalDateTime startDate, LocalDateTime endDate, OrderStatus[] status,Pageable pageable);
+	Page<ViewOrderOngoingEntity> findByNumberContainingAndDtBetweenAndStatusIn(String param, LocalDateTime startDate, LocalDateTime endDate, OrderStatus[] status, Pageable pageable);
+	Page<ViewOrderOngoingEntity> findBySalesNameContainingAndDtBetweenAndStatusIn(String param, LocalDateTime startDate, LocalDateTime endDate, OrderStatus[] status, Pageable pageable);
+	Page<ViewOrderOngoingEntity> findByManagerContainingAndDtBetweenAndStatusIn(String param, LocalDateTime startDate, LocalDateTime endDate, OrderStatus[] status, Pageable pageable);
+	Page<ViewOrderOngoingEntity> findAllByStatusAndDtBetween(OrderStatus status, LocalDateTime startDate, LocalDateTime endDate, Pageable pgab);
 }

@@ -46,15 +46,16 @@ public class OrderRestController {
 	@Autowired
 	private ViewOrderCancelService viewOrderCancelService;
 	
-	private final int SIZE=10;
+	private final int SIZE=1;
 	
 	@GetMapping("order/page")
-	public Page<ViewOrderOngoingEntity> paging(@RequestParam int pg, @RequestParam(required = false) String select,  @RequestParam(required = false) String param){
-		return this.viewOrderOngoingService.getAll(pg,SIZE,select,param);
+	public Page<ViewOrderOngoingEntity> paging(@RequestParam int pg, @RequestParam(required = false) String select,  @RequestParam(required = false) String param, @RequestParam(required = false) String startDate, @RequestParam(required = false) String endDate){
+		return this.viewOrderOngoingService.getAll(pg,SIZE,select,param,startDate,endDate);
 	}
 	
 	@GetMapping("order/cancel/page")	
 	public Page<ViewOrderCancelEntity> cancelPaging(@RequestParam int pg, @RequestParam(required = false) String select,  @RequestParam(required = false) String param, @RequestParam(required = false) String startDate, @RequestParam(required = false) String endDate){
+		System.out.println(startDate);
 		return this.viewOrderCancelService.getAll(pg,SIZE,select,param,startDate,endDate);
 	}
 	

@@ -5,12 +5,30 @@ export default class Paging {
     select_=null;
     param_=null;
     mapping_="";
+    startDate_=null;
+    endDate_=null;
 
-    async getPage(mapping, pg, select = null, param = null) {
+    async getPage(mapping, pg, select = null, param = null, StartDate=null,EndDate=null) {
+		
+		if(select!=null){
+			this.select_=select;
+		}
+		if(param!=null){
+			this.param_=param;
+		}
+		if(StartDate!=null){
+			this.startDate_=StartDate;
+		}
+		if(EndDate!=null){
+			this.endDate_=EndDate;
+			
+		}
         const queryParams = new URLSearchParams({
             pg: pg,
-            select: select,
-            param: param
+            select: this.select_,
+            param: this.param_,
+            startDate : this.startDate_,
+            endDate: this.endDate_
         });
 
         const response = await fetch(`${mapping}?${queryParams}`, {
@@ -18,16 +36,17 @@ export default class Paging {
         });
 
         if (!response.ok) {
+			this.select_="";
+        	this.param_="";
             throw new Error('Network error');
+            
         }
+        
+         //console.log("URL:", `${mapping}?${queryParams}`);
 
         const list = await response.json();
-        this.select_=select;
-        this.param_=param;
         this.mapping_=mapping;
         this.currentPage_=pg+1;
-        
-        
         this.totalPages_ = list.totalPages;
         return list;
     }

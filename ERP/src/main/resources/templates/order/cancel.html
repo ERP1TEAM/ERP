@@ -45,16 +45,18 @@
 				<div class="row">
 					<div class="col-md-12">
 						<div class="card">
-							<div class="card-action">주문진행</div>
+							<div class="card-action">주문취소</div>
 							<div class="search">
-								<input type="date" id="start_date" style="width: 120px;">
-								~ <input type="date" id="end_date" style="width: 120px;">
-								<select id="searchselect">
+							<form id="frm">
+								<input type="date" name="startDate" id="start_date" style="width: 120px;">
+								~ <input type="date" name="endDate" id="end_date" style="width: 120px;">
+								<select id="searchselect" name="select">
 									<option value="1">주문번호</option>
 									<option value="2">거래처</option>
 									<option value="3">담당자</option>
-								</select> <input type="text" id="searchtxt">
-								<button type="button" id="searchbtn">search</button>
+								</select> <input type="text" id="searchtxt" name="param">
+								<button type="submit" id="searchbtn">search</button>
+								</form>
 							</div>
 							<div class="card-content">
 								<div class="table-responsive">

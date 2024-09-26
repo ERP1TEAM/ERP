@@ -51,6 +51,7 @@
 						<div class="card">
 							<div class="card-action">출고취소</div>
 							<div class="search">
+							<form id="frm">
 								<input type="date" id="start_date" style="width: 120px;">
 								~ <input type="date" id="end_date" style="width: 120px;">
 								<select id="searchselect">
@@ -58,7 +59,8 @@
 									<option value="2">주문번호</option>
 									<option value="4">거래처</option>
 								</select> <input type="text" id="searchtxt">
-								<button type="button" id="searchbtn">search</button>
+								<button type="submit" id="searchbtn">search</button>
+								</form>
 							</div>
 							<div class="card-content">
 								<div class="table-responsive">

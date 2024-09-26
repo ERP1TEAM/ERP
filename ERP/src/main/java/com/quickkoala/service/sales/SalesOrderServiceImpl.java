@@ -62,7 +62,6 @@ public class SalesOrderServiceImpl implements SalesOrderService {
     public List<String> saveOrder(List<ClientsOrdersDTO> orders, String token) {
         LocalDateTime now = LocalDateTime.now();
         List<String> duplicateOrders = new ArrayList<>();  // 중복된 주문을 저장할 리스트
-//        List<String> invalidProducts = new ArrayList<>();  // 유효하지 않은 상품을 저장할 리스트
 
         for (ClientsOrdersDTO orderDTO : orders) {
 
@@ -107,14 +106,6 @@ public class SalesOrderServiceImpl implements SalesOrderService {
             // 상품 정보 저장 (동일한 orderId로 여러 상품 저장)
             List<String> productCodes = new ArrayList<>();
             for (ClientsOrderProductsDTO productDTO : orderDTO.getProducts()) {
-
-                // Product 테이블에서 해당 상품 코드가 있는지 확인
-                if (!productRepository.existsByCode(productDTO.getProductCode())) {
-                    // 유효하지 않은 상품인 경우 처리하지 않고 리스트에 추가
-                	duplicateOrders.add("[유효하지 않은 상품]" + productDTO.getProductCode()+ " - " + productDTO.getProductName());
-                    continue;
-                }
-
                 List<ClientsOrderProductsEntity> existingProducts = clientsOrderProductsRepository.findByClientsOrdersOrderIdAndProductCode(orderId, productDTO.getProductCode());
 
                 // 중복된 상품이 없을 경우에만 저장
@@ -126,9 +117,9 @@ public class SalesOrderServiceImpl implements SalesOrderService {
                     newProduct.setQty(productDTO.getQty());
                     clientsOrderProductsRepository.save(newProduct);
                     productCodes.add(productDTO.getProductCode());
-                } else {
-                    DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd h:mm:ss a");
-                    duplicateOrders.add("[중복된 주문]" + orderDTO.getOrderDate().format(format) + " - " + orderDTO.getName() + "-" + orderDTO.getTel());
+                }else {
+                	DateTimeFormatter format= DateTimeFormatter.ofPattern("yyyy-MM-dd h:mm:ss a");
+                	duplicateOrders.add("[" + orderDTO.getOrderDate().format(format) + "]" + orderDTO.getName() + "-" + orderDTO.getTel());
                 }
             }
 
@@ -148,6 +139,7 @@ public class SalesOrderServiceImpl implements SalesOrderService {
                 salesOrder.setStatus(OrderStatus.미승인);
                 salesOrder.setSalesCode(jwtTokenProvider.getCode(token));
                 salesOrder.setOrderId(orderId);  // 새로 생성한 orderId 사용
+              //salesOrder.setNumber(generateOrderNumber(now));
                 salesOrder.setNumber(temp(now));
             }
 
@@ -164,7 +156,6 @@ public class SalesOrderServiceImpl implements SalesOrderService {
 
         return duplicateOrders;  // 중복된 주문 정보를 반환
     }
-
 
 
     @Override

@@ -1,5 +1,6 @@
 package com.quickkoala.service.order;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -19,40 +20,41 @@ public class ViewOrderCancelServiceImpl implements ViewOrderCancelService{
 	@Autowired
 	private ViewOrderCancelRepository viewOrderCancelRepository;
 	
-	/*
 	@Override
-	public Page<ViewOrderCancelEntity> getAll(int pg, int size,Integer select, String param) {
-		Pageable pageable=(Pageable) PageRequest.of(pg, size, Sort.by(Sort.Order.desc("orderNumber")));
-		List<ViewOrderCancelEntity> before = null;
-		if(select.equals(null)||select.equals("null")) {
-			return viewOrderCancelRepository.findAll(pageable);
+	public Page<ViewOrderCancelEntity> getAll(int pg, int size,String select, String param, String startDate, String endDate) {
+		try {
+		
+		if(startDate.equals("null")||endDate.equals("null")||endDate==""||startDate=="") {
+			Pageable pageable=(Pageable) PageRequest.of(pg, size, Sort.by(Sort.Order.desc("dt")));
+			if(select.equals(null)||select.equals("null")||select=="") {
+				return viewOrderCancelRepository.findAll(pageable);
+			}else if(select.equals("1")&&param!=null) {
+				return viewOrderCancelRepository.findByOrderNumberContaining(param,pageable);
+			}else if(select.equals("2")&&param!=null) {
+				return viewOrderCancelRepository.findBySalesNameContaining(param,pageable);
+			}else if(select.equals("3")&&param!=null) {
+				return viewOrderCancelRepository.findByManagerContaining(param,pageable);
+			}else {
+				return Page.empty();
+			}
+		}else {
+			LocalDateTime sd = LocalDate.parse(startDate).atStartOfDay();
+			LocalDateTime ed = LocalDate.parse(endDate).atTime(23, 59, 59) ;
+		Pageable pageable=(Pageable) PageRequest.of(pg, size, Sort.by(Sort.Order.desc("dt")));
+		if(select.equals(null)||select.equals("null")||select=="") {
+			return viewOrderCancelRepository.findAllByDtBetween(sd,ed,pageable);
 		}else if(select.equals("1")&&param!=null) {
-			return viewOrderCancelRepository.findByOrderNumberContainingOrderByOrderNumberDesc(param,pageable);
+			return viewOrderCancelRepository.findByOrderNumberContainingAndDtBetween(param,sd,ed,pageable);
 		}else if(select.equals("2")&&param!=null) {
-			return viewOrderCancelRepository.findBySalesNameContainingOrderByOrderNumberDesc(param,pageable);
+			return viewOrderCancelRepository.findBySalesNameContainingAndDtBetween(param,sd,ed,pageable);
 		}else if(select.equals("3")&&param!=null) {
-			return viewOrderCancelRepository.findByManagerContainingOrderByOrderNumberDesc(param,pageable);
+			return viewOrderCancelRepository.findByManagerContainingAndDtBetween(param,sd,ed,pageable);
 		}else {
 			return Page.empty();
 		}
-	}
-	*/
-	@Override
-	public Page<ViewOrderCancelEntity> getAll(int pg, int size,String select, String param, String startDate, String endDate) {
+		}
 		
-		//LocalDateTime sd = LocalDateTime.parse(startDate);
-		//LocalDateTime ed = LocalDateTime.parse(endDate);
-		Pageable pageable=(Pageable) PageRequest.of(pg, size, Sort.by(Sort.Order.desc("orderNumber")));
-		List<ViewOrderCancelEntity> before = null;
-		if(select.equals(null)||select.equals("null")) {
-			return viewOrderCancelRepository.findAll(pageable);
-		}else if(select.equals("1")&&param!=null) {
-			return viewOrderCancelRepository.findByOrderNumberContainingOrderByOrderNumberDesc(param,pageable);
-		}else if(select.equals("2")&&param!=null) {
-			return viewOrderCancelRepository.findBySalesNameContainingOrderByOrderNumberDesc(param,pageable);
-		}else if(select.equals("3")&&param!=null) {
-			return viewOrderCancelRepository.findByManagerContainingOrderByOrderNumberDesc(param,pageable);
-		}else {
+		}catch(Exception e) {
 			return Page.empty();
 		}
 	}

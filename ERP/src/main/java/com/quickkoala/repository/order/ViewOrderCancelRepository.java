@@ -1,5 +1,6 @@
 package com.quickkoala.repository.order;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.data.domain.Page;
@@ -16,13 +17,13 @@ public interface ViewOrderCancelRepository extends JpaRepository<ViewOrderCancel
 	List<ViewOrderCancelEntity> findAllByOrderByOrderNumberDesc();
 	
 	Page<ViewOrderCancelEntity> findAll(Pageable pageable);
-	Page<ViewOrderCancelEntity> findByOrderNumberContainingOrderByOrderNumberDesc(String param, Pageable pageable);
-	Page<ViewOrderCancelEntity> findBySalesNameContainingOrderByOrderNumberDesc(String param, Pageable pageable);
-	Page<ViewOrderCancelEntity> findByManagerContainingOrderByOrderNumberDesc(String param, Pageable pageable);
+	Page<ViewOrderCancelEntity> findByOrderNumberContaining(String param, Pageable pageable);
+	Page<ViewOrderCancelEntity> findBySalesNameContaining(String param, Pageable pageable);
+	Page<ViewOrderCancelEntity> findByManagerContaining(String param, Pageable pageable);
 	
-	Page<ViewOrderCancelEntity> findAllByDtBetween(String param, LocalDateTime startDate, LocalDateTime endDate, Pageable pageable);
-	Page<ViewOrderCancelEntity> findByOrderNumberContainingAndDtBetweenOrderByOrderNumberDesc(String param, LocalDateTime startDate, LocalDateTime endDate, Pageable pageable);
-	Page<ViewOrderCancelEntity> findBySalesNameContainingAndDtBetweenOrderByOrderNumberDesc(String param, LocalDateTime startDate, LocalDateTime endDate, Pageable pageable);
-	Page<ViewOrderCancelEntity> findByManagerContainingAndDtBetweenOrderByOrderNumberDesc(String param, LocalDateTime startDate, LocalDateTime endDate, Pageable pageable);
+	Page<ViewOrderCancelEntity> findAllByDtBetween(LocalDateTime startDate, LocalDateTime endDate, Pageable pageable);
+	Page<ViewOrderCancelEntity> findByOrderNumberContainingAndDtBetween(String param, LocalDateTime startDate, LocalDateTime endDate, Pageable pageable);
+	Page<ViewOrderCancelEntity> findBySalesNameContainingAndDtBetween(String param, LocalDateTime startDate, LocalDateTime endDate, Pageable pageable);
+	Page<ViewOrderCancelEntity> findByManagerContainingAndDtBetween(String param, LocalDateTime startDate, LocalDateTime endDate, Pageable pageable);
 	
 }

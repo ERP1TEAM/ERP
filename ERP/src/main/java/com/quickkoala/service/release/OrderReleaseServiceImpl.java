@@ -171,19 +171,20 @@ public class OrderReleaseServiceImpl implements OrderReleaseService{
 	
 	 private String temp(LocalDate day) {
 	    	MaxReleaseNumberEntity max = maxReleaseNumberRepository.findByDt(day);
-	    	
+	    	String result = "";
 	    	if(max==null) {
 	    		MaxReleaseNumberEntity temp = new MaxReleaseNumberEntity();
 	    		temp.setDt(day);
 	    		temp.setNum(1);
 	    		maxReleaseNumberRepository.save(temp);
-	    		return day.format(DateTimeFormatter.ofPattern("yyyyMMdd"))+"-001";
+	    		 result = day.format(DateTimeFormatter.ofPattern("yyyyMMdd"))+"-001";
 	    	}else {
 	    		int newNumber = max.getNum()+1;
 	        	max.setNum(newNumber);
 	        	maxReleaseNumberRepository.save(max);
-	        	return "L"+day.format(DateTimeFormatter.ofPattern("yyyyMMdd"))+"-"+String.format("%03d",newNumber);
+	        	 result = "L"+day.format(DateTimeFormatter.ofPattern("yyyyMMdd"))+"-"+String.format("%03d",newNumber);
 	    	}
+	    	return result;
 	    }
 	    
 	
@@ -194,13 +195,11 @@ public class OrderReleaseServiceImpl implements OrderReleaseService{
 	    Iterator<LotEntity> lot = lots.iterator();
 	    return asignLotRecursively(releaseProduct, qty, lot, result)?result:null;
 	}
-
+	int count=0;
 	private boolean asignLotRecursively(ReleaseProductsEntity entity, Integer qty, Iterator<LotEntity> lotIterator, List<ReleaseProductsEntity> result) {
 	    if (!lotIterator.hasNext() && qty > 0) {
-	        System.out.println("FALSEEEEEEEE");
 	        return false;
 	    } else if (qty == 0) {
-	        System.out.println("TRUEEEEEEEEE");
 	        return true;
 	    }
 	    

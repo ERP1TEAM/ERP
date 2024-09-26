@@ -9,5 +9,5 @@ import com.quickkoala.entity.release.ViewReleaseCancelEntity;
 
 public interface ViewReleaseCancelService{
 	
-	public Page<ViewReleaseCancelEntity> getAll(int pg, int size,String select, String param);
+	public Page<ViewReleaseCancelEntity> getAll(int pg, int size,String select, String param, String startDate, String endDate);
 }
