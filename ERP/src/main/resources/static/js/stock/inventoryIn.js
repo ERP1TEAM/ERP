@@ -9,6 +9,12 @@ document.addEventListener('DOMContentLoaded', function() {
         const productprice = document.getElementById('inventoryprice').value;
         const storageLocation = document.getElementById('inventoryStorageLocation').value;
         
+        if (!productname || !supplierCode || !classificationCode|| !productprice) {
+            alert("모든 값을 채워주세요.");
+            return;
+        }
+        
+        
         const inventoryData = {
             code: productcode,
             name: productname,

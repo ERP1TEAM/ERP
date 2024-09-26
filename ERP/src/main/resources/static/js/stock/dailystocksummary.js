@@ -27,29 +27,41 @@ document.addEventListener('DOMContentLoaded', function() {
                     document.getElementById('dailystockshippedqty').value = data.data.shippedQty;
                 })
                 .catch(error => {
-                    console.log(error);
-                    alert('데이터 조회 중 오류가 발생했습니다.');
+                    alert('해당 날짜의 데이터가 없습니다.');
                 });
         } else {
             alert('날짜를 선택해 주세요.');
         }
     });
-    
+    function resetModalFields() {
+        document.getElementById('dailystockdate').value = "";
+        document.getElementById('dailystockproductcode').value = "";
+        document.getElementById('dailystocktotalqty').value = "";
+        document.getElementById('dailystockavailableqty').value = "";
+        document.getElementById('dailystockunavailableqty').value = "";
+        document.getElementById('dailystockreceivereturnqty').value = "";
+        document.getElementById('dailystockreturnqty').value = "";
+        document.getElementById('dailystockreceivedqty').value = "";
+        document.getElementById('dailystockshippedqty').value = "";
+    }    
     document.getElementById("dailystockclosemodal").addEventListener("click", function() {
         document.getElementById("dailystockmodal").style.display = "none";
         document.getElementById("dailystockoverlay").style.display = "none";
         document.body.style.overflow = "auto";
+         resetModalFields();
     });
 
     document.getElementById("dailystockoverlay").addEventListener("click", function() {
         document.getElementById("dailystockmodal").style.display = "none";
         document.getElementById("dailystockoverlay").style.display = "none";
         document.body.style.overflow = "auto";
+         resetModalFields();
     });
     document.getElementById("dailystockcancle").addEventListener("click", function() {
         document.getElementById("dailystockmodal").style.display = "none";
         document.getElementById("dailystockoverlay").style.display = "none";
         document.body.style.overflow = "auto";
+         resetModalFields();
     });
     
 });

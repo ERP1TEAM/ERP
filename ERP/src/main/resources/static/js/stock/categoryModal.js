@@ -64,7 +64,7 @@ function categorymainmodal(pno, code = '', word = '') {
 			
             
             let categoryth = `<tr class="odd gradeX" 
-            data-mainName="${category.mainName}" data-subName="${category.subName}" data-code="${category.code}">
+            data-mainName=d${category.mainName}" data-subName="${category.subName}" data-code="${category.code}">
                         <th><input type="checkbox" class="checkbox" value="${category.code}"></th>
                         <td>${category.code}</td>
                         <td>${category.mainCode}</td>

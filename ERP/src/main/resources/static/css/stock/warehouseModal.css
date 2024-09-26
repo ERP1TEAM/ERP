@@ -7,7 +7,7 @@
     display: none;
 }
 .checkbox{
-	position: relative;
+	position: relative !important;
 	transform: scale(1.5);
 }
 .postit-content {
