@@ -14,4 +14,5 @@ public interface ReceiveTempService {
 	String getOrderNumber(String data);
 	void removeData(String code);
 	String getMaxCode();
+	
 }
