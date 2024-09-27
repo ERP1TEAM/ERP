@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -93,26 +95,26 @@ public class ReceiveRestController {
 
 	// 발주요청
 	@PostMapping("receive/purchaseAdd")
-	public String purchaseAdd(@ModelAttribute PurchaseListDto orders, HttpServletRequest request) {
+	public ResponseEntity<String> purchaseAdd(@ModelAttribute PurchaseListDto orders, HttpServletRequest request) {
 		purchaseService.addOrders(orders,GetToken.getManagerName(request));
-		return "success";
+		return ResponseEntity.ok("success");
 	}
 
 	// 발주요청 페이지 상품목록 모달 데이터
 	@GetMapping("receive/productData")
-	public List<ViewPurchaseEntity> productData(@RequestParam String code, @RequestParam String word) {
+	public ResponseEntity<List<ViewPurchaseEntity>> productData(@RequestParam String code, @RequestParam String word) {
 		List<ViewPurchaseEntity> result = null;
 		if (code.equals("") || word.equals("")) {
 			result = viewPurchaseService.getAllData();
 		} else {
 			result = viewPurchaseService.getSearchData(code, word);
 		}
-		return result;
+		return ResponseEntity.ok(result);
 	}
 
 	// 발주내역 페이지 데이터
 	@GetMapping("receive/purchaseData/{pno}/{status}")
-	public Page<ViewPurchaseDetailEntity> purchaseData(@PathVariable Integer pno, @PathVariable String status,
+	public ResponseEntity<Page<ViewPurchaseDetailEntity>> purchaseData(@PathVariable Integer pno, @PathVariable String status,
 			@ModelAttribute SearchDto dto) {
 		String sDate = dto.getSDate();
 		String word = dto.getWord();
@@ -126,32 +128,22 @@ public class ReceiveRestController {
 				result = viewPurchaseDetailService.getPaginatedData(pno, SIZE, dto);
 			}
 		}
-		return result;
+		return ResponseEntity.ok(result);
 	}
 
 	// 가입고 페이지 데이터
 	@GetMapping("receive/tempReceiveData/{pno}")
-	public Page<ViewReceiveTempEntity> tempReceiveData(@PathVariable Integer pno, @ModelAttribute SearchDto dto) {
+	public ResponseEntity<Page<ViewReceiveTempEntity>> tempReceiveData(@PathVariable Integer pno, @ModelAttribute SearchDto dto) {
 		Page<ViewReceiveTempEntity> result = null;
 		result = viewReceiveTempService.getPaginatedData(pno, SIZE, dto);
-		return result;
+		return ResponseEntity.ok(result);
 	}
 
 	// 입고확정 모달
 	@GetMapping("receive/receivingModal")
-	public ReceiveModalDto receivingModal(@RequestParam("ornum") String ornum, @RequestParam("code") String code,
-			@RequestParam("name") String name, @RequestParam("qty") Integer qty, @RequestParam("wqty") Integer wqty,
-			@RequestParam("deli") String deli, @RequestParam("productCode") String productCode) {
-		ReceiveModalDto dto = new ReceiveModalDto();
-		dto.setOrnum(ornum);
-		dto.setCode(code);
-		dto.setDeli(deli);
-		dto.setName(name);
-		dto.setQty(qty);
-		dto.setWqty(wqty);
-		dto.setProductCode(productCode);
+	public ResponseEntity<ReceiveModalDto> receivingModal(@ModelAttribute ReceiveModalDto dto) {
 		List<String> locationCode = new ArrayList<>();
-		if (viewLocationProductService.getCount(productCode) == 0) {
+		if (viewLocationProductService.getCount(dto.getProductCode()) == 0) {
 			List<ViewLocationProductEntity> loca = viewLocationProductService.getData();
 			for (ViewLocationProductEntity ent : loca) {
 				if (ent.getProductCode() == null) {
@@ -161,15 +153,15 @@ public class ReceiveRestController {
 			}
 			dto.setLocation(locationCode);
 		}else {
-			locationCode.add(viewLocationProductService.getLocationCode(productCode));
+			locationCode.add(viewLocationProductService.getLocationCode(dto.getProductCode()));
 			dto.setLocation(locationCode);
 		}
-		return dto;
+		return ResponseEntity.ok(dto);
 	}
 
 	// 입고확정
 	@PostMapping("receive/receiving")
-	public String receiving(@ModelAttribute ReceivingDto dto, HttpServletRequest request) {
+	public ResponseEntity<String> receiving(@ModelAttribute ReceivingDto dto, HttpServletRequest request) {
 		ReceiveDetailEntity result = new ReceiveDetailEntity();
 		ReceiveReturnEntity result2 = new ReceiveReturnEntity();
 		
@@ -188,16 +180,16 @@ public class ReceiveRestController {
 		}
 
 		if (result == null || result2 == null) {
-			return "no";
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("no");
 		} else {
 			receiveTempService.removeData(dto.getCode());
-			return "ok";
+			return ResponseEntity.ok("ok");
 		}
 	}
 
 	// 입고현황 데이터 + 페이징
 	@GetMapping("receive/summaryData/{pno}")
-	public Page<ViewReceiveSummaryEntity> summaryData(@PathVariable Integer pno, @RequestParam String code,
+	public ResponseEntity<Page<ViewReceiveSummaryEntity>> summaryData(@PathVariable Integer pno, @RequestParam String code,
 			@RequestParam String word) {
 		Page<ViewReceiveSummaryEntity> result = null;
 		if (code.equals("") || word.equals("")) {
@@ -205,23 +197,23 @@ public class ReceiveRestController {
 		} else {
 			result = viewReceiveSummaryService.getPaginatedData(pno, SIZE, code, word);
 		}
-		return result;
+		return ResponseEntity.ok(result);
 	}
 
 	// 입고내역 데이터 + 페이징
 	@GetMapping("receive/detailData/{pno}")
-	public Page<ViewReceiveEntity> detailData(@PathVariable Integer pno, @ModelAttribute SearchDto dto) {
+	public ResponseEntity<Page<ViewReceiveEntity>> detailData(@PathVariable Integer pno, @ModelAttribute SearchDto dto) {
 		Page<ViewReceiveEntity> result = null;
 		result = viewReceiveService.getPaginatedData(pno, SIZE, dto);
-		return result;
+		return ResponseEntity.ok(result);
 	}
 	
 	// 입고반품 데이터 + 페이징
 	@GetMapping("receive/returnData/{pno}")
-	public Page<ViewReceiveReturnEntity> returnData(@PathVariable Integer pno, @ModelAttribute SearchDto dto) {
+	public ResponseEntity<Page<ViewReceiveReturnEntity>> returnData(@PathVariable Integer pno, @ModelAttribute SearchDto dto) {
 		Page<ViewReceiveReturnEntity> result = null;
 		result = viewReceiveReturnService.getPaginatedData(pno, SIZE, dto);
-		return result;
+		return ResponseEntity.ok(result);
 	}
 
 	// ** 사용안하는 코드 **//

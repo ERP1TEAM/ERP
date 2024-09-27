@@ -28,12 +28,17 @@ public class ReceiveTempServiceImpl implements ReceiveTempService{
 	
 	@Override
 	public ReceiveTempEntity addDelivery(String data, Integer ea, String code) {
-		String numberStr = this.getMaxCode().substring(this.getMaxCode().lastIndexOf("-") + 1);
-		int number = Integer.parseInt(numberStr) + 1;
 		PurchaseEntity purchaseEntity = purchaseRepository.findByOrderNumber(data);
 		ReceiveTempEntity receiveTempEntity = new ReceiveTempEntity();
-		String formattedNumber = String.format("%03d", number);
-		receiveTempEntity.setCode("RT"+TodayUtils.getToday()+"-"+formattedNumber);
+		System.out.println(this.getMaxCode());
+		if(this.getMaxCode() != null) {
+			String numberStr = this.getMaxCode().substring(this.getMaxCode().lastIndexOf("-") + 1);
+			int number = Integer.parseInt(numberStr) + 1;
+			String formattedNumber = String.format("%03d", number);
+			receiveTempEntity.setCode("RT"+TodayUtils.getToday()+"-"+formattedNumber);			
+		}else {
+			receiveTempEntity.setCode("RT"+TodayUtils.getToday()+"-"+"001");
+		}
 		receiveTempEntity.setOrderNumber(purchaseEntity.getOrderNumber());
 		receiveTempEntity.setDeliveryCode(code);
 		receiveTempEntity.setQuantity(purchaseEntity.getQuantity());
