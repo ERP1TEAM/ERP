@@ -51,8 +51,8 @@ public class MainNoticeController {
     }
     
     // 공지사항 상세 조회
-    @GetMapping("/noticeView/{id}")
-    public String viewNotice(@PathVariable Long id, Model model) {
+    @GetMapping("/noticeView")
+    public String viewNotice(@RequestParam("id") Long id, Model model) {
     	// 공지사항을 조회할 때 조회수를 증가시키는 로직 실행
         MainNoticeEntity notice = noticeService.getNoticeById(id);
 

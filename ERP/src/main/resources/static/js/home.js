@@ -55,7 +55,7 @@ function filterNotices(page = 0) {
                 const row = `
                     <tr>
                         <td class="center">${notice.no}</td>
-                        <td><a href="./noticeView/${notice.id}">${notice.title}</a></td>
+                        <td><a href="./noticeView?id=${notice.id}">${notice.title}</a></td>
                         <td>${notice.manager}</td>
                         <td class="center">${notice.views}</td>
                         <td class="center">${new Date(notice.createdAt).toLocaleDateString()}</td>
