@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', function() {
 					        return false;
 					    }
                 
-                const safetyQty = document.getElementById('stockmodalSafetyQty').value;
+                let safetyQty = document.getElementById('stockmodalSafetyQty').value;
 
                 fetch(`/main/stock/updateSafetyQty/${productCode}`, {
                     method: 'PUT',
@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 .then(data => {
                     if (data.success) {
                         alert('안전재고 개수가 수정되었습니다.');
-
+						 let row = document.querySelector(`#stocklisttbody tr td:first-child:contains('${productCode}')`).closest('tr');
                         row.querySelector('td:nth-child(8)').innerText = safetyQty;
 
                         document.getElementById("stockoverlay").style.display = "none";
@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 .catch(error => {
                     alert("안전재고개수를 업데이트하는데 오류가 발생했습니다.");
                 });
-            }, { once: true });
+            })
         }
     });
 
