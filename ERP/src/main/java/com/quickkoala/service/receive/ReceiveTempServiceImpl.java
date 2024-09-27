@@ -2,13 +2,11 @@ package com.quickkoala.service.receive;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.quickkoala.dto.supplier.SupplierDeliveryListDto;
 import com.quickkoala.entity.receive.ReceiveTempEntity;
 import com.quickkoala.entity.supplier.PurchaseEntity;
 import com.quickkoala.repository.receive.ReceiveTempRepository;
@@ -30,7 +28,6 @@ public class ReceiveTempServiceImpl implements ReceiveTempService{
 	public ReceiveTempEntity addDelivery(String data, Integer ea, String code) {
 		PurchaseEntity purchaseEntity = purchaseRepository.findByOrderNumber(data);
 		ReceiveTempEntity receiveTempEntity = new ReceiveTempEntity();
-		System.out.println(this.getMaxCode());
 		if(this.getMaxCode() != null) {
 			String numberStr = this.getMaxCode().substring(this.getMaxCode().lastIndexOf("-") + 1);
 			int number = Integer.parseInt(numberStr) + 1;
@@ -79,6 +76,5 @@ public class ReceiveTempServiceImpl implements ReceiveTempService{
 	@Override
 	public void removeData(String code) {
 		receiveTempRepository.deleteByCode(code);
-		
 	}
 }
