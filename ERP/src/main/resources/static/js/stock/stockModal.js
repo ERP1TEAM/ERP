@@ -18,6 +18,14 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('stockmodifysuppliername').value = supplierName;
             
             document.getElementById('safetyqtymodify').addEventListener('click', function() {
+                  	let value = event.target.value;
+
+					    if (!/^\d*$/.test(value)) {
+					        event.target.value = value.replace(/\D/g, '');
+					        alert('숫자만 입력 가능합니다.');
+					        return false;
+					    }
+                
                 const safetyQty = document.getElementById('stockmodalSafetyQty').value;
 
                 fetch(`/main/stock/updateSafetyQty/${productCode}`, {
@@ -32,7 +40,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        alert('안전재고 개수가 성공적으로 수정되었습니다.');
+                        alert('안전재고 개수가 수정되었습니다.');
 
                         row.querySelector('td:nth-child(8)').innerText = safetyQty;
 
@@ -40,7 +48,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         document.getElementById("safetyqtymodifymodal").style.display = "none";
                         document.body.style.overflow = 'auto';
                     } else {
-                        alert('안전재고 개수 수정에 실패했습니다.');
+                        alert('수정에 실패했습니다.');
                         console.log(error);
                     }
                 })

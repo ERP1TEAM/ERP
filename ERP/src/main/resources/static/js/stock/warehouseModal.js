@@ -191,10 +191,18 @@ document.getElementById('warehouseregister').addEventListener('click', function(
         const warehouseName = document.getElementById('warehouseName').value.trim();
         const warehouseMemo = document.getElementById('warehouseMemo').value.trim();
         
+        const specialCharPattern = /[^a-zA-Z0-9가-힣\s]/;
+        
         if (!warehouseCode || !warehouseName) {
         alert('창고 코드와 이름을 모두 입력해주세요.');
         return false;
     	}
+    	if (specialCharPattern.test(warehouseName)||specialCharPattern.test(warehousCode)) {
+            alert('창고 이름과 코드에 특수문자를 사용할 수 없습니다.');
+            return false;
+        }
+
+    	
         
         const warehouseData = {
             code: warehouseCode,
@@ -266,7 +274,7 @@ document.getElementById('warehousedelete').addEventListener('click',function(){
             alert('창고가 삭제되었습니다.');
             warehousemainmodal();
         } else {
-            alert('창고 삭제 중 오류가 발생했습니다.');
+            alert('창고 삭제에 실패했습니다');
         }
     })
     .catch(function (error) {
@@ -311,6 +319,12 @@ document.getElementById('warehouseModifybtn').addEventListener('click', function
         alert('창고 이름을 입력해주세요.');
         return false;
     	}
+    	const specialCharPattern = /[^a-zA-Z0-9가-힣\s]/;
+        
+    	if (specialCharPattern.test(warehouseName)) {
+            alert('창고 이름에 특수문자를 사용할 수 없습니다.');
+            return false;
+        }
         
         const warehouseData = {
             name: warehouseName,

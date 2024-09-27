@@ -148,7 +148,7 @@ document.getElementById('locationdelete').addEventListener('click',function(){
     })
     .then(response => {
 		 if (!response.ok) {
-            alert('로케이션 삭제 중 오류가 발생했습니다.');
+            alert('로케이션 삭제에 실패했습니다.');
         return false;
         }
         return response.json();
@@ -168,7 +168,7 @@ document.getElementById('locationdelete').addEventListener('click',function(){
             locationlistmain(locationP, locationSearchCode, locationSearchWord);
             }
         } else {
-            alert('로케이션 삭제 중 오류가 발생했습니다.');
+            alert('로케이션 삭제에 실패했습니다.');
         }
     })
     .catch(function (error) {

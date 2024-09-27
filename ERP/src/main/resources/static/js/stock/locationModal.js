@@ -73,6 +73,11 @@ document.getElementById('locationregister').addEventListener('click', function()
     const useflagval = document.querySelector('input[name="locationuseflag"]:checked').value;
     
     const autolocationcodeval = `${warehouseSelectval}-${rackcodeval}-${levelcodeval}${rowcodeval}`;
+    const specialCharPattern = /[^a-zA-Z0-9]/;
+    if (specialCharPattern.test(rackcodeval)) {
+        alert('선반 열 코드에 특수문자를 사용할 수 없습니다.');
+        return false;
+    }
     
     if (!rackcodeval) {
     alert('선반 열 코드를 적어주세요');
