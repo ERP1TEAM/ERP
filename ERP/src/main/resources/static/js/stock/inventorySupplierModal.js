@@ -126,7 +126,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         })
         .catch(function(error) {
-            alert('공급업체 모달을 불러오는 데 오류가 발생했습니다.');
+            alert('공급업체 모달을 불러오는데 실패했습니다.');
         });
     }
 

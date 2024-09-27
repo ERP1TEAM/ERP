@@ -120,7 +120,5 @@ stocklistSearchWord = document.getElementById("stocklistSearch").value;
 stocklistPaging(1, stocklistSearchCode, stocklistSearchWord); // 검색 후 첫 페이지부터 시작	
 })
 
-//데일리 재고내역 모달
-
 
 });
