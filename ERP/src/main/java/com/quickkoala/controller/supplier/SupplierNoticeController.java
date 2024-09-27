@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.quickkoala.dto.supplier.SupplierNoticeDTO;
+import com.quickkoala.entity.main.MainNoticeEntity;
 import com.quickkoala.entity.supplier.SupplierNoticeEntity;
 import com.quickkoala.service.supplier.SupplierNoticeServiceImpl;
 import com.quickkoala.token.config.JwtTokenProvider;
@@ -51,8 +52,8 @@ public class SupplierNoticeController {
     }
     
     // 공지사항 상세 조회
-    @GetMapping("/noticeView/{id}")
-    public String viewNotice(@PathVariable Long id, Model model) {
+    @GetMapping("/noticeView")
+    public String viewNotice(@RequestParam("id") Long id, Model model) {
     	// 공지사항을 조회할 때 조회수를 증가시키는 로직 실행
         SupplierNoticeEntity notice = noticeService.getNoticeById(id);
 
