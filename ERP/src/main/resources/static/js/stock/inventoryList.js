@@ -38,7 +38,6 @@ function inventorylistmain(pno, code = '', word = ''){
 	})
 	.then(response=>response.json())
 	.then(data=>{
-		console.log(data);
 		let inventorylisttbody=document.querySelector('#inventorylisttbody');
     	inventorylisttbody.innerHTML='';
 		
@@ -126,7 +125,6 @@ function inventorylistmain(pno, code = '', word = ''){
 		})
 		.catch(function(error){
 			alert("error");
-			console.log(error);
 		});
 }
 inventorylistmain(inventorylistP, inventorylistSearchCode, inventorylistSearchWord);

@@ -114,7 +114,6 @@ function locationlistmain(pno, code = '', word = ''){
 		})
 		.catch(function(error){
 			alert("error");
-			console.log(error);
 		});
 }
         
@@ -172,7 +171,6 @@ document.getElementById('locationdelete').addEventListener('click',function(){
         }
     })
     .catch(function (error) {
-        console.log(error);
         alert('오류가 발생했습니다.');
     });
 });         

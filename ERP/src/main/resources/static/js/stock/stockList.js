@@ -107,7 +107,6 @@ function stocklistmain(pno, code = '', word = ''){
 		})
 		.catch(function(error){
 			alert("error");
-			console.log(error);
 		});
 }
 stocklistmain(stocklistP, stocklistSearchCode, stocklistSearchWord);

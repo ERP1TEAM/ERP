@@ -49,11 +49,10 @@ document.addEventListener('DOMContentLoaded', function() {
                         document.body.style.overflow = 'auto';
                     } else {
                         alert('수정에 실패했습니다.');
-                        console.log(error);
                     }
                 })
                 .catch(error => {
-                    console.error('Error updating safetyQty:', error);
+                    alert("안전재고개수를 업데이트하는데 오류가 발생했습니다.");
                 });
             }, { once: true });
         }

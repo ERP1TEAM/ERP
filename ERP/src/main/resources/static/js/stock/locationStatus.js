@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
             renderRackButtons(data);
         })
         .catch(error => {
-            console.error('Error fetching location data:', error);
+            alert("선반을 갖고오는데 오류가 발생했습니다!");
         });
 });
 
@@ -102,7 +102,7 @@ function fetchInventoryData(locationCode) {
             renderInventoryTable(inventoryData);  // 데이터 렌더링 함수 호출
         })
         .catch(error => {
-            console.error('Error fetching inventory data:', error);
+           alert("선반정보를 갖고오는데 오류가 발생했습니다 !");
         });
 }
 

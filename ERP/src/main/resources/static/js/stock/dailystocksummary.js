@@ -17,7 +17,6 @@ document.addEventListener('DOMContentLoaded', function() {
             fetch(`/main/stock/daily_summary?date=${selectedDate}&productCode=${productCode}`)
                 .then(response => response.json())
                 .then(data => {
-					console.log(data);
                     document.getElementById('dailystocktotalqty').value = data.data.totalQty;
                     document.getElementById('dailystockavailableqty').value = data.data.availableQty;
                     document.getElementById('dailystockunavailableqty').value = data.data.unavailableQty;

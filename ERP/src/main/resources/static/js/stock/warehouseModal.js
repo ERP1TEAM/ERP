@@ -63,11 +63,8 @@ window.warehousePgPrev = function() {
             }    
         })
         .then(response => {
-			console.log(response.status);
         return response.json();})
         .then(data => {
-			console.log(data);
-			console.log(data.totalPages);
             let warehousetbody = document.querySelector('#warehousetbody');
             warehousetbody.innerHTML = '';
 
@@ -134,7 +131,6 @@ window.warehousePgPrev = function() {
         })
         .catch(function(error) {
             alert("error");
-            console.log(error);
         });
     }
 
@@ -192,15 +188,20 @@ document.getElementById('warehouseregister').addEventListener('click', function(
         const warehouseMemo = document.getElementById('warehouseMemo').value.trim();
         
         const specialCharPattern = /[^a-zA-Z0-9가-힣\s]/;
+        const specialCharPatternForCode = /[^a-zA-Z0-9]/; // 창고 코드는 영어와 숫자만 허용
         
         if (!warehouseCode || !warehouseName) {
         alert('창고 코드와 이름을 모두 입력해주세요.');
         return false;
     	}
-    	if (specialCharPattern.test(warehouseName)||specialCharPattern.test(warehousCode)) {
-            alert('창고 이름과 코드에 특수문자를 사용할 수 없습니다.');
+    	if (specialCharPattern.test(warehouseName)) {
+            alert('창고 이름에 특수문자를 사용할 수 없습니다.');
             return false;
         }
+        if (specialCharPatternForCode.test(warehouseCode)) {
+    	alert('창고 코드에는 영어와 숫자만 사용할 수 있습니다.');
+    	return false;
+		}
 
     	
         

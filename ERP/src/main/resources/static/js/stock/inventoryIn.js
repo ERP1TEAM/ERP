@@ -14,23 +14,12 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
         
-        const specialCharPattern = /[^a-zA-Z0-9\s]/;
-        if (specialCharPattern.test(productname)) {
-        alert("상품명에 특수문자를 사용할 수 없습니다.");
-        return;
-	    }
-	    if (specialCharPattern.test(supplierCode)) {
-	        alert("공급자 코드에 특수문자를 사용할 수 없습니다.");
-	        return;
-	    }
-	    if (specialCharPattern.test(classificationCode)) {
-	        alert("분류 코드에 특수문자를 사용할 수 없습니다.");
-	        return;
-	    }
-	    if (specialCharPattern.test(productprice)) {
-	        alert("상품 가격에 특수문자를 사용할 수 없습니다.");
-	        return;
-	    }
+        const numberPattern = /^[0-9]+$/; 
+        
+	   if (!numberPattern.test(productprice)) {
+		    alert("상품 가격은 숫자만 입력 가능합니다.");
+		    return;
+		}
         
         
         const inventoryData = {

@@ -135,7 +135,6 @@ function categorymainmodal(pno, code = '', word = '') {
     })
     .catch(function(error) {
         alert('카테고리 모달을 불러오는 데 오류가 발생했습니다.');
-        console.log(error);
     });
 }
  document.querySelector('#categorytbody').addEventListener('click', function(event) {
@@ -220,6 +219,23 @@ document.getElementById('categoryregister').addEventListener('click', function()
 		alert('대메뉴이름과 소메뉴이름을 모두 입력해주세요.');
 		return false;	
 		}
+		
+		const mainCodePattern = /^[A-Z]+$/;
+		const subCodePattern = /^[0-9]+$/;
+		if (!mainCodePattern.test(categorymainCodeval)) {
+        alert('대메뉴코드에는 대문자 영어만 사용 가능합니다.');
+        return false;
+    	}
+    	if (!subCodePattern.test(categorysubCodeval)) {
+        alert('소메뉴코드에는 숫자만 사용 가능합니다.');
+        return false;
+    	}
+		
+   		const specialCharPattern =  /[^a-zA-Z0-9가-힇\/]/;
+        if (specialCharPattern.test(categorymainNameval) || specialCharPattern.test(categorysubNameval)) {
+        alert('대메뉴이름과 소메뉴이름에 "/"를 제외한 특수문자 또는 공백을 사용할 수 없습니다.');
+        return false;
+    	}
         
         const categoryData = {
             code: autocategorycodeval,

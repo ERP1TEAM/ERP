@@ -119,7 +119,6 @@ function inventorymanagementmain(pno, code = '', word = ''){
 		})
 		.catch(function(error){
 			alert("error");
-			console.log(error);
 		});
 }
 inventorymanagementmain(inventorymanagementP, inventorymanagementSearchCode, inventorymanagementSearchWord);
