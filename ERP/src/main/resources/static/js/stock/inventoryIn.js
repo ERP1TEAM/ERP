@@ -45,14 +45,17 @@ document.addEventListener('DOMContentLoaded', function() {
             alert("상품이 등록 되었습니다.");
     		document.getElementById('inventoryname').value = '';
     		document.getElementById('inventoryprice').value = '';
+    		document.getElementById('inventorySuppliercodeoption').value = '';
+    		document.getElementById('inventorySuppliernameoption').value = '';
+    		document.getElementById('inventorymaincategory').value = '';
+    		document.getElementById('inventorysubcategory').value = '';
     		 
     		 fetch('/main/stock/inventoryrandomcode')
       			 .then(response => {
             	 if (response.ok) {
                		 return response.text();
-               		 window.location.reload();
             	} else {
-              	  throw new Error('새로운 상품코드를 받는 데 실패했습니다.');
+              	  throw new Error('새로운 상품코드를 발급 받지 못했습니다.');
          	    }
        		    })
         		.then(newcode=> {

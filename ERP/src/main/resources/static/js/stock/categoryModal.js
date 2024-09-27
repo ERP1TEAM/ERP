@@ -213,11 +213,11 @@ document.getElementById('categoryregister').addEventListener('click', function()
         const autocategorycodeval = `${categorymainCodeval}${categorysubCodeval}`;
         
         if (!categorymainCodeval || !categorysubCodeval) {
-        alert('대메뉴코드와 소메뉴코드 모두 입력해주세요.');
+        alert('대메뉴코드와 소메뉴코드를 모두 입력해주세요.');
         return false;
     	}
     	else if(!categorymainNameval || !categorysubNameval){
-		alert('대메뉴이름과 소메뉴이름 모두 입력해주세요.');
+		alert('대메뉴이름과 소메뉴이름을 모두 입력해주세요.');
 		return false;	
 		}
         
@@ -256,7 +256,7 @@ document.getElementById('categoryregister').addEventListener('click', function()
               }
         })
         .catch(error => {
-            alert('오류가 발생했습니다.');
+            alert('카테고리 오류 발생 !');
         });
     });
 
