@@ -161,7 +161,7 @@ document.addEventListener("DOMContentLoaded", function() {
 									} else {
 										formData.set("address", address);
 									}
-									formData.set("code",code);
+									formData.set("code", code);
 									formData.set("create_date", null);
 									fetch(`./modifySales/${code}`, {
 										method: "PATCH",
@@ -261,23 +261,35 @@ document.addEventListener("DOMContentLoaded", function() {
 
 	//로케이션 모달 열기	
 	document.getElementById("locationbtn").addEventListener("click", function() {
+		resetSalesForm();
 		document.getElementById("locationoverlay").style.display = "block";
 		document.getElementById("locationinmodal").style.display = "block";
 		document.body.style.overflow = "hidden";
 	});
 
-	//로케이션 X버튼으로 모달 닫기
-	document.getElementById("locationclosemodal").addEventListener("click", function() {
+	// 모달 닫기 함수
+	function closeModal() {
 		document.getElementById("locationoverlay").style.display = "none";
 		document.getElementById("locationinmodal").style.display = "none";
 		document.body.style.overflow = 'auto';
-	});
-	//오버레이 클릭시 모달 닫기
-	document.getElementById("locationoverlay").addEventListener("click", function() {
-		document.getElementById("locationoverlay").style.display = "none";
-		document.getElementById("locationinmodal").style.display = "none";
-		document.body.style.overflow = 'auto';
-	});
+		// 폼 데이터 초기화
+		resetSalesForm();
+	}
+
+	// 로케이션 X버튼으로 모달 닫기
+	document.getElementById("locationclosemodal").addEventListener("click", closeModal);
+	// 오버레이 클릭 시 모달 닫기
+	document.getElementById("locationoverlay").addEventListener("click", closeModal);
+
+	function resetSalesForm() {
+		document.getElementById("name").value = '';
+		document.getElementById("email").value = '';
+		document.getElementById("tel").value = '';
+		document.getElementById("address").value = '';
+		document.getElementById("detail_address").value = '';
+		document.getElementById("h2").innerText = "거래처 등록"; // 타이틀 초기화
+		document.getElementById("btn_div").innerHTML = `<input type="button" value="등록" class="p_button p_button_color2" id="add_btn">`;
+	}
 
 	salesFrm.addEventListener("submit", function(event) {
 		event.preventDefault(); // 기본 submit 동작 방지
