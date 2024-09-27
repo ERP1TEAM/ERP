@@ -24,7 +24,7 @@ import jakarta.servlet.http.HttpServletRequest;
 public class CalendarMemoController {
 
     @Autowired
-    private CalendarMemoServiceImpl memoService;
+    private CalendarMemoServiceImpl memoService; 
     
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
