@@ -63,6 +63,7 @@ public class StockRestController {
 	@Autowired
 	private ViewDailyStockSummaryService viewDailyStockSummaryService;
 	
+	
 	@GetMapping("/stock/daily_summary")
 	public ResponseEntity<Map<String,Object>> datedailystocksummary(@RequestParam("date") String date, 
             @RequestParam("productCode") String productCode){

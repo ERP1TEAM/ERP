@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
+    
     document.getElementById("stocklisttbody").addEventListener('click', function(event) {
         if (event.target && event.target.classList.contains('dailyinventorybtn')) {
             let productCode = event.target.getAttribute('data-product-code');
@@ -24,15 +25,19 @@ document.addEventListener('DOMContentLoaded', function() {
                     document.getElementById('dailystockreturnqty').value = data.data.returnQty;
                     document.getElementById('dailystockreceivedqty').value = data.data.receivedQty;
                     document.getElementById('dailystockshippedqty').value = data.data.shippedQty;
+                
                 })
                 .catch(error => {
                     alert('해당 날짜의 데이터가 없습니다.');
+                    resetModalFields2();
                 });
         } else {
             alert('날짜를 선택해 주세요.');
         }
     });
-    function resetModalFields() {
+    
+
+function resetModalFields() {
         document.getElementById('dailystockdate').value = "";
         document.getElementById('dailystockproductcode').value = "";
         document.getElementById('dailystocktotalqty').value = "";
@@ -42,7 +47,17 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('dailystockreturnqty').value = "";
         document.getElementById('dailystockreceivedqty').value = "";
         document.getElementById('dailystockshippedqty').value = "";
-    }    
+}
+function resetModalFields2() {
+        document.getElementById('dailystocktotalqty').value = "";
+        document.getElementById('dailystockavailableqty').value = "";
+        document.getElementById('dailystockunavailableqty').value = "";
+        document.getElementById('dailystockreceivereturnqty').value = "";
+        document.getElementById('dailystockreturnqty').value = "";
+        document.getElementById('dailystockreceivedqty').value = "";
+        document.getElementById('dailystockshippedqty').value = "";
+}    
+    
     document.getElementById("dailystockclosemodal").addEventListener("click", function() {
         document.getElementById("dailystockmodal").style.display = "none";
         document.getElementById("dailystockoverlay").style.display = "none";
