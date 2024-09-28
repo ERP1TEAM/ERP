@@ -191,11 +191,12 @@ public class ReceiveRestController {
 	@GetMapping("receive/summaryData/{pno}")
 	public ResponseEntity<Page<ViewReceiveSummaryEntity>> summaryData(@PathVariable Integer pno, @RequestParam String code,
 			@RequestParam String word) {
+		int size = 20;
 		Page<ViewReceiveSummaryEntity> result = null;
 		if (code.equals("") || word.equals("")) {
-			result = viewReceiveSummaryService.getPaginatedData(pno, SIZE);
+			result = viewReceiveSummaryService.getPaginatedData(pno, size);
 		} else {
-			result = viewReceiveSummaryService.getPaginatedData(pno, SIZE, code, word);
+			result = viewReceiveSummaryService.getPaginatedData(pno, size, code, word);
 		}
 		return ResponseEntity.ok(result);
 	}

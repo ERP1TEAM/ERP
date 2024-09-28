@@ -58,6 +58,8 @@ document.addEventListener("DOMContentLoaded", function() {
 			return tel.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3'); // 000-000-0000
 		} else if (tel.length === 11) {
 			return tel.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3'); // 000-0000-0000
+		} else if (tel.length === 8) {
+			return tel.replace(/(\d{4})(\d{4})/, '$1-$2');
 		}
 		return tel; // 기본 그대로 반환 (기타 형식)
 	};

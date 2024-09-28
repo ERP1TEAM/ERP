@@ -23,7 +23,7 @@ import com.quickkoala.service.client.SupplierService;
 @RequestMapping("main")
 public class ClientRestController {
 	
-	private static final int SIZE = 10;
+	private static final int SIZE = 15;
 	
 	@Autowired
 	private SupplierService supplierService;

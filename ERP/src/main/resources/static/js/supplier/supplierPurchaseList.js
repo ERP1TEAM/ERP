@@ -81,10 +81,11 @@ document.addEventListener("DOMContentLoaded", function() {
 				        <td style="text-align:right;">${item.totalPrice.toLocaleString()}</td>
 				        <td style="text-align:center;">${rdt}</td>
 				        <td style="text-align:right;">${item.totalWtQuantity}</td>
-				        <td><input type="text" id="${item.orderNumber}" style="all: unset; width: 100%;text-align:right;" placeHolder="수량입력"></td>
+				        <td><input type="text" id="${item.orderNumber}" style="all: unset; 
+				        width: 100%;text-align:right;" placeHolder="수량입력" maxlength="10"></td>
 				        <td style="text-align:center;"><input class="cd-paging-right-btn purchase_request" type="button"
 								value="납품등록" data-idx="${item.orderNumber}"
-								data-wt="${item.wtQuantity}"></td>
+								data-wt="${item.totalWtQuantity}"></td>
 				    </tr>`;
 					tbody.innerHTML += th;
 				})
@@ -189,7 +190,7 @@ document.addEventListener("DOMContentLoaded", function() {
             if (!ea) {
                 alert("납품수량을 입력하셔야 합니다.");
                 return;
-            } else if (wt < ea || wt == 0) {
+            } else if (wt < ea) {
                 alert("미납수량을 확인해주세요");
             } else if (confirm(ea + '개 납품등록을 하시겠습니까?')) {
                 fetch("./delivery_regi?data=" + encodeURIComponent(idx) + "&ea=" + encodeURIComponent(ea), {
