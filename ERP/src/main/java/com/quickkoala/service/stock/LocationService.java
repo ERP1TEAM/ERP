@@ -12,6 +12,9 @@ public interface LocationService {
 
 	LocationEntity saveLocation (LocationDto locationdto);
 	LocationDto convertToLocationDto(LocationEntity locationEntity);
+	LocationDto getLocationByCode(String code);
+	
+	LocationEntity updateLocation(LocationDto locationDto); 
 	
 	List<LocationDto> getAllOrdersByCode();
 	

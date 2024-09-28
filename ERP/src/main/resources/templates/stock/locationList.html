@@ -48,22 +48,23 @@
 						<div class="card-action">
                 			로케이션 관리
                 			</div>
-							<div class="card-content">
-								<div class="table-responsive">
 								<form id="search_form">
-									<ul>
-										<li><select class="product_input1 stocksearch"
+								 <div class="search stockallleft">
+										<select class="product_input1"
 											id="locationSearchtype">
 												<option value="1">로케이션 코드</option>
 												<option value="2">창고 코드</option>
 												<option value="3">선반 열</option>
 												<option value="4">선반 행</option>
 												<option value="5">선반 층</option>
-										</select> <input type="text" placeholder="검색어 입력" id="locationSearch"
+										</select> <input type="text" placeholder="검색어를 입력하세요" id="locationSearch"
 											class="stocksearchwidth"> 
-											<button type="submit" id="locationSearchbtn">검색</button></li>
-									</ul>
+											<button type="submit" id="locationSearchbtn">검색</button>
+											<button type="button" id="locationresetbtn">초기화</button>
+									</div>
 									</form>
+							<div class="card-content">
+								<div class="table-responsive">
 									<table class="table table-striped table-bordered table-hover"
 										id="dataTables-example">
 										<thead>

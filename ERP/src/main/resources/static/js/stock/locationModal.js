@@ -154,10 +154,14 @@ document.getElementById("locationbtn").addEventListener("click", function() {
     document.body.style.overflow = "hidden";
 });
 //로케이션 X버튼으로 모달 닫기
-document.getElementById("locationclosemodal").addEventListener("click", function() {
-    document.getElementById("locationoverlay").style.display = "none";
-    document.getElementById("locationinmodal").style.display = "none";
- document.body.style.overflow = 'auto';
+document.querySelectorAll('.closemodal').forEach(function(closeBtn) {
+     closeBtn.addEventListener('click', function() {
+        document.getElementById('locationoverlay').style.display = 'none';
+        document.getElementById('locationinmodal').style.display = 'none';
+        document.querySelector('#locationmodifymodal').style.display = 'none';
+        document.querySelector("#locationmodifyoverlay").style.display = 'none';
+        document.body.style.overflow = 'auto';
+   });
 });
 //취소 버튼으로 모달 닫기
 document.getElementById("locationcancle").addEventListener("click", function() {
@@ -172,5 +176,59 @@ document.getElementById("locationoverlay").addEventListener("click", function() 
  	document.body.style.overflow = 'auto';
 });
 
+
+//로케이션 수정정보
+document.getElementById("locationlisttbody").addEventListener('click', function(event) {
+        if (event.target && event.target.classList.contains('locationlistmodifybtn')) {
+            let code = event.target.getAttribute('data-code');
+            
+            fetch(`/main/stock/locationmodify/${code}`,{
+			method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        	}).then(response => response.json())
+        	.then(data => {
+	        document.querySelector('#locationmodifycode').value = data.code;
+            document.querySelector('#locationmodifywarehouse').value = data.warehouseCode;
+            document.querySelector('#locationmodifyrackcode').value = data.rackCode;
+            document.querySelector('#locationmodifyrowcode').value = data.rowCode;
+            document.querySelector('#locationmodifylevelcode').value = data.levelCode;
+	            if (data.useFlag == 'Y') {
+	                document.querySelector('input[name="locationmodifyuseflag"][value="Y"]').checked = true;
+	            } else {
+	                document.querySelector('input[name="locationmodifyuseflag"][value="N"]').checked = true;
+	            }
+            document.querySelector("#locationmodifymodal").style.display = "block";
+            document.querySelector("#locationmodifyoverlay").style.display = "block";
+            document.body.style.overflow = "hidden";
+        	}).catch(error=>{
+				alert('로케이션 정보를 가져오는 중 오류가 발생했습니다.');
+			});
+		}        
+    });
 });
-    
+
+//로케이션 수정버튼은 수정 후 페이징때문에 아예 로케이션리스트에서 코드 작성함
+
+function resetModalFields() {
+    document.querySelector('#locationmodifywarehouse').value = "";
+    document.querySelector('#locationmodifycode').value = "";
+    document.querySelector('#locationmodifyrackcode').value = "";
+    document.querySelector('#locationmodifyrowcode').value = "";
+    document.querySelector('#locationmodifylevelcode').value = "";
+    document.querySelector('input[name="locationmodifyuseflag"][value="Y"]').checked = true;
+    }       
+
+document.querySelector("#locationmodifyoverlay").addEventListener("click", function() {
+    document.querySelector("#locationmodifymodal").style.display = "none";
+    document.querySelector("#locationmodifyoverlay").style.display = "none";
+    document.body.style.overflow = "auto";
+     resetModalFields();
+    });
+document.querySelector("#locationmodifyclose").addEventListener("click", function() {
+    document.querySelector("#locationmodifymodal").style.display = "none";
+    document.querySelector("#locationmodifyoverlay").style.display = "none";
+    document.body.style.overflow = "auto";
+     resetModalFields();
+    });   

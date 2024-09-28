@@ -1,6 +1,7 @@
 package com.quickkoala.repository.stock;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -30,6 +31,6 @@ public interface LocationRepository extends JpaRepository<LocationEntity, String
 	
 	Page<LocationEntity> findByLevelCodeOrderByCodeDesc(Integer levelCode, Pageable pageable);
 	
-	
+	Optional<LocationEntity> findByCode(String code);
 	
 }

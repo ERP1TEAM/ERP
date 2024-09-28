@@ -26,4 +26,7 @@ public interface ProductRepository extends JpaRepository<ProductEntity, String>{
     int updateLocationCode(@Param("productCode") String productCode, @Param("locationCode") String locationCode);
 	
 
+	@Query("SELECT COUNT(p) FROM ProductEntity p WHERE p.storageLocation = :locationCode")
+	int countProductsByLocationCode(@Param("locationCode") String locationCode);
+	
 }

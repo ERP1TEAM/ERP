@@ -188,7 +188,7 @@ document.getElementById('warehouseregister').addEventListener('click', function(
         const warehouseMemo = document.getElementById('warehouseMemo').value.trim();
         
         const specialCharPattern = /[^a-zA-Z0-9가-힣\s]/;
-        const specialCharPatternForCode = /[^a-zA-Z0-9]/; // 창고 코드는 영어와 숫자만 허용
+        const specialCharPatternForCode = /[^a-zA-Z0-9]/; //영어와 숫자만 허용
         
         if (!warehouseCode || !warehouseName) {
         alert('창고 코드와 이름을 모두 입력해주세요.');
@@ -420,8 +420,8 @@ document.querySelectorAll('.closemodal').forEach(function(warehouseclosebtn) {
     document.getElementById('warehousemodifymodal').style.display = 'none';
     document.getElementById('warehouseinmodal').style.display = 'none';
     document.getElementById('warehouselistmodal').style.display = 'none';
-    document.getElementById('overlay').style.display = 'none';   // 오버레이 숨기기
-    document.body.style.overflow = 'auto';  // 배경 스크롤 다시 활성화
+    document.getElementById('overlay').style.display = 'none';
+    document.body.style.overflow = 'auto';
 });
 });
 

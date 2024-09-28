@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -15,6 +16,7 @@ import com.quickkoala.dto.stock.LocationDto;
 import com.quickkoala.entity.stock.LocationEntity;
 import com.quickkoala.entity.stock.ProductEntity.UseFlag;
 import com.quickkoala.repository.stock.LocationRepository;
+import com.quickkoala.repository.stock.ProductRepository;
 
 import jakarta.transaction.Transactional;
 
@@ -24,7 +26,8 @@ public class LocationServiceImpl implements LocationService {
 	@Autowired
 	private LocationRepository locationRepository;
 	
-	
+	@Autowired
+	private ProductRepository productRepository;
 	
 	
 	//Entity -> DTO 변환
@@ -81,6 +84,33 @@ public class LocationServiceImpl implements LocationService {
 	}
 	
 	@Override
+	public LocationDto getLocationByCode(String code) {
+		LocationEntity locationEntity = locationRepository.findById(code).orElse(null);
+		
+		if (locationEntity == null) {
+	        throw new IllegalArgumentException("해당 데이터의 로케이션 정보를 찾을 수 없습니다.");
+	    }
+		
+		return convertToLocationDto(locationEntity);
+	}
+	
+	@Override
+	public LocationEntity updateLocation(LocationDto locationDto) {
+	    Optional<LocationEntity> optionalLocationEntity = locationRepository.findByCode(locationDto.getCode());
+
+	    if (!optionalLocationEntity.isPresent()) {
+	        throw new IllegalArgumentException("해당 데이터의 로케이션 정보를 찾을 수 없습니다.");
+	    }
+
+	    LocationEntity locationEntity = optionalLocationEntity.get();
+	   
+	    UseFlag useFlag = UseFlag.valueOf(locationDto.getUseFlag());
+	    locationEntity.setUseFlag(useFlag);
+	    
+	    return locationRepository.save(locationEntity);
+	}
+	
+	@Override
 	public LocationEntity saveLocation(LocationDto locationDto) {
 		LocationEntity locationEntity =convertToLocationEntity(locationDto);
 		
@@ -108,15 +138,38 @@ public class LocationServiceImpl implements LocationService {
 		Map<String, Object> locationDelresult = new HashMap<>();
 		
 		for(String code : locationCodes) {
-			try {
-				if(locationRepository.existsById(code)) {
-				locationRepository.deleteById(code);
-				locationDelresult.put(code, "삭제되었습니다");
-				}else {
-				locationDelresult.put(code, "삭제에 실패했습니다.");
-				}
+			 try {
+		            Optional<LocationEntity> optionalLocation = locationRepository.findById(code);
+		            
+		            if (!optionalLocation.isPresent()) {
+		                locationDelresult.put(code, "로케이션을 찾을 수 없습니다.");
+		                continue;
+		            }
+		            LocationEntity location = optionalLocation.get();
+
+		            if (!location.getUseFlag().equals(UseFlag.N)) {
+		                locationDelresult.put(code, "비활성화 상태에서만 삭제 가능합니다.");
+		                continue;
+		            }
+
+		            int productCount = productRepository.countProductsByLocationCode(code);
+		            
+		            if (productCount > 0) {
+		                locationDelresult.put(code, "해당 로케이션에 상품이 있어 삭제할 수 없습니다.");
+		                continue;
+		            }
+		            
+		            locationRepository.deleteById(code);
+		            
+		            if (locationRepository.existsById(code)) {
+		                locationDelresult.put(code, "삭제에 실패했습니다.");
+		            } else {
+		                locationDelresult.put(code, "삭제되었습니다.");
+		            }
+		            
+		            
 	        }catch(Exception e) {
-	        	locationDelresult.put(code,"Error");
+	        	locationDelresult.put(code,"삭제 중 오류발생하여 실패했습니다.");
 	        }
 		}
 		

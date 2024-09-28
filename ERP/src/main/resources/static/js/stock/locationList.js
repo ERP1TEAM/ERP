@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	var locationtotalPages = 1;
     var locationstartPage = 0;
     var locationendPage = 0;
-    const locationpageSize = 3; // 페이지 번호 그룹 크기 설정
+    const locationpageSize = 5; // 페이지 번호 그룹 크기 설정
 
     const getLocationQueryParam = (param) => {
         const urlParams = new URLSearchParams(window.location.search);
@@ -62,7 +62,7 @@ function locationlistmain(pno, code = '', word = ''){
                     <td style="text-align:center;">${locationlist.rowCode}</td>
                     <td style="text-align:center;">${locationlist.levelCode}</td>
                     <td style="text-align:center;">${locationlistuseFlag}</td>
-                    <td style="text-align:center;"><input type="button" value="수정" class="locationlistmodifybtn"></td>
+                    <td style="text-align:center;"><input type="button" value="수정" class="locationlistmodifybtn" data-code="${locationlist.code}"></td>
                  </tr>`;
 			locationlisttbody.innerHTML +=locationlistth;
 		});
@@ -154,20 +154,24 @@ document.getElementById('locationdelete').addEventListener('click',function(){
     })
     .then(data => {
 		if(!data){return false;}
-        if (data.ok) {
-            alert('로케이션이 삭제되었습니다.');
-            
-             checkboxes.forEach(function (checkbox) {
-                const row = checkbox.closest('tr');
-                if (row) {
-                    row.remove();
-                }
-                });
-            if (typeof locationpaging == 'function')  {
-            locationlistmain(locationP, locationSearchCode, locationSearchWord);
+        Object.keys(data).forEach(code => {
+            const result = data[code];
+            if (result == '삭제되었습니다.') {
+                // 성공한 항목들만 DOM에서 제거
+                const checkbox = Array.from(checkboxes).find(cb => cb.value === code);
+                if (checkbox) {
+                    const row = checkbox.closest('tr');
+                    if (row) {
+                        row.remove();
+                    }
+                } alert("로케이션이 삭제되었습니다.");
+            } else {
+                alert(`${result}`);
             }
-        } else {
-            alert('로케이션 삭제에 실패했습니다.');
+        });
+
+        if (typeof locationpaging === 'function') {
+            locationlistmain(locationP, locationSearchCode, locationSearchWord);
         }
     })
     .catch(function (error) {
@@ -176,6 +180,56 @@ document.getElementById('locationdelete').addEventListener('click',function(){
 });         
 locationlistmain(locationP, locationSearchCode, locationSearchWord);
 
+//로케이션 수정 버튼
+document.querySelector("#locationmodifybtn").addEventListener('click', function() {
+    const updatedData = {
+        useFlag: document.querySelector('input[name="locationmodifyuseflag"]:checked').value
+    };
+
+    const locationCode = document.querySelector('#locationmodifycode').value;
+
+    fetch(`/main/stock/locationmodify/${locationCode}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(updatedData)
+    })
+	.then(response => {
+	    if (response.ok) {
+	        // 성공 메시지 출력 및 UI 갱신
+	        alert('로케이션 정보가 수정되었습니다.');
+	        document.querySelector("#locationmodifymodal").style.display = "none";
+	        document.querySelector("#locationmodifyoverlay").style.display = "none";
+	        document.body.style.overflow = "auto";
+	        resetModalFields();
+	        locationlistmain(locationP, locationSearchCode, locationSearchWord);
+
+	    } else {
+	        // 오류 응답 처리
+	        return response.json().then(err => {
+	            alert(err.message || '수정 실패');
+	            throw new Error(err.message || '수정 실패');
+	        }).catch(() => {
+	            alert('수정 실패');
+	        });
+	    }
+})
+.catch(error => {
+    console.log(error);
+    alert('로케이션 정보 수정 중 오류가 발생했습니다.');
+});
+});
+function resetModalFields() {
+    document.querySelector('#locationmodifywarehouse').value = "";
+    document.querySelector('#locationmodifycode').value = "";
+    document.querySelector('#locationmodifyrackcode').value = "";
+    document.querySelector('#locationmodifyrowcode').value = "";
+    document.querySelector('#locationmodifylevelcode').value = "";
+    document.querySelector('input[name="locationmodifyuseflag"][value="Y"]').checked = true;
+    }  
+    
+
 //검색
 document.getElementById("search_form").addEventListener("submit", function(event) {
 event.preventDefault(); // 기본 폼 제출 방지
@@ -183,4 +237,10 @@ locationSearchCode = document.getElementById("locationSearchtype").value;
 locationSearchWord = document.getElementById("locationSearch").value;
 locationpaging(1, locationSearchCode, locationSearchWord); // 검색 후 첫 페이지부터 시작				
     });
+
+document.querySelector("#locationresetbtn").addEventListener("click", function() {
+    document.querySelector("#locationSearchtype").value = '1';
+    document.querySelector("#locationSearch").value = '';
+    locationpaging(1, '', '');
+});
 });

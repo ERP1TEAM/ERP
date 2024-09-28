@@ -150,8 +150,6 @@ public class WarehouseRestController {
     	List<String> locationCodeList = Arrays.asList(locationCodes.split(","));
         Map<String, Object> locationdelresponse = locationService.deleteLocation(locationCodeList);
         
-        locationdelresponse.put("ok", true);
-        
         return ResponseEntity.ok(locationdelresponse);
     }
     
@@ -170,4 +168,30 @@ public class WarehouseRestController {
 
         return ResponseEntity.ok(products);
     }
+    
+    //로케이션 수정 모달
+    @GetMapping("/stock/locationmodify/{code}")
+    public ResponseEntity<LocationDto> getLocationByCode(@PathVariable String code) {
+        try {
+            LocationDto locationDto = locationService.getLocationByCode(code);
+            return ResponseEntity.ok(locationDto);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
+    
+    @PutMapping("/stock/locationmodify/{locationCode}")
+    public ResponseEntity<String> updateLocation(@PathVariable String locationCode, @RequestBody LocationDto locationDto) {
+        try {
+        	locationDto.setCode(locationCode);
+        	locationService.updateLocation(locationDto);
+            
+            return ResponseEntity.ok("로케이션 수정이 완료되었습니다.");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("로케이션 수정 중 오류가 발생했습니다.");
+        }
+    }
+    
 }

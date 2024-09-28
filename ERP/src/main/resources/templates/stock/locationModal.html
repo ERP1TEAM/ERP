@@ -2,7 +2,7 @@
 <div id="locationoverlay" class="modal-overlay"></div>
 <div id="locationinmodal" class="modal modalwidth">
 <div>
-        <span class="close" id="locationclosemodal">&times;</span>
+        <span class="close closemodal">&times;</span>
     </div>
 <div class="stockmodal-scroll">
 <div class="product_insert row modalmarginleft"><br>
@@ -44,12 +44,6 @@
         <select id="levelcode" class="product_input1"></select>
         </li>
     </ul>
-     <ul>
-        <li>메모</li>
-        <li>
-        <input type=text id="locationmemo" class="product_input3">
-        </li>
-    </ul>
     <ul>
         <li>사용 유/무</li>
         <li>
@@ -64,4 +58,64 @@
 </div>
 </div>
 </div>
+
+<div id="locationmodifyoverlay" class="modal-overlay"></div>
+<div id="locationmodifymodal" class="modal modalwidth">
+<div>
+        <span class="close closemodal">&times;</span>
+    </div>
+<div class="stockmodal-scroll">
+<div class="product_insert row modalmarginleft"><br>
+                    <div class="card-action">
+			          <h2>로케이션 수정</h2><br>
+                    </div>
+    <ul>
+        <li>창고명</li>
+        <li>
+            <input type="text" class="product_input3" id="locationmodifywarehouse" readonly="readonly">
+        </li>
+    </ul>
+    
+    <ul>
+        <li>로케이션 코드</li>
+        <li>
+		<input type="text" class="product_input3" readonly="readonly" id="locationmodifycode">
+        </li>
+    </ul>
+    <ul>
+        <li>선반 열</li>
+        <li>
+        <input type="text" class="product_input3" id="locationmodifyrackcode" readonly="readonly">
+        </li>
+    </ul>
+    <ul>
+        <li>선반 행</li>
+        <li>
+        <input type="text" id="locationmodifyrowcode" class="product_input3" readonly="readonly" >
+        </li>
+    </ul>
+     <ul>
+        <li>선반 층</li>
+        <li>
+        <input type="text" id="locationmodifylevelcode" class="product_input3" readonly="readonly">
+        </li>
+    </ul>
+    <ul>
+        <li>사용 유/무</li>
+        <li>
+            <label><input type="radio" name="locationmodifyuseflag" class="rdo" value ="Y" checked> 사용</label>
+            <label><input type="radio" name="locationmodifyuseflag" class="rdo" value="N" > 미사용</label>
+        </li>
+    </ul>
+<div class="subpage_view4" style="text-align:center; margin-bottom: 100px;">
+    <input type="button" value="수정" class="p_button p_button_color2" id="locationmodifybtn">
+    <input type="button" value="취소" class="p_button p_button_color1" id="locationmodifyclose">
+</div> 
+</div>
+</div>
+
+</div>
+
+
+
 </div>
