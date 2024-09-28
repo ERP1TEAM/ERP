@@ -197,7 +197,6 @@ document.querySelector("#locationmodifybtn").addEventListener('click', function(
     })
 	.then(response => {
 	    if (response.ok) {
-	        // 성공 메시지 출력 및 UI 갱신
 	        alert('로케이션 정보가 수정되었습니다.');
 	        document.querySelector("#locationmodifymodal").style.display = "none";
 	        document.querySelector("#locationmodifyoverlay").style.display = "none";
@@ -206,7 +205,6 @@ document.querySelector("#locationmodifybtn").addEventListener('click', function(
 	        locationlistmain(locationP, locationSearchCode, locationSearchWord);
 
 	    } else {
-	        // 오류 응답 처리
 	        return response.json().then(err => {
 	            alert(err.message || '수정 실패');
 	            throw new Error(err.message || '수정 실패');
@@ -216,7 +214,6 @@ document.querySelector("#locationmodifybtn").addEventListener('click', function(
 	    }
 })
 .catch(error => {
-    console.log(error);
     alert('로케이션 정보 수정 중 오류가 발생했습니다.');
 });
 });
@@ -239,8 +236,10 @@ locationpaging(1, locationSearchCode, locationSearchWord); // 검색 후 첫 페
     });
 
 document.querySelector("#locationresetbtn").addEventListener("click", function() {
-    document.querySelector("#locationSearchtype").value = '1';
-    document.querySelector("#locationSearch").value = '';
-    locationpaging(1, '', '');
-});
+     locationSearchCode = '1';
+     locationSearchWord = '';
+     document.querySelector("#locationSearchtype").value = locationSearchCode;
+     document.querySelector("#locationSearch").value = locationSearchWord;
+     locationpaging(1, locationSearchCode, locationSearchWord);  // 첫 페이지로 리셋
+    });
 });

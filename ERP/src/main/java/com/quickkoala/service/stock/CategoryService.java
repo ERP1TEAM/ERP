@@ -18,6 +18,8 @@ public interface CategoryService {
 	
 	boolean updateCategory(String Code, CategoryDto categoryDto);
 	
+	
+	boolean candeleteCategory(String categoryCode);
 	Map<String, Object> deleteCategory(List<String> categoryCodes);
 	
 	Page<CategoryEntity> getPaginatedData(int pno, int size);

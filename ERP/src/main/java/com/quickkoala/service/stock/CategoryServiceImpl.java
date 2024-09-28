@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -15,12 +16,18 @@ import com.quickkoala.dto.stock.CategoryDto;
 import com.quickkoala.entity.stock.CategoryEntity;
 import com.quickkoala.entity.stock.ProductEntity.UseFlag;
 import com.quickkoala.repository.stock.CategoryRepository;
+import com.quickkoala.repository.stock.ProductRepository;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class CategoryServiceImpl implements CategoryService{
 	
 	@Autowired
 	private CategoryRepository categoryRepository;
+	
+	@Autowired
+    private ProductRepository productRepository;
 	
 	//Entity -> DTO 변환
 	private CategoryDto convertToCategoryDto(CategoryEntity categoryEntity) {
@@ -108,24 +115,53 @@ public class CategoryServiceImpl implements CategoryService{
 	}
 	
 	@Override
+	public boolean candeleteCategory(String categoryCode) {
+		int productCount = productRepository.countProductsByCategoryCode(categoryCode);
+		return productCount == 0;
+	}
+	
+	@Transactional
+	@Override
 	public Map<String, Object> deleteCategory(List<String> categoryCodes) {
 		Map<String, Object> categoryDelresult = new HashMap<>();
 
 		for(String code: categoryCodes) {
-			try {
-			if(categoryRepository.existsById(code)) {
-				categoryRepository.deleteById(code);
-				categoryDelresult.put(code, "삭제되었습니다");
-			}else {
-				categoryDelresult.put(code, "삭제에 실패했습니다.");
+				 try {
+			            Optional<CategoryEntity> optionalCategory = categoryRepository.findById(code);
+			            
+			            if (!optionalCategory.isPresent()) {
+			                categoryDelresult.put(code, "카테고리를 찾을 수 없습니다.");
+			                continue;
+			            }
+
+			            CategoryEntity categoryEntity = optionalCategory.get();
+
+			            // 미사용 상태에서만 삭제 가능
+			            if (!categoryEntity.getUseFlag().equals(UseFlag.N)) {
+			                categoryDelresult.put(code, "카테고리가 미사용 상태일 때만 삭제 가능합니다.");
+			                continue;
+			            }
+
+			            // 상품이 없을 때만 삭제 가능
+			            if (candeleteCategory(code)) {
+			                categoryRepository.deleteById(code);
+
+			                // 데이터베이스 동기화 (명시적 flush)
+			                categoryRepository.flush();  // 이 부분을 추가하여 즉시 삭제 반영
+
+			                categoryDelresult.put(code, "삭제되었습니다.");
+			            } else {
+			                categoryDelresult.put(code, "카테고리에 제품이 있어 삭제할 수 없습니다.");
+			            }
+
+			        } catch (Exception e) {
+			            // 예외 발생 시, 실제 예외 메시지를 로그로 출력
+			            e.printStackTrace();  
+			            categoryDelresult.put(code, "카테고리 삭제 중 오류 발생");
+			        }
+			    }
+			    return categoryDelresult;
 			}
-        }catch(Exception e) {
-        	categoryDelresult.put(code,"Error");
-        }
-		}
-		
-		return categoryDelresult;
-	}
 	
 	@Override
 	public Page<CategoryEntity> getPaginatedData(int pno, int size) {

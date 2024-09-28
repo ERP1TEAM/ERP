@@ -176,7 +176,13 @@ document.getElementById("categorySearchbtn").addEventListener("click", function(
         categorySearchWord = document.getElementById("categorySearch").value;
         categoryPaging(1, categorySearchCode, categorySearchWord);
     });
-
+document.querySelector("#categoryresetbtn").addEventListener("click", function() {
+    categorySearchCode='1';
+    categorySearchWord='';
+    document.querySelector("#categorySearchtype").value = categorySearchCode;
+    document.querySelector("#categorySearch").value = categorySearchWord;
+    categoryPaging(1, categorySearchCode,categorySearchWord);
+});
 //카테고리 코드 자동 생성
 const categorymainCode = document.getElementById('categorymainCode');
 const categorysubCode = document.getElementById('categorysubCode');
@@ -394,20 +400,39 @@ document.getElementById('categorydelete').addEventListener('click',function(){
         }
     })
     .then(response => {
-		return response.json();
-		})
+				 if (!response.ok) {
+            alert('카테고리 삭제에 실패했습니다.');
+        return false;
+        }
+        return response.json();
+    })
     .then(data => {
-        if (data.ok) {
-            alert('카테고리가 삭제되었습니다.');
-            categorymainmodal(currentPage,categorySearchCode,categorySearchWord);
-        } else {
-            alert('카테고리 삭제 중 오류가 발생했습니다.');
+		if(!data){return false;}
+        Object.keys(data).forEach(code => {
+            const result = data[code];
+            if (result == '삭제되었습니다.') {
+                // 성공한 항목들만 DOM에서 제거
+                const checkbox = Array.from(checkboxes).find(cb => cb.value === code);
+                if (checkbox) {
+                    const row = checkbox.closest('tr');
+                    if (row) {
+                        row.remove();
+                    }
+                } alert("카테고리가 삭제되었습니다.");
+            } else {
+                alert(`${result}`);
+            }
+        });
+
+        if (typeof categoryPaging === 'function') {
+            categorymainmodal(currentPage,categorySearchCode, categorySearchWord);
         }
     })
     .catch(function (error) {
         alert('오류가 발생했습니다.');
     });
-}); 
+});         
+
 //카테고리 등록 취소
 document.getElementById('categoryinback').addEventListener('click',function(){
     document.getElementById('categoryinmodal').style.display = 'none';

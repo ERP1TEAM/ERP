@@ -15,10 +15,11 @@ document.addEventListener('DOMContentLoaded', function() {
     let inventorysuplliercurrentPage = inventorySupplierlistP;
     document.getElementById("inventorySupplierSearchtype").value = inventorySupplierlistSearchCode;
     document.getElementById("inventorySupplierSearch").value = inventorySupplierlistSearchWord;
+   
     window.inventorySupplierlistPaging = function(p = inventorySupplierlistP, code = inventorySupplierlistSearchCode, word = inventorySupplierlistSearchWord) {
-        inventorysuplliercurrentPage =p;
-        inventorySupplierlistMainModal(p, code, word);
-    }
+    inventorysuplliercurrentPage = p;
+    inventorySupplierlistMainModal(p, code, word);
+	};
 
     window.inventorySupplierlistPgNext = function() {
         inventorySupplierlistMainModal(inventorySupplierlistEndPage + 1, inventorySupplierlistSearchCode, inventorySupplierlistSearchWord);
@@ -99,7 +100,7 @@ document.addEventListener('DOMContentLoaded', function() {
             inventorySupplierlistPaging.innerHTML = paginationHTML;
 
             // URL 업데이트 (검색 조건도 포함)
-            if (word === "") {
+            if (word == "") {
                 history.replaceState({}, '', location.pathname + `?p=${pno}`);
             } else {
                 history.replaceState({}, '', location.pathname + `?p=${pno}&code=${code}&word=${word}`);
@@ -129,22 +130,37 @@ document.addEventListener('DOMContentLoaded', function() {
             alert('공급업체 모달을 불러오는데 실패했습니다.');
         });
     }
+// 검색
+document.getElementById("inventorySupplierlist_form").addEventListener("submit", function(event) {
+     event.preventDefault();
+     inventorySupplierlistSearchCode = document.getElementById("inventorySupplierSearchtype").value;
+     inventorySupplierlistSearchWord = document.getElementById("inventorySupplierSearch").value;
+     inventorySupplierlistPaging(1, inventorySupplierlistSearchCode, inventorySupplierlistSearchWord);
+});
+document.querySelector("#inventorySupplierresetbtn").addEventListener("click", function() {
+    inventorySupplierlistSearchCode='1';
+    inventorySupplierlistSearchWord='';
+    document.querySelector("#inventorySupplierSearchtype").value = inventorySupplierlistSearchCode;
+    document.querySelector("#inventorySupplierSearch").value = inventorySupplierlistSearchWord;
+    inventorySupplierlistPaging(1, inventorySupplierlistSearchCode,inventorySupplierlistSearchWord);
+});
 
-    // 검색
-    document.getElementById("inventorySupplierlist_form").addEventListener("submit", function(event) {
-        event.preventDefault();
-        inventorySupplierlistSearchCode = document.getElementById("inventorySupplierSearchtype").value;
-        inventorySupplierlistSearchWord = document.getElementById("inventorySupplierSearch").value;
+document.getElementById("inventorySupplierSearchbtn").addEventListener("click", function() {
+        let inventorySupplierlistSearchCode = document.getElementById("inventorySupplierSearchtype").value;
+        let inventorySupplierlistSearchWord = document.getElementById("inventorySupplierSearch").value;
+		
+		history.replaceState({}, '', `?p=1&supplierCode=${inventorySupplierlistSearchCode}&supplierWord=${inventorySupplierlistSearchWord}`);
+
         inventorySupplierlistPaging(1, inventorySupplierlistSearchCode, inventorySupplierlistSearchWord);
-    });
-    document.getElementById("inventorySupplierSearchbtn").addEventListener("click", function() {
-        inventorySupplierlistSearchCode = document.getElementById("inventorySupplierSearchtype").value;
-        inventorySupplierlistSearchWord = document.getElementById("inventorySupplierSearch").value;
-        inventorySupplierlistPaging(1, inventorySupplierlistSearchCode, inventorySupplierlistSearchWord);
-    });
+});
 
  document.getElementById('inventoryInsupplierbtn').addEventListener('click', function() {
  inventorySupplierlistMainModal(inventorysuplliercurrentPage, inventorySupplierlistSearchCode, inventorySupplierlistSearchWord);
+ 
+  const searchType = document.getElementById("inventorySupplierSearchtype").value;
+    if (!searchType) {
+        document.getElementById("inventorySupplierSearchtype").value = inventorySupplierlistSearchCode;
+    }
 });
     document.querySelectorAll(".inventorySupplierlistclosemodal").forEach(function(button) {
         button.addEventListener("click", function() {

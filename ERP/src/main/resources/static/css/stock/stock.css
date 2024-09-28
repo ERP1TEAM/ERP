@@ -6,6 +6,9 @@
 @import url("./main.css");
 @import url("./product.css");
 
+.resetbtncolor:focus{
+	 background-color: #F0F0F0 !important;
+}
 .black_font{
 	color:rgba(0, 0, 0, 1) !important;
 }

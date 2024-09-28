@@ -44,6 +44,7 @@ import jakarta.servlet.http.HttpServletRequest;
 @CrossOrigin(origins="*", allowedHeaders = "*")
 public class StockRestController {
 	private final int SIZE = 10;
+	private final int modalSIZE = 5;
 
 	//***** 재고 *****//
 	
@@ -88,9 +89,9 @@ public class StockRestController {
 		
 		 Page<SupplierEntity> supplierlistdata;
 		    if (code == null || code.isEmpty() || word == null || word.isEmpty()) {
-		        supplierlistdata = supplierService.getPaginatedData(pno, SIZE);
+		        supplierlistdata = supplierService.getPaginatedData(pno, modalSIZE);
 		    } else {
-		        supplierlistdata = supplierService.getPaginatedData(pno, SIZE, code, word);
+		        supplierlistdata = supplierService.getPaginatedData(pno, modalSIZE, code, word);
 		    }
 		    
 		    if (supplierlistdata == null || supplierlistdata.isEmpty()) {
@@ -206,9 +207,9 @@ public class StockRestController {
 		
     	Page<CategoryEntity> result = categoryService.getPaginatedData(pno, SIZE);
     	if (code == null || code.isEmpty() || word == null || word.isEmpty()) {
-			result = categoryService.getPaginatedData(pno, SIZE);
+			result = categoryService.getPaginatedData(pno, modalSIZE);
 		} else {
-			result = categoryService.getPaginatedData(pno, SIZE, code, word);
+			result = categoryService.getPaginatedData(pno, modalSIZE, code, word);
 		}
     	return result;
 	}
@@ -247,8 +248,6 @@ public class StockRestController {
     public ResponseEntity<Map<String, Object>> deleteCategory(@PathVariable String categoryCodes) {
     	List<String> categoryCodeList = Arrays.asList(categoryCodes.split(","));
         Map<String, Object> categoryresponse = categoryService.deleteCategory(categoryCodeList);
-        
-        categoryresponse.put("ok", true);
         
         return ResponseEntity.ok(categoryresponse);
     }
