@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	var stocklistTotalpages = 1;
     var stocklistStartPage = 0;
     var stocklistEndPage = 0;
-    const stocklistPageSize = 3; // 페이지 번호 그룹 크기 설정
+    const stocklistPageSize = 5; // 페이지 번호 그룹 크기 설정
     
     const getstocklistQueryParam = (param) => {
         const urlParams = new URLSearchParams(window.location.search);
@@ -113,11 +113,18 @@ stocklistmain(stocklistP, stocklistSearchCode, stocklistSearchWord);
 
 //검색
 document.getElementById("stocklist_form").addEventListener("submit", function(event) {
-event.preventDefault(); // 기본 폼 제출 방지
+event.preventDefault();
 stocklistSearchCode = document.getElementById("stocklistSearchtype").value;
 stocklistSearchWord = document.getElementById("stocklistSearch").value;
 stocklistPaging(1, stocklistSearchCode, stocklistSearchWord); // 검색 후 첫 페이지부터 시작	
 })
+document.querySelector("#stocklistresetbtn").addEventListener("click", function() {
+    stocklistSearchCode='1';
+    stocklistSearchWord='';
+    document.querySelector("#stocklistSearchtype").value = stocklistSearchCode;
+    document.querySelector("#stocklistSearch").value = stocklistSearchWord;
+    stocklistPaging(1,  stocklistSearchCode, stocklistSearchWord);
+});
 
 
 });
