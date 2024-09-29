@@ -26,4 +26,7 @@ public interface WarehouseService {
 	Page<WarehouseEntity> getPaginatedData(int pno, int size);
 	
 	Page<WarehouseEntity> getPaginatedData(int pno, int size, String code, String word);
+	
+	boolean hasLocations(String warehouseCode);
+
 }

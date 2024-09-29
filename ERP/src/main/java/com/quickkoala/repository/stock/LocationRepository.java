@@ -33,4 +33,5 @@ public interface LocationRepository extends JpaRepository<LocationEntity, String
 	
 	Optional<LocationEntity> findByCode(String code);
 	
+	boolean existsByWarehouseCode(String warehouseCode);
 }

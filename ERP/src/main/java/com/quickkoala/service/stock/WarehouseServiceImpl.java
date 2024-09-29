@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import com.quickkoala.dto.stock.WarehouseDto;
 import com.quickkoala.entity.stock.WarehouseEntity;
+import com.quickkoala.repository.stock.LocationRepository;
 import com.quickkoala.repository.stock.WarehouseRepository;
 
 import jakarta.transaction.Transactional;
@@ -23,6 +24,8 @@ public class WarehouseServiceImpl implements WarehouseService {
 	@Autowired
 	private WarehouseRepository warehouseRepository;
 	
+	@Autowired
+	private LocationRepository locationRepository;
 	//Entity -> DTO 변환
 	private WarehouseDto convertToWarehouseDto(WarehouseEntity warehouseEntity) {
 		WarehouseDto maptoWarehouseDto = new WarehouseDto();
@@ -72,19 +75,31 @@ public class WarehouseServiceImpl implements WarehouseService {
 		
 		for(String code: warehouseCodes) {
 			try {
-			if(warehouseRepository.existsById(code)) {
-			warehouseRepository.deleteById(code);
-			warehouseDelresult.put(code, "삭제되었습니다");
-			}else {
-			warehouseDelresult.put(code, "삭제에 실패했습니다.");
-			}
-        }catch(Exception e) {
-        	warehouseDelresult.put(code,"Error");
-        }
-		}
-		
-		return warehouseDelresult;
+	            if (warehouseRepository.existsById(code)) {
+	                
+	                if (locationRepository.existsByWarehouseCode(code)) {
+	                    warehouseDelresult.put(code, "해당 창고에 로케이션이 남아있어 삭제할 수 없습니다.");
+	                } else {
+	                    warehouseRepository.deleteById(code);
+	                    warehouseDelresult.put(code, "삭제되었습니다.");
+	                }
+	                
+	            } else {
+	                warehouseDelresult.put(code, "존재하지 않는 창고입니다.");
+	            }
+	        } catch (Exception e) {
+	            warehouseDelresult.put(code, "삭제 중 오류가 발생했습니다.");
+	        }
+	    }
+
+	    return warehouseDelresult;
 	}
+	
+	@Override
+	public boolean hasLocations(String warehouseCode) {
+		return locationRepository.existsByWarehouseCode(warehouseCode);
+	}
+	
 	@Override
 	public WarehouseDto getWarehouseByCode(String warehouseCode) {
 		WarehouseEntity warehouseEntity = warehouseRepository.findByCode(warehouseCode);

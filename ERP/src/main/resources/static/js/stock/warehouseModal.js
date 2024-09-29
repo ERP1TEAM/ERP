@@ -267,18 +267,17 @@ document.getElementById('warehousedelete').addEventListener('click',function(){
             'Content-Type': 'application/json',
         }
     })
-    .then(response => {
-		return response.json();
-		})
+     .then(response => response.json())  // 응답을 JSON으로 변환
     .then(data => {
-        if (data.ok) {
-            alert('창고가 삭제되었습니다.');
-            warehousemainmodal();
-        } else {
-            alert('창고 삭제에 실패했습니다');
-        }
+        // 서버에서 받은 삭제 결과 메시지를 처리
+        Object.keys(data).forEach(function(warehouseCode) {
+            const message = data[warehouseCode];
+            alert(`${message}`);
+        });
+
+        warehousemainmodal();  // 삭제 후 리스트를 새로고침
     })
-    .catch(function (error) {
+    .catch(error => {
         alert('오류가 발생했습니다.');
     });
 }); 

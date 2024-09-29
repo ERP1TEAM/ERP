@@ -52,13 +52,14 @@ public class WarehouseRestController {
     }
     
     @DeleteMapping("/stock/warehouses/{warehouseCodes}")
-    public ResponseEntity<Map<String, Object>> deleteWarehouses(@PathVariable String warehouseCodes) {
-    	List<String> warehouseCodeList = Arrays.asList(warehouseCodes.split(","));
-        Map<String, Object> warehouseresponse = warehouseService.deleteWarehouse(warehouseCodeList);
-        
-        warehouseresponse.put("ok", true);
-        
-        return ResponseEntity.ok(warehouseresponse);
+    public ResponseEntity<Map<String, Object>> deleteWarehouses(@PathVariable List<String> warehouseCodes) {
+        Map<String, Object> deleteResults = warehouseService.deleteWarehouse(warehouseCodes);
+
+        if (deleteResults.values().stream().anyMatch(result -> result.equals("삭제되었습니다."))) {
+            return ResponseEntity.ok(deleteResults);
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(deleteResults);
+        }
     }
 	
 	@GetMapping("/stock/{warehouseCode}")
