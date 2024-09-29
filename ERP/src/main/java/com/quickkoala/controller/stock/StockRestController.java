@@ -44,7 +44,7 @@ import jakarta.servlet.http.HttpServletRequest;
 @RequestMapping("main")
 @CrossOrigin(origins="*", allowedHeaders = "*")
 public class StockRestController {
-	private final int SIZE = 10;
+	private final int SIZE = 15;
 	private final int modalSIZE = 5;
 
 	//***** 재고 *****//
