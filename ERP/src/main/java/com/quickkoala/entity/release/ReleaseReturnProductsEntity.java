@@ -36,6 +36,12 @@ public class ReleaseReturnProductsEntity {
 	@Column(name = "dt", nullable = false, columnDefinition="DATETIME DEFAULT CURRENT_TIMESTAMP")
 	private LocalDateTime dt;
 	
+	@Column(name="product_code", nullable=false)
+	private String productCode;
+	
+	@Column(name="supplier_code", nullable=false)
+	private String supplierCode;
+	
 	@Column(name = "manager", length = 20, nullable = false)
 	private String manager;
 	

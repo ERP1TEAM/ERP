@@ -107,11 +107,13 @@ public class ReleaseRestController {
 	
 	@PostMapping("release/return/discard")
 	public String returnDiscard(@RequestParam("relNum") String relNum,@RequestParam("lotNum") String lotNum,@RequestParam("qty") int qty) {
+		System.out.println("aa");
 		return releaseRefundPrdouctsService.saveStatus(relNum,lotNum,qty,"폐기");
 	}
 	
 	@PostMapping("release/return/receive")
 	public String returnReceive(@RequestParam("relNum") String relNum,@RequestParam("lotNum") String lotNum,@RequestParam("qty") int qty) {
+		System.out.println("bb");
 		return releaseRefundPrdouctsService.saveStatus(relNum,lotNum,qty,"입고");
 	}
 	

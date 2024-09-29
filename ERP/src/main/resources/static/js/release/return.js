@@ -31,7 +31,7 @@ function paging(_page,_select,_param){
 				 let btns = "";
                 if (product.status === '대기') {
                     btns = `
-                    	<input type="number" id="returnnum">
+                    	<input type="number" name="renum">
                         <input type="button" value="폐기" onclick="discardp(event, '${product.relNumber}','${product.lotNumber}')">
                         <input type="button" value="입고" onclick="receivep(event, '${product.relNumber}','${product.lotNumber}')">
                     `;
@@ -61,7 +61,7 @@ window.discardp = function(e,relNumber,lotNumber){
 	fetch("./return/discard",{
 				method : "POST",
 				headers : {"content-type":"application/x-www-form-urlencoded"},
-				body : "relNum="+encodeURIComponent(relNumber)+"lotNum="+encodeURIComponent(lotNumber)+"&qty="+encodeURIComponent(document.querySelector("#returnnum").value)
+				body : "relNum="+encodeURIComponent(relNumber)+"&lotNum="+encodeURIComponent(lotNumber)+"&qty="+encodeURIComponent( e.target.parentElement.querySelector('input[name="renum"]').value)
 			})
 			.then(function(response){
 				return response.text();
@@ -81,10 +81,10 @@ window.discardp = function(e,relNumber,lotNumber){
 }
 window.receivep = function(e,relNumber,lotNumber){
 	e.stopPropagation();
-	fetch("./return/discard",{
+	fetch("./return/receive",{
 				method : "POST",
 				headers : {"content-type":"application/x-www-form-urlencoded"},
-				body : "relNum="+encodeURIComponent(relNumber)+"&lotNum="+encodeURIComponent(lotNumber)+"&qty="+encodeURIComponent(document.querySelector("#returnnum").value)
+				body : "relNum="+encodeURIComponent(relNumber)+"&lotNum="+encodeURIComponent(lotNumber)+"&qty="+encodeURIComponent( e.target.parentElement.querySelector('input[name="renum"]').value)
 			})
 			.then(function(response){
 				return response.text();
