@@ -10,7 +10,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import com.quickkoala.entity.release.ViewReleaseCompleteEntity;
-import com.quickkoala.entity.release.ViewReleaseOngoingEntity;
 import com.quickkoala.repository.release.ViewReleaseCompleteRepository;
 
 @Service

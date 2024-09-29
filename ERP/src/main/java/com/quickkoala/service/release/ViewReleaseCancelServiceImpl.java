@@ -17,8 +17,6 @@ public class ViewReleaseCancelServiceImpl implements ViewReleaseCancelService{
 	private ViewReleaseCancelRepository viewReleaseCancelRepository;
 	
 	public Page<ViewReleaseCancelEntity> getAll(int pg, int size,String select, String param, String startDate, String endDate) {
-		
-		
 		try {
 			
 			if(startDate.equals("null")||endDate.equals("null")||endDate==""||startDate=="") {

@@ -14,11 +14,6 @@ window.postpone=postpone;
 window.cancelRelease=cancelRelease;
 window.complete=complete;
 window.onload = function() {
-	pagingIns.currentPage_=localStorage.getItem("currentpg");
-	pagingIns.mapping_=localStorage.getItem("mapping");
-	pagingIns.param_=localStorage.getItem("param");
-	pagingIns.totalPages_=localStorage.getItem("totalpg");
-	pagingIns.select_=localStorage.getItem("select");
 	paging(pagingIns.currentPage_ - 1);
 };
 window.pgNext = function() {
@@ -152,11 +147,6 @@ function postpone(e, rnum){
 			.then(function(data){
 				console.log(data);
 				if(data=="OK"){
-					localStorage.setItem("currentpg",pagingIns.currentPage_);
-					localStorage.setItem("mapping",pagingIns.mapping_);
-					localStorage.setItem("param",pagingIns.param_);
-					localStorage.setItem("totalpg",pagingIns.totalPages_);
-					localStorage.setItem("select",pagingIns.select_);
 					window.location.reload();
 					alert('지연 상태로 변경되었습니다');
 					
@@ -183,11 +173,6 @@ function cancelRelease(e, rnum){
 			.then(function(data){
 				console.log(data);
 				if(data=="OK"){
-					localStorage.setItem("currentpg",pagingIns.currentPage_);
-					localStorage.setItem("mapping",pagingIns.mapping_);
-					localStorage.setItem("param",pagingIns.param_);
-					localStorage.setItem("totalpg",pagingIns.totalPages_);
-					localStorage.setItem("select",pagingIns.select_);
 					window.location.reload();
 					alert('출고 취소되었습니다');
 					
@@ -213,11 +198,6 @@ function complete(e, rnum){
 			.then(function(data){
 				console.log(data);
 				if(data=="OK"){
-					localStorage.setItem("currentpg",pagingIns.currentPage_);
-					localStorage.setItem("mapping",pagingIns.mapping_);
-					localStorage.setItem("param",pagingIns.param_);
-					localStorage.setItem("totalpg",pagingIns.totalPages_);
-					localStorage.setItem("select",pagingIns.select_);
 					window.location.reload();
 					alert('출고 완료되었습니다');
 					

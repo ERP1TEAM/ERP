@@ -9,6 +9,8 @@ import com.quickkoala.entity.release.ViewReleaseCancelEntity;
 
 @Repository
 public interface ViewReleaseCancelRepository extends JpaRepository<ViewReleaseCancelEntity, String> {
+	
+	 Page<ViewReleaseCancelEntity> findAll(Pageable pageable);
     
     // relNumber로 필터링
     Page<ViewReleaseCancelEntity> findByRelNumberContaining(String relNumber, Pageable pageable);

@@ -38,6 +38,12 @@ public class ViewReleaseReturnProductsEntity {
 	@Column(name = "qty", nullable = false)
 	private int qty;
 	
+	@Column(name = "sales_code", length = 20, nullable = false)
+	private String salesCode;
+	
+	@Column(name = "sales_name", length = 255, nullable = false)
+	private String salesName;
+	
 	@Column(name = "product_code", length = 8, nullable = false)
 	private String productCode;
 	

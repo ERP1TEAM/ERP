@@ -21,21 +21,24 @@ public class ReleaseReturnProductsServiceImpl implements ReleaseReturnProductsSe
 	@Override
 	public String saveStatus(String relNum, String lotNum, int qty,String status) {
 		if (relNum == null || lotNum == null || status == null) {
+			System.out.println(1);
 	        return "NO";
 	    }
 		List<ReleaseReturnProductsEntity> optional = releaseReturnProductsRepository.findByRelNumberAndLotNumber(relNum,lotNum);
 		if(optional.size()==0) {
+			System.out.println(2);
 			return "NO";
 		}else {
 			for(ReleaseReturnProductsEntity item : optional) {
 				if(item.getStatus()==ReleaseReturnStatus.대기){
-					System.out.println("FINDDD");
 					if(item.getQty()<qty) {
+						System.out.println(3);
 						return "NO";
 					}
 					else if(item.getQty()==qty){
 						item.setStatus(ReleaseReturnStatus.valueOf(status));
 						releaseReturnProductsRepository.save(item);
+						System.out.println(4);
 						return "OK";
 					}else {
 						int remain = item.getQty()-qty;
@@ -51,10 +54,12 @@ public class ReleaseReturnProductsServiceImpl implements ReleaseReturnProductsSe
 						releaseReturnProductsRepository.save(item);
 						releaseReturnProductsRepository.save(added);			
 					}
+					System.out.println(5);
 					return "OK";
 				}
 			}
 		}
+		System.out.println(6);
 		return "NO";
 	}
 

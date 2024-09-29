@@ -14,7 +14,7 @@ window.pgPrev = function() {
      paging(pagingIns.currentPage_ - 1);
 };
 document.addEventListener("DOMContentLoaded", function() {
-    paging(pagingIns.currentPage_);
+    paging(pagingIns.currentPage_-1);
 });
 window.expand_post=expand_post;
 function paging(_pg,_select,_param,_sd,_ed){
@@ -35,7 +35,7 @@ function paging(_pg,_select,_param,_sd,_ed){
                         <td style="text-align:center;">${order.manager}</td>
                         <td style="text-align:center;">${pagingIns.dateFormat(order.dt)}</td>
                         <td style="text-align:right;">${order.orderTotal.toLocaleString()}</td>
-                        <td style="text-align:center;"><input type="button" value="삭제" onclick="approve(event,'${order.orderNumber}')"></td>
+                        <td style="text-align:center;"></td>
                     </tr>
                 `;
             });

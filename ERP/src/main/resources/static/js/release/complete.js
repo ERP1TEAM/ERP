@@ -8,18 +8,18 @@ window.clickPageBtn = function(pg) {
     paging(pg-1);
 };
 document.addEventListener("DOMContentLoaded", function() {
-    paging(pagingIns.currentPage_);
+    paging(pagingIns.currentPage_-1);
 });
 
 window.expand_post=expand_post;
 window.pgNext = function() {
     pagingIns.pgNext();
-     paging(pagingIns.currentPage_ - 1, pagingIns.select_, pagingIns.param_);
+     paging(pagingIns.currentPage_ - 1);
 };
 
 window.pgPrev = function() {
     pagingIns.pgPrev();
-     paging(pagingIns.currentPage_ - 1, pagingIns.select_, pagingIns.param_);
+     paging(pagingIns.currentPage_ - 1);
 };
 function paging(_page,_select,_param,_sd,_ed){
 	pagingIns.getPage("./complete/page",_page,_select,_param,_sd,_ed).then(result => {
@@ -86,6 +86,7 @@ function expand_post(thisElement,onum){
 						span.innerText="반품할 수량을 입력하세요 : ";
 						let inp = document.createElement("input");
 						inp.type="number";
+						inp.maxLength=9999;
 						let btn = document.createElement("input");
 						btn.type="button";
 						btn.value="반품";
@@ -124,7 +125,7 @@ window.returnProduct = function(rCode,lCode,qty) {
 				method : "POST",
 				headers : {"content-type":"application/x-www-form-urlencoded"},
 				body : "rCode="+encodeURIComponent(rCode)+"&lCode="+encodeURIComponent(lCode)
-				+"&qty="+encodeURIComponent(qty)+"&reason="+encodeURIComponent(reason)
+				+"&qty="+encodeURIComponent(qty)
 			})
 			.then(function(response){
 				return response.text();

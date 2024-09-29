@@ -1,5 +1,5 @@
 export default class Paging {
-    currentPage_ = 0;
+    currentPage_ = 1;
     totalPages_ = 0;
     pageNav = document.querySelector("#paging");
     select_=null;

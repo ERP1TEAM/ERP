@@ -10,6 +10,8 @@ import com.quickkoala.entity.release.ViewReleaseCompleteEntity;
 
 @Repository
 public interface ViewReleaseCompleteRepository extends JpaRepository<ViewReleaseCompleteEntity, String> {
+	
+	Page<ViewReleaseCompleteEntity> findAll( Pageable pageable);
     
     // relNumber로 필터링
     Page<ViewReleaseCompleteEntity> findByRelNumberContaining(String relNumber, Pageable pageable);

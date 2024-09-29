@@ -46,7 +46,7 @@ public class OrderRestController {
 	@Autowired
 	private ViewOrderCancelService viewOrderCancelService;
 	
-	private final int SIZE=1;
+	private final int SIZE=10;
 	
 	@GetMapping("order/page")
 	public Page<ViewOrderOngoingEntity> paging(@RequestParam int pg, @RequestParam(required = false) String select,  @RequestParam(required = false) String param, @RequestParam(required = false) String startDate, @RequestParam(required = false) String endDate){

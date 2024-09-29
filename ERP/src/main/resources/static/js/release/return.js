@@ -6,7 +6,7 @@ window.clickPageBtn = function(pg,sel,par) {
     paging(pg-1, sel, par);
 };
 document.addEventListener("DOMContentLoaded", function() {
-    paging(pagingIns.currentPage_);
+    paging(pagingIns.currentPage_-1);
 });
 window.pgNext = function() {
     pagingIns.pgNext();
@@ -17,9 +17,6 @@ window.pgPrev = function() {
     pagingIns.pgPrev();
      paging(pagingIns.currentPage_ - 1, pagingIns.select_, pagingIns.param_);
 };
-window.expand_post=expand_post;
-window.discard=discard;
-window.receive=receive;
 function paging(_page,_select,_param){
 	pagingIns.getPage("./return/page",_page,_select,_param).then(result => {
         let list=result.content;
@@ -35,8 +32,8 @@ function paging(_page,_select,_param){
                 if (product.status === '대기') {
                     btns = `
                     	<input type="number" id="returnnum">
-                        <input type="button" value="폐기" onclick="discard(event, '${product.relNumber}','${product.lotNumber}')">
-                        <input type="button" value="입고" onclick="receive(event, '${product.relNumber}','${product.lotNumber}')">
+                        <input type="button" value="폐기" onclick="discardp(event, '${product.relNumber}','${product.lotNumber}')">
+                        <input type="button" value="입고" onclick="receivep(event, '${product.relNumber}','${product.lotNumber}')">
                     `;
                 }
                 html += `
@@ -47,9 +44,8 @@ function paging(_page,_select,_param){
                         <td>${product.supplierName}</td>
                         <td>${product.lotNumber}</td>
                         <td>${product.qty}</td>
-                        <td>${product.price}</td>
+                        <td>${pagingIns.dateFormat(product.dt)}</td>
                         <td>${product.manager}</td>
-                        <td>${product.reason}</td>
                         <td>${product.status}</td>
                         <td>${btns}</td>
                     </tr>
@@ -60,15 +56,7 @@ function paging(_page,_select,_param){
         tBody.innerHTML = html;
     });
 }
-document.querySelector("#page-test").addEventListener("change",function(){
-	paging(this.value-1);
-});
-
-function expand_post(thisElement,onum){
-	
-}
-
-function discard(e,relNumber,lotNumber){
+window.discardp = function(e,relNumber,lotNumber){
 	e.stopPropagation();
 	fetch("./return/discard",{
 				method : "POST",
@@ -91,7 +79,7 @@ function discard(e,relNumber,lotNumber){
 			});	
 	
 }
-function receive(e,relNumber,lotNumber){
+window.receivep = function(e,relNumber,lotNumber){
 	e.stopPropagation();
 	fetch("./return/discard",{
 				method : "POST",

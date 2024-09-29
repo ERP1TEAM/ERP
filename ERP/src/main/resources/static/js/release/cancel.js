@@ -5,7 +5,7 @@ window.clickPageBtn = function(pg) {
     paging(pg-1);
 };
 document.addEventListener("DOMContentLoaded", function() {
-    paging(pagingIns.currentPage_);
+    paging(pagingIns.currentPage_-1);
 });
 window.expand_post=expand_post;
 window.pgNext = function() {

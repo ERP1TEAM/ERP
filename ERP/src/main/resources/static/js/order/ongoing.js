@@ -35,11 +35,6 @@ document.querySelector("#wait").addEventListener("click",function(){
 	paging(0,"4","미승인","","");
 });
 window.onload = function() {
-	pagingIns.currentPage_=localStorage.getItem("currentpg");
-	pagingIns.mapping_=localStorage.getItem("mapping");
-	pagingIns.param_=localStorage.getItem("param");
-	pagingIns.totalPages_=localStorage.getItem("totalpg");
-	pagingIns.select_=localStorage.getItem("select");
 	paging(pagingIns.currentPage_ - 1);
 };
 function paging(_page,_select,_param,_sd,_ed){
@@ -116,9 +111,9 @@ function expand_post(thisElement,onum){
 						let li4 = document.createElement("li");
 						li4.innerText="가용재고 : "+data.availableQty;
 						let li5 = document.createElement("li");
-						li5.innerText="금액 : "+data.price;
+						li5.innerText="금액 : "+data.price.toLocaleString();
 						let li6 = document.createElement("li");
-						li6.innerText="총액 : "+data.price*data.qty;
+						li6.innerText="총액 : "+(data.price*data.qty).toLocaleString();
 						let li7 = document.createElement("li");
 						let btn = document.createElement("input");
 						btn.type="button";
@@ -169,16 +164,11 @@ function approve(e,num){
 			})
 			.then(function(data){
 				if(data=="OK"){
-					localStorage.setItem("currentpg",pagingIns.currentPage_);
-					localStorage.setItem("mapping",pagingIns.mapping_);
-					localStorage.setItem("param",pagingIns.param_);
-					localStorage.setItem("totalpg",pagingIns.totalPages_);
-					localStorage.setItem("select",pagingIns.select_);
 					window.location.reload();
 					alert('해당 주문이 승인되었습니다');
 					
 				}else if("STOCKERROR"){
-					alert('재고 오류로 승인되지 않았습니다');
+					alert('재고가 부족하여 승인되지 않았습니다');
 					}else{
 					alert('오류 발생으로 상태가 변경되지 않았습니다');
 				}
@@ -200,11 +190,6 @@ function cancelOrder(e,num){
 			})
 			.then(function(data){
 				if(data=="OK"){
-					localStorage.setItem("currentpg",pagingIns.currentPage_);
-					localStorage.setItem("mapping",pagingIns.mapping_);
-					localStorage.setItem("param",pagingIns.param_);
-					localStorage.setItem("totalpg",pagingIns.totalPages_);
-					localStorage.setItem("select",pagingIns.select_);
 					window.location.reload();
 					alert('해당 주문이 취소되었습니다');
 					
