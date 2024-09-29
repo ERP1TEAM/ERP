@@ -60,11 +60,12 @@ public class JwtTokenProvider {
         }
     }
 
-    public void setJwtCookies(HttpServletResponse response, String token) {
+    public void setJwtCookies(HttpServletResponse response, String token, HttpServletRequest request) {
         // JWT 토큰 쿠키 설정
         Cookie tokenCookie = new Cookie("token", token);
         tokenCookie.setHttpOnly(true); // 클라이언트 측 스크립트에서 접근 불가
-        tokenCookie.setSecure(false); // HTTPS에서만 전송
+        boolean isSecure = request.isSecure();
+        tokenCookie.setSecure(isSecure); // HTTPS에서만 전송
         tokenCookie.setPath("/"); // 전체 도메인에 대해 유효
         //tokenCookie.setMaxAge((int) (validityInMilliseconds / 1000)); // 쿠키 유효 시간 (초)
         tokenCookie.setAttribute("SameSite", "Strict"); // CSRF 공격 방지를 위한 SameSite 속성 설정

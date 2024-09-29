@@ -112,12 +112,12 @@ document.addEventListener("DOMContentLoaded", function() {
 	const closeModal = document.getElementById('overlay');
 	const closeModalBtn = document.getElementById('close-modal-btn');
 	const body = document.body;
-
+	let dataIdx = "";
 	//모달 열기
 	document.body.addEventListener('click', function(event) {
 		// 클릭된 요소가 modal-btn 클래스를 가지고 있는지 확인
 		if (event.target.classList.contains('modal-btn')) {
-			const dataIdx = event.target.getAttribute('data-row');
+			dataIdx = event.target.getAttribute('data-row');
 
 			// modal과 overlay가 정상적으로 정의되어 있는지 확인
 			modal.style.display = 'block';
@@ -206,7 +206,7 @@ document.addEventListener("DOMContentLoaded", function() {
 		event.preventDefault(); // 기본 폼 제출 방지
 		searchCode = document.getElementById("search_code").value || '제조사';
 		searchWord = document.getElementById("search_word").value;
-		products(searchCode, searchWord);
+		products(searchCode, searchWord, dataIdx);
 	});
 
 

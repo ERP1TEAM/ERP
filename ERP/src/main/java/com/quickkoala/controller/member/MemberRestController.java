@@ -23,6 +23,7 @@ import com.quickkoala.service.client.SupplierService;
 import com.quickkoala.service.member.MemberServiceImpl;
 import com.quickkoala.token.config.JwtTokenProvider;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 @RestController
@@ -50,7 +51,7 @@ public class MemberRestController {
     
     //로그인
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody MemberEntity member, HttpServletResponse response) {
+    public ResponseEntity<String> login(@RequestBody MemberEntity member, HttpServletResponse response, HttpServletRequest request) {
         boolean isAuthenticated = memberService.authenticateUser(member.getUserId(), member.getPassword());
         if (isAuthenticated) {
             // 사용자 정보 조회
@@ -60,7 +61,7 @@ public class MemberRestController {
             String token = jwtTokenProvider.createToken(member.getUserId(), memberInfo.getRole(), memberInfo.getCode(), memberInfo.getName());
 
             // JWT를 HTTP-Only 쿠키에 설정
-            jwtTokenProvider.setJwtCookies(response, token);
+            jwtTokenProvider.setJwtCookies(response, token, request);
 
             // 역할에 따라 리디렉션 URL 결정
             String redirectUrl;
