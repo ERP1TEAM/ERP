@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 				items.forEach(function(stocklist) {
 					//let rowClass = stocklist.totalQty < stocklist.safetyQty ? 'alert-row' : '';  // 안전재고 부족시 빨간색 배경
-					let stockStatus = stocklist.totalQty < stocklist.safetyQty ? '재고부족' : '재고충분';  // 재고 상태
+					let stockStatus = stocklist.totalQty < stocklist.safetyQty ? '재고부족' : '-';  // 재고 상태
 					let statusColor = stocklist.totalQty < stocklist.safetyQty ? 'color: red;' : 'color: black;';  // 재고 상태에 따른 글씨 색상
 
 					let stocklistth = `<tr class="odd gradeX">
