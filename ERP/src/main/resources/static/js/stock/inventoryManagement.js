@@ -140,4 +140,5 @@ document.querySelector("#inventorymanagementresetbtn").addEventListener("click",
     });
 
 
+
 });

@@ -38,3 +38,9 @@
     cursor: pointer;
     padding: 0 5px; /* 버튼 내부 좌우 여백 설정 */
 }
+.alert-row {
+    background-color:#FF6347!important;
+    color: black !important;
+    font-weight: bold;
+    font-size: 1.2em;
+}

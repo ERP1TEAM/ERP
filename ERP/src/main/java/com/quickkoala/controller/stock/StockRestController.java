@@ -2,6 +2,7 @@ package com.quickkoala.controller.stock;
 
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -63,6 +64,15 @@ public class StockRestController {
 	@Autowired
 	private ViewDailyStockSummaryService viewDailyStockSummaryService;
 	
+	@Autowired
+	private ViewProductStockSupplierService viewProductStockSupplierService;
+	
+	@GetMapping("/stock/sortedbysafety/{pno}")
+	public ResponseEntity<Page<ViewProductStockSupplierEntity>> getSortedStockList(@PathVariable int pno, 
+			@RequestParam(defaultValue = "1") String code,@RequestParam(defaultValue = "") String word) {
+        Page<ViewProductStockSupplierEntity> sortedData = viewProductStockSupplierService.getSortedByTotalQtyMinusSafetyQty(pno, SIZE, code, word);
+        return ResponseEntity.ok().body(sortedData);
+	}
 	
 	@GetMapping("/stock/daily_summary")
 	public ResponseEntity<Map<String,Object>> datedailystocksummary(@RequestParam("date") String date, 

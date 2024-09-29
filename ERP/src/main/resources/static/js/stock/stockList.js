@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
 function stocklistmain(pno, code = '', word = ''){
-	fetch(`/main/stock/viewproductstocks/${pno}?code=${code}&word=${word}`,{
+	fetch(`/main/stock/sortedbysafety/${pno}?code=${code}&word=${word}`,{
 		method:'GET',
 		headers:{
 				'Content-Type':'application/json',
@@ -41,25 +41,25 @@ function stocklistmain(pno, code = '', word = ''){
 		let stocklisttbody=document.querySelector('#stocklisttbody');
     	stocklisttbody.innerHTML='';
 		
-		const items = data.content;
+		const items =  data.content;
 		stocklistTotalpages = data.totalPages;
 		
-    	items.forEach(function(stocklist){
-		
-        let stocklistth = `<tr class="odd gradeX">
-                    <td style="text-align:center;">${stocklist.productCode}</td>
-                    <td>${stocklist.productName}</td>
-                    <td style="text-align:center;">${stocklist.supplierCode}</td>
-                    <td>${stocklist.supplierName}</td>
-                    <td style="text-align:right;">${stocklist.totalQty}</td>
-                    <td style="text-align:right;">${stocklist.availableQty}</td>
-                    <td style="text-align:right;">${stocklist.unavailableQty}</td>
-                    <td style="text-align:right;">${stocklist.safetyQty}</td>
-                    <td style="text-align:center;"><input type="button" value="상세보기" class="dailyinventorybtn" data-product-code="${stocklist.productCode}"></td>
-                    <td style="text-align:center;"><input type="button" value="설정" class="safetyqtysetting"></td>
-                 </tr>`;
-			stocklisttbody.innerHTML +=stocklistth;
-		}); 
+		 items.forEach(function(stocklist) {
+                let rowClass = stocklist.totalQty <= (stocklist.safetyQty + 20) ? 'alert-row' : '';  // 안전재고 부족시 빨간색 표시
+                let stocklistth = `<tr class="odd gradeX ${rowClass}">
+                        <td style="text-align:center;">${stocklist.productCode}</td>
+                        <td>${stocklist.productName}</td>
+                        <td style="text-align:center;">${stocklist.supplierCode}</td>
+                        <td>${stocklist.supplierName}</td>
+                        <td style="text-align:right;">${stocklist.totalQty}</td>
+                        <td style="text-align:right;">${stocklist.availableQty}</td>
+                        <td style="text-align:right;">${stocklist.unavailableQty}</td>
+                        <td style="text-align:right;">${stocklist.safetyQty}</td>
+                        <td style="text-align:center;"><input type="button" value="상세보기" class="dailyinventorybtn" data-product-code="${stocklist.productCode}"></td>
+                        <td style="text-align:center;"><input type="button" value="설정" class="safetyqtysetting"></td>
+                     </tr>`;
+                stocklisttbody.innerHTML += stocklistth;
+            });
 		const stocklistPaging = document.getElementById("stocklistPaging");
 		stocklistPaging.innerHTML = '';
 		
@@ -106,7 +106,7 @@ function stocklistmain(pno, code = '', word = ''){
 				}  
 		})
 		.catch(function(error){
-			alert("error");
+			alert("재고목록 데이터를 받아올 수 없습니다.");
 		});
 }
 stocklistmain(stocklistP, stocklistSearchCode, stocklistSearchWord);

@@ -8,6 +8,7 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -50,7 +51,7 @@ public class ViewProductStockSupplierEntity {
 	 	@Column(name = "unavailable_qty", nullable=false)
 	    private int unavailableQty;
 
-	 	@Column(name = "safety_qty ", nullable=false)
+	 	@Column(name = "safety_qty", nullable=false)
 	    private int safetyQty;
 
 	 	@Column(name = "use_flag", nullable = false)

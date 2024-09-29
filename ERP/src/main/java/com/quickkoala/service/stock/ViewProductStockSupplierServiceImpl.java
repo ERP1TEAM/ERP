@@ -1,10 +1,14 @@
 package com.quickkoala.service.stock;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -17,7 +21,7 @@ import com.quickkoala.repository.stock.ViewProductStockSupplierRepository;
 public class ViewProductStockSupplierServiceImpl implements ViewProductStockSupplierService{
 
 	@Autowired
-	private ViewProductStockSupplierRepository viewproductstockRepository;
+	private ViewProductStockSupplierRepository viewproductstocksupplierRepository;
 	
 	//Entity -> DTO 변환
 	@Override
@@ -36,9 +40,37 @@ public class ViewProductStockSupplierServiceImpl implements ViewProductStockSupp
 		return maptoViewProductStockDto;
 	}
 	
+	
+	@Override
+	public Page<ViewProductStockSupplierEntity> getSortedByTotalQtyMinusSafetyQty(int pno, int size, String code,
+			String word) {
+		 Pageable pageable = PageRequest.of(pno - 1, size);
+		 Page<ViewProductStockSupplierEntity> pageData;
+
+		 if(code.equals("1")) {
+	            pageData = viewproductstocksupplierRepository.findAll(pageable);
+	        } else if(code.equals("2")) {
+	            pageData = viewproductstocksupplierRepository.findByProductNameContainingOrderByProductCodeDesc(word, pageable);
+	        } else if(code.equals("3")) {
+	            pageData = viewproductstocksupplierRepository.findBySupplierCodeContainingOrderByProductCodeDesc(word, pageable);
+	        } else if(code.equals("4")) {
+	            pageData = viewproductstocksupplierRepository.findBySupplierNameContainingOrderByProductCodeDesc(word, pageable);
+	        } else {
+	            pageData = viewproductstocksupplierRepository.findAll(pageable);
+	        }
+
+	        // 가져온 데이터 리스트를 총재고 - 안전재고 값으로 정렬
+	        List<ViewProductStockSupplierEntity> sortedEntities = pageData.getContent().stream()
+	            .sorted(Comparator.comparingInt(e -> e.getTotalQty() - e.getSafetyQty()))
+	            .collect(Collectors.toList());
+
+	        // 정렬된 데이터를 다시 PageImpl로 변환해서 반환
+	        return new PageImpl<>(sortedEntities, pageable, pageData.getTotalElements());
+	    }
+	
 	@Override
 	public List<ViewProductStockSupplierDto> getAllOrdersByProductCode() {
-		List<ViewProductStockSupplierEntity> lisViewproductstockEntity = viewproductstockRepository.findAllByOrderByProductCodeDesc();
+		List<ViewProductStockSupplierEntity> lisViewproductstockEntity = viewproductstocksupplierRepository.findAllByOrderByProductCodeDesc();
 		List<ViewProductStockSupplierDto> lisViewproductstockDto = new ArrayList<>();
 		
 		for (ViewProductStockSupplierEntity viewproductstockEntity : lisViewproductstockEntity) {
@@ -52,7 +84,7 @@ public class ViewProductStockSupplierServiceImpl implements ViewProductStockSupp
 	@Override
 	public Page<ViewProductStockSupplierEntity> getPaginatedData(int pno, int size) {
 		Pageable pageable = PageRequest.of(pno-1, size);
-		return viewproductstockRepository.findAllByOrderByProductCodeDesc(pageable);
+		return viewproductstocksupplierRepository.findAllByOrderByProductCodeDesc(pageable);
 	}
 	
 	@Override
@@ -60,13 +92,13 @@ public class ViewProductStockSupplierServiceImpl implements ViewProductStockSupp
 		Page<ViewProductStockSupplierEntity> result = null;
 		Pageable pageable = PageRequest.of(pno-1, size);
 		if(code.equals("1")) {
-			result = viewproductstockRepository.findByProductCodeContainingOrderByProductCodeDesc(word, pageable);
+			result = viewproductstocksupplierRepository.findByProductCodeContainingOrderByProductCodeDesc(word, pageable);
 		}else if(code.equals("2")) {
-			result = viewproductstockRepository.findByProductNameContainingOrderByProductCodeDesc(word, pageable);
+			result = viewproductstocksupplierRepository.findByProductNameContainingOrderByProductCodeDesc(word, pageable);
 		}else if(code.equals("3")) {
-			result = viewproductstockRepository.findBySupplierCodeContainingOrderByProductCodeDesc(word, pageable);
+			result = viewproductstocksupplierRepository.findBySupplierCodeContainingOrderByProductCodeDesc(word, pageable);
 		}else if(code.equals("4")) {
-			result = viewproductstockRepository.findBySupplierNameContainingOrderByProductCodeDesc(word, pageable);
+			result = viewproductstocksupplierRepository.findBySupplierNameContainingOrderByProductCodeDesc(word, pageable);
 		}
 		return result;
 	}
@@ -76,18 +108,19 @@ public class ViewProductStockSupplierServiceImpl implements ViewProductStockSupp
 		Page<ViewProductStockSupplierEntity> result = null;
 		Pageable pageable = PageRequest.of(pno-1, size);
 		if(code.equals("1")) {
-			result = viewproductstockRepository.findByProductCodeContainingOrderByProductCodeDesc(word, pageable);
+			result = viewproductstocksupplierRepository.findByProductCodeContainingOrderByProductCodeDesc(word, pageable);
 		}else if(code.equals("2")) {
-			result = viewproductstockRepository.findByProductNameContainingOrderByProductCodeDesc(word, pageable);
+			result = viewproductstocksupplierRepository.findByProductNameContainingOrderByProductCodeDesc(word, pageable);
 		}else if(code.equals("3")) {
-			result = viewproductstockRepository.findBySupplierCodeContainingOrderByProductCodeDesc(word, pageable);
+			result = viewproductstocksupplierRepository.findBySupplierCodeContainingOrderByProductCodeDesc(word, pageable);
 		}else if(code.equals("4")) {
-			result = viewproductstockRepository.findBySupplierNameContainingOrderByProductCodeDesc(word, pageable);
+			result = viewproductstocksupplierRepository.findBySupplierNameContainingOrderByProductCodeDesc(word, pageable);
 		}else if(code.equals("5")) {
-			result = viewproductstockRepository.findByLocationCodeContainingOrderByProductCodeDesc(word, pageable);
+			result = viewproductstocksupplierRepository.findByLocationCodeContainingOrderByProductCodeDesc(word, pageable);
 		}else if(code.equals("6")) {
-			result = viewproductstockRepository.findByClassificationCodeContainingOrderByProductCodeDesc(word, pageable);
+			result = viewproductstocksupplierRepository.findByClassificationCodeContainingOrderByProductCodeDesc(word, pageable);
 		}
 		return result;
 	}
+	
 }

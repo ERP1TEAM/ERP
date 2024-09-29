@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -26,5 +27,8 @@ public interface ViewProductStockSupplierRepository extends JpaRepository<ViewPr
 	
 	Page<ViewProductStockSupplierEntity> findByLocationCodeContainingOrderByProductCodeDesc(String locationCode, Pageable pageable);
 	Page<ViewProductStockSupplierEntity> findByClassificationCodeContainingOrderByProductCodeDesc(String classificationCode, Pageable pageable);
+	
+	
+	Page<ViewProductStockSupplierEntity> findAll(Pageable pageable);
 	
 }

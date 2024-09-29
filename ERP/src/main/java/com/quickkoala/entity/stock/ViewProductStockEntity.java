@@ -8,6 +8,7 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -59,4 +60,6 @@ public class ViewProductStockEntity {
 
 	 	@Column(name = "memo",nullable=true, columnDefinition = "text")
 	    private String memo;
+	 	
+	 
 }
