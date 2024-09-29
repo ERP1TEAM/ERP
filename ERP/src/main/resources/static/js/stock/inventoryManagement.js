@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	var inventorymanagementTotalPages = 1;
     var inventorymanagementStartPage = 0;
     var inventorymanagementEndPage = 0;
-    const inventorymanagementPageSize = 3; // 페이지 번호 그룹 크기 설정
+    const inventorymanagementPageSize = 5; // 페이지 번호 그룹 크기 설정
     
     const getinventorymanagementQueryParam = (param) => {
         const urlParams = new URLSearchParams(window.location.search);
@@ -128,7 +128,16 @@ document.getElementById("inventoryManagement_form").addEventListener("submit", f
 event.preventDefault(); // 기본 폼 제출 방지
 inventorymanagementSearchCode = document.getElementById("inventorymanagementSearchtype").value;
 inventorymanagementSearchWord = document.getElementById("inventorymanagementSearch").value;
-inventorymanagementPaging(1, inventorymanagementSearchCode, inventorymanagementSearchWord); // 검색 후 첫 페이지부터 시작	
+inventorymanagementPaging(1, inventorymanagementSearchCode, inventorymanagementSearchWord);	
 })
+
+document.querySelector("#inventorymanagementresetbtn").addEventListener("click", function() {
+     inventorymanagementSearchCode = '1';
+     inventorymanagementSearchWord = '';
+     document.querySelector("#inventorymanagementSearchtype").value = inventorymanagementSearchCode;
+     document.querySelector("#inventorymanagementSearch").value = inventorymanagementSearchWord;
+     inventorymanagementPaging(1, inventorymanagementSearchCode, inventorymanagementSearchWord);
+    });
+
 
 });
