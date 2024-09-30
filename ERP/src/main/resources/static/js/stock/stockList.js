@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	}
 
 	function stocklistmain(pno, code = '', word = '') {
-		fetch(`/main/stock/sortedbysafety/${pno}?code=${code}&word=${word}`, {
+		fetch(`/main/stock/stocklist/${pno}?code=${code}&word=${word}`, {
 			method: 'GET',
 			headers: {
 				'Content-Type': 'application/json',
