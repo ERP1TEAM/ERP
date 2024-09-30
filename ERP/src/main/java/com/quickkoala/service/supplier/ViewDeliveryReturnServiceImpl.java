@@ -40,7 +40,7 @@ public class ViewDeliveryReturnServiceImpl implements ViewDeliveryReturnService{
 	}
 	
 	@Override
-	public Page<ViewDeliveryReturnEntity> getPaginadtedData(int pno, int size, SearchDto dto) {
+	public Page<ViewDeliveryReturnEntity> getPaginadtedData(int pno, int size, SearchDto dto, String code) {
 		Page<ViewDeliveryReturnEntity> result = null;
 		Pageable pageable = PageRequest.of(pno-1, size);
 		String sDateString = dto.getSDate();
@@ -69,7 +69,7 @@ public class ViewDeliveryReturnServiceImpl implements ViewDeliveryReturnService{
 	    	searchField = dto.getWord();
 	    }
 	    
-		result = viewDeliveryReturnRepository.search(searchField, codeType, sDateTime, eDateTime, pageable);
+		result = viewDeliveryReturnRepository.search(searchField, codeType, code, sDateTime, eDateTime, pageable);
 		return result;
 	}
 }

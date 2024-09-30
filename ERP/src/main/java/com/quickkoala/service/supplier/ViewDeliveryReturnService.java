@@ -8,5 +8,5 @@ import com.quickkoala.entity.supplier.ViewDeliveryReturnEntity;
 public interface ViewDeliveryReturnService {
 	Page<ViewDeliveryReturnEntity> getPaginadtedData(int pno, int size);
 	Page<ViewDeliveryReturnEntity> getPaginadtedData(int pno, int size, String code, String word);
-	Page<ViewDeliveryReturnEntity> getPaginadtedData(int pno, int size, SearchDto dto);
+	Page<ViewDeliveryReturnEntity> getPaginadtedData(int pno, int size, SearchDto dto, String code);
 }

@@ -8,6 +8,6 @@ import com.quickkoala.entity.supplier.ViewDeliveryDetailEntity;
 public interface ViewDeliveryDetailService {
 	Page<ViewDeliveryDetailEntity> getPaginatedData(int pno, int size);
 	Page<ViewDeliveryDetailEntity> getPaginatedData(int pno, int size, String code, String word);
-	Page<ViewDeliveryDetailEntity> getPaginatedData(int pno, int size, SearchDto dto);
+	Page<ViewDeliveryDetailEntity> getPaginatedData(int pno, int size, SearchDto dto, String code);
 	
 }

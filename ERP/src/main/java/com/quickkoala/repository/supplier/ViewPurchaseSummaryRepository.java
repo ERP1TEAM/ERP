@@ -33,6 +33,7 @@ public interface ViewPurchaseSummaryRepository extends JpaRepository<ViewPurchas
 	        "(:searchField IS NULL OR " +
 	        "(:codeType = '발주번호' AND LOWER(CONCAT(v.orderNumber)) LIKE LOWER(CONCAT('%', :searchField, '%'))) OR " + 
 	        "(:codeType = '상품명' AND LOWER(CONCAT(v.productName)) LIKE LOWER(CONCAT('%', :searchField, '%')))) AND " + 
+	        "(:supplierCode IS NULL OR v.supplierCode = :supplierCode) AND " + // supplierCode 조건 추가
 	        "(" +
 	        "(:startDate IS NULL AND :endDate IS NOT NULL AND v.date <= :endDate) OR " +
 	        "(:startDate IS NOT NULL AND :endDate IS NULL AND v.date >= :startDate) OR " +
@@ -46,5 +47,6 @@ public interface ViewPurchaseSummaryRepository extends JpaRepository<ViewPurchas
 	        @Param("codeType") String codeType, 
 	        @Param("startDate") LocalDateTime startDate, 
 	        @Param("endDate") LocalDateTime endDate, 
+	        @Param("supplierCode") String supplierCode, // supplierCode 파라미터 추가
 	        Pageable pageable);
 }

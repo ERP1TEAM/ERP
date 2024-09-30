@@ -19,6 +19,7 @@ public class ViewPurchaseSummaryEntity {
 	@Id
     private String orderNumber;
 
+	private String supplierCode;
     private String productCode;
     private String productName;
     private int quantity;

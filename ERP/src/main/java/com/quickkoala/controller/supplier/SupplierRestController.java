@@ -20,6 +20,9 @@ import com.quickkoala.service.supplier.DeliveryDetailService;
 import com.quickkoala.service.supplier.ViewDeliveryDetailService;
 import com.quickkoala.service.supplier.ViewDeliveryReturnService;
 import com.quickkoala.service.supplier.ViewPurchaseSummaryService;
+import com.quickkoala.utils.GetToken;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("supplier")
@@ -44,25 +47,25 @@ public class SupplierRestController {
 
 	// 발주내역 리스트
 	@GetMapping("purchaseData/{pno}")
-	public ResponseEntity<Page<ViewPurchaseSummaryEntity>> purchaseData(@PathVariable Integer pno, @ModelAttribute SearchDto dto) {
+	public ResponseEntity<Page<ViewPurchaseSummaryEntity>> purchaseData(@PathVariable Integer pno, @ModelAttribute SearchDto dto, HttpServletRequest request) {
 		Page<ViewPurchaseSummaryEntity> result = null;
-		result = viewPurchaseSummaryService.getPaginadtedData(pno, SIZE, dto);
+		result = viewPurchaseSummaryService.getPaginadtedData(pno, SIZE, dto, GetToken.getSupplierCode(request));
 		return ResponseEntity.ok(result);
 	}
 
 	// 납품내역 리스트
 	@GetMapping("deliveryData/{pno}")
-	public ResponseEntity<Page<ViewDeliveryDetailEntity>> deliveryData(@PathVariable Integer pno, @ModelAttribute SearchDto dto) {
+	public ResponseEntity<Page<ViewDeliveryDetailEntity>> deliveryData(@PathVariable Integer pno, @ModelAttribute SearchDto dto, HttpServletRequest request) {
 		Page<ViewDeliveryDetailEntity> result = null;
-		result = viewDeliveryDetailService.getPaginatedData(pno, SIZE, dto);
+		result = viewDeliveryDetailService.getPaginatedData(pno, SIZE, dto, GetToken.getSupplierCode(request));
 		return ResponseEntity.ok(result);
 	}
 
 	// 반품내역 리스트
 	@GetMapping("returnData/{pno}")
-	public ResponseEntity<Page<ViewDeliveryReturnEntity>> returnData(@PathVariable Integer pno, @ModelAttribute SearchDto dto) {
+	public ResponseEntity<Page<ViewDeliveryReturnEntity>> returnData(@PathVariable Integer pno, @ModelAttribute SearchDto dto, HttpServletRequest request) {
 		Page<ViewDeliveryReturnEntity> result = null;
-		result = viewDeliveryReturnService.getPaginadtedData(pno, SIZE, dto);
+		result = viewDeliveryReturnService.getPaginadtedData(pno, SIZE, dto, GetToken.getSupplierCode(request));
 		return ResponseEntity.ok(result);
 	}
 

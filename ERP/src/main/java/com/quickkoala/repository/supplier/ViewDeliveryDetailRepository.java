@@ -27,20 +27,26 @@ public interface ViewDeliveryDetailRepository extends JpaRepository<ViewDelivery
 	Page<ViewDeliveryDetailEntity> findByProductNameContainingOrderByDeliveryCodeDesc(String productName,
 			Pageable pageable);
 	
-	@Query("SELECT v FROM ViewDeliveryDetailEntity v WHERE " + "(:searchField IS NULL OR "
-			+ "(:codeType = '납품번호' AND LOWER(CONCAT(v.deliveryCode)) LIKE LOWER(CONCAT('%', :searchField, '%'))) OR " + // 입고번호
-			"(:codeType = '발주번호' AND LOWER(CONCAT(v.orderNumber)) LIKE LOWER(CONCAT('%', :searchField, '%'))) OR " + // 발주번호
-			"(:codeType = '상품명' AND LOWER(CONCAT(v.productName)) LIKE LOWER(CONCAT('%', :searchField, '%')))) AND " + // 상품명
-			"("
-	        + "(:startDate IS NULL AND :endDate IS NOT NULL AND v.date <= :endDate) OR "
-	        + "(:startDate IS NOT NULL AND :endDate IS NULL AND v.date >= :startDate) OR "
-	        + "(:startDate IS NOT NULL AND :endDate IS NOT NULL AND v.date BETWEEN :startDate AND :endDate) OR "
-	        + "(:startDate IS NULL AND :endDate IS NULL)"
-	        + ") "
-			+ 
-			"ORDER BY v.deliveryCode DESC") // receiveCode를 기준으로 내림차순 정렬
-	Page<ViewDeliveryDetailEntity> search(@Param("searchField") String searchField, // 검색할 값
-			@Param("codeType") String codeType, // 어떤 코드인지 (입고번호, 발주번호 등)
-			@Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate, Pageable pageable);
+	@Query("SELECT v FROM ViewDeliveryDetailEntity v WHERE " + 
+	        "(:searchField IS NULL OR " +
+	        "(:codeType = '납품번호' AND LOWER(CONCAT(v.deliveryCode)) LIKE LOWER(CONCAT('%', :searchField, '%'))) OR " + // 납품번호
+	        "(:codeType = '발주번호' AND LOWER(CONCAT(v.orderNumber)) LIKE LOWER(CONCAT('%', :searchField, '%'))) OR " + // 발주번호
+	        "(:codeType = '상품명' AND LOWER(CONCAT(v.productName)) LIKE LOWER(CONCAT('%', :searchField, '%')))) AND " + // 상품명
+	        "(:supplierCode IS NULL OR v.supplierCode = :supplierCode) AND " + // supplierCode 조건 추가
+	        "(" +
+	        "(:startDate IS NULL AND :endDate IS NOT NULL AND v.date <= :endDate) OR " +
+	        "(:startDate IS NOT NULL AND :endDate IS NULL AND v.date >= :startDate) OR " +
+	        "(:startDate IS NOT NULL AND :endDate IS NOT NULL AND v.date BETWEEN :startDate AND :endDate) OR " +
+	        "(:startDate IS NULL AND :endDate IS NULL)" +
+	        ") " +
+	        "ORDER BY v.deliveryCode DESC") // 납품번호를 기준으로 내림차순 정렬
+	Page<ViewDeliveryDetailEntity> search(
+	        @Param("searchField") String searchField, // 검색할 값
+	        @Param("codeType") String codeType, // 코드 유형 (납품번호, 발주번호 등)
+	        @Param("supplierCode") String supplierCode, // supplierCode 파라미터 추가
+	        @Param("startDate") LocalDateTime startDate, 
+	        @Param("endDate") LocalDateTime endDate, 
+	        Pageable pageable);
+
 
 }

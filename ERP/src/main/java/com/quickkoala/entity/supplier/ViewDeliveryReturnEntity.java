@@ -23,6 +23,9 @@ public class ViewDeliveryReturnEntity {
 
     @Column(name = "order_number", nullable = false, length = 14)
     private String orderNumber;
+    
+    @Column(name = "supplier_code")
+    private String supplierCode;
 
     @Column(name = "product_code", nullable = false, length = 8)
     private String productCode;

@@ -13,6 +13,8 @@ import com.quickkoala.dto.receive.SearchDto;
 import com.quickkoala.entity.supplier.ViewPurchaseSummaryEntity;
 import com.quickkoala.repository.supplier.ViewPurchaseSummaryRepository;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 @Service
 public class ViewPurchaseSummaryServiceImpl implements ViewPurchaseSummaryService{
 
@@ -37,7 +39,7 @@ public class ViewPurchaseSummaryServiceImpl implements ViewPurchaseSummaryServic
 	}
 	
 	@Override
-	public Page<ViewPurchaseSummaryEntity> getPaginadtedData(int pno, int size, SearchDto dto) {
+	public Page<ViewPurchaseSummaryEntity> getPaginadtedData(int pno, int size, SearchDto dto, String code) {
 		Page<ViewPurchaseSummaryEntity> result = null;
 		Pageable pageable = PageRequest.of(pno-1, size);
 		String sDateString = dto.getSDate();
@@ -66,7 +68,7 @@ public class ViewPurchaseSummaryServiceImpl implements ViewPurchaseSummaryServic
 	    	searchField = dto.getWord();
 	    }
 	    
-		result = viewPurchaseSummaryRepository.search(searchField, codeType, sDateTime, eDateTime, pageable);
+		result = viewPurchaseSummaryRepository.search(searchField, codeType, sDateTime, eDateTime, code, pageable);
 		return result;
 	}
 }

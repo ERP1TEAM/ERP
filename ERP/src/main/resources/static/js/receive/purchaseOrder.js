@@ -139,6 +139,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 				data.forEach(function(item) {
 					th = `<tr class="modal-item">
+					        <input type="hidden" value="${item.supplierCode}">
 							<td data-code="${item.productCode}"
 								>${item.productCode}</td>
 							<td data-maf="${item.manufacturer}"
@@ -160,10 +161,10 @@ document.addEventListener("DOMContentLoaded", function() {
 						const maf = pRow.querySelector('[data-maf]').getAttribute('data-maf');
 						const pName = pRow.querySelector('[data-name]').getAttribute('data-name');
 						const uPrice = pRow.querySelector('[data-price]').getAttribute('data-price');
-
+						
 						// 현재 선택된 행의 ID 가져오기
 						const currentRowId = dataIdx;
-						document.getElementById(`product_code_${currentRowId}`).value = pCode;
+						document.getElementById(`product_code_${currentRowId}`).value = pCode; 
 						document.getElementById(`supplier_${currentRowId}`).value = maf;
 						document.getElementById(`product_${currentRowId}`).value = pName;
 						document.getElementById(`unit_price_${currentRowId}`).value = parseFloat(uPrice).toLocaleString("en-US");

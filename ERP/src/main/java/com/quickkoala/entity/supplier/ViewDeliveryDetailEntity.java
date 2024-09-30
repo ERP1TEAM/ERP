@@ -23,6 +23,9 @@ public class ViewDeliveryDetailEntity {
 
     @Column(name = "order_number", length = 14, nullable = false)
     private String orderNumber;
+    
+    @Column(name = "supplier_code")
+    private String supplierCode;
 
     @Column(name = "product_code", length = 8, nullable = false)
     private String productCode;

@@ -22,4 +22,11 @@ public class GetToken {
         String manager = jwtTokenProvider.getName(token);
         return manager;
     }
+    
+    public static String getSupplierCode(HttpServletRequest httpServletRequest) {
+        String token = jwtTokenProvider.resolveToken(httpServletRequest);
+        String code = jwtTokenProvider.getCode(token);
+        return code;
+    }
+   
 }

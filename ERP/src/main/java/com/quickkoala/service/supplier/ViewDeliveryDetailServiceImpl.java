@@ -40,7 +40,7 @@ public class ViewDeliveryDetailServiceImpl implements ViewDeliveryDetailService{
 	}
 	
 	@Override
-	public Page<ViewDeliveryDetailEntity> getPaginatedData(int pno, int size, SearchDto dto) {
+	public Page<ViewDeliveryDetailEntity> getPaginatedData(int pno, int size, SearchDto dto, String code) {
 		Page<ViewDeliveryDetailEntity> result = null;
 		Pageable pageable = PageRequest.of(pno-1, size);
 		String sDateString = dto.getSDate();
@@ -69,7 +69,7 @@ public class ViewDeliveryDetailServiceImpl implements ViewDeliveryDetailService{
 	    	searchField = dto.getWord();
 	    }
 	    
-		result = viewDeliveryDetailRepository.search(searchField, codeType, sDateTime, eDateTime, pageable);
+		result = viewDeliveryDetailRepository.search(searchField, codeType, code, sDateTime, eDateTime, pageable);
 		return result;
 	}
 }
