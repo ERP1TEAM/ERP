@@ -105,14 +105,16 @@
 	<script src="../../assets/js/Lightweight-Chart/jquery.chart.js"></script>
 	<script src="../../assets/js/custom-scripts.js"></script>
 	<script src="../../js/client/salesList.js"></script>
-	<script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
+	<script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+
 	<script>
 	// 주소 찾기
     function findPostcode(postcodeId, addressId) {
         new daum.Postcode({
             oncomplete: function(data) {
                 // 전달된 id를 사용하여 해당 필드에 값을 설정
-                document.getElementById("address").value = data.jibunAddress;
+            	// jibunAddress가 비어있으면 autoJibunAddress를 사용
+                document.getElementById("address").value = data.address;
             }
         }).open();
     }

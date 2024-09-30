@@ -1,45 +1,45 @@
 document.addEventListener("DOMContentLoaded", function() {
-    var totalPages = 1;
-    var startPage = 0;
-    var endPage = 0;
-    const pageSize = 3; // 페이지 번호 그룹 크기 설정
+	var totalPages = 1;
+	var startPage = 0;
+	var endPage = 0;
+	const pageSize = 3; // 페이지 번호 그룹 크기 설정
 
-    const getQueryParam = (param) => {
-        const urlParams = new URLSearchParams(window.location.search);
-        return urlParams.get(param);
-    }
+	const getQueryParam = (param) => {
+		const urlParams = new URLSearchParams(window.location.search);
+		return urlParams.get(param);
+	}
 
-    let p = parseInt(getQueryParam("p")) || 1;
-    let searchCode = getQueryParam("code") || '발주처코드';  // 검색 코드
-    let searchWord = getQueryParam("word") || '';  // 검색어
-    
-    document.getElementById("search_code").value = searchCode;
-    document.getElementById("search_word").value = searchWord;
+	let p = parseInt(getQueryParam("p")) || 1;
+	let searchCode = getQueryParam("code") || '발주처코드';  // 검색 코드
+	let searchWord = getQueryParam("word") || '';  // 검색어
 
-    // 페이징 함수를 전역으로 설정
-    window.paging = function(p, code = searchCode, word = searchWord) {
-        tableData(p, code, word);
-    }
+	document.getElementById("search_code").value = searchCode;
+	document.getElementById("search_word").value = searchWord;
 
-    window.pgNext = function() {
-        tableData(endPage + 1, searchCode, searchWord);
-    }
+	// 페이징 함수를 전역으로 설정
+	window.paging = function(p, code = searchCode, word = searchWord) {
+		tableData(p, code, word);
+	}
 
-    window.pgPrev = function() {
-        tableData(startPage - 1, searchCode, searchWord);
-    }
-    
-    window.toggleActions = function(button) {
-            const actionButtons = button.nextElementSibling;
-            const isVisible = actionButtons.style.display === 'flex';
-            document.querySelectorAll('.action-buttons').forEach(function(btn) {
-                btn.style.display = 'none';
-            });
-            actionButtons.style.display = isVisible ? 'none' : 'flex';
-        }
-    
-    function formatDate(isoString) {
-		
+	window.pgNext = function() {
+		tableData(endPage + 1, searchCode, searchWord);
+	}
+
+	window.pgPrev = function() {
+		tableData(startPage - 1, searchCode, searchWord);
+	}
+
+	window.toggleActions = function(button) {
+		const actionButtons = button.nextElementSibling;
+		const isVisible = actionButtons.style.display === 'flex';
+		document.querySelectorAll('.action-buttons').forEach(function(btn) {
+			btn.style.display = 'none';
+		});
+		actionButtons.style.display = isVisible ? 'none' : 'flex';
+	}
+
+	function formatDate(isoString) {
+
 		const date = new Date(isoString);
 
 		const year = date.getFullYear();
@@ -51,36 +51,36 @@ document.addEventListener("DOMContentLoaded", function() {
 
 		return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 	}
-	
+
 	// 전화번호 포맷팅 함수
-   function formatTel(tel) {
-        if (tel.length === 10) {
-            return tel.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3'); // 000-000-0000
-        } else if (tel.length === 11) {
-            return tel.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3'); // 000-0000-0000
-        } else if (tel.length === 8) {
+	function formatTel(tel) {
+		if (tel.length === 10) {
+			return tel.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3'); // 000-000-0000
+		} else if (tel.length === 11) {
+			return tel.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3'); // 000-0000-0000
+		} else if (tel.length === 8) {
 			return tel.replace(/(\d{4})(\d{4})/, '$1-$2');
 		}
-        return tel; // 기본 그대로 반환 (기타 형식)
-    };
+		return tel; // 기본 그대로 반환 (기타 형식)
+	};
 
 
-    // 테이블 출력
-    const tableData = (pno, code = '', word = '') => {
-        fetch(`./supplierList/${pno}?code=${code}&word=${word}`, {
-            method: 'GET'
-        })
-            .then(response => response.json())
-            .then(data => {
-                const items = data.content;
-                totalPages = data.totalPages;
+	// 테이블 출력
+	const tableData = (pno, code = '', word = '') => {
+		fetch(`./supplierList/${pno}?code=${code}&word=${word}`, {
+			method: 'GET'
+		})
+			.then(response => response.json())
+			.then(data => {
+				const items = data.content;
+				totalPages = data.totalPages;
 
-                let tbody = document.querySelector('#tbody');
-                tbody.innerHTML = '';
-                items.forEach(function(item) {
+				let tbody = document.querySelector('#tbody');
+				tbody.innerHTML = '';
+				items.forEach(function(item) {
 					const rdt = formatDate(item.createdDate);
 					const formattedTel = formatTel(item.tel);
-                    let th = `
+					let th = `
                     <tr class="odd gradeX">
                         <td style="text-align:center;">${item.code}</td>
                         <td>${item.name}</td>
@@ -90,10 +90,10 @@ document.addEventListener("DOMContentLoaded", function() {
                         <td style="text-align:center;">${rdt}</td>
                         <td style="text-align:center;"><button class="modify-btn" data-code="${item.code}">수정</button></td>
                     </tr>`;
-                    tbody.innerHTML += th;
-                })
-                
-                document.querySelectorAll(".modify-btn").forEach(function(button) {
+					tbody.innerHTML += th;
+				})
+
+				document.querySelectorAll(".modify-btn").forEach(function(button) {
 					button.addEventListener("click", function() {
 						document.getElementById("locationoverlay").style.display = "block";
 						document.getElementById("locationinmodal").style.display = "block";
@@ -164,7 +164,7 @@ document.addEventListener("DOMContentLoaded", function() {
 									} else {
 										formData.set("address", address);
 									}
-									formData.set("code",code);
+									formData.set("code", code);
 									formData.set("create_date", null);
 									fetch(`./modifySupplier/${code}`, {
 										method: "PATCH",
@@ -191,82 +191,82 @@ document.addEventListener("DOMContentLoaded", function() {
 				})
 
 				/*<td class="container" style="text-align:center;">
-		                    <button onclick="toggleActions(this)">관리</button>
-		                    <div class="action-buttons" style="margin-left:-37px;">
-		                        <button>수정</button>
-		                        <button>삭제</button>
-		                    </div>
-		                </td> */
-                const paging = document.getElementById("paging");
-                paging.innerHTML = '';
+							<button onclick="toggleActions(this)">관리</button>
+							<div class="action-buttons" style="margin-left:-37px;">
+								<button>수정</button>
+								<button>삭제</button>
+							</div>
+						</td> */
+				const paging = document.getElementById("paging");
+				paging.innerHTML = '';
 
-                // 페이지 그룹의 시작과 끝 계산
-                startPage = Math.floor((pno - 1) / pageSize) * pageSize + 1;
-                endPage = Math.min(startPage + pageSize - 1, totalPages);
+				// 페이지 그룹의 시작과 끝 계산
+				startPage = Math.floor((pno - 1) / pageSize) * pageSize + 1;
+				endPage = Math.min(startPage + pageSize - 1, totalPages);
 
-                // 페이징 HTML 생성
-                let paginationHTML = `<ul class="pagination">`;
+				// 페이징 HTML 생성
+				let paginationHTML = `<ul class="pagination">`;
 
-                // 'Precious' 링크 추가
-                if (startPage > pageSize) {
-                    paginationHTML += `
+				// 'Precious' 링크 추가
+				if (startPage > pageSize) {
+					paginationHTML += `
                         <li class="page-item"><a class="page-link" aria-label="Previous" onclick="pgPrev()">
                             <span aria-hidden="true">&laquo;</span>
                         </a></li>
                     `;
-                }
+				}
 
-                // 페이지 번호 링크 추가
-                for (let i = startPage; i <= endPage; i++) {
-                    const className = pno === i ? 'page-item current-page' : 'page-item';
-                    paginationHTML += `
+				// 페이지 번호 링크 추가
+				for (let i = startPage; i <= endPage; i++) {
+					const className = pno === i ? 'page-item current-page' : 'page-item';
+					paginationHTML += `
                         <li class="${className}"><a class="page-link" onclick="paging(${i}, '${code}', '${word}')">${i}</a></li>
                     `;
-                }
+				}
 
-                // 'Next' 링크 추가
-                if (endPage < totalPages) {
-                    paginationHTML += `
+				// 'Next' 링크 추가
+				if (endPage < totalPages) {
+					paginationHTML += `
                         <li class="page-item"><a class="page-link" aria-label="Next" onclick="pgNext()">
                             <span aria-hidden="true">&raquo;</span>
                         </a></li>
                     `;
-                }
+				}
 
-                paginationHTML += `</ul>`;
+				paginationHTML += `</ul>`;
 
-                // 페이징 HTML을 페이지에 삽입
-                paging.innerHTML = paginationHTML;
+				// 페이징 HTML을 페이지에 삽입
+				paging.innerHTML = paginationHTML;
 
-                // URL 업데이트 (검색 조건도 포함)
-                if(word === ""){
-	                history.replaceState({}, '', location.pathname + `?p=${pno}`);			
-				}else{
+				// URL 업데이트 (검색 조건도 포함)
+				if (word === "") {
+					history.replaceState({}, '', location.pathname + `?p=${pno}`);
+				} else {
 					history.replaceState({}, '', location.pathname + `?p=${pno}&code=${code}&word=${word}`);
 				}
-            })
-            .catch(function(error) {
-                alert(error);
-            });
-    }
+			})
+			.catch(function(error) {
+				alert(error);
+			});
+	}
 
-    // 첫 페이지 로드 시 테이블 데이터 출력
-    tableData(p, searchCode, searchWord);
+	// 첫 페이지 로드 시 테이블 데이터 출력
+	tableData(p, searchCode, searchWord);
 
 	//검색
-    document.getElementById("search_form").addEventListener("submit", function(event) {
-        event.preventDefault(); // 기본 폼 제출 방지
-        searchCode = document.getElementById("search_code").value;
-        searchWord = document.getElementById("search_word").value;
-        if(!searchCode && searchWord){
+	document.getElementById("search_form").addEventListener("submit", function(event) {
+		event.preventDefault(); // 기본 폼 제출 방지
+		searchCode = document.getElementById("search_code").value;
+		searchWord = document.getElementById("search_word").value;
+		if (!searchCode && searchWord) {
 			alert("검색분류를 선택해주세요");
-		}else{
-		    paging(1, searchCode, searchWord); // 검색 후 첫 페이지부터 시작				
+		} else {
+			paging(1, searchCode, searchWord); // 검색 후 첫 페이지부터 시작				
 		}
-    });
-    
-    
-    const supplierFrm = document.getElementById("supplier_frm");
+	});
+
+
+	const supplierFrm = document.getElementById("supplier_frm");
 
 	//로케이션 모달 열기	
 	document.getElementById("locationbtn").addEventListener("click", function() {
@@ -298,73 +298,75 @@ document.addEventListener("DOMContentLoaded", function() {
 		document.getElementById("detail_address").value = '';
 		document.getElementById("h2").innerText = "발주처 등록"; // 타이틀 초기화
 		document.getElementById("btn_div").innerHTML = `<input type="button" value="등록" class="p_button p_button_color2" id="add_btn">`;
+
+		document.querySelector("#add_btn").addEventListener("click", function(event) {
+			event.preventDefault();
+			const formData = new FormData(supplier_frm);
+
+			const name = formData.get("name");
+			const tel = formData.get("tel");
+			const email = formData.get("email");
+			const address = formData.get("address");
+			const detailAddress = formData.get("detail_address");
+
+			if (!name) {
+				alert("발주처명을 입력하세요");
+				return;
+			}
+			if (!tel) {
+				alert("연락처를 입력하세요");
+				return;
+			}
+			if (isNaN(tel)) {
+				alert("연락처는 숫자만 가능합니다.");
+				return;
+			}
+			if (!email) {
+				alert("이메일을 입력하세요");
+				return;
+			}
+			// 이메일 형식 검사
+			const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+			if (!emailPattern.test(email)) {
+				alert("올바른 이메일 형식을 입력하세요");
+				return;
+			}
+			if (!address) {
+				alert("주소를 입력하세요");
+				return;
+			}
+			// detailAddress가 있을 경우에만 추가
+			if (detailAddress) {
+				formData.set("address", `${address} (${detailAddress})`);
+			} else {
+				formData.set("address", address);
+			}
+
+			fetch("./addSupplier", {
+				method: "post",
+				body: formData
+			})
+				.then(response => response.text())
+				.then(data => {
+					if (data === "ok") {
+						alert("발주처가 등록되었습니다.");
+						window.location.reload();
+					} else {
+						alert("발주처 등록중 오류가 발생하였습니다.");
+					}
+				})
+				.catch(error => {
+					console.log(error);
+					alert("발주처 등록중 오류가 발생하였습니다.");
+				})
+
+		})
 	}
 
 	supplierFrm.addEventListener("submit", function(event) {
 		event.preventDefault(); // 기본 submit 동작 방지
 	});
 
-	document.querySelector("#add_btn").addEventListener("click", function(event) {
-		event.preventDefault();
-		const formData = new FormData(supplier_frm);
 
-		const name = formData.get("name");
-		const tel = formData.get("tel");
-		const email = formData.get("email");
-		const address = formData.get("address");
-		const detailAddress = formData.get("detail_address");
 
-		if (!name) {
-			alert("발주처명을 입력하세요");
-			return;
-		}
-		if (!tel) {
-			alert("연락처를 입력하세요");
-			return;
-		}
-		if (isNaN(tel)) {
-			alert("연락처는 숫자만 가능합니다.");
-			return;
-		}
-		if (!email) {
-			alert("이메일을 입력하세요");
-			return;
-		}
-		// 이메일 형식 검사
-		const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-		if (!emailPattern.test(email)) {
-			alert("올바른 이메일 형식을 입력하세요");
-			return;
-		}
-		if (!address) {
-			alert("주소를 입력하세요");
-			return;
-		}
-		// detailAddress가 있을 경우에만 추가
-		if (detailAddress) {
-			formData.set("address", `${address} (${detailAddress})`);
-		} else {
-			formData.set("address", address);
-		}
-
-		fetch("./addSupplier", {
-			method: "post",
-			body: formData
-		})
-			.then(response => response.text())
-			.then(data => {
-				if (data === "ok") {
-					alert("발주처가 등록되었습니다.");
-					window.location.reload();
-				} else {
-					alert("발주처 등록중 오류가 발생하였습니다.");
-				}
-			})
-			.catch(error => {
-				console.log(error);
-				alert("발주처 등록중 오류가 발생하였습니다.");
-			})
-
-	})
-    
 });
