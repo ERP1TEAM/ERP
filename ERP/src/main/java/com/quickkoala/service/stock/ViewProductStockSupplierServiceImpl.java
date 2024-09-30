@@ -42,33 +42,6 @@ public class ViewProductStockSupplierServiceImpl implements ViewProductStockSupp
 	
 	
 	@Override
-	public Page<ViewProductStockSupplierEntity> getSortedByTotalQtyMinusSafetyQty(int pno, int size, String code,
-			String word) {
-		 Pageable pageable = PageRequest.of(pno - 1, size);
-		 Page<ViewProductStockSupplierEntity> pageData;
-
-		 if(code.equals("1")) {
-	            pageData = viewproductstocksupplierRepository.findAll(pageable);
-	        } else if(code.equals("2")) {
-	            pageData = viewproductstocksupplierRepository.findByProductNameContainingOrderByProductCodeDesc(word, pageable);
-	        } else if(code.equals("3")) {
-	            pageData = viewproductstocksupplierRepository.findBySupplierCodeContainingOrderByProductCodeDesc(word, pageable);
-	        } else if(code.equals("4")) {
-	            pageData = viewproductstocksupplierRepository.findBySupplierNameContainingOrderByProductCodeDesc(word, pageable);
-	        } else {
-	            pageData = viewproductstocksupplierRepository.findAll(pageable);
-	        }
-
-	        // 가져온 데이터 리스트를 총재고 - 안전재고 값으로 정렬
-	        List<ViewProductStockSupplierEntity> sortedEntities = pageData.getContent().stream()
-	            .sorted(Comparator.comparingInt(e -> e.getTotalQty() - e.getSafetyQty()))
-	            .collect(Collectors.toList());
-
-	        // 정렬된 데이터를 다시 PageImpl로 변환해서 반환
-	        return new PageImpl<>(sortedEntities, pageable, pageData.getTotalElements());
-	    }
-	
-	@Override
 	public List<ViewProductStockSupplierDto> getAllOrdersByProductCode() {
 		List<ViewProductStockSupplierEntity> lisViewproductstockEntity = viewproductstocksupplierRepository.findAllByOrderByProductCodeDesc();
 		List<ViewProductStockSupplierDto> lisViewproductstockDto = new ArrayList<>();

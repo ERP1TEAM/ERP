@@ -67,11 +67,10 @@ public class StockRestController {
 	@Autowired
 	private ViewProductStockSupplierService viewProductStockSupplierService;
 	
-	@GetMapping("/stock/sortedbysafety/{pno}")
-	public ResponseEntity<Page<ViewProductStockSupplierEntity>> getSortedStockList(@PathVariable int pno, 
-			@RequestParam(defaultValue = "1") String code,@RequestParam(defaultValue = "") String word) {
-        Page<ViewProductStockSupplierEntity> sortedData = viewProductStockSupplierService.getSortedByTotalQtyMinusSafetyQty(pno, SIZE, code, word);
-        return ResponseEntity.ok().body(sortedData);
+	@GetMapping("/stock/stocklist/{pno}")
+	public ResponseEntity<Page<ViewProductStockSupplierEntity>> getPaginatedStockList(@PathVariable int pno) {
+	    Page<ViewProductStockSupplierEntity> paginatedData = viewProductStockSupplierService.getPaginatedData(pno, SIZE);
+	    return ResponseEntity.ok().body(paginatedData);
 	}
 	
 	@GetMapping("/stock/daily_summary")

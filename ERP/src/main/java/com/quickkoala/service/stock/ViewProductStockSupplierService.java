@@ -19,6 +19,5 @@ public interface ViewProductStockSupplierService {
 	Page<ViewProductStockSupplierEntity> getinventoryPaginatedData(int pno, int size, String code, String word);
 	
 	
-	Page<ViewProductStockSupplierEntity> getSortedByTotalQtyMinusSafetyQty(int pno, int size, String code, String word);
 
 }

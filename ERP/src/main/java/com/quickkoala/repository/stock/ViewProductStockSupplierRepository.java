@@ -29,6 +29,4 @@ public interface ViewProductStockSupplierRepository extends JpaRepository<ViewPr
 	Page<ViewProductStockSupplierEntity> findByClassificationCodeContainingOrderByProductCodeDesc(String classificationCode, Pageable pageable);
 	
 	
-	Page<ViewProductStockSupplierEntity> findAll(Pageable pageable);
-	
 }
