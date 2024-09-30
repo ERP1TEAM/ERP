@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', function() {
 								        <td style="text-align:right;">${stocklist.safetyQty}</td>
 								        <td style="text-align:center;"><input type="button" value="상세보기" class="dailyinventorybtn" data-product-code="${stocklist.productCode}"></td>
 								        <td style="text-align:center;"><input type="button" value="설정" class="safetyqtysetting"></td>
-								        <td style="text-align:center; ${statusColor}">${stockStatus}</td>  <!-- 재고 상태 표시, 글씨 색상 적용 -->
+								        <td style="text-align:center;"><a href="../receive/purchaseOrder" style="${statusColor}">${stockStatus}</a></td>  <!-- 재고 상태 표시, 글씨 색상 적용 -->
 								     </tr>`;
 
 					stocklisttbody.innerHTML += stocklistth;
