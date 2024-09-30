@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 	//paging 함수를 전역으로 설정
 	window.paging = function(p, code = searchCode, word = searchWord, sDate = startDate, eDate = endDate) {
-	    tableData(p, code, word, sDate, eDate);
+		tableData(p, code, word, sDate, eDate);
 	}
 
 	window.pgNext = function() {
@@ -69,9 +69,15 @@ document.addEventListener("DOMContentLoaded", function() {
 
 				let tbody = document.querySelector('#tbody');
 				tbody.innerHTML = '';
-				items.forEach(function(item) {
-					const rdt = formatDate(item.receiveDate);
-					let th = `
+				if (items.length === 0) {
+					let th = `<tr>
+								<td colspan="10" style="text-align: center;">등록된 입고 내역이 없습니다.</td>
+								</tr>`;
+					tbody.innerHTML += th;
+				} else {
+					items.forEach(function(item) {
+						const rdt = formatDate(item.receiveDate);
+						let th = `
 				    <tr class="odd gradeX">
 				        <td style="text-align:center;">${item.receiveCode}</td>
 				        <td style="text-align:center;">${item.orderNumber}</td>
@@ -82,8 +88,9 @@ document.addEventListener("DOMContentLoaded", function() {
 				        <td style="text-align:center;">${rdt}</td>
 				        <td style="text-align:center;">${item.manager}</td>
 				    </tr>`;
-					tbody.innerHTML += th;
-				})
+						tbody.innerHTML += th;
+					})
+				}
 
 				const paging = document.getElementById("paging");
 				paging.innerHTML = ''; // 'innerHTML'로 수정
@@ -127,9 +134,9 @@ document.addEventListener("DOMContentLoaded", function() {
 				paging.innerHTML = paginationHTML;
 
 				// URL 업데이트 (검색 조건도 포함)
-				if(eDate === ""){
+				if (eDate === "") {
 					history.replaceState({}, '', location.pathname + `?p=${pno}`);
-				}else if (word === "" && sDate === "") {
+				} else if (word === "" && sDate === "") {
 					history.replaceState({}, '', location.pathname + `?p=${pno}` + `&eDate=${eDate}`);
 				} else if (sDate === "") {
 					history.replaceState({}, '', location.pathname + `?p=${pno}` + `&code=${code}&word=${word}&eDate=${eDate}`);
@@ -153,17 +160,17 @@ document.addEventListener("DOMContentLoaded", function() {
 		endDate = document.getElementById("end_date").value;
 		searchCode = document.getElementById("search_code").value;
 		searchWord = document.getElementById("search_word").value;
-		if(startDate !== "" && endDate === ""){
+		if (startDate !== "" && endDate === "") {
 			endDate = new Date().toISOString().split('T')[0];
 			document.getElementById("end_date").value = endDate;
 			paging(1, searchCode, searchWord, startDate, endDate);
-		}else if (startDate > endDate) {
+		} else if (startDate > endDate) {
 			alert("기간이 잘못 설정되었습니다.");
-		}else{
+		} else {
 			paging(1, searchCode, searchWord, startDate, endDate); // 검색 후 첫 페이지부터 시작						
 		}
 	});
-	
+
 	document.getElementById("reset_btn").addEventListener("click", function() {
 		searchCode = '입고번호';
 		searchWord = '';

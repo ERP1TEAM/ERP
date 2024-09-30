@@ -70,9 +70,15 @@ document.addEventListener("DOMContentLoaded", function() {
 
 				let tbody = document.querySelector('#tbody');
 				tbody.innerHTML = '';
-				items.forEach(function(item) {
-					const rdt = formatDate(item.returnDate);
-					let th = `
+				if (items.length === 0) {
+					let th = `<tr>
+								<td colspan="10" style="text-align: center;">등록된 반품 내역이 없습니다.</td>
+								</tr>`;
+					tbody.innerHTML += th;
+				} else {
+					items.forEach(function(item) {
+						const rdt = formatDate(item.returnDate);
+						let th = `
 				    <tr class="odd gradeX">
 				        <td style="text-align:center;">${item.returnNumber}</td>
 				        <td style="text-align:center;">${item.orderNumber}</td>
@@ -85,8 +91,9 @@ document.addEventListener("DOMContentLoaded", function() {
 				        <td>${item.returnMemo}</td>
 				        <td style="text-align:center;">${item.returnManager}</td>
 				    </tr>`;
-					tbody.innerHTML += th;
-				})
+						tbody.innerHTML += th;
+					})
+				}
 
 				const paging = document.getElementById("paging");
 				paging.innerHTML = ''; // 'innerHTML'로 수정
@@ -128,9 +135,9 @@ document.addEventListener("DOMContentLoaded", function() {
 
 				// 페이징 HTML을 페이지에 삽입
 				paging.innerHTML = paginationHTML;
-				if(eDate === ""){
+				if (eDate === "") {
 					history.replaceState({}, '', location.pathname + `?p=${pno}`);
-				}else if (word === "" && sDate === "") {
+				} else if (word === "" && sDate === "") {
 					history.replaceState({}, '', location.pathname + `?p=${pno}` + `&eDate=${eDate}`);
 				} else if (sDate === "") {
 					history.replaceState({}, '', location.pathname + `?p=${pno}` + `&code=${code}&word=${word}&eDate=${eDate}`);

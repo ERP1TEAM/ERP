@@ -15,13 +15,13 @@ document.addEventListener("DOMContentLoaded", function() {
 	}
 	let p = parseInt(getQueryParam("p")) || 1;
 	searchCode = getQueryParam("code") || '납품번호';  // 검색 코드
-    searchWord = getQueryParam("word") || '';  // 검색어
-    startDate = getQueryParam("sDate") || '';
+	searchWord = getQueryParam("word") || '';  // 검색어
+	startDate = getQueryParam("sDate") || '';
 	endDate = getQueryParam("eDate") || new Date().toISOString().split('T')[0];
-    
-    document.getElementById("search_code").value = searchCode;
-    document.getElementById("search_word").value = searchWord;
-    document.getElementById("start_date").value = startDate;
+
+	document.getElementById("search_code").value = searchCode;
+	document.getElementById("search_word").value = searchWord;
+	document.getElementById("start_date").value = startDate;
 	document.getElementById("end_date").value = endDate;
 
 	//paging 함수를 전역으로 설정
@@ -36,9 +36,9 @@ document.addEventListener("DOMContentLoaded", function() {
 	window.pgPrev = function() {
 		tableData(startPage - 1, searchCode, searchWord, startDate, endDate);
 	}
-	
+
 	function formatDate(isoString) {
-		
+
 		const date = new Date(isoString);
 
 		const year = date.getFullYear();
@@ -69,9 +69,15 @@ document.addEventListener("DOMContentLoaded", function() {
 
 				let tbody = document.querySelector('#tbody');
 				tbody.innerHTML = '';
-				items.forEach(function(item) {
-					const rdt = formatDate(item.returnDate);
-					let th = `
+				if (items.length === 0) {
+					let th = `<tr>
+								<td colspan="10" style="text-align: center;">등록된 반품 내역이 없습니다.</td>
+								</tr>`;
+					tbody.innerHTML += th;
+				} else {
+					items.forEach(function(item) {
+						const rdt = formatDate(item.returnDate);
+						let th = `
 				    <tr class="odd gradeX">
 				        <td style="text-align:center;">${item.deliveryCode}</td>
 				        <td style="text-align:center;">${item.orderNumber}</td>
@@ -83,21 +89,22 @@ document.addEventListener("DOMContentLoaded", function() {
 				        <td>${item.returnMemo}</td>
 				        <td style="text-align:center;">${rdt}</td>
 				    </tr>`;
-					tbody.innerHTML += th;
-				})
+						tbody.innerHTML += th;
+					})
+				}
 
 				const paging = document.getElementById("paging");
 				paging.innerHTML = ''; // 'innerHTML'로 수정
-				
+
 				// 페이지 그룹의 시작과 끝 계산
 				startPage = Math.floor((pno - 1) / pageSize) * pageSize + 1;
 				endPage = Math.min(startPage + pageSize - 1, totalPages);
 
 				// 페이징 HTML 생성
 				let paginationHTML = `<ul class="pagination">`;
-				
+
 				// 'Precious' 링크 추가
-				if(startPage > pageSize){
+				if (startPage > pageSize) {
 					paginationHTML += `
 					        <li class="page-item"><a class="page-link" aria-label="Previous" onclick="pgPrev()">
 					            <span aria-hidden="true">&laquo;</span>
@@ -114,21 +121,21 @@ document.addEventListener("DOMContentLoaded", function() {
 				}
 
 				// 'Next' 링크 추가
-				if(endPage < totalPages){
+				if (endPage < totalPages) {
 					paginationHTML += `
 					        <li class="page-item"><a class="page-link" aria-label="Next" onclick="pgNext()">
 					            <span aria-hidden="true">&raquo;</span>
 					        </a></li>
 					`;
 				}
-				
+
 				paginationHTML += `</ul>`;
 
 				// 페이징 HTML을 페이지에 삽입
 				paging.innerHTML = paginationHTML;
-				if(eDate === ""){
+				if (eDate === "") {
 					history.replaceState({}, '', location.pathname + `?p=${pno}`);
-				}else if (word === "" && sDate === "") {
+				} else if (word === "" && sDate === "") {
 					history.replaceState({}, '', location.pathname + `?p=${pno}` + `&eDate=${eDate}`);
 				} else if (sDate === "") {
 					history.replaceState({}, '', location.pathname + `?p=${pno}` + `&code=${code}&word=${word}&eDate=${eDate}`);

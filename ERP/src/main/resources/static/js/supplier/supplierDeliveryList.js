@@ -69,9 +69,15 @@ document.addEventListener("DOMContentLoaded", function() {
 
 				let tbody = document.querySelector('#tbody');
 				tbody.innerHTML = '';
-				items.forEach(function(item) {
-					const rdt = formatDate(item.date);
-					let th = `
+				if (items.length === 0) {
+					let th = `<tr>
+								<td colspan="10" style="text-align: center;">등록된 납품 내역이 없습니다.</td>
+								</tr>`;
+					tbody.innerHTML += th;
+				} else {
+					items.forEach(function(item) {
+						const rdt = formatDate(item.date);
+						let th = `
 				    <tr class="odd gradeX">
 				        <td style="text-align:center;">${item.deliveryCode}</td>
 				        <td style="text-align:center;">${item.orderNumber}</td>
@@ -80,8 +86,9 @@ document.addEventListener("DOMContentLoaded", function() {
 				        <td style="text-align:right;">${item.quantity}</td>
 				        <td style="text-align:center;">${rdt}</td>
 				    </tr>`;
-					tbody.innerHTML += th;
-				})
+						tbody.innerHTML += th;
+					})
+				}
 
 				const paging = document.getElementById("paging");
 				paging.innerHTML = ''; // 'innerHTML'로 수정
