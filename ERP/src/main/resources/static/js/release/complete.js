@@ -146,6 +146,7 @@ window.returnProduct = function(rCode,lCode,qty) {
 			})
 			.then(function(result){
 				if(result="OK"){
+					window.location.reload();
 					alert("반품 처리가 완료되었습니다");
 					
 				}else{
