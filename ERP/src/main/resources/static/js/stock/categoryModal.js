@@ -12,7 +12,10 @@ const getCategoryQueryParam = (param) => {
 let categoryP = parseInt(getCategoryQueryParam("p")) || 1;
 let categorySearchCode = getCategoryQueryParam("code") || '1';  // 검색 코드
 let categorySearchWord = getCategoryQueryParam("word") || '';  // 검색어
-let currentPage = categoryP;
+let currentPage = 1;
+function openCategoryModal() {
+        categorymainmodal(currentPage);
+    }
 document.getElementById("categorySearchtype").value = categorySearchCode;
 document.getElementById("categorySearch").value = categorySearchWord;
 
@@ -118,11 +121,13 @@ function categorymainmodal(pno, code = '', word = '') {
                 categoryPaging.innerHTML = paginationHTML;
 				
                 // URL 업데이트 (검색 조건도 포함)
-                if(word === ""){
-	                history.replaceState({}, '', location.pathname + `?p=${pno}`);			
-				}else{
-					history.replaceState({}, '', location.pathname + `?p=${pno}&code=${code}&word=${word}`);
-				}
+                if (word == "") {
+                history.replaceState({}, '', location.pathname + `?p=${pno}`);
+            	} else {
+                history.replaceState({}, '', location.pathname + `?p=${pno}&code=${code}&word=${word}`);
+           		}
+           		currentPage = pno; 
+           		 
         document.getElementById('categoryoverlay').style.display = 'block';
         document.getElementById('categorylistmodal').style.display = 'block';
         document.body.style.overflow = 'hidden';
@@ -137,52 +142,88 @@ function categorymainmodal(pno, code = '', word = '') {
         alert('카테고리 모달을 불러오는 데 오류가 발생했습니다.');
     });
 }
- document.querySelector('#categorytbody').addEventListener('click', function(event) {
-        const clickedRow = event.target.closest('tr');
-		
-		  if (event.target.tagName.toLowerCase() === 'input' && event.target.type === 'checkbox') {
-        return;
-    }
-		
-         if (clickedRow && clickedRow.hasAttribute('data-code')) {
-        const selectedCode = clickedRow.getAttribute('data-code');
-        const selectedMainName = clickedRow.getAttribute('data-mainName');
-        const selectedSubName = clickedRow.getAttribute('data-subName');
-
-		 setCategoryCode(selectedCode, selectedMainName, selectedSubName);
-            document.getElementById("inventorymaincategory").value = selectedMainName;
-            document.getElementById("inventorysubcategory").value = selectedSubName;
-
-            document.getElementById('categorylistmodal').style.display = "none";
-            document.getElementById("categoryoverlay").style.display = "none";
-            document.body.style.overflow = 'auto';
-        }
-    });
-function setCategoryCode(code, mainName, subName) {
-    document.getElementById('inventorymaincategory').value = mainName;
-    document.getElementById('inventorysubcategory').value = subName;
-
-    document.getElementById('inventorycategorycode').value = code;
+function inventoryInPage() {
+       return document.getElementById('inventoryInPage') != null;
 }
-//검색
-document.getElementById("category_form").addEventListener("submit", function(event) {
-event.preventDefault(); // 기본 폼 제출 방지
-categorySearchCode = document.getElementById("categorySearchtype").value;
-categorySearchWord = document.getElementById("categorySearch").value;
-categoryPaging(1, categorySearchCode, categorySearchWord); // 검색 후 첫 페이지부터 시작				
-    });
-document.getElementById("categorySearchbtn").addEventListener("click", function() {
-        categorySearchCode = document.getElementById("categorySearchtype").value;
-        categorySearchWord = document.getElementById("categorySearch").value;
-        categoryPaging(1, categorySearchCode, categorySearchWord);
-    });
-document.querySelector("#categoryresetbtn").addEventListener("click", function() {
-    categorySearchCode='1';
-    categorySearchWord='';
-    document.querySelector("#categorySearchtype").value = categorySearchCode;
-    document.querySelector("#categorySearch").value = categorySearchWord;
-    categoryPaging(1, categorySearchCode,categorySearchWord);
-});
+function inventoryManagementPage() {
+       return document.getElementById('inventoryManagementPage') !== null;
+}
+const categoryTbody = document.querySelector('#categorytbody');       
+ if (categoryTbody) {
+            categoryTbody.addEventListener('click', function(event) {
+                const clickedRow = event.target.closest('tr');
+
+                if (event.target.tagName.toLowerCase() == 'input' && event.target.type == 'checkbox') {
+                    return;
+                }
+
+                if (clickedRow && clickedRow.hasAttribute('data-code')) {
+                    const selectedCode = clickedRow.getAttribute('data-code');
+                    const selectedMainName = clickedRow.getAttribute('data-mainName');
+                    const selectedSubName = clickedRow.getAttribute('data-subName');
+
+                    if (inventoryInPage()) {
+                        setCategoryCodepage1(selectedCode, selectedMainName, selectedSubName);
+                    } else if (inventoryManagementPage()) {
+                        setCategoryCodepage2(selectedCode, selectedMainName, selectedSubName);
+                    }
+
+                    document.getElementById('categorylistmodal').style.display = "none";
+                    document.getElementById("categoryoverlay").style.display = "none";
+                    document.body.style.overflow = 'auto';
+                }
+            });
+        }
+//inventoryIn
+        function setCategoryCodepage1(code, mainName, subName) {
+            const mainCategoryInput = document.getElementById('inventorymaincategory');
+            const subCategoryInput = document.getElementById('inventorysubcategory');
+            const categoryCodeInput = document.getElementById('inventorycategorycode');
+            if (mainCategoryInput && subCategoryInput && categoryCodeInput) {
+                mainCategoryInput.value = mainName;
+                subCategoryInput.value = subName;
+                categoryCodeInput.value = code;
+            }
+        }
+        function setCategoryCodepage2(code, mainName, subName) {
+            const mainCategoryInput = document.querySelector('#inventorymodifymaincategory');
+            const subCategoryInput = document.querySelector('#inventorymodifysubcategory');
+            const categoryCodeInput = document.querySelector('#inventorymodifycategorycode');
+            if (mainCategoryInput && subCategoryInput && categoryCodeInput) {
+                mainCategoryInput.value = mainName;
+                subCategoryInput.value = subName;
+                categoryCodeInput.value = code;
+            }
+        }
+// 검색
+const categoryForm = document.getElementById("category_form");
+if (categoryForm) {
+	   categoryForm.addEventListener("submit", function(event) {
+	   event.preventDefault(); // 기본 폼 제출 방지
+	   categorySearchCode = document.getElementById("categorySearchtype").value;
+	   categorySearchWord = document.getElementById("categorySearch").value;
+	   categoryPaging(1, categorySearchCode, categorySearchWord); // 검색 후 첫 페이지부터 시작
+	   });
+}
+const categorySearchBtn = document.getElementById("categorySearchbtn");
+        if (categorySearchBtn) {
+            categorySearchBtn.addEventListener("click", function() {
+                categorySearchCode = document.getElementById("categorySearchtype").value;
+                categorySearchWord = document.getElementById("categorySearch").value;
+                categoryPaging(1, categorySearchCode, categorySearchWord);
+            });
+        }
+
+const categoryResetBtn = document.querySelector("#categoryresetbtn");
+        if (categoryResetBtn) {
+            categoryResetBtn.addEventListener("click", function() {
+                categorySearchCode = '1';
+                categorySearchWord = '';
+                document.querySelector("#categorySearchtype").value = categorySearchCode;
+                document.querySelector("#categorySearch").value = categorySearchWord;
+                categoryPaging(1, categorySearchCode, categorySearchWord);
+            });
+ }
 //카테고리 코드 자동 생성
 const categorymainCode = document.getElementById('categorymainCode');
 const categorysubCode = document.getElementById('categorysubCode');
@@ -201,10 +242,11 @@ categoryCode.value = autocategorycodeval;
 categoryCode.value = '';
 }
 }
-// 대메뉴 코드, 소메뉴 코드에 변화가 있을 때 카테고리 코드를 자동 업데이트
-categorymainCode.addEventListener('input', updateCategoryCode);
-categorysubCode.addEventListener('input', updateCategoryCode);
-
+ if (categorymainCode && categorysubCode) {
+    // 대메뉴 코드, 소메뉴 코드에 변화가 있을 때 카테고리 코드를 자동 업데이트
+     categorymainCode.addEventListener('input', updateCategoryCode);
+     categorysubCode.addEventListener('input', updateCategoryCode);
+}
 //카테고리 등록
 document.getElementById('categoryregister').addEventListener('click', function() {
         
@@ -453,7 +495,7 @@ document.getElementById('categoryin').addEventListener('click', function() {
 //카테고리 모달 열기	
 document.querySelectorAll(".categorybtn").forEach(function(button) {
 	button.addEventListener("click", function() {
-    categorymainmodal(categoryP, categorySearchCode, categorySearchWord);
+		 openCategoryModal();
 	});
 });
 //카테고리 X버튼으로 모달 닫기

@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const classificationCode = document.getElementById('inventorycategorycode').value;
         const useFlag = document.querySelector('input[name="inventoryuseflag"]:checked').value;
         const productprice = document.getElementById('inventoryprice').value;
-        const storageLocation = document.getElementById('inventoryStorageLocation').value;
+        const storageLocation = document.getElementById('inventoryStorageLocation').value || null;
         
         if (!productname || !supplierCode || !classificationCode|| !productprice) {
             alert("모든 값을 채워주세요.");
@@ -50,6 +50,8 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .then(data => {
             alert("상품이 등록 되었습니다.");
+    		console.log(inventoryData);
+    		console.log(data);
     		document.getElementById('inventoryname').value = '';
     		document.getElementById('inventoryprice').value = '';
     		document.getElementById('inventorySuppliercodeoption').value = '';

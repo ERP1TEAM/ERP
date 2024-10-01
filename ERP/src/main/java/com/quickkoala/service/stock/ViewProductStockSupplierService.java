@@ -11,6 +11,7 @@ public interface ViewProductStockSupplierService {
 
 	List<ViewProductStockSupplierDto> getAllOrdersByProductCode();
 	ViewProductStockSupplierDto converToViewProductStockDto(ViewProductStockSupplierEntity viewProductStockEntity);
+	 ViewProductStockSupplierDto getProductStockDtoByCode(String productCode);
 	
 	Page<ViewProductStockSupplierEntity> getPaginatedData(int pno, int size);
 	
@@ -18,6 +19,6 @@ public interface ViewProductStockSupplierService {
 	
 	Page<ViewProductStockSupplierEntity> getinventoryPaginatedData(int pno, int size, String code, String word);
 	
-	
+	ViewProductStockSupplierEntity findByProductCode(String productCode);
 
 }
