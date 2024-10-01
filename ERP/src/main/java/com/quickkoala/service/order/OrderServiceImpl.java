@@ -51,6 +51,9 @@ public class OrderServiceImpl implements OrderService{
 		if(status=="취소") {
 			OrderCancelEntity entity = new OrderCancelEntity();
 			 if(optional.isPresent()) {
+				 
+				 optional.get().setStatus(OrderStatus.취소);
+				 orderRepository.save(optional.get());
 				 entity.setDt(LocalDateTime.now());
 				 entity.setManager(manager);
 				 entity.setMemo(null);

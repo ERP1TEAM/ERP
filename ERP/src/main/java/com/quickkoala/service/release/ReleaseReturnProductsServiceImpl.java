@@ -21,7 +21,6 @@ public class ReleaseReturnProductsServiceImpl implements ReleaseReturnProductsSe
 
 	@Override
 	public String saveStatus(String relNum, String lotNum, int qty,String status) {
-		System.out.println(status);
 		if (relNum == null || lotNum == null || status == null) {
 			System.out.println(1);
 	        return "NO";
