@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.quickkoala.dto.stock.CategoryDto;
 import com.quickkoala.dto.stock.ProductDto;
+import com.quickkoala.dto.stock.ViewProductStockSupplierDto;
 import com.quickkoala.entity.client.SupplierEntity;
 import com.quickkoala.entity.stock.CategoryEntity;
 import com.quickkoala.entity.stock.ProductEntity;
@@ -186,7 +187,7 @@ public class StockRestController {
 	}
 	
 	@GetMapping("/stock/inventorymanagement/{pno}")
-	public Map<String, Object> inventorymanagementLsit(@PathVariable Integer pno, @RequestParam String code,
+	public Map<String, Object> inventorymanagementList(@PathVariable Integer pno, @RequestParam String code,
 			@RequestParam String word) {
 		Map<String, Object> result = new HashMap<>();
 		Page<ViewProductStockSupplierEntity> inventoryData = viewProductStockService.getPaginatedData(pno, SIZE);
@@ -203,6 +204,24 @@ public class StockRestController {
 		return result;
 		
 	}
+	
+	 @GetMapping("/stock/inventorymodify/{productCode}")
+	 public ResponseEntity<Map<String, Object>> getInventoryAndCategories(@PathVariable String productCode) {
+	        Map<String, Object> result = new HashMap<>();
+	        
+	        // 제품 정보를 DTO로 변환하여 가져옴
+	        ViewProductStockSupplierDto inventoryData = viewProductStockSupplierService.getProductStockDtoByCode(productCode);
+
+	        // 카테고리 정보를 가져옴
+	        List<CategoryDto> categories = categoryService.getAllOrdersByCode();
+
+	        // 두 데이터를 Map에 넣음
+	        result.put("inventoryData", inventoryData);
+	        result.put("categories", categories);
+
+	        // 성공적으로 데이터를 반환
+	        return ResponseEntity.ok(result);
+	    }
 	
 	
 	

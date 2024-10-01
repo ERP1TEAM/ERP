@@ -412,7 +412,6 @@ function warehousemainmodal(){
 		});
         }
 });
-
 //모달닫기
 document.querySelectorAll('.closemodal').forEach(function(warehouseclosebtn) {
     warehouseclosebtn.addEventListener('click',function(){

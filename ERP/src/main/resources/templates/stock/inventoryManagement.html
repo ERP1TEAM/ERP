@@ -71,10 +71,10 @@
 		                                <th class="center" style="width: 10%;">품목명</th>
 		                                <th class="center" style="width: 6%;">제조사코드</th>
 		                                <th class="center" style="width: 6%;">제조사명</th>
-		                                <th class="center" style="width: 6%;">로케이션 코드</th>
-		                                <th class="center" style="width: 6%;">카테고리 코드</th>
-		                                <th class="center" style="width: 8%;">대메뉴명(대메뉴코드)</th>
-		                                <th class="center" style="width: 8%;">소메뉴명(소메뉴코드)</th>
+		                                <th class="center" style="width: 6%;">로케이션코드</th>
+		                                <th class="center" style="width: 6%;">카테고리코드</th>
+		                                <th class="center" style="width: 8%;">대메뉴명(코드)</th>
+		                                <th class="center" style="width: 8%;">소메뉴명(코드)</th>
 		                                <th class="center" style="width: 4%;">단가</th>
 		                                <th class="center" style="width: 5%;">사용유/무</th>
 		                                <th class="center" style="width: 1%;">관리</th>
@@ -97,7 +97,79 @@
 	   
             </div>
             </div>
-               
+            
+<!-- 모달 -->
+<div id="inventoryManagementoverlay" class="modal-overlay" style="display: none;"></div>
+<div id="inventoryManagementmodal" class="modal modalwidth" style="display:none;">
+  	<div id="inventoryManagementPage"></div>
+  	<div>
+       <span class="close" id="inventoryManagementclosemodal">&times;</span>
+    </div>
+  <div class="stockmodal-scroll">
+    <div id="inventoryModalContent">
+    	<div class="product_insert row modalmarginleft"><br>
+                <div class="card-action">
+    				<h2>품목 수정</h2><br>
+    			</div>
+		    <ul>
+		        <li>품목코드</li>
+		        <li>
+		            <input type="text" class="product_input3  black_font" id="inventorymodifycode" readonly="readonly">
+		        </li>
+		    </ul>
+		    <ul>
+		        <li>품목명</li>
+		        <li>
+		            <input type="text" class="product_input3" maxlength="200" id="inventorymodifyname"> <span class="help_text">※ 품목명은 최대 200자까지만 적용할 수 있습니다.</span>
+		        </li>
+		    </ul>
+		    <ul>
+		        <li>제조사명</li>
+		        <li>
+		        <input type="text" class="product_input3 black_font" readonly="readonly" id="inventorysuppliermodifyname">
+		        </li>
+		    </ul>
+		    <ul>
+		        <li>대메뉴</li>
+		        <li>
+		            <input type="text" id="inventorymodifymaincategory" class="product_input3 black_font" readonly="readonly">
+		            <input type="hidden" id="inventorymodifycategorycode">
+		            <input type="button" value="+" title="+" class="product_btn2 categorybtn">
+		        </li>
+		    </ul>
+		    
+		    <div th:insert="~{stock/categoryModal :: categorylist}"></div>
+		    
+		    <ul>
+		        <li>소메뉴</li>
+		        <li>
+		            <input type="text" id="inventorymodifysubcategory" class= "product_input3 black_font" readonly="readonly">
+		        </li>
+		    </ul>
+		    <ul>
+		        <li>단가</li>
+		        <li>
+		            <input type="text" class="product_input3" id="inventorymodifyprice" maxlength="10"> <span class="help_text">※ , 없이 숫자만 입력하세요</span>
+		        </li>
+		    </ul>
+		    <ul>
+		        <li>사용 유/무</li>
+		        <li>
+		            <label><input type="radio" name="inventorymodifyuseflag" class="rdo" value="Y" checked> 사용</label>
+		            <label><input type="radio" name="inventorymodifyuseflag" class="rdo" value="N"> 미사용</label>
+		        </li>
+		    </ul>
+		</div>
+		<div class="subpage_view4" style="text-align:center; margin-bottom: 100px; padding-bottom:20px;">
+		    <input type="button" value="수정"  class="p_button p_button_color2" style="margin-right: 5px;" id="inventorymodifysave">
+		    <input type="button" value="취소"  class="p_button p_button_color1" id="inventorymodifycancle">
+		    <input type="button" value="데이터 삭제"  class="p_button p_button_color1" id="inventorymodifydelbtn">
+		</div>
+    
+    	</div>
+    </div>
+  </div>
+
     <script src="../../assets/js/jquery-1.10.2.js"></script>
     <script src="../../assets/js/bootstrap.min.js"></script>
 	<script src="../../assets/materialize/js/materialize.min.js"></script>
@@ -109,5 +181,6 @@
 	<script src="../../assets/js/Lightweight-Chart/jquery.chart.js"></script>
     <script src="../../assets/js/custom-scripts.js"></script>
     <script th:src="@{/js/stock/inventoryManagement.js}"></script>
+    <script th:src="@{/js/stock/categoryModal.js}"></script>
 </body>
 </html>

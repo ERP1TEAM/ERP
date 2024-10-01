@@ -40,6 +40,24 @@ public class ViewProductStockSupplierServiceImpl implements ViewProductStockSupp
 		return maptoViewProductStockDto;
 	}
 	
+	@Override
+	public ViewProductStockSupplierEntity findByProductCode(String productCode) {
+		 ViewProductStockSupplierEntity productEntity = viewproductstocksupplierRepository.findByProductCode(productCode);
+	        if (productEntity != null) {
+	            return viewproductstocksupplierRepository.findByProductCode(productCode);
+	        }
+	        return null; 
+	    }
+	
+	@Override
+	public ViewProductStockSupplierDto getProductStockDtoByCode(String productCode) {
+		ViewProductStockSupplierEntity productEntity = findByProductCode(productCode);
+        if (productEntity != null) {
+            return converToViewProductStockDto(productEntity);  // Entity -> DTO 변환
+        }
+        return null;
+	}
+	
 	
 	@Override
 	public List<ViewProductStockSupplierDto> getAllOrdersByProductCode() {

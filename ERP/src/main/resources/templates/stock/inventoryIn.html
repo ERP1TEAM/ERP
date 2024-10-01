@@ -25,6 +25,7 @@
 </head>
 <body>
     <div id="wrapper"> 
+     <div id="inventoryInPage"></div>
         <nav th:replace="~{main/header :: header}"></nav>
         
         <div th:replace="~{main/dropdown :: dropdown}"></div>
@@ -133,7 +134,7 @@
 	<script src="../../assets/js/Lightweight-Chart/jquery.chart.js"></script>
     <script src="../../assets/js/custom-scripts.js"></script>
     <script th:src="@{/js/stock/inventoryIn.js}"></script>
-    <script th:src="@{/js/stock/categoryModal.js}"></script>
     <script th:src="@{/js/stock/inventorySupplierModal.js}"></script>
+    <script th:src="@{/js/stock/categoryModal.js}"></script>
 </body>
 </html>
