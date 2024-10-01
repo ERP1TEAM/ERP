@@ -62,7 +62,7 @@ public class OrderServiceImpl implements OrderService{
 				 if(saved!=null) {
 					 result="OK";
 				 }
-				 orderRepository.delete(optional.get());
+				 //orderRepository.delete(optional.get());
 			 }
 		}else if(status=="승인") {
 			 if(optional.isPresent()) {

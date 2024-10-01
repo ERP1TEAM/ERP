@@ -134,10 +134,12 @@ window.returnProduct = function(rCode,lCode,qty) {
 				if(result="OK"){
 					alert("반품 처리가 완료되었습니다");
 					
+				}else{
+					alert("오류 발생으로 상태가 변경되지 않았습니다.");
 				}
 				
 			}).catch(function(error){
-				alert('오류 발생으로 반품 처리 하지 못했습니다.');
+				alert('오류 발생으로 상태가 변경되지 않았습니다.');
 			});	
 };
  document.getElementById('frm').addEventListener('submit', function(event) {

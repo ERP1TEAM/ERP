@@ -117,7 +117,7 @@ function expand_post(thisElement,onum){
 						let li7 = document.createElement("li");
 						let btn = document.createElement("input");
 						btn.type="button";
-						btn.value="입고신청";
+						btn.value="발주요청";
 						btn.addEventListener("click",function(e){
 							e.stopPropagation();
 							if(modal_opened){

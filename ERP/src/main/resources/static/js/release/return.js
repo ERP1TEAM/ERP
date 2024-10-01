@@ -39,7 +39,6 @@ function paging(_page,_select,_param){
                 html += `
                     <tr class='odd gradeX'>
                         <td>${product.relNumber}</td>
-                        <td>${product.salesName}</td>
                         <td>${product.productName}(${product.productCode})</td>
                         <td>${product.supplierName}</td>
                         <td>${product.lotNumber}</td>

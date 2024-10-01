@@ -70,7 +70,6 @@ public class OrderReleaseServiceImpl implements OrderReleaseService{
 		LocalDateTime date = LocalDateTime.now();
 		if(optional.isPresent()) {
 			if(status=="출고취소") {
-				orderReleaseRepository.deleteByNumber(id);
 				ReleaseCancelEntity releaseCancelEntity = new ReleaseCancelEntity();
 				releaseCancelEntity.setDt(date);
 				releaseCancelEntity.setManager(manager);
@@ -80,13 +79,13 @@ public class OrderReleaseServiceImpl implements OrderReleaseService{
 				releaseCancelEntity.setWho(ReleaseCancelWho.기타);
 				releaseCancelEntity.setOrderNumber(optional.get().getOrderNumber());
 				releaseCancelEntity.setSalesCode(optional.get().getSalesCode());
+				orderReleaseRepository.updateStatus(id,OrderReleaseEntity.ReleaseStatus.출고취소);
 				ReleaseCancelEntity saved = releaseCancelRepository.save(releaseCancelEntity);
 				if(saved!=null) {
 					result=1;
 				}
 			}else if(status=="출고완료") {
 				try {
-				orderReleaseRepository.deleteByNumber(id);
 				ReleaseCompleteEntity releaseCompleteEntity = new ReleaseCompleteEntity();
 				releaseCompleteEntity.setDt(date);
 				releaseCompleteEntity.setManager(manager);
@@ -94,6 +93,7 @@ public class OrderReleaseServiceImpl implements OrderReleaseService{
 				releaseCompleteEntity.setOrderNumber(optional.get().getOrderNumber());
 				releaseCompleteEntity.setSalesCode(optional.get().getSalesCode());
 				releaseCompleteEntity.setRelNumber(optional.get().getNumber());
+				orderReleaseRepository.updateStatus(id,OrderReleaseEntity.ReleaseStatus.출고완료);
 				ReleaseCompleteEntity saved = releaseCompleteRepository.save(releaseCompleteEntity);
 				if(saved!=null) {
 					result=1;
@@ -119,7 +119,7 @@ public class OrderReleaseServiceImpl implements OrderReleaseService{
 		orderReleaseEntity.setNumber(newReleaseNumber);
 		orderReleaseEntity.setStatus(ReleaseStatus.출고준비);
 		 List<ClientsOrderProductsEntity> orderedList = clientsOrderProductsRepository.findByClientsOrdersOrderId(orderReleaseEntity.getOrderId());
-		 List<ReleaseProductsEntity> releasedList = new ArrayList<ReleaseProductsEntity>();
+		 List<ReleaseProductsEntity> releaseProducts = new ArrayList<ReleaseProductsEntity>();
 		 ReleaseProductsEntity releaseProduct = null;
 		 for(ClientsOrderProductsEntity released : orderedList) {
 			 releaseProduct = new ReleaseProductsEntity();
@@ -143,11 +143,11 @@ public class OrderReleaseServiceImpl implements OrderReleaseService{
 				 asignok=false;
 				 break;
 			 }
-			 releasedList.addAll(asignResult);
+			 releaseProducts.addAll(asignResult);
 		 }
 		
 		 if(asignok) {
-			 releaseProductsRepository.saveAll(releasedList);
+			 releaseProductsRepository.saveAll(releaseProducts);
 			 orderReleaseRepository.save(orderReleaseEntity);
 			 return "OK";
 		 }else {
@@ -177,7 +177,7 @@ public class OrderReleaseServiceImpl implements OrderReleaseService{
 	    		temp.setDt(day);
 	    		temp.setNum(1);
 	    		maxReleaseNumberRepository.save(temp);
-	    		 result = day.format(DateTimeFormatter.ofPattern("yyyyMMdd"))+"-001";
+	    		 result = "L"+day.format(DateTimeFormatter.ofPattern("yyyyMMdd"))+"-001";
 	    	}else {
 	    		int newNumber = max.getNum()+1;
 	        	max.setNum(newNumber);

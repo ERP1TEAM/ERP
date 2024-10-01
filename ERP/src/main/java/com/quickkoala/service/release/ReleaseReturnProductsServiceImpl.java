@@ -1,4 +1,5 @@
 package com.quickkoala.service.release;
+import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -70,13 +71,16 @@ public class ReleaseReturnProductsServiceImpl implements ReleaseReturnProductsSe
 	@Override
 	public String saveProduct(String rCode,String lCode,int qty, String reason,String manager) {
 		List<ReleaseProductsEntity> li = releaseProductsRepository.findByRelNumberAndLotNumber(rCode,lCode);
-		System.out.println(li.size());
+		System.out.println("return:"+li.size());
 		
 		if(li.size()==0) {
 			return "NO";
 		}else {
+			System.out.println("start");
 			for(ReleaseProductsEntity item : li) {
-				if(item.getReturnFlag()=="N"){
+				System.out.println("NNN");
+				if(item.getReturnFlag().equals("N")){
+					System.out.println("OOOOKKK");
 					if(item.getQty()<qty) {
 						return "NO";
 					}
@@ -88,13 +92,20 @@ public class ReleaseReturnProductsServiceImpl implements ReleaseReturnProductsSe
 						try {
 						entity.setReason(ReleaseReturnReason.valueOf(reason));
 						}catch(Exception e) {
-							entity.setReason(null);
+							entity.setReason(ReleaseReturnReason.기타);
 						}
+						entity.setSupplierCode(item.getSupplierCode()); 
 						entity.setQty(qty);
 						entity.setStatus(ReleaseReturnStatus.대기);
 						entity.setRelNumber(rCode);
 						entity.setManager(manager);
+						entity.setProductCode(item.getProductCode());
+						entity.setDt(LocalDateTime.now());
 						ReleaseReturnProductsEntity temp = releaseReturnProductsRepository.save(entity);
+						System.out.println(3333333);
+						if(temp==null) {
+							System.out.println(111111);
+						}
 						return "OK";
 					}else {
 						int remain = item.getQty()-qty;
@@ -115,13 +126,20 @@ public class ReleaseReturnProductsServiceImpl implements ReleaseReturnProductsSe
 						try {
 						entity.setReason(ReleaseReturnReason.valueOf(reason));
 						}catch(Exception e) {
-							entity.setReason(null);
+							entity.setReason(ReleaseReturnReason.기타);
 						}
+						entity.setSupplierCode(item.getSupplierCode()); 
+						entity.setProductCode(item.getProductCode());
+						entity.setDt(LocalDateTime.now());
 						entity.setQty(qty);
 						entity.setStatus(ReleaseReturnStatus.대기);
 						entity.setRelNumber(rCode);
 						entity.setManager(manager);
 						ReleaseReturnProductsEntity temp = releaseReturnProductsRepository.save(entity);
+						System.out.println(4444444);
+						if(temp==null) {
+							System.out.println(222222);
+						}
 						return "OK";
 						
 					}
