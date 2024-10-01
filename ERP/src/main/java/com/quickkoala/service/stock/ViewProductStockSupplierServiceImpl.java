@@ -82,6 +82,9 @@ public class ViewProductStockSupplierServiceImpl implements ViewProductStockSupp
 	public Page<ViewProductStockSupplierEntity> getPaginatedData(int pno, int size, String code, String word) {
 		Page<ViewProductStockSupplierEntity> result = null;
 		Pageable pageable = PageRequest.of(pno-1, size);
+		if (word == null || word.isEmpty()) {
+	        return viewproductstocksupplierRepository.findAllByOrderByProductCodeDesc(pageable);
+	    }
 		if(code.equals("1")) {
 			result = viewproductstocksupplierRepository.findByProductCodeContainingOrderByProductCodeDesc(word, pageable);
 		}else if(code.equals("2")) {

@@ -69,8 +69,12 @@ public class StockRestController {
 	private ViewProductStockSupplierService viewProductStockSupplierService;
 	
 	@GetMapping("/stock/stocklist/{pno}")
-	public ResponseEntity<Page<ViewProductStockSupplierEntity>> getPaginatedStockList(@PathVariable int pno) {
-	    Page<ViewProductStockSupplierEntity> paginatedData = viewProductStockSupplierService.getPaginatedData(pno, SIZE);
+	public ResponseEntity<Page<ViewProductStockSupplierEntity>> getPaginatedStockList(
+	        @PathVariable int pno,
+	        @RequestParam String code,
+	        @RequestParam String word) {
+	    
+	    Page<ViewProductStockSupplierEntity> paginatedData = viewProductStockSupplierService.getPaginatedData(pno, SIZE, code, word);
 	    return ResponseEntity.ok().body(paginatedData);
 	}
 	
