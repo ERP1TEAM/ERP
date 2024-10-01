@@ -134,4 +134,51 @@ public class ProductServiceImpl implements ProductService{
 	public int modifyLocation(String productCode, String locationCode) {
 		return productRepository.updateLocationCode(productCode, locationCode);
 	}
+	
+	@Transactional
+	@Override
+	public void updateProductInfo(String productCode, ProductDto productDto) {
+		
+		if (productDto.getName() == null) {
+	        throw new IllegalArgumentException("상품 이름이 null입니다.");
+	    }
+		
+		String productName = productDto.getName();
+	    String classificationCode = productDto.getClassificationCode();
+	    int price = productDto.getPrice();
+	    String useFlag = productDto.getUseFlag();
+
+	    UseFlag useFlagEnum;
+	    try {
+	        useFlagEnum = UseFlag.valueOf(useFlag.toUpperCase());
+	    } catch (IllegalArgumentException e) {
+	        throw new IllegalArgumentException("잘못된 useFlag 값입니다.");
+	    }
+	    
+	    int updatedCount = productRepository.updateProductInfo(
+	            productCode,
+	            productName,
+	            classificationCode,
+	            price,
+	            useFlagEnum
+	    );
+	        if (updatedCount == 0) {
+	            throw new RuntimeException("상품 업데이트에 실패했습니다.");
+	        }
+	    }
+	
+	@Transactional
+	@Override
+	public boolean deleteProductWithStockCheck(String productCode) {
+		if (!productRepository.existsByCode(productCode)) {
+            return false;
+        }
+        StockEntity stockEntity = stockRepository.findByProductCode(productCode);
+        if (stockEntity != null && stockEntity.getTotalQty() > 0) {
+            return false;
+        }
+        productRepository.deleteById(productCode);
+        return true;
+    }
+	
 }

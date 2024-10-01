@@ -68,7 +68,15 @@ document.addEventListener('DOMContentLoaded', function() {
                         <td>${categoryname.subName}(${categoryname.subCode})</td>
                         <td style="text-align:right;">${price}</td>
                         <td style="text-align:center;">${useFlag}</td>
-                        <td style="text-align:center;"><input type="button" value="수정" class="inventorymanagementmodifybtn" data-product-code="${inventorymanagement.productCode}"></td>
+                        <td style="text-align:center;">
+                        <input type="button" value="수정" 
+                        class="inventorymanagementmodifybtn" 
+                        data-product-code="${inventorymanagement.productCode}"
+                        data-maincatename="${categoryname.mainName}" 
+ 			            data-subcatename="${categoryname.subName}"
+ 			            data-maincatecode="${categoryname.mainCode}"
+           				data-subcatecode="${categoryname.subCode}">
+                        </td>
                     </tr>`;
                 inventorymanagementtbody.innerHTML += inventorymanagementth;
             });
@@ -77,10 +85,19 @@ document.addEventListener('DOMContentLoaded', function() {
             document.querySelectorAll('.inventorymanagementmodifybtn').forEach(button => {
                 button.addEventListener('click', function() {
                     let productCode = this.getAttribute('data-product-code');
-                    document.querySelector('#inventoryManagementmodal').style.display = 'block'; // querySelector로 id 선택
-                    document.querySelector('#inventoryManagementoverlay').style.display = 'block'; // 오버레이도 표시
+                    let maincatename = this.getAttribute('data-maincatename');
+                    let subcatename = this.getAttribute('data-subcatename');
+                    let maincatecode = this.getAttribute('data-maincatecode'); // 대메뉴 코드 가져오기
+  				    let subcatecode = this.getAttribute('data-subcatecode'); 
+                   
+                    document.querySelector('#inventoryManagementmodal').style.display = 'block';
+                    document.querySelector('#inventoryManagementoverlay').style.display = 'block'; 
                     document.querySelector('#inventorymodifycode').value = productCode;
-
+					document.querySelector('#inventorymodifymaincategorycode').value = maincatecode; 
+       				document.querySelector('#inventorymodifysubcategorycode').value = subcatecode; 
+					
+					document.querySelector('#inventorymodifydelbtn').setAttribute('data-product-code', productCode);
+					 
                     fetch(`/main/stock/inventorymodify/${productCode}`, {
                         method: 'GET',
                         headers: {
@@ -89,27 +106,114 @@ document.addEventListener('DOMContentLoaded', function() {
                     })
                     .then(response => response.json())
                     .then(data => {
-						
-						console.log(data);
-                        document.querySelector('#inventorymodifycode').value = data.inventoryData.productCode;
-                        document.querySelector('#inventorymodifyname').value = data.inventoryData.productName;
-                        document.querySelector('#inventorysuppliermodifyname').value = data.inventoryData.supplierName;
-                        document.querySelector('#inventorymodifymaincategory').value = data.mainCategoryName;
-                        document.querySelector('#inventorymodifysubcategory').value = data.subCategoryName;
-                        document.querySelector('#inventorymodifyprice').value = data.inventoryData.price;
+                        document.querySelector('#inventorymodifycode').value = productCode;
+                        document.querySelector('#inventorymodifyname').value = data.productName;
+                        document.querySelector('#inventorysuppliermodifyname').value = data.supplierName;
+                        document.querySelector('#inventorymodifymaincategory').value = maincatename; 
+                        document.querySelector('#inventorymodifysubcategory').value = subcatename ;
+                        document.querySelector('#inventorymodifyprice').value = data.price;
 
-                        if (data.useFlag === 'Y') {
+                        if (data.useFlag == 'Y') {
                             document.querySelector('input[name="inventorymodifyuseflag"][value="Y"]').checked = true;
                         } else {
                             document.querySelector('input[name="inventorymodifyuseflag"][value="N"]').checked = true;
                         }
                     })
                     .catch(error => {
-                        console.error("데이터를 가져오는데 실패했습니다.", error);
+                        alert("상품 정보를 가져오는데 실패했습니다.");
                     });
                 });
             });
+            
+            //데이터 수정
+            document.querySelector('#inventorymodifysave').addEventListener('click', function() {
+		        const productCode = document.querySelector('#inventorymodifycode').value;
+		        const productName = document.querySelector('#inventorymodifyname').value;
+		        const mainCategoryCode = document.querySelector('#inventorymodifymaincategorycode').value;
+    			const subCategoryCode = document.querySelector('#inventorymodifysubcategorycode').value;
+		        const price = parseInt(document.querySelector('#inventorymodifyprice').value, 10); 
+		        const useFlag = document.querySelector('input[name="inventorymodifyuseflag"]:checked').value;
+				
+				const classification_code = `${mainCategoryCode}${subCategoryCode}`;
+		        
+		        if (!productName || !price) {
+			            alert("모든 값을 채워주세요.");
+			            return;
+			        }
+			        
+			        const numberPattern = /^[0-9]+$/; 
+			        
+				   if (!numberPattern.test(price)) {
+					    alert("상품 가격은 숫자만 입력 가능합니다.");
+					    return;
+					}
+					if (isNaN(price)) {
+					    alert("상품 가격은 유효한 숫자여야 합니다.");
+					    return;
+					}
+        
+		        
+		        
+		        fetch(`/main/stock/inventorymodifysave/${productCode}`, {
+		            method: 'PUT',
+		            headers: {
+		                'Content-Type': 'application/json'
+		            },
+		            body: JSON.stringify({
+		               	name: productName,
+		                classificationCode: classification_code,
+		                price: price,
+		                useFlag: useFlag
+		            })
+		        })
+		        .then(response => {
+		            if (response.ok) {
+		                alert('상품이 수정되었습니다.');
+		                document.querySelector('#inventoryManagementmodal').style.display = 'none';
+        				document.querySelector('#inventoryManagementoverlay').style.display = 'none';
+		    	        
+		    	        window.location.reload();
 
+		            } else {
+		                alert('상품 수정에 실패했습니다.');
+		            }
+		        })
+		        .catch(error => {
+		            alert('서버 오류로 수정에 실패했습니다.');
+		        });
+	    	});
+	    
+            
+            //데이터 삭제
+			document.querySelector('#inventorymodifydelbtn').addEventListener('click', function() {
+			
+			let productCode = this.getAttribute('data-product-code');		    
+		    if (confirm("상품을 삭제하시겠습니까? (재고가 0개일 때만 삭제 가능합니다.)")) {
+		        fetch(`/main/stock/inventorydelete/${productCode}`, {
+		            method: 'DELETE',
+		            headers: {
+		                'Content-Type': 'application/json'
+		            },
+		        })
+		        .then(response => {
+		            if (response.ok) {
+		                alert('상품이 삭제되었습니다.');
+		                document.querySelector('#inventoryManagementmodal').style.display = 'none';
+        				document.querySelector('#inventoryManagementoverlay').style.display = 'none';
+		    	        
+		    	        window.location.reload();
+		    	        
+		            } else {
+		                alert('상품 삭제에 실패했습니다.');
+		            }
+		        })
+		        .catch(error => {
+		            alert('서버 오류로 삭제에 실패했습니다.');
+		        });
+		    }
+			});
+			
+			
             // 페이징 설정
             const inventorymanagementPaging = document.getElementById("inventoryManagementPaging");
             inventorymanagementPaging.innerHTML = '';
@@ -148,7 +252,7 @@ document.addEventListener('DOMContentLoaded', function() {
             inventorymanagementPaging.innerHTML = paginationHTML;
 
             // URL 업데이트 (검색 조건도 포함)
-            if (word === "") {
+            if (word == "") {
                 history.replaceState({}, '', location.pathname + `?p=${pno}`);
             } else {
                 history.replaceState({}, '', location.pathname + `?p=${pno}&code=${code}&word=${word}`);

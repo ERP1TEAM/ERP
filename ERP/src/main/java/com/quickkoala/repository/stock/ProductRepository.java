@@ -32,4 +32,13 @@ public interface ProductRepository extends JpaRepository<ProductEntity, String>{
 	@Query("SELECT COUNT(p) FROM ProductEntity p WHERE p.classificationCode = :categoryCode")
 	int countProductsByCategoryCode(@Param("categoryCode") String categoryCode);
 	
+	 @Modifying
+	 @Query("UPDATE ProductEntity p SET p.name = :productName, p.price = :price, p.classificationCode = :classificationCode, p.useFlag = :useFlag WHERE p.code = :productCode")
+	 int updateProductInfo(
+	     @Param("productCode") String productCode,
+	     @Param("productName") String productName,
+	     @Param("classificationCode") String classificationCode,
+	     @Param("price") int price,
+	     @Param("useFlag") ProductEntity.UseFlag useFlag
+	 );
 }

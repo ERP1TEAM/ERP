@@ -12,6 +12,9 @@
 .black_font{
 	color:rgba(0, 0, 0, 1) !important;
 }
+.stockreadonlyfont{
+	color: rgba(169, 169, 169, 1) !important;
+}
 .stocksearch{
 	display: inline-block !important;
 }

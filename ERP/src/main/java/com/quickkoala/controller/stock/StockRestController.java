@@ -206,23 +206,32 @@ public class StockRestController {
 	}
 	
 	 @GetMapping("/stock/inventorymodify/{productCode}")
-	 public ResponseEntity<Map<String, Object>> getInventoryAndCategories(@PathVariable String productCode) {
-	        Map<String, Object> result = new HashMap<>();
-	        
-	        // 제품 정보를 DTO로 변환하여 가져옴
-	        ViewProductStockSupplierDto inventoryData = viewProductStockSupplierService.getProductStockDtoByCode(productCode);
-
-	        // 카테고리 정보를 가져옴
-	        List<CategoryDto> categories = categoryService.getAllOrdersByCode();
-
-	        // 두 데이터를 Map에 넣음
-	        result.put("inventoryData", inventoryData);
-	        result.put("categories", categories);
-
-	        // 성공적으로 데이터를 반환
-	        return ResponseEntity.ok(result);
+	    public ResponseEntity<ViewProductStockSupplierDto> getInventoryForModify(@PathVariable String productCode) {
+	        ViewProductStockSupplierDto productDto = viewProductStockSupplierService.getProductStockDtoByCode(productCode);
+	        if (productDto != null) {
+	            return ResponseEntity.ok(productDto);
+	        } else {
+	            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+	        }
 	    }
-	
+	 
+	 @PutMapping("/stock/inventorymodifysave/{productCode}")
+	    public void updateProductInfo(
+	            @PathVariable String productCode,
+	            @RequestBody ProductDto productDto) {
+	        productService.updateProductInfo(productCode, productDto);
+	    }
+	 
+	 @DeleteMapping("/stock/inventorydelete/{productCode}")
+	    public ResponseEntity<String> deleteProduct(@PathVariable String productCode) {
+	        boolean isDeleted = productService.deleteProductWithStockCheck(productCode);
+
+	        if (isDeleted) {
+	            return ResponseEntity.ok("상품이 삭제되었습니다.");
+	        } else {
+	            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("상품을 삭제하는데 실패했습니다.");
+	        }
+	    }
 	
 	
 	//******카테고리 모달 부분*****//

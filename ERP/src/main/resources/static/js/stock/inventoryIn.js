@@ -50,8 +50,6 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .then(data => {
             alert("상품이 등록 되었습니다.");
-    		console.log(inventoryData);
-    		console.log(data);
     		document.getElementById('inventoryname').value = '';
     		document.getElementById('inventoryprice').value = '';
     		document.getElementById('inventorySuppliercodeoption').value = '';
