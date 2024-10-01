@@ -26,14 +26,14 @@ window.pgPrev = function() {
      paging(pagingIns.currentPage_ - 1);
 };
 document.querySelector("#all").addEventListener("click",function(){
-	paging(0,"","","","");
+	paging(0,"null","null","null","null");
 	
 });
 document.querySelector("#ready").addEventListener("click",function(){
-	paging(0,"4","출고준비","","");
+	paging(0,"4","출고준비","null","null");
 });
 document.querySelector("#pone").addEventListener("click",function(){
-	paging(0,"4","출고지연","","");
+	paging(0,"4","출고지연","null","null");
 });
 
 function paging(_page,_select,_param,_sd,_ed){

@@ -34,6 +34,7 @@ public class ViewReleaseOngoingServiceImpl implements ViewReleaseOngoingService{
 	@Override
 	public Page<ViewReleaseOngoingEntity> getAll(int pg, int size,String select, String param,String startDate,String endDate) {
 		ReleaseStatus[] sts = {ReleaseStatus.출고준비,ReleaseStatus.출고지연};
+		System.out.println(pg+"||"+size+"||"+select+"||"+param+"||"+startDate+"||"+endDate);
 		try {
 			
 			if (startDate.equals("null") || endDate.equals("null") || endDate.equals("") || startDate.equals("")) {
@@ -46,6 +47,8 @@ public class ViewReleaseOngoingServiceImpl implements ViewReleaseOngoingService{
 			        return viewReleaseOngoingRepository.findByOrderNumberContainingAndStatusIn(param, sts, pageable);
 			    } else if (select.equals("3") && param != null) {
 			        return viewReleaseOngoingRepository.findBySalesNameContainingAndStatusIn(param, sts, pageable);
+			    }else if (select.equals("4") && param != null) {
+			        return viewReleaseOngoingRepository.findAllByStatusIn(new ReleaseStatus[]{ReleaseStatus.valueOf(param)}, pageable);
 			    } else {
 			        return Page.empty();
 			    }

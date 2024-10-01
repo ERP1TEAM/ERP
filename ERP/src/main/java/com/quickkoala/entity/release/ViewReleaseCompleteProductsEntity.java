@@ -48,4 +48,7 @@ public class ViewReleaseCompleteProductsEntity {
 	
 	@Column(name = "supplier_name", length = 255, nullable = false)
 	private String supplierName;
+	
+	@Column(name="return_flag", nullable=false)
+	private String returnFlag;
 }

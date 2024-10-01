@@ -71,16 +71,12 @@ public class ReleaseReturnProductsServiceImpl implements ReleaseReturnProductsSe
 	@Override
 	public String saveProduct(String rCode,String lCode,int qty, String reason,String manager) {
 		List<ReleaseProductsEntity> li = releaseProductsRepository.findByRelNumberAndLotNumber(rCode,lCode);
-		System.out.println("return:"+li.size());
-		
 		if(li.size()==0) {
 			return "NO";
 		}else {
-			System.out.println("start");
 			for(ReleaseProductsEntity item : li) {
-				System.out.println("NNN");
+				try {
 				if(item.getReturnFlag().equals("N")){
-					System.out.println("OOOOKKK");
 					if(item.getQty()<qty) {
 						return "NO";
 					}
@@ -102,14 +98,11 @@ public class ReleaseReturnProductsServiceImpl implements ReleaseReturnProductsSe
 						entity.setProductCode(item.getProductCode());
 						entity.setDt(LocalDateTime.now());
 						ReleaseReturnProductsEntity temp = releaseReturnProductsRepository.save(entity);
-						System.out.println(3333333);
-						if(temp==null) {
-							System.out.println(111111);
-						}
 						return "OK";
 					}else {
 						int remain = item.getQty()-qty;
 						item.setQty(remain);
+						releaseProductsRepository.save(item);
 						ReleaseProductsEntity rp = new ReleaseProductsEntity();
 						rp.setDt(item.getDt());
 						rp.setLotNumber(item.getLotNumber());
@@ -136,16 +129,13 @@ public class ReleaseReturnProductsServiceImpl implements ReleaseReturnProductsSe
 						entity.setRelNumber(rCode);
 						entity.setManager(manager);
 						ReleaseReturnProductsEntity temp = releaseReturnProductsRepository.save(entity);
-						System.out.println(4444444);
-						if(temp==null) {
-							System.out.println(222222);
-						}
 						return "OK";
 						
 					}
-				
-				
 			}
+				}catch(Exception e) {
+					return "NO";
+				}
 		}
 		
 	

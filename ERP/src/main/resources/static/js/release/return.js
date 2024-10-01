@@ -103,7 +103,10 @@ window.receivep = function(e,relNumber,lotNumber){
 	
 }
 document.querySelector("#searchbtn").addEventListener("click",function(){
+	alert('서비스 준비중 입니다.');
+	/*
 	let select=document.querySelector("#searchselect").value;
 	let prm=document.querySelector("#searchtxt").value;
 	paging(0,select,prm);
+	*/
 });

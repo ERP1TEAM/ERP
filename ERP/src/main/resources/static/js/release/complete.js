@@ -82,7 +82,15 @@ function expand_post(thisElement,onum){
 						let li3 = document.createElement("li");
 						li3.innerText="수량 : "+data.qty;
 						let li5 = document.createElement("li");
-						let span = document.createElement("span");
+						
+						console.log(data.returnFlag);
+						
+						if(data.returnFlag=="Y"){
+							let span= document.createElement("span");
+							span.innerText="[반품 처리된 상품입니다]";
+						li5.append(span);
+						}else{
+							let span = document.createElement("span");
 						span.innerText="반품할 수량을 입력하세요 : ";
 						let inp = document.createElement("input");
 						inp.type="number";
@@ -93,10 +101,14 @@ function expand_post(thisElement,onum){
 						btn.addEventListener("click",function(){
 							returnProduct(data.relNumber,data.lotNumber,data.qty);
 						});
+						
+						
 						li5.append(span);
 						li5.append(inp);
 						li5.append(btn);
-						li3.innerText="수량 : "+data.qty;
+						
+						}
+						
 						ul.append(li1);
 						ul.append(li4);
 						ul.append(li2);
@@ -104,6 +116,8 @@ function expand_post(thisElement,onum){
 						ul.append(li5);
 						td.colSpan="8";
 						td.append(ul);
+						
+						
 					});
 				tr.append(td);
 				var parent = thisElement.parentNode;

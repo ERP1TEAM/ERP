@@ -25,14 +25,14 @@ window.approve=approve;
 window.cancelOrder=cancelOrder;
 window.expand_post=expand_post;
 document.querySelector("#all").addEventListener("click",function(){
-	paging(0,"","","","");
+	paging(0,"null","null","null","null");
 	
 });
 document.querySelector("#apv").addEventListener("click",function(){
-	paging(0,"4","승인","","");
+	paging(0,"4","승인","null","null");
 });
 document.querySelector("#wait").addEventListener("click",function(){
-	paging(0,"4","미승인","","");
+	paging(0,"4","미승인","null","null");
 });
 window.onload = function() {
 	paging(pagingIns.currentPage_ - 1);
