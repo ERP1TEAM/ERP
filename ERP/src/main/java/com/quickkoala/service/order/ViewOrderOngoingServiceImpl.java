@@ -30,7 +30,7 @@ public class ViewOrderOngoingServiceImpl implements ViewOrderOngoingService{
 		if(startDate.equals("null")||endDate.equals("null")||endDate==""||startDate=="") {
 			Pageable pageable = (Pageable) PageRequest.of(pg, size, Sort.by(Sort.Order.desc("number")));
 			if(select.equals(null)||select.equals("null")||select=="") {
-				return viewOrderOngoingRepository.findAll(pageable);
+				return viewOrderOngoingRepository.findAllByStatusIn(sts,pageable);
 			}else if(select.equals("1")&&param!=null) {
 				return viewOrderOngoingRepository.findByNumberContainingAndStatusIn(param,sts,pageable);
 			}else if(select.equals("2")&&param!=null) {
