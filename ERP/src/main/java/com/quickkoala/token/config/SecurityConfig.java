@@ -13,22 +13,17 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 
-import com.quickkoala.token.service.CustomMemberDetailsService;
-
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
     private final JwtTokenProvider jwtTokenProvider;
-    @SuppressWarnings("unused")
-	private final CustomMemberDetailsService memberDetailsService;
     private final CustomAccessDeniedHandler accessDeniedHandler;
     
     // SecurityConfig 생성자: JwtTokenProvider와 CustomUserDetailsService를 주입받습니다.
-    public SecurityConfig(JwtTokenProvider jwtTokenProvider, CustomMemberDetailsService memberDetailsService, CustomAccessDeniedHandler accessDeniedHandler) {
+    public SecurityConfig(JwtTokenProvider jwtTokenProvider, CustomAccessDeniedHandler accessDeniedHandler) {
         this.jwtTokenProvider = jwtTokenProvider;
-        this.memberDetailsService = memberDetailsService;
         this.accessDeniedHandler = accessDeniedHandler;
     }
     
