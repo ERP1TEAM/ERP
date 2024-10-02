@@ -196,15 +196,15 @@ public class SalesOrderServiceImpl implements SalesOrderService {
                         
                         try {
                             LocalDateTime orderDate = LocalDateTime.parse(dateStr, formatter);
-                            System.out.println("Parsed String Order Date: " + orderDate); // 로그 추가
+                            //System.out.println("String 날짜 변환 : " + orderDate); // 로그 추가
                             orderDTO.setOrderDate(orderDate);
                         } catch (Exception e) {
-                            System.err.println("날짜 변환 오류: " + e.getMessage());
+                            //System.err.println("날짜 변환 오류: " + e.getMessage());
                             //orderDTO.setOrderDate(LocalDateTime.now());  // 기본값으로 현재 시간 설정
                         }
                     }
                 } else {
-                    System.out.println("Order Date is null");
+                    //System.out.println("Order Date is null");
                     //orderDTO.setOrderDate(LocalDateTime.now());
                 }
 
