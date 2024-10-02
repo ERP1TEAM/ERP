@@ -45,7 +45,7 @@ public class SecurityConfig {
                 .requestMatchers("/sales/**").hasAuthority("Sales")
                 .requestMatchers("/main/**").hasAuthority("Main")
                 .requestMatchers("/supplier/**").hasAuthority("Supplier")
-                .requestMatchers(HttpMethod.DELETE,"/api/**").permitAll()
+                .requestMatchers(HttpMethod.DELETE,"/**").permitAll()
                 .anyRequest().authenticated()
         )
             .formLogin(formLogin ->
