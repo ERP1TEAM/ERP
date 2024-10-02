@@ -48,7 +48,7 @@ document.getElementById('deleteButton').addEventListener('click', function() {
     const noticeId = getNoticeIdFromUrl(); // URL에서 공지사항 ID 추출
 
     if (confirm("정말로 이 공지사항을 삭제하시겠습니까?")) {
-        fetch(`../delete/${noticeId}`, {
+        fetch(`./delete/${noticeId}`, {
             method: 'DELETE'
         })
         .then(response => {
