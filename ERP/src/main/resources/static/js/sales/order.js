@@ -1,7 +1,11 @@
-   const fileInput = document.getElementById('fileInput');
-   const fileUploadContainer = document.querySelector('.file-upload-container');
-   const fileNameDisplay = document.getElementById('fileName');
-   const uploadButton = document.getElementById('uploadButton');
+document.addEventListener('DOMContentLoaded', function() {
+	checkFields();
+});
+
+const fileInput = document.getElementById('fileInput');
+const fileUploadContainer = document.querySelector('.file-upload-container');
+const fileNameDisplay = document.getElementById('fileName');
+const uploadButton = document.getElementById('uploadButton');
 
    // 파일을 드래그 앤 드롭 또는 클릭으로 선택
    fileUploadContainer.addEventListener('click', function () {
@@ -189,25 +193,69 @@
        `;
    }
 
-   // 입력 필드 값이 모두 채워졌는지 확인하는 함수
-   function checkFields() {
-       // 현재 행 인덱스 (마지막 행을 대상으로 함)
-       const currentRow = rowCount - 1;
+	   // 입력 필드 값이 모두 채워졌는지 확인하는 함수
+	   function checkFields() {
+	       const currentRow = rowCount - 1;
 
-       const recipientName = document.getElementById(`recipientName-${currentRow}`).value.trim();
-       const recipientPhone = document.getElementById(`recipientPhone-${currentRow}`).value.trim();
-       const recipientEmail = document.getElementById(`recipientEmail-${currentRow}`).value.trim();
-       const recipientPostcode = document.getElementById(`recipientPostcode-${currentRow}`).value.trim();
-       const recipientAddress = document.getElementById(`recipientAddress-${currentRow}`).value.trim();
-       const recipientDetailAddress = document.getElementById(`recipientDetailAddress-${currentRow}`).value.trim();
-	   const orderDate = document.getElementById(`orderDate-${currentRow}`).value.trim();
-       // 모든 필드가 입력되었는지 확인 (상품코드, 상품명, 주문갯수는 제외)
-       if (recipientName && recipientPhone && recipientEmail && recipientPostcode && recipientAddress && recipientDetailAddress && orderDate) {
-           document.getElementById('addRowButton').disabled = false;  // 버튼 활성화
-       } else {
-           document.getElementById('addRowButton').disabled = true;  // 버튼 비활성화
-       }
-   }
+	       const recipientName = document.getElementById(`recipientName-${currentRow}`).value.trim();
+	       const recipientPhone = document.getElementById(`recipientPhone-${currentRow}`).value.trim();
+	       const recipientEmail = document.getElementById(`recipientEmail-${currentRow}`).value.trim();
+	       const recipientPostcode = document.getElementById(`recipientPostcode-${currentRow}`).value.trim();
+	       const recipientAddress = document.getElementById(`recipientAddress-${currentRow}`).value.trim();
+	       const recipientDetailAddress = document.getElementById(`recipientDetailAddress-${currentRow}`).value.trim();
+	       const productCode = document.getElementById(`productCode-${currentRow}`).value.trim();
+	       const productName = document.getElementById(`productName-${currentRow}`).value.trim();
+	       const productNameValid = document.getElementById(`productName-${currentRow}`).dataset.valid === "true";
+	       const orderDate = document.getElementById(`orderDate-${currentRow}`).value.trim();
+	       const productQuantity = document.getElementById(`productQuantity-${currentRow}`).value.trim();
+
+	       // 각 필드의 유효성 검사
+	       const isValidName = validateName(recipientName);
+	       const isValidPhone = validatePhone(recipientPhone);
+	       const isValidEmail = validateEmail(recipientEmail);
+	       const isValidPostcode = validatePostcode(recipientPostcode);
+	       const isValidAddress = recipientAddress !== "" && recipientDetailAddress !== "";
+	       const isValidProductCode = productCode.length === 8;
+	       const isValidProductName = productNameValid;
+	       const isValidQuantity = validateQuantity(productQuantity);
+	       const isValidDate = validateDate(orderDate);
+
+	       if (isValidName && isValidPhone && isValidEmail && isValidPostcode && isValidAddress &&
+	           isValidProductCode && isValidProductName && isValidQuantity && isValidDate) {
+	           document.getElementById('submitOrder').disabled = false;  // 버튼 활성화
+	       } else {
+	           document.getElementById('submitOrder').disabled = true;  // 버튼 비활성화
+	       }
+	   }
+
+	   // 유효성 검사 함수들
+	   function validateName(name) {
+	       return name.length >= 2;  // 이름은 2글자 이상이어야 함
+	   }
+
+	   function validatePhone(phone) {
+	       const phoneRegex = /^[0-9]{10,11}$/;
+	       return phoneRegex.test(phone);  // 연락처는 10~11자리 숫자만 허용
+	   }
+
+	   function validateEmail(email) {
+	       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+	       return emailRegex.test(email);  // 이메일 형식이 맞는지 확인
+	   }
+
+	   function validatePostcode(postcode) {
+	       return postcode !== "";  // 우편번호는 빈 값이 아니어야 함
+	   }
+
+	   function validateQuantity(quantity) {
+	       return parseInt(quantity, 10) > 0;  // 수량은 0보다 커야 함
+	   }
+
+	   function validateDate(date) {
+	       return !isNaN(new Date(date).getTime());  // 날짜가 유효한지 확인
+	   }
+
+
 
    
    
@@ -233,31 +281,41 @@
        }).open();
    }
    		// 주문상품코드를 입력하면 주문상품명을 자동으로 출력
-   		async function fetchProductName(productCodeId, productNameId) {
-   		    const productCode = document.getElementById(productCodeId).value;
-   		    const productNameField = document.getElementById(productNameId);
-   		
-   		    // 8자리일 때만 서버에서 상품명을 조회
-   		    if (productCode.trim().length === 8) {
-   		        try {
-   		            // 서버에서 상품 정보를 가져오는 API 호출
-   		            const response = await fetch(`/sales/getProductByCode?code=${productCode}`);
-   		
-   		            if (response.ok) {
-   		                const product = await response.json();
-   		                productNameField.value = product.name; // 해당 행의 상품명 필드에 값 설정
-   		            } else {
-   		                productNameField.value = ''; // 상품명을 지움
-   		                alert('해당 상품코드를 찾을 수 없습니다.');
-   		            }
-   		        } catch (error) {
-   		            console.error('상품 정보를 가져오는 중 오류 발생:', error);
-   		            alert('상품 정보를 가져오는 중 오류가 발생했습니다.');
-   		        }
-   		    } else {
-   		        productNameField.value = '상품코드는 8자리입니다'; // 상품코드가 8자리가 아닌 경우
-   		    }
-   		}
+		async function fetchProductName(productCodeId, productNameId) {
+		    const productCode = document.getElementById(productCodeId).value;
+		    const productNameField = document.getElementById(productNameId);
+
+		    // 8자리일 때만 서버에서 상품명을 조회
+		    if (productCode.trim().length === 8) {
+		        try {
+		            // 서버에서 상품 정보를 가져오는 API 호출
+		            const response = await fetch(`/sales/getProductByCode?code=${productCode}`);
+
+		            if (response.ok) {
+		                const product = await response.json();
+		                productNameField.value = product.name; // 해당 행의 상품명 필드에 값 설정
+		                productNameField.dataset.valid = "true"; // 유효한 상품명 표시
+		                checkFields(); // 필드 검증
+		            } else {
+		                productNameField.value = ''; // 상품명을 지움
+		                productNameField.dataset.valid = "false"; // 유효하지 않은 상품명 표시
+		                alert('해당 상품코드를 찾을 수 없습니다.');
+		                checkFields(); // 필드 검증
+		            }
+		        } catch (error) {
+		            console.error('상품 정보를 가져오는 중 오류 발생:', error);
+		            productNameField.value = ''; // 상품명을 지움
+		            productNameField.dataset.valid = "false"; // 유효하지 않은 상품명 표시
+		            alert('상품 정보를 가져오는 중 오류가 발생했습니다.');
+		            checkFields(); // 필드 검증
+		        }
+		    } else {
+		        productNameField.value = '상품코드는 8자리입니다'; // 상품코드가 8자리가 아닌 경우
+		        productNameField.dataset.valid = "false"; // 유효하지 않은 상품명 표시
+		        checkFields(); // 필드 검증
+		    }
+		}
+
 
            
    // 직접 주문 등록 버튼 클릭 시 데이터 전송
