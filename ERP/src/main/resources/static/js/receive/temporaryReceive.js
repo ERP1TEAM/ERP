@@ -383,7 +383,7 @@ document.addEventListener("DOMContentLoaded", function() {
 				}
 			})
 			.catch(error => {
-				conosole.log(error);
+				console.log(error);
 			})
 
 		document.getElementById('warehouselistmodal').style.display = 'none';

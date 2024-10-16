@@ -141,8 +141,9 @@ public class TokenRestController {
                 // 새로운 쿠키를 설정
                 Cookie tokenCookie = new Cookie("token", newToken);
                 tokenCookie.setHttpOnly(true);
-                boolean isSecure = request.isSecure();
-                tokenCookie.setSecure(isSecure);
+                //boolean isSecure = request.isSecure();
+                //tokenCookie.setSecure(isSecure);
+                tokenCookie.setSecure(true);
                 tokenCookie.setPath("/");
                 tokenCookie.setAttribute("SameSite", "Strict");
                 response.addCookie(tokenCookie);
