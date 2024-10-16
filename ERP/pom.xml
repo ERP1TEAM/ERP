@@ -66,11 +66,12 @@
 			<scope>runtime</scope>
 		</dependency>
 		-->
+		
 		<dependency>
 			<groupId>org.mariadb.jdbc</groupId>
 			<artifactId>mariadb-java-client</artifactId>
-			<version>3.1.0</version> <!-- MariaDB 11.5에 추천되는 버전 -->
 		</dependency>
+		
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
