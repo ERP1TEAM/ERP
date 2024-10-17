@@ -35,7 +35,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(authorizeRequests -> 
             	authorizeRequests
                 // 정적 리소스에 대한 접근을 허용
-                .requestMatchers("/css/**", "/js/**", "/images/**", "/assets/**", "/img/**", "/videos/**").permitAll()
+                .requestMatchers("/css/**", "/js/**", "/images/**", "/assets/**", "/img/**", "/videos/**", "/favicon.ico").permitAll()
                 .requestMatchers("/api/**", "/register", "/login", "/video").permitAll()
                 .requestMatchers("/.well-known/pki-validation/**").permitAll()
                 .requestMatchers("/sales/**").hasAuthority("Sales")
