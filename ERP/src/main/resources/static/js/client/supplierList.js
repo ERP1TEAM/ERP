@@ -104,7 +104,6 @@ document.addEventListener("DOMContentLoaded", function() {
 						})
 							.then(response => response.json())
 							.then(data => {
-								console.log(data.name);
 								document.getElementById("name").value = data.name;
 								document.getElementById("email").value = data.email;
 								document.getElementById("tel").value = data.tel;

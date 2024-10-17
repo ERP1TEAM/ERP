@@ -1,7 +1,8 @@
-	package com.quickkoala.controller.supplier;
+package com.quickkoala.controller.supplier;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -47,15 +48,33 @@ public class SupplierRestController {
 
 	// 발주내역 리스트
 	@GetMapping("purchaseData/{pno}")
-	public ResponseEntity<Page<ViewPurchaseSummaryEntity>> purchaseData(@PathVariable Integer pno, @ModelAttribute SearchDto dto, HttpServletRequest request) {
+	public ResponseEntity<Page<ViewPurchaseSummaryEntity>> purchaseData(
+			@PathVariable Integer pno,
+			@ModelAttribute SearchDto dto, HttpServletRequest request) {
 		Page<ViewPurchaseSummaryEntity> result = null;
 		result = viewPurchaseSummaryService.getPaginadtedData(pno, SIZE, dto, GetToken.getSupplierCode(request));
 		return ResponseEntity.ok(result);
 	}
 
+	// 납품등록
+	@GetMapping("delivery_regi")
+	public ResponseEntity<String> deliveryRegi(
+			@RequestParam("data") String data, 
+			@RequestParam("ea") Integer ea) {
+		try {
+			DeliveryDetailEntity ent = deliveryDetailService.addDelivery(data, ea);
+			receiveTempService.addDelivery(data, ea, ent.getCode());
+			return ResponseEntity.ok("ok");
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("no");
+		}
+	}
+
 	// 납품내역 리스트
 	@GetMapping("deliveryData/{pno}")
-	public ResponseEntity<Page<ViewDeliveryDetailEntity>> deliveryData(@PathVariable Integer pno, @ModelAttribute SearchDto dto, HttpServletRequest request) {
+	public ResponseEntity<Page<ViewDeliveryDetailEntity>> deliveryData(@PathVariable Integer pno,
+			@ModelAttribute SearchDto dto, HttpServletRequest request) {
 		Page<ViewDeliveryDetailEntity> result = null;
 		result = viewDeliveryDetailService.getPaginatedData(pno, SIZE, dto, GetToken.getSupplierCode(request));
 		return ResponseEntity.ok(result);
@@ -63,17 +82,11 @@ public class SupplierRestController {
 
 	// 반품내역 리스트
 	@GetMapping("returnData/{pno}")
-	public ResponseEntity<Page<ViewDeliveryReturnEntity>> returnData(@PathVariable Integer pno, @ModelAttribute SearchDto dto, HttpServletRequest request) {
+	public ResponseEntity<Page<ViewDeliveryReturnEntity>> returnData(@PathVariable Integer pno,
+			@ModelAttribute SearchDto dto, HttpServletRequest request) {
 		Page<ViewDeliveryReturnEntity> result = null;
 		result = viewDeliveryReturnService.getPaginadtedData(pno, SIZE, dto, GetToken.getSupplierCode(request));
 		return ResponseEntity.ok(result);
 	}
 
-	// 납품등록
-	@GetMapping("delivery_regi")
-	public ResponseEntity<String> deliveryRegi(@RequestParam("data") String data, @RequestParam("ea") Integer ea) {
-		DeliveryDetailEntity ent = deliveryDetailService.addDelivery(data, ea);
-		receiveTempService.addDelivery(data, ea, ent.getCode());
-		return ResponseEntity.ok("ok");
-	}
 }

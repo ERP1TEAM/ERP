@@ -263,6 +263,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 	//로케이션 모달 열기	
 	document.getElementById("locationbtn").addEventListener("click", function() {
+		resetSalesForm();
 		document.getElementById("locationoverlay").style.display = "block";
 		document.getElementById("locationinmodal").style.display = "block";
 		document.body.style.overflow = "hidden";
