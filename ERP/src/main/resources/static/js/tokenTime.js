@@ -88,7 +88,6 @@ function logout() {
     cancelled = true; // 세션 상태 체크를 중지하기 위해 cancelled를 true로 설정
     // 페이지 이동 전 extendSession 실행을 막기 위해 event listener 제거
     window.removeEventListener('beforeunload', extendSession);
-
     // 실제 로그아웃 요청을 서버로 전송
     location.href = '/api/logout'; // 로그아웃 경로로 이동
 }

@@ -38,7 +38,6 @@ public class MemberServiceImpl implements MemberService {
         return memberRepository.findAll();
     }
     
-    
     //사용자인증
     public boolean authenticateUser(String userId, String password) {
         // 사용자 정보를 Optional로 가져옵니다

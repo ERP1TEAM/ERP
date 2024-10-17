@@ -62,7 +62,7 @@ public interface ClientsOrdersRepository extends JpaRepository<ClientsOrdersEnti
         Pageable pageable
     );
 
-    // 검색 필터를 적용한 주문 검색 쿼리 (회사 코드 필터 포함)
+    // 검색 필터를 적용한 주문 검색 쿼리 (회사 코드 , 주문번호, 주문날짜로 조회)
     @Query("SELECT o FROM ClientsOrdersEntity o WHERE o.code = :code " +
            "AND (:searchText IS NULL OR o.orderId LIKE %:searchText% OR o.name LIKE %:searchText%) " +
            "AND (:searchDate IS NULL OR o.orderDate = :searchDate)")

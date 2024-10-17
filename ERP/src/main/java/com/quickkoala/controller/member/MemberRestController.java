@@ -42,12 +42,6 @@ public class MemberRestController {
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
 
-    //관리자 등록
-    @PostMapping("/register")
-    public String register(@RequestBody MemberEntity member) {
-        memberService.saveMember(member);
-        return "회원 등록 성공";
-    }
     
     //로그인
     @PostMapping("/login")
@@ -122,5 +116,12 @@ public class MemberRestController {
     public ResponseEntity<Boolean> checkId(@RequestParam String userId) {
         boolean exists = memberService.isUserIdExists(userId);
         return ResponseEntity.ok(exists);
+    }
+    
+    //관리자 등록
+    @PostMapping("/register")
+    public String register(@RequestBody MemberEntity member) {
+    	memberService.saveMember(member);
+    	return "회원 등록 성공";
     }
 }

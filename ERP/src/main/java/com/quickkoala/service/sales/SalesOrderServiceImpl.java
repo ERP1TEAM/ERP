@@ -1,6 +1,6 @@
 package com.quickkoala.service.sales;
 
-import java.io.File;
+import java.io.File; 
 import java.io.FileInputStream;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -106,7 +106,8 @@ public class SalesOrderServiceImpl implements SalesOrderService {
             // 상품 정보 저장 (동일한 orderId로 여러 상품 저장)
             List<String> productCodes = new ArrayList<>();
             for (ClientsOrderProductsDTO productDTO : orderDTO.getProducts()) {
-                List<ClientsOrderProductsEntity> existingProducts = clientsOrderProductsRepository.findByClientsOrdersOrderIdAndProductCode(orderId, productDTO.getProductCode());
+                List<ClientsOrderProductsEntity> existingProducts = clientsOrderProductsRepository
+                														.findByClientsOrdersOrderIdAndProductCode(orderId, productDTO.getProductCode());
 
                 // 중복된 상품이 없을 경우에만 저장
                 if (existingProducts.isEmpty()) {
@@ -337,8 +338,9 @@ public class SalesOrderServiceImpl implements SalesOrderService {
 
 
     
- // 검색 메서드 수정
-    public Page<ClientsOrdersEntity> searchOrders(String managerCompanyCode, String searchType, String searchText, LocalDate startDate, LocalDate endDate, int page, int size) {
+ // 검색 메서드
+    public Page<ClientsOrdersEntity> searchOrders(String managerCompanyCode, String searchType, String searchText,
+    											  LocalDate startDate, LocalDate endDate, int page, int size) {
         // 페이지 요청 시 orderId 기준으로 오름차순 정렬을 추가
         Pageable pageable = PageRequest.of(page, size, Sort.by("orderId").descending());
 
