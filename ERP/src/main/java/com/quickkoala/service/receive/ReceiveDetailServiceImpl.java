@@ -10,6 +10,8 @@ import com.quickkoala.entity.receive.ReceiveDetailEntity;
 import com.quickkoala.repository.receive.ReceiveDetailRepository;
 import com.quickkoala.utils.TodayUtils;
 
+import lombok.extern.log4j.Log4j2;
+@Log4j2
 @Service
 public class ReceiveDetailServiceImpl implements ReceiveDetailService{
 	
@@ -26,11 +28,13 @@ public class ReceiveDetailServiceImpl implements ReceiveDetailService{
 		
 		int number = (int)this.getCountOfOrdersToday()+1;
 		String formattedNumber = String.format("%03d", number);
+		
 		receiveDetailEntity.setCode("R"+TodayUtils.getToday()+"-" + formattedNumber);
 		receiveDetailEntity.setOrderNumber(orderNumber);
 		receiveDetailEntity.setQuantity(ea);
 		receiveDetailEntity.setDate(LocalDateTime.now());
 		receiveDetailEntity.setManager(manager);
+		
 		return receiveDetailRepository.save(receiveDetailEntity);
 	}
 	
