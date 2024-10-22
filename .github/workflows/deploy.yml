@@ -18,6 +18,9 @@ jobs:
         with:
           java-version: '17'  # 사용 중인 JDK 버전
 
+      - name: List current directory structure
+        run: ls -R  # 현재 디렉토리 구조를 출력
+
       - name: Build the project
         run: |
           cd erp/erp  # pom.xml이 있는 디렉토리로 이동
