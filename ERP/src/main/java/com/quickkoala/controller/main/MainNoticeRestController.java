@@ -33,7 +33,7 @@ public class MainNoticeRestController {
 	    @RequestParam(defaultValue = "0") int page, 
 	    @RequestParam(defaultValue = "10") int size, 
 	    HttpServletRequest request) { 
-
+ 
 	    String token = jwtTokenProvider.resolveToken(request);
 	    String companyCode = jwtTokenProvider.getClaim(token, "code");
 
