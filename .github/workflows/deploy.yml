@@ -3,7 +3,7 @@ name: Build and Deploy
 on:
   push:
     branches:
-      - main  # 배포를 원하는 브랜치
+      - main
 
 jobs:
   build:
@@ -16,36 +16,33 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v1
         with:
-          java-version: '17'  # 사용 중인 JDK 버전
-
-      - name: List current directory structure
-        run: ls -R  # 현재 디렉토리 구조를 출력
+          java-version: '17'
 
       - name: Build the project
         run: |
-          cd ERP  # pom.xml이 있는 디렉토리로 이동
-          mvn clean package  # Maven으로 빌드
+          cd ERP
+          mvn clean package
 
       - name: Deploy to GCP via SFTP
         uses: appleboy/scp-action@master
         with:
-          host: ${{ secrets.GCP_HOST }}  # GCP 서버 IP 또는 도메인
-          username: ${{ secrets.GCP_USERNAME }}  # SFTP 사용자 이름
-          key: ${{ secrets.GCP_PRIVATE_KEY }}  # SFTP 개인 키
+          host: ${{ secrets.GCP_HOST }}
+          username: ${{ secrets.GCP_USERNAME }}
+          key: ${{ secrets.GCP_PRIVATE_KEY }}
+          passphrase: ${{ secrets.GCP_PASSPHRASE }}  # 추가된 암호
           port: 22
-          source: "ERP/target/*.jar"  # 빌드된 JAR 파일의 경로
-          target: "/home/rodzld18/"  # GCP 서버에 JAR 파일을 배포할 경로
+          source: "ERP/target/*.jar"
+          target: "/home/rodzld18/"
 
       - name: Execute JAR on GCP
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.GCP_HOST }}  # GCP 서버 IP 또는 도메인
-          username: ${{ secrets.GCP_USERNAME }}  # SFTP 사용자 이름
-          key: ${{ secrets.GCP_PRIVATE_KEY }}  # SFTP 개인 키
+          host: ${{ secrets.GCP_HOST }}
+          username: ${{ secrets.GCP_USERNAME }}
+          key: ${{ secrets.GCP_PRIVATE_KEY }}
+          passphrase: ${{ secrets.GCP_PASSPHRASE }}  # 추가된 암호
           port: 22
           script: |
-            cd /home/rodzld18/  # JAR 파일이 위치한 디렉토리로 이동
-            # 기존 프로세스 종료 (기존 JAR 파일이 실행 중일 경우)
+            cd /home/rodzld18/
             pkill -f 'java -jar' || true
-            # JAR 파일 실행
             nohup java -Duser.timezone=Asia/Seoul -jar ERP-0.0.1-SNAPSHOT.jar > output.log 2>&1 &
