@@ -164,12 +164,14 @@ document.getElementById('locationdelete').addEventListener('click',function(){
                     if (row) {
                         row.remove();
                     }
-                } alert("로케이션이 삭제되었습니다.");
+                }
             } else {
                 alert(`${result}`);
             }
         });
-
+        
+		alert("로케이션이 삭제되었습니다.");
+        
         if (typeof locationpaging === 'function') {
             locationlistmain(locationP, locationSearchCode, locationSearchWord);
         }
@@ -217,6 +219,7 @@ document.querySelector("#locationmodifybtn").addEventListener('click', function(
     alert('로케이션 정보 수정 중 오류가 발생했습니다.');
 });
 });
+
 function resetModalFields() {
     document.querySelector('#locationmodifywarehouse').value = "";
     document.querySelector('#locationmodifycode').value = "";

@@ -120,8 +120,9 @@ document.getElementById('locationregister').addEventListener('click', function()
                 } else if (data.useFlag == 'N') {
                     datauseFlag = '미사용';
                 }
+                
 			const locationlisttbody = document.getElementById('locationlisttbody');  // 로케이션 리스트가 출력되는 DOM 요소
-            const locationlisttr = document.createElement('tr');  // 새 행 생성
+            const locationlisttr = document.createElement('tr');
             locationlisttr.innerHTML = `
              	<td><input type="checkbox" class="checkbox" value="${data.code}"></td>
                 <td>${data.code}</td>
@@ -130,23 +131,24 @@ document.getElementById('locationregister').addEventListener('click', function()
                 <td>${data.rowCode}</td>
                 <td>${data.levelCode}</td>
                 <td>${datauseFlag}</td>
-                <td><input type="button" value="수정" class="locationlistmodifybtn"></td>
+                <td><input type="button" value="수정" class="locationlistmodifybtn" data-code="${data.code}"></td>
             `;
-            locationlisttbody.appendChild(locationlisttr);
-            alert('등록이 완료되었습니다.');
+            locationlisttbody.insertBefore(locationlisttr, locationlisttbody.firstChild);
+            
             document.getElementById('rackcode').value = '';
             document.getElementById('locationcode').value = '';
             
              document.getElementById('locationinmodal').style.display = 'none';
              document.getElementById('locationoverlay').style.display = 'none';
          	 document.body.style.overflow = 'auto';
+            alert('등록이 완료되었습니다.');
 
     })
     .catch(error => {
            alert('오류가 발생했습니다.');
         });
     });
-
+    
 //로케이션 모달 열기	
 document.getElementById("locationbtn").addEventListener("click", function() {
     document.getElementById("locationoverlay").style.display = "block";
