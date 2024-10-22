@@ -19,7 +19,7 @@ jobs:
           java-version: '17'  # 사용 중인 JDK 버전
 
       - name: Build the project
-        run: ./mvnw clean package  # Maven 사용 시, Gradle 사용 시 ./gradlew build
+        run: mvn clean package  # Maven으로 빌드
 
       - name: Deploy to GCP via SFTP
         uses: appleboy/scp-action@master
@@ -40,5 +40,7 @@ jobs:
           port: 22
           script: |
             cd /home/rodzld18/  # JAR 파일이 위치한 디렉토리로 이동
-            nohup java -Duser.timezone=Asia/Seoul -jar your-application.jar > output.log 2>&1 &
-            # output.log: 로그 파일, 출력 및 에러를 모두 기록합니다.
+            # 기존 프로세스 종료 (기존 JAR 파일이 실행 중일 경우)
+            pkill -f 'java -jar' || true
+            # JAR 파일 실행
+            nohup java -Duser.timezone=Asia/Seoul -jar ERP-0.0.1-SNAPSHOT.jar > output.log 2>&1 &
