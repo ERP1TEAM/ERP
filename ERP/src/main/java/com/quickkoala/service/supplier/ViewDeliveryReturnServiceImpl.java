@@ -20,13 +20,13 @@ public class ViewDeliveryReturnServiceImpl implements ViewDeliveryReturnService{
 	private ViewDeliveryReturnRepository viewDeliveryReturnRepository;
 	
 	@Override
-	public Page<ViewDeliveryReturnEntity> getPaginadtedData(int pno, int size) {
+	public Page<ViewDeliveryReturnEntity> getPaginatedData(int pno, int size) {
 		Pageable pageable = PageRequest.of(pno-1, size);
 		return viewDeliveryReturnRepository.findAllByOrderByReturnDateDesc(pageable);
 	}
 	
 	@Override
-	public Page<ViewDeliveryReturnEntity> getPaginadtedData(int pno, int size, String code, String word) {
+	public Page<ViewDeliveryReturnEntity> getPaginatedData(int pno, int size, String code, String word) {
 		Page<ViewDeliveryReturnEntity> result = null;
 		Pageable pageable = PageRequest.of(pno-1, size);
 		if(code.equals("납품번호")) {
@@ -40,7 +40,7 @@ public class ViewDeliveryReturnServiceImpl implements ViewDeliveryReturnService{
 	}
 	
 	@Override
-	public Page<ViewDeliveryReturnEntity> getPaginadtedData(int pno, int size, SearchDto dto, String code) {
+	public Page<ViewDeliveryReturnEntity> getPaginatedData(int pno, int size, SearchDto dto, String code) {
 		Page<ViewDeliveryReturnEntity> result = null;
 		Pageable pageable = PageRequest.of(pno-1, size);
 		String sDateString = dto.getSDate();

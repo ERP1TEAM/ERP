@@ -8,4 +8,8 @@ import lombok.Setter;
 public class SearchDto {
 	String code, word;
 	String sDate, eDate;
+	
+	public boolean hasFilters() {
+        return (sDate != null && !sDate.isEmpty()) || (word != null && !word.isEmpty());
+    }
 }

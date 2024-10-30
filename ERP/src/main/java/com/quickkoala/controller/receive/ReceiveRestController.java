@@ -1,9 +1,9 @@
 package com.quickkoala.controller.receive;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,8 +19,6 @@ import com.quickkoala.dto.receive.PurchaseListDto;
 import com.quickkoala.dto.receive.ReceiveModalDto;
 import com.quickkoala.dto.receive.ReceivingDto;
 import com.quickkoala.dto.receive.SearchDto;
-import com.quickkoala.entity.receive.ReceiveDetailEntity;
-import com.quickkoala.entity.receive.ReceiveReturnEntity;
 import com.quickkoala.entity.receive.ViewLocationProductEntity;
 import com.quickkoala.entity.receive.ViewPurchaseDetailEntity;
 import com.quickkoala.entity.receive.ViewPurchaseEntity;
@@ -28,9 +26,7 @@ import com.quickkoala.entity.receive.ViewReceiveEntity;
 import com.quickkoala.entity.receive.ViewReceiveReturnEntity;
 import com.quickkoala.entity.receive.ViewReceiveSummaryEntity;
 import com.quickkoala.entity.receive.ViewReceiveTempEntity;
-import com.quickkoala.service.receive.ReceiveDetailService;
-import com.quickkoala.service.receive.ReceiveReturnService;
-import com.quickkoala.service.receive.ReceiveTempService;
+import com.quickkoala.service.receive.ReceivingService;
 import com.quickkoala.service.receive.ViewLocationProductService;
 import com.quickkoala.service.receive.ViewPurchaseDetailService;
 import com.quickkoala.service.receive.ViewPurchaseService;
@@ -38,8 +34,6 @@ import com.quickkoala.service.receive.ViewReceiveReturnService;
 import com.quickkoala.service.receive.ViewReceiveService;
 import com.quickkoala.service.receive.ViewReceiveSummaryService;
 import com.quickkoala.service.receive.ViewReceiveTempService;
-import com.quickkoala.service.stock.LotService;
-import com.quickkoala.service.stock.ProductService;
 import com.quickkoala.service.supplier.PurchaseService;
 import com.quickkoala.utils.GetToken;
 
@@ -49,186 +43,139 @@ import jakarta.servlet.http.HttpServletRequest;
 @RequestMapping("main")
 public class ReceiveRestController {
 
-	private static final int SIZE = 10;
+	private static final int DEFAULT_SIZE = 10;
+    private static final int SUMMARY_SIZE = 20;
 	
-	@Autowired
-	private PurchaseService purchaseService;
+	private final PurchaseService purchaseService;
+	private final ViewReceiveTempService viewReceiveTempService;
+	private final ViewPurchaseDetailService viewPurchaseDetailService;
+	private final ViewPurchaseService viewPurchaseService;
+	private final ViewReceiveService viewReceiveService;
+	private final ViewReceiveReturnService viewReceiveReturnService;
+	private final ViewReceiveSummaryService viewReceiveSummaryService;
+	private final ViewLocationProductService viewLocationProductService;
+	private final ReceivingService receivingService;
 
-	@Autowired
-	private ViewReceiveTempService viewReceiveTempService;
-
-	@Autowired
-	private ReceiveDetailService receiveDetailService;
-
-	@Autowired
-	private ReceiveReturnService receiveReturnService;
-
-	@Autowired
-	private ReceiveTempService receiveTempService;
-
-	@Autowired
-	private LotService lotService;
-
-	@Autowired
-	private ViewPurchaseDetailService viewPurchaseDetailService;
-
-	@Autowired
-	private ViewPurchaseService viewPurchaseService;
-
-	@Autowired
-	private ViewReceiveService viewReceiveService;
-
-	@Autowired
-	private ViewReceiveReturnService viewReceiveReturnService;
-
-	@Autowired
-	private ViewReceiveSummaryService viewReceiveSummaryService;
-
-	@Autowired
-	private ViewLocationProductService viewLocationProductService;
+	public ReceiveRestController(
+		PurchaseService purchaseService,
+		ViewReceiveTempService viewReceiveTempService,
+		ViewPurchaseDetailService viewPurchaseDetailService,
+		ViewPurchaseService viewPurchaseService,
+		ViewReceiveService viewReceiveService,
+		ViewReceiveReturnService viewReceiveReturnService,
+		ViewReceiveSummaryService viewReceiveSummaryService,
+		ViewLocationProductService viewLocationProductService,
+		ReceivingService receivingService) {
+		this.purchaseService = purchaseService;
+		this.viewReceiveTempService = viewReceiveTempService;
+		this.viewPurchaseDetailService = viewPurchaseDetailService;
+		this.viewPurchaseService = viewPurchaseService;
+		this.viewReceiveService = viewReceiveService;
+		this.viewReceiveReturnService = viewReceiveReturnService;
+		this.viewReceiveSummaryService = viewReceiveSummaryService;
+		this.viewLocationProductService = viewLocationProductService;
+		this.receivingService = receivingService;
+	}
 	
-	@Autowired
-	private ProductService productService;
-
-	// @Autowired
-	// private SupplierService supplierService;
-
 	// 발주요청
-	@PostMapping("receive/purchaseAdd")
-	public ResponseEntity<String> purchaseAdd(@ModelAttribute PurchaseListDto orders, HttpServletRequest request) {
-		try {
-			purchaseService.addOrders(orders,GetToken.getManagerName(request));
-			return ResponseEntity.ok("success");
-		}catch(Exception e) {
-			e.printStackTrace();
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("no");
-		}
-		
-	}
+    @PostMapping("receive/purchaseAdd")
+    public ResponseEntity<String> purchaseAdd(@ModelAttribute PurchaseListDto orders, HttpServletRequest request) {
+        return processRequest(() -> {
+            String managerName = GetToken.getManagerName(request);
+            purchaseService.addOrders(orders, managerName);
+        });
+    }
 
-	// 발주요청 페이지 상품목록 모달 데이터
-	@GetMapping("receive/productData")
-	public ResponseEntity<List<ViewPurchaseEntity>> productData(@RequestParam String code, @RequestParam String word) {
-		List<ViewPurchaseEntity> result = null;
-		if (code.equals("") || word.equals("")) {
-			result = viewPurchaseService.getAllData();
-		} else {
-			result = viewPurchaseService.getSearchData(code, word);
-		}
-		return ResponseEntity.ok(result);
-	}
+    // 발주요청 페이지 상품목록 모달 데이터
+    @GetMapping("receive/productData")
+    public ResponseEntity<List<ViewPurchaseEntity>> productData(@RequestParam String code, @RequestParam String word) {
+        List<ViewPurchaseEntity> result = code.isEmpty() || word.isEmpty() ? 
+            viewPurchaseService.getAllData() : 
+            viewPurchaseService.getSearchData(code, word);
+        return ResponseEntity.ok(result);
+    }
 
-	// 발주내역 페이지 데이터
-	@GetMapping("receive/purchaseData/{pno}/{status}")
-	public ResponseEntity<Page<ViewPurchaseDetailEntity>> purchaseData(@PathVariable Integer pno, @PathVariable String status,
-			@ModelAttribute SearchDto dto) {
-		String sDate = dto.getSDate();
-		String word = dto.getWord();
-		Page<ViewPurchaseDetailEntity> result = null;
-		if (status.equals("all")) {
-			result = viewPurchaseDetailService.getPaginatedData(pno, SIZE, dto);
-		} else {
-			if (word.equals("") && sDate.equals("")) {
-				result = viewPurchaseDetailService.getPaginatedDataByStatus(status, pno, SIZE);
-			} else {
-				result = viewPurchaseDetailService.getPaginatedData(pno, SIZE, dto);
-			}
-		}
-		return ResponseEntity.ok(result);
-	}
+    // 발주내역 페이지 데이터
+    @GetMapping("receive/purchaseData/{pno}/{status}")
+    public ResponseEntity<Page<ViewPurchaseDetailEntity>> purchaseData(@PathVariable Integer pno, @PathVariable String status, @ModelAttribute SearchDto dto) {
+        return ResponseEntity.ok(status.equals("all") || dto.hasFilters() ? 
+            viewPurchaseDetailService.getPaginatedData(pno, DEFAULT_SIZE, dto) : 
+            viewPurchaseDetailService.getPaginatedDataByStatus(status, pno, DEFAULT_SIZE));
+    }
 
-	// 가입고 페이지 데이터
-	@GetMapping("receive/tempReceiveData/{pno}")
-	public ResponseEntity<Page<ViewReceiveTempEntity>> tempReceiveData(@PathVariable Integer pno, @ModelAttribute SearchDto dto) {
-		Page<ViewReceiveTempEntity> result = null;
-		result = viewReceiveTempService.getPaginatedData(pno, SIZE, dto);
-		return ResponseEntity.ok(result);
-	}
+    // 가입고 페이지 데이터
+    @GetMapping("receive/tempReceiveData/{pno}")
+    public ResponseEntity<Page<ViewReceiveTempEntity>> tempReceiveData(@PathVariable Integer pno, @ModelAttribute SearchDto dto) {
+        return processPagedData(() -> viewReceiveTempService.getPaginatedData(pno, DEFAULT_SIZE, dto));
+    }
 
-	// 입고확정 모달
-	@GetMapping("receive/receivingModal")
-	public ResponseEntity<ReceiveModalDto> receivingModal(@ModelAttribute ReceiveModalDto dto) {
-		List<String> locationCode = new ArrayList<>();
-		if (viewLocationProductService.getCount(dto.getProductCode()) == 0) {
-			List<ViewLocationProductEntity> loca = viewLocationProductService.getData();
-			for (ViewLocationProductEntity ent : loca) {
-				if (ent.getProductCode() == null) {
-					locationCode.add(ent.getLocationCode());
-				}
+    // 입고확정 모달
+    @GetMapping("receive/receivingModal")
+    public ResponseEntity<ReceiveModalDto> receivingModal(@ModelAttribute ReceiveModalDto dto) {
+        List<String> locationCode = viewLocationProductService.getCount(dto.getProductCode()) == 0 ?
+            getAvailableLocationCodes() :
+            List.of(viewLocationProductService.getLocationCode(dto.getProductCode()));
+        dto.setLocation(locationCode);
+        return ResponseEntity.ok(dto);
+    }
 
-			}
-			dto.setLocation(locationCode);
-		}else {
-			locationCode.add(viewLocationProductService.getLocationCode(dto.getProductCode()));
-			dto.setLocation(locationCode);
-		}
-		return ResponseEntity.ok(dto);
-	}
+    // 입고확정
+    @PostMapping("receive/receiving")
+    public ResponseEntity<String> receiving(@ModelAttribute ReceivingDto dto, HttpServletRequest request) {
+        return processRequest(() -> {
+            String manager = GetToken.getManagerName(request);
+            receivingService.processReceiving(dto, manager);
+        });
+    }
 
-	// 입고확정
-	@PostMapping("receive/receiving")
-	public ResponseEntity<String> receiving(@ModelAttribute ReceivingDto dto, 
-			HttpServletRequest request) {
-		ReceiveDetailEntity result = new ReceiveDetailEntity();
-		ReceiveReturnEntity result2 = new ReceiveReturnEntity();
-		
-		try {
-			String manager = GetToken.getManagerName(request);
-			// 입고수량이 있을때
-			if (dto.getReQty() != 0) {
-				result = receiveDetailService.addData(dto.getCode(), dto.getReQty(), manager);
-				lotService.addLot(dto);
-				if(!dto.getLocation().equals("N")) {
-					int result3 = productService.modifyLocation(dto.getProductCode(), dto.getLocation());
-					System.out.println(result3);
-				}
-			}
-			// 반품수량이 있을때
-			if (dto.getCaQty() != 0) {
-				result2 = receiveReturnService.addData(dto, manager);
-			}
+    // 입고현황 데이터 + 페이징
+    @GetMapping("receive/summaryData/{pno}")
+    public ResponseEntity<Page<ViewReceiveSummaryEntity>> summaryData(@PathVariable Integer pno, @RequestParam String code, @RequestParam String word) {
+        return ResponseEntity.ok(code.isEmpty() || word.isEmpty() ?
+            viewReceiveSummaryService.getPaginatedData(pno, SUMMARY_SIZE) :
+            viewReceiveSummaryService.getPaginatedData(pno, SUMMARY_SIZE, code, word));
+    }
 
-			if (result == null || result2 == null) {
-				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("no");
-			} else {
-				receiveTempService.removeData(dto.getCode());
-				return ResponseEntity.ok("ok");
-			}
-		}catch(Exception e) {
-			e.printStackTrace();
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("no");
-		}
-	}
+    // 입고내역 데이터 + 페이징
+    @GetMapping("receive/detailData/{pno}")
+    public ResponseEntity<Page<ViewReceiveEntity>> detailData(@PathVariable Integer pno, @ModelAttribute SearchDto dto) {
+        return processPagedData(() -> viewReceiveService.getPaginatedData(pno, DEFAULT_SIZE, dto));
+    }
 
-	// 입고현황 데이터 + 페이징
-	@GetMapping("receive/summaryData/{pno}")
-	public ResponseEntity<Page<ViewReceiveSummaryEntity>> summaryData(@PathVariable Integer pno, @RequestParam String code,
-			@RequestParam String word) {
-		int size = 20;
-		Page<ViewReceiveSummaryEntity> result = null;
-		if (code.equals("") || word.equals("")) {
-			result = viewReceiveSummaryService.getPaginatedData(pno, size);
-		} else {
-			result = viewReceiveSummaryService.getPaginatedData(pno, size, code, word);
-		}
-		return ResponseEntity.ok(result);
-	}
+    // 입고반품 데이터 + 페이징
+    @GetMapping("receive/returnData/{pno}")
+    public ResponseEntity<Page<ViewReceiveReturnEntity>> returnData(@PathVariable Integer pno, @ModelAttribute SearchDto dto) {
+        return processPagedData(() -> viewReceiveReturnService.getPaginatedData(pno, DEFAULT_SIZE, dto));
+    }
 
-	// 입고내역 데이터 + 페이징
-	@GetMapping("receive/detailData/{pno}")
-	public ResponseEntity<Page<ViewReceiveEntity>> detailData(@PathVariable Integer pno, @ModelAttribute SearchDto dto) {
-		Page<ViewReceiveEntity> result = null;
-		result = viewReceiveService.getPaginatedData(pno, SIZE, dto);
-		return ResponseEntity.ok(result);
-	}
-	
-	// 입고반품 데이터 + 페이징
-	@GetMapping("receive/returnData/{pno}")
-	public ResponseEntity<Page<ViewReceiveReturnEntity>> returnData(@PathVariable Integer pno, @ModelAttribute SearchDto dto) {
-		Page<ViewReceiveReturnEntity> result = null;
-		result = viewReceiveReturnService.getPaginatedData(pno, SIZE, dto);
-		return ResponseEntity.ok(result);
-	}
+    // 공통 예외 처리 메서드
+    private ResponseEntity<String> processRequest(Runnable action) {
+        try {
+            action.run();
+            return ResponseEntity.ok("success");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("no");
+        }
+    }
+
+    // 공통 페이징 데이터 처리 메서드
+    private <T> ResponseEntity<Page<T>> processPagedData(Supplier<Page<T>> supplier) {
+        try {
+            return ResponseEntity.ok(supplier.get());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
+
+    // 사용 가능한 위치 코드 가져오기
+    private List<String> getAvailableLocationCodes() {
+        return viewLocationProductService.getData().stream()
+            .filter(ent -> ent.getProductCode() == null)
+            .map(ViewLocationProductEntity::getLocationCode)
+            .collect(Collectors.toList());
+    }
 
 	// ** 사용안하는 코드 **//
 	/*

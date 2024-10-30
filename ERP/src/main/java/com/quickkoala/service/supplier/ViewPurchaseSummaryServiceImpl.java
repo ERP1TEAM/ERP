@@ -22,12 +22,12 @@ public class ViewPurchaseSummaryServiceImpl implements ViewPurchaseSummaryServic
 	private ViewPurchaseSummaryRepository viewPurchaseSummaryRepository;
 	
 	@Override
-	public Page<ViewPurchaseSummaryEntity> getPaginadtedData(int pno, int size) {
+	public Page<ViewPurchaseSummaryEntity> getPaginatedData(int pno, int size) {
 		Pageable pageable = PageRequest.of(pno-1, size);
 		return viewPurchaseSummaryRepository.findByTotalWtQuantityGreaterThanOrderByOrderNumberDesc(0, pageable);
 	}
 	@Override
-	public Page<ViewPurchaseSummaryEntity> getPaginadtedData(int pno, int size, String code, String word) {
+	public Page<ViewPurchaseSummaryEntity> getPaginatedData(int pno, int size, String code, String word) {
 		Page<ViewPurchaseSummaryEntity> result = null;
 		Pageable pageable = PageRequest.of(pno-1, size);
 		if(code.equals("발주번호")) {
@@ -39,7 +39,7 @@ public class ViewPurchaseSummaryServiceImpl implements ViewPurchaseSummaryServic
 	}
 	
 	@Override
-	public Page<ViewPurchaseSummaryEntity> getPaginadtedData(int pno, int size, SearchDto dto, String code) {
+	public Page<ViewPurchaseSummaryEntity> getPaginatedData(int pno, int size, SearchDto dto, String code) {
 		Page<ViewPurchaseSummaryEntity> result = null;
 		Pageable pageable = PageRequest.of(pno-1, size);
 		String sDateString = dto.getSDate();

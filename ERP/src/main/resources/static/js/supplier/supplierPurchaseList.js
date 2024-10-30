@@ -200,8 +200,12 @@ document.addEventListener("DOMContentLoaded", function() {
 			} else if (wt < ea) {
 				alert("미납수량을 확인해주세요");
 			} else if (confirm(ea + '개 납품등록을 하시겠습니까?')) {
-				fetch("./delivery_regi?data=" + encodeURIComponent(idx) + "&ea=" + encodeURIComponent(ea), {
-					method: "GET"
+				fetch("./delivery_regi", {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json"
+					},
+					body: JSON.stringify({ data: idx, ea: ea })
 				})
 					.then(response => response.text())
 					.then(data => {
@@ -214,7 +218,7 @@ document.addEventListener("DOMContentLoaded", function() {
 					})
 					.catch(error => {
 						console.log(error);
-					})
+					});
 			}
 		}
 	});
