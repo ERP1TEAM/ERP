@@ -23,6 +23,7 @@ public class ReceiveDetailServiceImpl implements ReceiveDetailService{
 	
 	@Override
 	public ReceiveDetailEntity addData(String data, Integer ea, String manager) {
+		System.out.println("addData 작동됨");
 		ReceiveDetailEntity receiveDetailEntity = new ReceiveDetailEntity();	
 		String orderNumber = receiveTempService.getOrderNumber(data);
 		

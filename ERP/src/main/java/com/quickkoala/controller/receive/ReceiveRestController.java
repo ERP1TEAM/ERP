@@ -123,7 +123,7 @@ public class ReceiveRestController {
     @PostMapping("receive/receiving")
     public ResponseEntity<String> receiving(@ModelAttribute ReceivingDto dto, HttpServletRequest request) {
         return processRequest(() -> {
-            String manager = GetToken.getManagerName(request);
+        	String manager = GetToken.getManagerName(request);
             receivingService.processReceiving(dto, manager);
         });
     }

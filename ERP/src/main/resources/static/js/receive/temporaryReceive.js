@@ -373,7 +373,8 @@ document.addEventListener("DOMContentLoaded", function() {
 		})
 			.then(response => response.text())
 			.then(data => {
-				if (data === "ok") {
+				console.log(data);
+				if (data === "success") {
 					alert('입고가 완료되었습니다.');
 					window.location.reload();
 				} else if (data === "over") {

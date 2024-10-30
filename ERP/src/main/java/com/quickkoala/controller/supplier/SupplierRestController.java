@@ -67,6 +67,10 @@ public class SupplierRestController {
 	public ResponseEntity<String> deliveryRegi(@RequestBody @Valid DeliveryRegiDto dto) {
 	    try {
 	        DeliveryDetailEntity ent = deliveryDetailService.addDelivery(dto.getData(), dto.getEa());
+	        if (ent == null) {
+	            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("DeliveryDetailEntity is null");
+	        }
+	        
 	        receiveTempService.addDelivery(dto.getData(), dto.getEa(), ent.getCode());
 	        return ResponseEntity.ok("ok");
 	    } catch (Exception e) {

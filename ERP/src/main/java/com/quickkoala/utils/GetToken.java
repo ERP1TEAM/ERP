@@ -16,6 +16,11 @@ public class GetToken {
     public void setJwtTokenProvider(JwtTokenProvider jwtTokenProvider) {
         GetToken.jwtTokenProvider = jwtTokenProvider;
     }
+	
+	// init 메소드 추가
+    public static void init(JwtTokenProvider provider) {
+        GetToken.jwtTokenProvider = provider;
+    }
 
     public static String getManagerName(HttpServletRequest httpServletRequest) {
         String token = jwtTokenProvider.resolveToken(httpServletRequest);
